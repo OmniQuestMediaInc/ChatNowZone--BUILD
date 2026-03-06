@@ -12,7 +12,7 @@ export class StatementsService {
     const { skip, take } = options ?? {};
 
     return await this.db.ledger_entries.findMany({
-      where: { beneficiary_id: studioId, studio_amount_cents: { gt: 0 } },
+      where: { studio_id: studioId, studio_amount_cents: { gt: 0 } },
       orderBy: { created_at: 'desc' },
       skip,
       take: typeof take === 'number' ? take : 100,
@@ -27,7 +27,7 @@ export class StatementsService {
     const { skip, take } = options ?? {};
 
     return await this.db.ledger_entries.findMany({
-      where: { beneficiary_id: creatorId },
+      where: { performer_id: creatorId },
       orderBy: { created_at: 'desc' },
       skip,
       take: typeof take === 'number' ? take : 100,
