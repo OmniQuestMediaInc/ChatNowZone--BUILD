@@ -146,7 +146,11 @@ CREATE TABLE IF NOT EXISTS ledger_entries (
     -- Amounts (all in minor units: cents)
     gross_amount_cents  BIGINT      NOT NULL CHECK (gross_amount_cents >= 0),
     fee_amount_cents    BIGINT      NOT NULL DEFAULT 0 CHECK (fee_amount_cents >= 0),
-    net_amount_cents    BIGINT      NOT NULL CHECK (net_amount_cents >= 0),
+    net_amount_cents    BIGINT      NOT NULL CHECK (
+                                (entry_type IN ('REFUND', 'CHARGEBACK', 'REVERSAL') AND net_amount_cents <= 0)
+                                OR
+                                (entry_type NOT IN ('REFUND', 'CHARGEBACK', 'REVERSAL') AND net_amount_cents >= 0)
+                            ),
     currency            CHAR(3)     NOT NULL DEFAULT 'USD',
 
     -- Split ledger (populated for PAYOUT entries)
