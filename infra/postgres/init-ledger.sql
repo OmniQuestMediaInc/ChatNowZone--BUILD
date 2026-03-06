@@ -41,9 +41,6 @@ CREATE TABLE IF NOT EXISTS user_risk_profiles (
     last_evaluated_at   TIMESTAMPTZ
 );
 
-CREATE INDEX IF NOT EXISTS idx_user_risk_profiles_user_id
-    ON user_risk_profiles (user_id);
-
 CREATE INDEX IF NOT EXISTS idx_user_risk_profiles_risk_tier
     ON user_risk_profiles (risk_tier);
 
