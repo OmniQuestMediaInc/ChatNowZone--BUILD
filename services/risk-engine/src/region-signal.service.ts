@@ -35,7 +35,7 @@ export class RegionSignalService {
   private readonly logger = new Logger(RegionSignalService.name);
 
   /**
-   * Generates a Trusted Region Signal by comparing 
+   * Generates a Trusted Region Signal by comparing
    * Payment BIN, Billing Country, and IP Geolocation.
    */
   async getConfidenceScore(data: RegionSignalInput): Promise<RegionSignalResult> {
@@ -136,3 +136,4 @@ export class RegionSignalService {
     });
   }
 }
+

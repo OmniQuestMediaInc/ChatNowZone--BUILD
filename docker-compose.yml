@@ -85,3 +85,4 @@ volumes:
       - redis
     environment:
       - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/chatnow_zone
+

@@ -103,6 +103,9 @@ export class TipService {
     if (!Number.isFinite(tx.tokenAmount) || tx.tokenAmount <= 0) {
       throw new Error('tokenAmount must be a positive finite number');
     }
+    if (!tx.reasonCode) {
+      throw new Error('reasonCode is required');
+    }
 
     await this.ledger.recordSplitTip(tx);
   }

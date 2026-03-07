@@ -9,6 +9,7 @@ export const logger = {
   },
   info: (message: string, meta?: Record<string, unknown>): void => {
     const timestamp = new Date().toISOString();
+    process.stdout.write(
     process.stderr.write(
       JSON.stringify({ level: 'info', message, ...meta, timestamp }) + '\n',
     );
