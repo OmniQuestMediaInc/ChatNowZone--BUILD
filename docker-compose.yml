@@ -13,6 +13,32 @@ services:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+      POSTGRES_DB: chatnow
+      POSTGRES_USER: chatnow_app
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # PORTS REMOVED: Internal network only. (PR #20 — NETWORK ISOLATION invariant)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init-ledger.sql:/docker-entrypoint-initdb.d/01-init-ledger.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chatnow_app -d chatnow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    container_name: chatnow_redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    # PORTS REMOVED: Internal network only. (PR #20 — NETWORK ISOLATION invariant)
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   api:
     build: .
