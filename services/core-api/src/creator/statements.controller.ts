@@ -16,7 +16,7 @@ function parsePaginationParam(value: string | undefined): number | undefined {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
 }
 
-@UseGuards(StatementsDenyAllGuard)
+@UseGuards(new StatementsDenyAllGuard())
 @Controller('statements')
 export class StatementsController {
   constructor(private readonly statementsService: StatementsService) {}
