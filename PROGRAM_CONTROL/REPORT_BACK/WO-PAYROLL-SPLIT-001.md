@@ -4,13 +4,29 @@
 `copilot/implement-payroll-split-logic`
 
 ## HEAD
-`3db1b0f` (pre-commit; final HEAD updated after push)
+`e495baa`
 
 ## Files Changed
 ```
 services/core-api/src/db.ts                        |  8 ++++++++
 services/core-api/src/finance/ledger.service.ts    | 45 ++++++++++++++++++++++++++++++++++++++++++++++
 services/core-api/src/finance/ledger.module.ts     |  9 +++++++++
+```
+
+## Commands Run + Verbatim Outputs
+
+```
+$ git log --oneline -3
+e495baa Merge branch 'main' into copilot/implement-payroll-split-logic
+3f6bd94 feat: install payroll splitter logic (LedgerService, LedgerModule, db singleton)
+395feb0 feat(risk-engine): install RegionSignalService — Trusted Region Signal (R2)
+
+$ git diff --stat HEAD~1 HEAD
+ PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md |  42 ++++++++++++++
+ services/core-api/src/db.ts                         |   8 +++
+ services/core-api/src/finance/ledger.module.ts      |   9 +++
+ services/core-api/src/finance/ledger.service.ts     |  46 +++++++++++++++
+ 4 files changed, 105 insertions(+)
 ```
 
 ## Changes Applied
@@ -33,7 +49,7 @@ NestJS `LedgerModule` wrapping `LedgerService` as provider and export.
 | Invariant | Status |
 |---|---|
 | Append-Only Ledger | ✅ `db.$transaction([db.ledger_entries.create(...)])` — INSERT only, no UPDATE/DELETE |
-| Deterministic Logic | ✅ Pure function: same inputs → same outputs; `Math.round` for reproducible cent values |
+| Deterministic Logic | ✅ Split calculation is deterministic: same inputs → same outputs; `Math.round` for reproducible cent values |
 | Atomic Write | ✅ Wrapped in `db.$transaction([...])` |
 | No Secrets / PII | ✅ No credentials or PII logged |
 
