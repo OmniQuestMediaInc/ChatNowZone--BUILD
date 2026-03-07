@@ -151,9 +151,9 @@ CREATE TABLE IF NOT EXISTS ledger_entries (
     currency            CHAR(3)     NOT NULL DEFAULT 'USD',
 
     -- Split ledger (populated for PAYOUT entries)
-    studio_amount_cents    BIGINT   DEFAULT 0,
-    performer_amount_cents BIGINT   DEFAULT 0,
-    platform_amount_cents  BIGINT   DEFAULT 0,
+    studio_amount_cents    BIGINT   NOT NULL DEFAULT 0,
+    performer_amount_cents BIGINT   NOT NULL DEFAULT 0,
+    platform_amount_cents  BIGINT   NOT NULL DEFAULT 0,
 
     -- External gateway
     gateway             VARCHAR(50),
