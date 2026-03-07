@@ -47,7 +47,7 @@ jobs:
           PGPASSWORD: testpass
         run: |
           psql -v ON_ERROR_STOP=1 -h localhost -U chatnow_app -d chatnow \
-               -f infra/postgres/init-ledger.sql
+               -f infra/postgres/init-ledger.sql && \
           echo "✅ Ledger schema applied successfully"
 
   # ---------------------------------------------------------------------------
