@@ -19,7 +19,10 @@ export class LedgerService {
           { expiry_date: null },
           { expiry_date: { gt: now } }
         ]
-      }
+      },
+      orderBy: {
+        effective_date: 'desc',
+      },
     });
 
     const studioSplit = contract ? Number(contract.studio_split) : 0;
