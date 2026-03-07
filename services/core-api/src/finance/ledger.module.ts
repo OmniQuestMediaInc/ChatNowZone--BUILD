@@ -1,3 +1,9 @@
+// WO: WO-INIT-001
+import { Module } from '@nestjs/common';
+import { LedgerService } from './ledger.service';
+
+@Module({
+  providers: [LedgerService],
 // WO: WO-PAYROLL-SPLIT-001
 import { Module } from '@nestjs/common';
 import { LedgerService } from './ledger.service';
