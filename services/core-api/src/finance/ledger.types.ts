@@ -6,4 +6,5 @@ export interface TipTransaction {
   isVIP: boolean;
   correlationId: string;
   reasonCode?: string;
+  reasonCode: string;
 }

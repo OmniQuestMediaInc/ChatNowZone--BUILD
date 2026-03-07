@@ -1,3 +1,8 @@
+# NCII Takedown Log
+
+| Date | Reference ID | Reported By | Content Description | Action Taken | Resolved |
+|------|-------------|-------------|---------------------|--------------|----------|
+| | | | | | |
 # NCII Takedown Log — Evidence Template
 
 **WO: WO-INIT-001**

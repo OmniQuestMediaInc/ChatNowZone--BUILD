@@ -9,6 +9,11 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 - **Deterministic Logic**: All financial calculations are pure, reproducible functions.
 - **Work Order Governance**: No code change ships without a referenced, approved WO ID.
 
+## Invariant Rules
+
+5. **NETWORK ISOLATION**: No database or internal cache port may be mapped to the host IP.
+   Only the API Gateway (Port 80/443) is permitted to have public bindings.
+
 ## Repository Structure
 
 ```
@@ -53,6 +58,15 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 | PostgreSQL | postgres:15-alpine | Primary relational data store |
 | Redis | redis:7 | Caching and session state |
 | core-api (api) | (local build) | NestJS application server |
+| `transactions` | Tracks every movement of value between users (tip, subscription, private_show) | INSERT ONLY — no UPDATE/DELETE |
+
+## Infrastructure
+
+| Component | Image | Service Name | Purpose |
+|---|---|---|---|
+| PostgreSQL | postgres:15-alpine | db | Primary relational data store |
+| Redis | redis:7-alpine | redis | Caching and session state |
+| API | (local build) | api | NestJS application server |
 
 ## Program Control Contacts
 - Authority: Kevin (Program Control / OmniQuestMedia)
@@ -64,3 +78,4 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 |---|---|---|
 | 2026-03-06 | WO-INIT-001 | Initialize repository structure, ledger schema, docker-compose, governance files |
 | 2026-03-07 | WO-INIT-001 | Add structured logger, TipService, creator surface stubs, RiskModule; fix default 80/20 splits; add transactions table; align docker-compose to spec (postgres:15-alpine, db/redis/api); add ESLint/Prettier config; add NCII takedown log template |
+| 2026-03-07 | WO-INIT-001 | Update docker-compose: postgres:15-alpine, chatnow_zone DB, ${DB_PASSWORD}, redis:7-alpine, service renames (db, api) |
