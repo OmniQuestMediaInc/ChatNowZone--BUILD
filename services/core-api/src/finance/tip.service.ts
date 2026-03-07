@@ -30,6 +30,9 @@ export class TipService {
    * @param tx - Tip transaction descriptor; correlationId must be a globally
    *             unique, caller-supplied idempotency key (e.g., UUID v4).
    *
+   * Correctness notes versus the naive implementation:
+   *   1. Balance enforcement is NOT done via a stale Redis read outside the
+   *      transaction (TOCTOU).  The ledger accumulation is the source of truth;
    * Correctness notes:
    *   1. Balance enforcement is NOT done via a stale Redis read outside the
    *      transaction (TOCTOU). The ledger accumulation is the source of truth;
