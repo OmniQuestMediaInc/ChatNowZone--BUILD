@@ -13,6 +13,11 @@ services:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
       POSTGRES_DB: chatnow
       POSTGRES_USER: chatnow_app
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
