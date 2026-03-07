@@ -7,7 +7,7 @@
 `copilot/fix-commit-backup-issue`
 
 ## HEAD
-`6600943` Initial plan  *(pre-change; updated after commit)*
+`6600943`
 
 ## Problem
 The main branch showed **grey** (no status) on GitHub because `.github/workflows/`
