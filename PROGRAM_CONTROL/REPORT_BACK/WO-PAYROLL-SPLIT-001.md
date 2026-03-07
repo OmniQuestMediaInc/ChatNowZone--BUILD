@@ -4,54 +4,59 @@
 `copilot/implement-payroll-split-logic`
 
 ## HEAD
-`e495baa`
+`d4670b3`
 
 ## Files Changed
 ```
-PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md |  42 ++++++++++++++
-services/core-api/src/db.ts                         |   8 +++
-services/core-api/src/finance/ledger.module.ts      |   9 +++
-services/core-api/src/finance/ledger.service.ts     |  46 +++++++++++++++
+PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md |  59 +++++++++++++++++
+services/core-api/src/db.ts                         |  10 +++
+services/core-api/src/finance/ledger.module.ts      |  11 +++
+services/core-api/src/finance/ledger.service.ts     |  55 ++++++++++++++++
+4 files changed, 135 insertions(+)
 ```
 
 ## Commands Run + Verbatim Outputs
 
 ```
-$ git log --oneline -3
-e495baa Merge branch 'main' into copilot/implement-payroll-split-logic
-3f6bd94 feat: install payroll splitter logic (LedgerService, LedgerModule, db singleton)
-395feb0 feat(risk-engine): install RegionSignalService — Trusted Region Signal (R2)
+$ git log --oneline -6
+d4670b3 fix: address d1faf7b review — PrismaService injection, TipTransaction type, date-bounded contract lookup, performer_id/studio_id/contract_id on ledger entry, WO headers, Files Changed fix
+d1faf7b Merge branch 'main' into copilot/implement-payroll-split-logic
+6678016 fix(governance): add // WO: WO-INIT-001 header to all new services/ TS files
+6979b64 fix(statements): add ParseUUIDPipe to studioId/creatorId params for 400 on invalid UUIDs
+49ff476 fix(statements): use new StatementsDenyAllGuard() instance to guarantee guard is applied
+9aa8363 fix(statements): replace beneficiary_id with studio_id/performer_id per ledger schema
 
-$ git diff --stat HEAD~1 HEAD
- PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md |  42 ++++++++++++++
- services/core-api/src/db.ts                         |   8 +++
- services/core-api/src/finance/ledger.module.ts      |   9 +++
- services/core-api/src/finance/ledger.service.ts     |  46 +++++++++++++++
- 4 files changed, 105 insertions(+)
+$ git diff --stat d1faf7b HEAD
+ PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md |  17 +++---
+ services/core-api/src/db.ts                         |   2 +-
+ services/core-api/src/finance/ledger.module.ts      |   3 +-
+ services/core-api/src/finance/ledger.service.ts     |  38 ++++++++++++------
+ 4 files changed, 42 insertions(+), 18 deletions(-)
 ```
 
 ## Changes Applied
 
 ### `services/core-api/src/db.ts`
-Prisma singleton client — reuse the same `PrismaClient` instance across the process to prevent connection pool exhaustion.
+Prisma singleton client — reuse the same `PrismaClient` instance across the process to prevent connection pool exhaustion. Added `// WO: WO-PAYROLL-SPLIT-001` governance header.
 
 ### `services/core-api/src/finance/ledger.service.ts`
-Installed exactly per droid command payload:
-- `@Injectable()` NestJS decorator applied
+- `@Injectable()` NestJS decorator with `PrismaService` constructor injection (no dual-pool risk)
 - `REGULAR_PAYOUT_RATE = 0.065` and `VIP_PAYOUT_RATE = 0.080` rate constants
-- `processSplitTransaction` method: resolves studio contract, calculates split using `Math.round` to prevent floating-point cent errors, writes atomic `$transaction` INSERT to `ledger_entries`
-- Imports `db` from already-initialized Prisma singleton
+- Uses shared `TipTransaction` type from `ledger.types.ts` (no inline type duplication)
+- `processSplitTransaction`: resolves studio contract filtered by `performer_id`, `status: 'ACTIVE'`, `effective_date ≤ today`, `expiry_date ≥ today OR null`, ordered by `effective_date DESC`
+- Split calculation uses `Math.round` for reproducible cent values; performer receives the integer remainder to prevent floating-point accumulation
+- Atomic `$transaction([ledger_entries.create(...)])` INSERT with `entry_type: 'CHARGE'`; `performer_id`, `studio_id`, `contract_id` populated from resolved contract
 
 ### `services/core-api/src/finance/ledger.module.ts`
-NestJS `LedgerModule` wrapping `LedgerService` as provider and export.
+NestJS `LedgerModule` providing both `PrismaService` and `LedgerService`; exports `LedgerService`. Added `// WO: WO-PAYROLL-SPLIT-001` governance header.
 
 ## Doctrine Compliance
 
 | Invariant | Status |
 |---|---|
-| Append-Only Ledger | ✅ `db.$transaction([db.ledger_entries.create(...)])` — INSERT only, no UPDATE/DELETE |
+| Append-Only Ledger | ✅ `this.db.$transaction([this.db.ledger_entries.create(...)])` — INSERT only, no UPDATE/DELETE |
 | Deterministic Logic | ✅ Split calculation is deterministic: same inputs → same outputs; `Math.round` for reproducible cent values |
-| Atomic Write | ✅ Wrapped in `db.$transaction([...])` |
+| Atomic Write | ✅ Wrapped in `this.db.$transaction([...])` |
 | No Secrets / PII | ✅ No credentials or PII logged |
 
 ## Result
