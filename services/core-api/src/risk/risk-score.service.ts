@@ -1,3 +1,4 @@
+// WO: WO-INIT-001
 import { db } from '../db';
 
 export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
@@ -10,7 +11,7 @@ export interface RiskScore {
 
 export class RiskScoreService {
   async getScore(userId: string): Promise<RiskScore> {
-    const profile = await db.user_risk_profiles.findFirst({
+    const profile = await db.user_risk_profiles.findUnique({
       where: { user_id: userId },
     });
 
