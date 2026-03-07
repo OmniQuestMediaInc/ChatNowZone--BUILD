@@ -7,27 +7,29 @@
 `copilot/reopen-and-address-comments`
 
 ## HEAD Commit
-See latest commit on this branch.
+`71e84433d87aa042c45f9d6f44fe9eaaeb92f2c6` — feat(WO-INIT-001): implement all PR #16 checklist items
 
-## Files Changed (`git diff --stat`)
+## Files Changed (`git diff bd9e14ed49568b956ac8085db47557345ed4f5ef HEAD --stat`)
 
 ```
-OQMI_SYSTEM_STATE.md
-docker-compose.yml
-infra/postgres/init-ledger.sql
-services/core-api/src/finance/ledger.service.ts
-services/core-api/src/finance/ledger.types.ts
-services/core-api/src/finance/tip.service.ts          (new)
-services/core-api/src/logger.ts                        (new)
-services/core-api/src/creator/dashboard.controller.ts  (new)
-services/core-api/src/creator/statements.service.ts    (new)
-services/core-api/src/creator/roster.gateway.ts        (new)
-services/core-api/src/risk/risk-score.service.ts
-services/risk-engine/src/region-signal.service.ts
-services/risk-engine/src/risk.module.ts                (new)
-.eslintrc.js                                           (new)
-.prettierrc                                            (new)
-docs/compliance/evidence_templates/NCII_TAKEDOWN_LOG.md (new)
+ .eslintrc.js                                            |  31 +++++++++++++
+ .prettierrc                                             |  11 +++++
+ OQMI_SYSTEM_STATE.md                                    |   6 ++-
+ PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md              |  63 +++++++++++++++++++++++++
+ docker-compose.yml                                      |  16 +++----
+ docs/compliance/evidence_templates/NCII_TAKEDOWN_LOG.md |  38 +++++++++++++++
+ infra/postgres/init-ledger.sql                          |  62 +++++++++++++++++++++++++
+ services/core-api/src/creator/dashboard.controller.ts   |  22 +++++++++
+ services/core-api/src/creator/roster.gateway.ts         |  23 ++++++++++
+ services/core-api/src/creator/statements.service.ts     |  40 ++++++++++++++++
+ services/core-api/src/finance/ledger.service.ts         | 140 ++++++++++++++++++++++++++++++++++++++++---
+ services/core-api/src/finance/ledger.types.ts           |   1 +
+ services/core-api/src/finance/tip.service.ts            |  30 ++++++++++++
+ services/core-api/src/logger.ts                         |  44 ++++++++++++++++++
+ services/core-api/src/risk/risk-score.service.ts        |  66 ++++++++++++++++----------
+ services/risk-engine/src/region-signal.service.ts       |  76 ++++++++++++++++++------------
+ services/risk-engine/src/risk.module.ts                 |   9 ++++
+ 17 files changed, 565 insertions(+), 113 deletions(-)
 ```
 
 ## Tasks Completed
