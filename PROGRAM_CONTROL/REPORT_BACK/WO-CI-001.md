@@ -69,10 +69,16 @@ present: services/core-api/src/risk/risk-score.service.ts
 --- ALL PRESENT ---
 ```
 
-### CodeQL security scan (after adding `permissions: contents: read`)
+### CodeQL security scan
 ```
-Analysis Result for 'actions'. Found 0 alerts.
+$ gh api repos/OmniQuestMedia/ChatNowZone--BUILD/code-scanning/alerts?state=open
+
+HTTP 403: Code Security must be enabled for this repository to use code scanning.
 ```
+GitHub Advanced Security / Code Security is not enabled for this repository.
+No CodeQL scan is configured; therefore zero code-scanning alerts exist.
+The `permissions: contents: read` workflow-level key was added as a best-practice
+hardening measure (least-privilege) regardless of whether Code Security is active.
 
 ## Expected Outcome
 Once this PR is merged to `main`, every subsequent push will trigger the CI
