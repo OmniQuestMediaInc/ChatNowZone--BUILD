@@ -1,12 +1,12 @@
 services:
-  postgres:
-    image: postgres:16
-    container_name: chatnow_postgres
+  db:
+    image: postgres:15-alpine
+    container_name: chatnow_db
     restart: unless-stopped
     environment:
       POSTGRES_DB: chatnow
       POSTGRES_USER: chatnow_app
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -33,21 +33,21 @@ services:
       timeout: 5s
       retries: 5
 
-  core-api:
+  api:
     build:
       context: ./services/core-api
       dockerfile: Dockerfile
-    container_name: chatnow_core_api
+    container_name: chatnow_api
     restart: unless-stopped
     environment:
       NODE_ENV: ${NODE_ENV:-production}
-      DATABASE_URL: postgresql://chatnow_app:${POSTGRES_PASSWORD}@postgres:5432/chatnow
+      DATABASE_URL: postgresql://chatnow_app:${DB_PASSWORD}@db:5432/chatnow
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       PORT: 3000
     ports:
       - "3000:3000"
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
       redis:
         condition: service_healthy

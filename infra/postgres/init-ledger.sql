@@ -224,3 +224,65 @@ COMMENT ON COLUMN ledger_entries.idempotency_key IS
 
 COMMENT ON COLUMN ledger_entries.parent_entry_id IS
     'Links a REFUND, REVERSAL, or CHARGEBACK back to the original CHARGE entry.';
+
+-- =============================================================================
+-- TABLE: transactions
+-- PURPOSE: High-level transaction record linking a user action (e.g. tip,
+--          purchase) to one or more ledger_entries. Provides a single point
+--          of reference for the originating event.
+-- MUTATION POLICY: INSERT ONLY. Status field may be updated by policy.
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS transactions (
+    id                  UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- Identity
+    transaction_ref     VARCHAR(100) NOT NULL UNIQUE,
+    idempotency_key     VARCHAR(200) NOT NULL UNIQUE,
+
+    -- Parties
+    user_id             UUID        NOT NULL,
+    performer_id        UUID,
+    studio_id           UUID,
+
+    -- Classification
+    transaction_type    VARCHAR(50) NOT NULL
+                            CHECK (transaction_type IN (
+                                'TIP',
+                                'PURCHASE',
+                                'SUBSCRIPTION',
+                                'REFUND',
+                                'CHARGEBACK',
+                                'PAYOUT'
+                            )),
+    status              VARCHAR(20) NOT NULL DEFAULT 'PENDING'
+                            CHECK (status IN ('PENDING', 'SETTLED', 'FAILED', 'DISPUTED', 'REVERSED')),
+
+    -- Amount
+    gross_amount_cents  BIGINT      NOT NULL CHECK (gross_amount_cents >= 0),
+    currency            CHAR(3)     NOT NULL DEFAULT 'USD',
+
+    -- Metadata
+    metadata            JSONB,
+
+    -- Audit
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_transactions_user_id
+    ON transactions (user_id);
+
+CREATE INDEX IF NOT EXISTS idx_transactions_performer_id
+    ON transactions (performer_id)
+    WHERE performer_id IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_transactions_status
+    ON transactions (status);
+
+CREATE INDEX IF NOT EXISTS idx_transactions_created_at
+    ON transactions (created_at DESC);
+
+COMMENT ON TABLE transactions IS
+    'High-level transaction record. Each transaction may produce one or more '
+    'ledger_entries. Provides a single originating event reference for auditing.';
+

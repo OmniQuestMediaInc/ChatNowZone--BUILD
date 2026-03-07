@@ -44,14 +44,15 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 | `user_risk_profiles` | Mini Credit Bureau scoring per user | INSERT + UPDATE allowed |
 | `studio_contracts` | Payroll split logic for studio/performer contracts | INSERT + UPDATE allowed |
 | `ledger_entries` | Append-only transaction history | INSERT ONLY — no UPDATE/DELETE |
+| `transactions` | High-level transaction records linking user actions to ledger entries | INSERT ONLY — status UPDATE allowed by policy |
 
 ## Infrastructure
 
 | Component | Image | Purpose |
 |---|---|---|
-| PostgreSQL | postgres:16 | Primary relational data store |
+| PostgreSQL | postgres:15-alpine | Primary relational data store |
 | Redis | redis:7 | Caching and session state |
-| core-api | (local build) | NestJS application server |
+| core-api (api) | (local build) | NestJS application server |
 
 ## Program Control Contacts
 - Authority: Kevin (Program Control / OmniQuestMedia)
@@ -62,3 +63,4 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 | Date | WO ID | Description |
 |---|---|---|
 | 2026-03-06 | WO-INIT-001 | Initialize repository structure, ledger schema, docker-compose, governance files |
+| 2026-03-07 | WO-INIT-001 | Add structured logger, TipService, creator surface stubs, RiskModule; fix default 80/20 splits; add transactions table; align docker-compose to spec (postgres:15-alpine, db/redis/api); add ESLint/Prettier config; add NCII takedown log template |
