@@ -49,6 +49,15 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 | `user_risk_profiles` | Mini Credit Bureau scoring per user | INSERT + UPDATE allowed |
 | `studio_contracts` | Payroll split logic for studio/performer contracts | INSERT + UPDATE allowed |
 | `ledger_entries` | Append-only transaction history | INSERT ONLY — no UPDATE/DELETE |
+| `transactions` | High-level transaction records linking user actions to ledger entries | INSERT ONLY — status UPDATE allowed by policy |
+
+## Infrastructure
+
+| Component | Image | Purpose |
+|---|---|---|
+| PostgreSQL | postgres:15-alpine | Primary relational data store |
+| Redis | redis:7 | Caching and session state |
+| core-api (api) | (local build) | NestJS application server |
 | `transactions` | Tracks every movement of value between users (tip, subscription, private_show) | INSERT ONLY — no UPDATE/DELETE |
 
 ## Infrastructure
@@ -69,4 +78,5 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 |---|---|---|
 | 2026-03-06 | WO-INIT-001 | Initialize repository structure, ledger schema, docker-compose, governance files |
 | 2026-03-07 | WO-INIT-001 | Update docker-compose: postgres:15-alpine, chatnow_zone DB, ${DB_PASSWORD}, redis:7-alpine, service renames (db, api); add transactions table; structured logger; 80/20 default split; TipService; creator surfaces; RiskModule; ESLint/Prettier configs |
+| 2026-03-07 | WO-INIT-001 | Add structured logger, TipService, creator surface stubs, RiskModule; fix default 80/20 splits; add transactions table; align docker-compose to spec (postgres:15-alpine, db/redis/api); add ESLint/Prettier config; add NCII takedown log template |
 | 2026-03-07 | WO-INIT-001 | Update docker-compose: postgres:15-alpine, chatnow_zone DB, ${DB_PASSWORD}, redis:7-alpine, service renames (db, api) |

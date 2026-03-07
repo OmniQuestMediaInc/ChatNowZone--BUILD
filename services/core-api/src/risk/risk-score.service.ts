@@ -18,6 +18,10 @@ export class RiskScoreService {
       });
 
       if (!profile) {
+        logger.info('getScore: no risk profile found, returning LOW default', {
+          context: 'RiskScoreService',
+          userId,
+        });
         return { userId, level: 'LOW', score: 0 };
       }
 
@@ -36,6 +40,20 @@ export class RiskScoreService {
         level = 'MEDIUM';
       }
 
+      logger.info('getScore: risk score calculated', {
+        context: 'RiskScoreService',
+        userId,
+        score,
+        level,
+      });
+
+      return { userId, level, score };
+    } catch (error) {
+      logger.error('getScore: failed to retrieve risk profile', error, {
+        context: 'RiskScoreService',
+        userId,
+      });
+      throw error;
       return { userId, level, score };
     } catch (err) {
       logger.error('RiskScoreService.getScore failed', {

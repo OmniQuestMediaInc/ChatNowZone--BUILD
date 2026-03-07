@@ -9,6 +9,8 @@ export interface DashboardSummary {
   recentTipCount: number;
 }
 
+export class DashboardController {
+  getSummary(creatorId: string): DashboardSummary {
 @Injectable()
 export class DashboardController {
   async getSummary(creatorId: string): Promise<DashboardSummary> {

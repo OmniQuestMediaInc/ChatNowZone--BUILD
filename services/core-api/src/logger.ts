@@ -32,6 +32,11 @@ function formatError(error: unknown): string {
 
 export const logger = {
   info(message: string, meta?: Record<string, unknown>): void {
+    const entry: LogEntry = { ...(meta || {}), level: 'info', message };
+    process.stdout.write(JSON.stringify(entry) + '\n');
+  },
+  warn(message: string, meta?: Record<string, unknown>): void {
+    const entry: LogEntry = { ...(meta || {}), level: 'warn', message };
     const entry: LogEntry = { level: 'info', message, ...meta };
     process.stdout.write(JSON.stringify(entry) + '\n');
   },
@@ -41,6 +46,10 @@ export const logger = {
   },
   error(message: string, error?: unknown, meta?: Record<string, unknown>): void {
     const entry: LogEntry = {
+      ...(meta || {}),
+      level: 'error',
+      message,
+      ...(error !== undefined ? { error: formatError(error) } : {}),
       level: 'error',
       message,
       ...(error !== undefined ? { error: formatError(error) } : {}),
@@ -50,6 +59,7 @@ export const logger = {
   },
   debug(message: string, meta?: Record<string, unknown>): void {
     if (process.env.LOG_LEVEL === 'debug') {
+      const entry: LogEntry = { ...(meta || {}), level: 'debug', message };
       const entry: LogEntry = { level: 'debug', message, ...meta };
       process.stdout.write(JSON.stringify(entry) + '\n');
     }
