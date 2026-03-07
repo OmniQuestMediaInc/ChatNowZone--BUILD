@@ -7,7 +7,7 @@
 `copilot/fix-commit-backup-issue`
 
 ## HEAD
-`6600943`
+`a5c86f7` fix(ci): add GitHub Actions CI workflow to turn main branch green (WO-CI-001)
 
 ## Problem
 The main branch showed **grey** (no status) on GitHub because `.github/workflows/`
@@ -25,18 +25,53 @@ every push to `main` and every PR targeting `main`.
 
 ## Files Changed
 ```
- .github/required-files.txt               | 14 ++++++++++++++
- .github/workflows/ci.yml                 | 80 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- PROGRAM_CONTROL/REPORT_BACK/WO-CI-001.md | 46 ++++++++++++++++++++++++++++++++++++++
+$ git show a5c86f7 --stat
+commit a5c86f779478e0010dfaaece593ded94d8694057
+Author: copilot-swe-agent[bot]
+Date:   Sat Mar 7 12:54:51 2026 +0000
+
+    fix(ci): add GitHub Actions CI workflow to turn main branch green (WO-CI-001)
+
+ .github/required-files.txt               | 15 ++++++++++++++
+ .github/workflows/ci.yml                 | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ PROGRAM_CONTROL/REPORT_BACK/WO-CI-001.md | 47 +++++++++++++++++++++++++++++++++++++++++++
  3 files changed, 140 insertions(+)
 ```
 
 ## Commands Run
 
+### YAML syntax validation
 ```
-mkdir -p .github/workflows PROGRAM_CONTROL/REPORT_BACK
-# Created .github/workflows/ci.yml (see file for full content)
-# Created PROGRAM_CONTROL/REPORT_BACK/WO-CI-001.md (this file)
+$ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml')); print('YAML valid')"
+YAML valid
+```
+
+### validate-structure smoke-test (required-files check)
+```
+$ while IFS= read -r f || [ -n "$f" ]; do
+    [[ -z "$f" || "$f" == \#* ]] && continue
+    if [ -f "$f" ]; then echo "present: $f"
+    else echo "MISSING: $f"; all_ok=false; fi
+  done < .github/required-files.txt
+present: infra/postgres/init-ledger.sql
+present: docker-compose.yml
+present: OQMI_SYSTEM_STATE.md
+present: .github/copilot-instructions.md
+present: services/core-api/src/app.module.ts
+present: services/core-api/src/db.ts
+present: services/core-api/src/prisma.service.ts
+present: services/core-api/src/finance/ledger.service.ts
+present: services/core-api/src/finance/ledger.types.ts
+present: services/core-api/src/creator/statements.service.ts
+present: services/core-api/src/creator/statements.controller.ts
+present: services/core-api/src/creator/creator.module.ts
+present: services/core-api/src/risk/risk-score.service.ts
+--- ALL PRESENT ---
+```
+
+### CodeQL security scan (after adding `permissions: contents: read`)
+```
+Analysis Result for 'actions'. Found 0 alerts.
 ```
 
 ## Expected Outcome
