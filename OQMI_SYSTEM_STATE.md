@@ -69,3 +69,4 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 |---|---|---|
 | 2026-03-06 | WO-INIT-001 | Initialize repository structure, ledger schema, docker-compose, governance files |
 | 2026-03-07 | WO-INIT-001 | Update docker-compose: postgres:15-alpine, chatnow_zone DB, ${DB_PASSWORD}, redis:7-alpine, service renames (db, api); add transactions table; structured logger; 80/20 default split; TipService; creator surfaces; RiskModule; ESLint/Prettier configs |
+| 2026-03-07 | WO-INIT-001 | Update docker-compose: postgres:15-alpine, chatnow_zone DB, ${DB_PASSWORD}, redis:7-alpine, service renames (db, api) |
