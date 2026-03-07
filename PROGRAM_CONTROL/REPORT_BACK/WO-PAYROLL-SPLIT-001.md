@@ -4,7 +4,7 @@
 `copilot/implement-payroll-split-logic`
 
 ## HEAD
-`6e4f23a`
+`bb322c1`
 
 ## Files Changed
 ```
