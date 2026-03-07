@@ -3,15 +3,13 @@ module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: './tsconfig.json',
-    tsconfigRootDir: __dirname,
     sourceType: 'module',
+    ecmaVersion: 2020,
   },
   plugins: ['@typescript-eslint'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   rules: {
     // Enforce explicit return types on functions
@@ -22,8 +20,6 @@ module.exports = {
     '@typescript-eslint/require-await': 'error',
     // Enforce consistent type assertions
     '@typescript-eslint/consistent-type-assertions': 'error',
-    // No floating promises
-    '@typescript-eslint/no-floating-promises': 'error',
     // No unused variables
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
   },

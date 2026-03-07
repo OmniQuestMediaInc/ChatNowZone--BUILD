@@ -9,7 +9,7 @@ export interface DashboardSummary {
 }
 
 export class DashboardController {
-  async getSummary(creatorId: string): Promise<DashboardSummary> {
+  getSummary(creatorId: string): DashboardSummary {
     // TODO: Implement dashboard summary aggregation from ledger_entries
     return {
       creatorId,

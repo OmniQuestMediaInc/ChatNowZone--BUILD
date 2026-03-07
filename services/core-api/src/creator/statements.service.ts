@@ -23,10 +23,10 @@ export interface CreatorStatement {
 }
 
 export class StatementsService {
-  async getStatement(
+  getStatement(
     creatorId: string,
     period: StatementPeriod,
-  ): Promise<CreatorStatement> {
+  ): CreatorStatement {
     // TODO: Implement statement generation from ledger_entries
     return {
       creatorId,

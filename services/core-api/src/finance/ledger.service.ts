@@ -12,7 +12,7 @@ const SPLIT_TOLERANCE = 0.0001;
 export class LedgerService {
   private readonly RATES = { REGULAR: 0.065, VIP: 0.080 };
 
-  async recordSplitTip(tx: TipTransaction): Promise<ReturnType<typeof db.$transaction>> {
+  async recordSplitTip(tx: TipTransaction): ReturnType<typeof db.$transaction> {
     try {
       const rate = tx.isVIP ? this.RATES.VIP : this.RATES.REGULAR;
       const totalPayoutCents = Math.round(tx.tokenAmount * rate * 100);

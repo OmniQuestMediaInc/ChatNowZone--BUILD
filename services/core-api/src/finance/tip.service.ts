@@ -11,6 +11,23 @@ export class TipService {
   }
 
   async processTip(tx: TipTransaction): Promise<void> {
+    // Validate required fields before delegating to the ledger.
+    const missing: string[] = [];
+    if (!tx.userId)        missing.push('userId');
+    if (!tx.creatorId)     missing.push('creatorId');
+    if (!tx.correlationId) missing.push('correlationId');
+    if (typeof tx.tokenAmount !== 'number') {
+      missing.push('tokenAmount (must be a number)');
+    } else if (tx.tokenAmount <= 0) {
+      missing.push('tokenAmount (must be greater than zero)');
+    }
+
+    if (missing.length > 0) {
+      const msg = `processTip: invalid input — missing or invalid fields: ${missing.join(', ')}`;
+      logger.error(msg, undefined, { context: 'TipService', correlationId: tx.correlationId });
+      throw new Error(msg);
+    }
+
     logger.info('processTip: processing tip transaction', {
       context: 'TipService',
       correlationId: tx.correlationId,

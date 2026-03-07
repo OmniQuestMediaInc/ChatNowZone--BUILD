@@ -8,15 +8,15 @@ export interface RosterEntry {
 }
 
 export class RosterGateway {
-  async getRoster(studioId: string): Promise<RosterEntry[]> {
+  getRoster(_studioId: string): RosterEntry[] {
     // TODO: Implement roster retrieval from studio_contracts
     return [];
   }
 
-  async getPerformerContract(
-    studioId: string,
-    performerId: string,
-  ): Promise<RosterEntry | null> {
+  getPerformerContract(
+    _studioId: string,
+    _performerId: string,
+  ): RosterEntry | null {
     // TODO: Implement contract lookup from studio_contracts
     return null;
   }
