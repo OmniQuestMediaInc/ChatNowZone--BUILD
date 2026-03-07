@@ -13,6 +13,7 @@ export class LedgerService {
   private readonly VIP_PAYOUT_RATE = 0.080;
 
   async recordSplitTip(tx: TipTransaction): Promise<unknown> {
+  async recordSplitTip(tx: TipTransaction) {
     try {
       const rate = tx.isVIP ? this.RATES.VIP : this.RATES.REGULAR;
       const totalPayoutCents = Math.round(tx.tokenAmount * rate * 100);
@@ -37,6 +38,8 @@ export class LedgerService {
       // A studio_contract override replaces these defaults entirely.
       const studioSplit = contract ? Number(contract.studio_split) : 0.20;
       const platformSplit = contract ? Number(contract.platform_split) : 0.00;
+      const studioSplit = contract ? Number(contract.studio_split) : 0;
+      const platformSplit = contract ? Number(contract.platform_split) : 0;
 
       if (studioSplit + platformSplit > 1) {
         throw new Error(
@@ -68,6 +71,7 @@ export class LedgerService {
               amountTokens: tx.tokenAmount,
               isVIP: tx.isVIP,
               reasonCode: tx.reasonCode,
+              reasonCode: tx.isVIP ? 'VIP_LIFT' : 'REGULAR_TIP',
             },
           },
         }),
