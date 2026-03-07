@@ -21,6 +21,12 @@ export class StudioReportService {
         studio_amount_cents: { gt: 0 },
       },
       orderBy: { created_at: 'desc' },
+      select: {
+        beneficiary_id: true,
+        studio_amount_cents: true,
+        gross_amount_cents: true,
+        created_at: true,
+      },
     });
   }
 
