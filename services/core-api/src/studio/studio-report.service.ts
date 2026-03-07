@@ -1,73 +1,104 @@
+// WO: WO-INIT-001
 import { Injectable, Inject } from '@nestjs/common';
 
-interface EarningsTotals {
-  studio_amount_cents: bigint;
+interface EarningsRow {
+  id: string;
+  studio_id: string | null;
+  performer_id: string | null;
+  entry_type: string;
   gross_amount_cents: bigint;
+  studio_amount_cents: bigint;
+  currency: string;
+  created_at: Date;
 }
 
-interface EarningsRow {
-  studio_amount_cents: bigint;
-  gross_amount_cents: bigint;
+interface SerializedEarningsRow {
+  id: string;
+  studio_id: string | null;
+  performer_id: string | null;
+  entry_type: string;
+  gross_amount_cents: string;
+  studio_amount_cents: string;
+  currency: string;
+  created_at: Date;
 }
 
 @Injectable()
 export class StudioReportService {
   constructor(@Inject('DB') private readonly db: any) {}
 
-  async getStudioEarnings(studioId: string) {
-    return await this.db.ledger_entries.findMany({
+  async getStudioEarnings(
+    studioId: string,
+    page = 1,
+    pageSize = 100,
+  ): Promise<SerializedEarningsRow[]> {
+    const rows: EarningsRow[] = await this.db.ledger_entries.findMany({
       where: {
-        beneficiary_id: { in: await this.getStudioCreatorIds(studioId) },
+        studio_id: studioId,
         studio_amount_cents: { gt: 0 },
       },
-      orderBy: { created_at: 'desc' },
+      orderBy: [{ created_at: 'desc' }, { id: 'desc' }],
+      take: pageSize,
+      skip: (page - 1) * pageSize,
       select: {
-        beneficiary_id: true,
-        studio_amount_cents: true,
+        id: true,
+        studio_id: true,
+        performer_id: true,
+        entry_type: true,
         gross_amount_cents: true,
+        studio_amount_cents: true,
+        currency: true,
         created_at: true,
       },
     });
+
+    return rows.map((row) => ({
+      ...row,
+      gross_amount_cents: row.gross_amount_cents.toString(),
+      studio_amount_cents: row.studio_amount_cents.toString(),
+    }));
   }
 
   async getStudioSummary(studioId: string) {
-    const creatorIds = await this.getStudioCreatorIds(studioId);
+    const performerCount = await this.getActivePerformerCount(studioId);
 
-    const rows: EarningsRow[] = await this.db.ledger_entries.findMany({
+    const aggregation = await this.db.ledger_entries.aggregate({
       where: {
-        beneficiary_id: { in: creatorIds },
+        studio_id: studioId,
         studio_amount_cents: { gt: 0 },
       },
-      select: {
+      _sum: {
         studio_amount_cents: true,
         gross_amount_cents: true,
       },
+      _count: {
+        _all: true,
+      },
     });
 
-    const totals = rows.reduce<EarningsTotals>(
-      (acc, row) => {
-        acc.studio_amount_cents += row.studio_amount_cents;
-        acc.gross_amount_cents += row.gross_amount_cents;
-        return acc;
-      },
-      { studio_amount_cents: BigInt(0), gross_amount_cents: BigInt(0) },
-    );
+    const totalStudioAmountCents: bigint =
+      aggregation._sum?.studio_amount_cents ?? BigInt(0);
+    const totalGrossAmountCents: bigint =
+      aggregation._sum?.gross_amount_cents ?? BigInt(0);
 
     return {
       studio_id: studioId,
-      creator_count: creatorIds.length,
-      transaction_count: rows.length,
-      total_studio_amount_cents: totals.studio_amount_cents.toString(),
-      total_gross_amount_cents: totals.gross_amount_cents.toString(),
+      performer_count: performerCount,
+      transaction_count: aggregation._count?._all ?? 0,
+      total_studio_amount_cents: totalStudioAmountCents.toString(),
+      total_gross_amount_cents: totalGrossAmountCents.toString(),
       currency: 'USD',
     };
   }
 
-  private async getStudioCreatorIds(studioId: string): Promise<string[]> {
+  private async getActivePerformerCount(studioId: string): Promise<number> {
     const contracts = await this.db.studio_contracts.findMany({
-      where: { studio_id: studioId },
+      where: { studio_id: studioId, status: 'ACTIVE' },
       select: { performer_id: true },
     });
-    return contracts.map((c: { performer_id: string }) => c.performer_id);
+    const unique = new Set(
+      contracts.map((c: { performer_id: string }) => c.performer_id),
+    );
+    return unique.size;
   }
 }
