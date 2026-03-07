@@ -49,6 +49,7 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 | `user_risk_profiles` | Mini Credit Bureau scoring per user | INSERT + UPDATE allowed |
 | `studio_contracts` | Payroll split logic for studio/performer contracts | INSERT + UPDATE allowed |
 | `ledger_entries` | Append-only transaction history | INSERT ONLY — no UPDATE/DELETE |
+| `transactions` | Tracks every movement of value between users (tip, subscription, private_show) | INSERT ONLY — no UPDATE/DELETE |
 
 ## Infrastructure
 
