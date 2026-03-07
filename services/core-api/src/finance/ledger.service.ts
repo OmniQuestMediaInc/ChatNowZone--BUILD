@@ -5,7 +5,7 @@ import { TipTransaction } from './ledger.types';
 export class LedgerService {
   private readonly RATES = { REGULAR: 0.065, VIP: 0.080 };
 
-  async recordSplitTip(tx: TipTransaction) {
+  async recordSplitTip(tx: TipTransaction): Promise<unknown> {
     const rate = tx.isVIP ? this.RATES.VIP : this.RATES.REGULAR;
     const totalPayoutCents = Math.round(tx.tokenAmount * rate * 100);
 
@@ -57,7 +57,7 @@ export class LedgerService {
           metadata: {
             amountTokens: tx.tokenAmount,
             isVIP: tx.isVIP,
-            reasonCode: tx.isVIP ? 'VIP_LIFT' : 'REGULAR_TIP',
+            reasonCode: tx.reasonCode,
           },
         },
       }),
