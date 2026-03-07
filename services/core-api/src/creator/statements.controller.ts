@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards, CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Query, UseGuards, CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { StatementsService } from './statements.service';
 
 // TODO: replace temporary deny-all guard with real authentication + authorization guards before production use
@@ -23,7 +23,7 @@ export class StatementsController {
 
   @Get('studio/:studioId')
   async getStudioStatement(
-    @Param('studioId') studioId: string,
+    @Param('studioId', ParseUUIDPipe) studioId: string,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {
@@ -35,7 +35,7 @@ export class StatementsController {
 
   @Get('creator/:creatorId/earnings')
   async getCreatorEarnings(
-    @Param('creatorId') creatorId: string,
+    @Param('creatorId', ParseUUIDPipe) creatorId: string,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {
