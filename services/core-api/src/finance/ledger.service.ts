@@ -11,6 +11,7 @@ export class LedgerService {
   private readonly REGULAR_PAYOUT_RATE = 0.065;
   private readonly VIP_PAYOUT_RATE = 0.080;
 
+  async recordSplitTip(tx: TipTransaction): Promise<unknown[]> {
   async recordSplitTip(tx: TipTransaction): Promise<unknown> {
     const rate = tx.isVIP ? this.RATES.VIP : this.RATES.REGULAR;
   constructor(private readonly db: PrismaService) {}
