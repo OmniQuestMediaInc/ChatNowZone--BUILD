@@ -26,16 +26,26 @@ export class LedgerService {
     const performerAmountCents = totalPayoutCents - studioAmountCents;
 
     return await db.$transaction([
-      db.ledger_entries.create({ data: { 
-        correlation_id: tx.correlationId, 
-        actor_id: tx.userId,
-        beneficiary_id: tx.creatorId, 
-        amount_tokens: tx.tokenAmount,
-        performer_amount_cents: performerAmountCents,
-        studio_amount_cents: studioAmountCents,
-        entry_type: 'TIP',
-        reason_code: tx.isVIP ? 'VIP_LIFT' : 'REGULAR_TIP'
-      }})
+      db.ledger_entries.create({
+        data: {
+          transaction_ref: tx.correlationId,
+          idempotency_key: tx.correlationId,
+          user_id: tx.userId,
+          gross_amount_cents: totalPayoutCents,
+          net_amount_cents: totalPayoutCents,
+          entry_type: 'TIP',
+          reason_code: tx.isVIP ? 'VIP_LIFT' : 'REGULAR_TIP',
+          metadata: {
+            correlationId: tx.correlationId,
+            actorId: tx.userId,
+            beneficiaryId: tx.creatorId,
+            amountTokens: tx.tokenAmount,
+            performerAmountCents,
+            studioAmountCents,
+            isVIP: tx.isVIP,
+          },
+        },
+      }),
     ]);
   }
 }
