@@ -227,6 +227,12 @@ COMMENT ON COLUMN ledger_entries.parent_entry_id IS
 
 -- =============================================================================
 -- TABLE: transactions
+-- PURPOSE: High-level transaction record linking a user action (e.g. tip,
+--          purchase) to one or more ledger_entries. Provides a single point
+--          of reference for the originating event.
+-- MUTATION POLICY: INSERT ONLY except status transitions. INSERT and status
+--                  UPDATE are permitted. All other UPDATE columns and all
+--                  DELETE operations are blocked by trigger.
 -- PURPOSE: Tracks every single movement of value between users.
 -- MUTATION POLICY: INSERT ONLY. No UPDATE. No DELETE. Ever.
 -- WO: WO-INIT-001
@@ -339,3 +345,60 @@ CREATE INDEX IF NOT EXISTS idx_transactions_created_at
 COMMENT ON TABLE transactions IS
     'High-level transaction record. Each transaction may produce one or more '
     'ledger_entries. Provides a single originating event reference for auditing.';
+
+-- ---------------------------------------------------------------------------
+-- Trigger: block DELETE and non-status UPDATE on transactions (append-only
+-- with the sole exception of status transitions).
+-- ---------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION transactions_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'DELETE' THEN
+        RAISE EXCEPTION
+            'transactions is append-only: DELETE is not permitted (id=%).', OLD.id;
+    END IF;
+    -- On UPDATE, only the status column may change.
+    -- Note: updated_at is intentionally excluded here — it is managed by the
+    -- separate trg_transactions_status_updated_at trigger and must be allowed
+    -- to change in concert with a status update.
+    IF TG_OP = 'UPDATE' THEN
+        IF NEW.transaction_ref     IS DISTINCT FROM OLD.transaction_ref     OR
+           NEW.idempotency_key     IS DISTINCT FROM OLD.idempotency_key     OR
+           NEW.user_id             IS DISTINCT FROM OLD.user_id             OR
+           NEW.performer_id        IS DISTINCT FROM OLD.performer_id        OR
+           NEW.studio_id           IS DISTINCT FROM OLD.studio_id           OR
+           NEW.transaction_type    IS DISTINCT FROM OLD.transaction_type    OR
+           NEW.gross_amount_cents  IS DISTINCT FROM OLD.gross_amount_cents  OR
+           NEW.currency            IS DISTINCT FROM OLD.currency            OR
+           NEW.metadata            IS DISTINCT FROM OLD.metadata            OR
+           NEW.created_at          IS DISTINCT FROM OLD.created_at
+        THEN
+            RAISE EXCEPTION
+                'transactions is append-only: only status updates are permitted (id=%).', OLD.id;
+        END IF;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_transactions_block_mutation
+BEFORE UPDATE OR DELETE ON transactions
+FOR EACH ROW EXECUTE FUNCTION transactions_block_mutation();
+
+-- ---------------------------------------------------------------------------
+-- Trigger: maintain updated_at when transaction status changes.
+-- ---------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION set_transactions_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.status IS DISTINCT FROM OLD.status THEN
+        NEW.updated_at := NOW();
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_transactions_status_updated_at
+BEFORE UPDATE OF status ON transactions
+FOR EACH ROW EXECUTE FUNCTION set_transactions_updated_at();
+
