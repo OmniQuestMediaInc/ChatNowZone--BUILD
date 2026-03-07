@@ -21,10 +21,15 @@ export class LedgerService {
       }
     });
 
-    const studioPct = contract ? Number(contract.studio_commission_pct) : 0;
-    const studioAmountCents = Math.round(totalPayoutCents * (studioPct / 100));
-    const performerAmountCents = totalPayoutCents - studioAmountCents;
+    const studioSplit = contract?.studio_split ?? 0;
+    const platformSplit = contract?.platform_split ?? 0;
+    const performerSplit =
+      contract?.performer_split !== undefined && contract?.performer_split !== null
+        ? contract.performer_split
+        : 1 - studioSplit - platformSplit;
 
+    const studioAmountCents = Math.round(totalPayoutCents * studioSplit);
+    const performerAmountCents = Math.round(totalPayoutCents * performerSplit);
     return await db.$transaction([
       db.ledger_entries.create({
         data: {
