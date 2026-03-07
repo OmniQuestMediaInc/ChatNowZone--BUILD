@@ -1,14 +1,22 @@
 services:
-  postgres:
-    image: postgres:16
-    container_name: chatnow_postgres
-    restart: unless-stopped
+  db:
+    image: postgres:15-alpine
     environment:
+      POSTGRES_DB: chatnow_zone
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./infra/postgres:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
       POSTGRES_DB: chatnow
       POSTGRES_USER: chatnow_app
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
+    # PORTS REMOVED: Internal network only. (PR #20 — NETWORK ISOLATION invariant)
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./infra/postgres/init-ledger.sql:/docker-entrypoint-initdb.d/01-init-ledger.sql:ro
@@ -23,8 +31,7 @@ services:
     container_name: chatnow_redis
     restart: unless-stopped
     command: redis-server --requirepass ${REDIS_PASSWORD}
-    ports:
-      - "6379:6379"
+    # PORTS REMOVED: Internal network only. (PR #20 — NETWORK ISOLATION invariant)
     volumes:
       - redis_data:/data
     healthcheck:
@@ -33,31 +40,10 @@ services:
       timeout: 5s
       retries: 5
 
-  core-api:
-    build:
-      context: ./services/core-api
-      dockerfile: Dockerfile
-    container_name: chatnow_core_api
-    restart: unless-stopped
-    environment:
-      NODE_ENV: ${NODE_ENV:-production}
-      DATABASE_URL: postgresql://chatnow_app:${POSTGRES_PASSWORD}@postgres:5432/chatnow
-      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
-      PORT: 3000
-    ports:
-      - "3000:3000"
+  api:
+    build: .
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-
-volumes:
-  postgres_data:
-  redis_data:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/chatnow_zone

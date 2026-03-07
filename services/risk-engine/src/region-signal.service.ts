@@ -14,6 +14,7 @@ export interface RegionSignalResult {
   vpnRisk: boolean;
   flags: string[];
 }
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class RegionSignalService {
@@ -59,5 +60,33 @@ export class RegionSignalService {
       });
       throw err;
     }
+  getConfidenceScore(data: {
+    ipCountry: string;
+    billingCountry: string;
+    binCountry: string;
+    isVpnDetected: boolean;
+  }): Promise<{ confidence: number; region: string; vpnRisk: boolean }> {
+    let score = 1.0;
+
+    // 1. VPN Penalty
+    if (data.isVpnDetected) {
+      score -= 0.5;
+    }
+
+    // 2. BIN vs Billing Mismatch (High Risk)
+    if (data.binCountry !== data.billingCountry) {
+      score -= 0.3;
+    }
+
+    // 3. IP vs Billing Mismatch (Moderate Risk)
+    if (data.ipCountry !== data.billingCountry) {
+      score -= 0.1;
+    }
+
+    return Promise.resolve({
+      confidence: Math.max(0, score),
+      region: data.binCountry, // BIN is the 'Anchor of Trust'
+      vpnRisk: data.isVpnDetected
+    });
   }
 }
