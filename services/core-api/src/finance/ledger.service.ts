@@ -1,3 +1,4 @@
+// WO: WO-INIT-001
 import { db } from '../db';
 import { TipTransaction } from './ledger.types';
 
@@ -21,33 +22,39 @@ export class LedgerService {
       }
     });
 
-    const studioSplit = contract?.studio_split ?? 0;
-    const platformSplit = contract?.platform_split ?? 0;
-    const performerSplit =
-      contract?.performer_split !== undefined && contract?.performer_split !== null
-        ? contract.performer_split
-        : 1 - studioSplit - platformSplit;
+    const studioSplit = contract ? Number(contract.studio_split) : 0;
+    const platformSplit = contract ? Number(contract.platform_split) : 0;
+
+    if (studioSplit + platformSplit > 1) {
+      throw new Error(
+        `Invalid contract splits: studio(${studioSplit}) + platform(${platformSplit}) > 1.0`,
+      );
+    }
 
     const studioAmountCents = Math.round(totalPayoutCents * studioSplit);
-    const performerAmountCents = Math.round(totalPayoutCents * performerSplit);
+    const platformAmountCents = Math.round(totalPayoutCents * platformSplit);
+    // Performer gets the exact remainder — avoids floating-point accumulation
+    const performerAmountCents = totalPayoutCents - studioAmountCents - platformAmountCents;
+
     return await db.$transaction([
       db.ledger_entries.create({
         data: {
           transaction_ref: tx.correlationId,
           idempotency_key: tx.correlationId,
           user_id: tx.userId,
+          performer_id: tx.creatorId,
+          studio_id: contract?.studio_id ?? null,
+          contract_id: contract?.id ?? null,
           gross_amount_cents: totalPayoutCents,
           net_amount_cents: totalPayoutCents,
-          entry_type: 'TIP',
-          reason_code: tx.isVIP ? 'VIP_LIFT' : 'REGULAR_TIP',
+          entry_type: 'CHARGE',
+          performer_amount_cents: performerAmountCents,
+          studio_amount_cents: studioAmountCents,
+          platform_amount_cents: platformAmountCents,
           metadata: {
-            correlationId: tx.correlationId,
-            actorId: tx.userId,
-            beneficiaryId: tx.creatorId,
             amountTokens: tx.tokenAmount,
-            performerAmountCents,
-            studioAmountCents,
             isVIP: tx.isVIP,
+            reasonCode: tx.isVIP ? 'VIP_LIFT' : 'REGULAR_TIP',
           },
         },
       }),
