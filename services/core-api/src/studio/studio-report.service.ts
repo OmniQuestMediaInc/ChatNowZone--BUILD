@@ -66,8 +66,8 @@ export class StudioReportService {
   private async getStudioCreatorIds(studioId: string): Promise<string[]> {
     const contracts = await this.db.studio_contracts.findMany({
       where: { studio_id: studioId },
-      select: { creator_id: true },
+      select: { performer_id: true },
     });
-    return contracts.map((c: { creator_id: string }) => c.creator_id);
+    return contracts.map((c: { performer_id: string }) => c.performer_id);
   }
 }
