@@ -25,7 +25,9 @@ export class LedgerService {
       },
     });
 
-    const studioSplit = contract ? Number(contract.studio_split) : 0;
+    // Default 80/20 split: performer 80%, studio 20%, platform 0%
+    // A studio_contract override replaces these defaults entirely.
+    const studioSplit = contract ? Number(contract.studio_split) : 0.20;
     const platformSplit = contract ? Number(contract.platform_split) : 0;
 
     if (studioSplit + platformSplit > 1) {
