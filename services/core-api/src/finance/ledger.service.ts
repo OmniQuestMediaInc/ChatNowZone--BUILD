@@ -11,6 +11,8 @@ export class LedgerService {
   private readonly REGULAR_PAYOUT_RATE = 0.065;
   private readonly VIP_PAYOUT_RATE = 0.080;
 
+  async recordSplitTip(tx: TipTransaction): Promise<unknown> {
+    const rate = tx.isVIP ? this.RATES.VIP : this.RATES.REGULAR;
   constructor(private readonly db: PrismaService) {}
 
   async processSplitTransaction(tx: TipTransaction) {
@@ -58,6 +60,14 @@ export class LedgerService {
           gross_amount_cents: Math.round(tx.tokenAmount * 100),
           net_amount_cents: totalPayoutCents,
           entry_type: 'CHARGE',
+          performer_amount_cents: performerAmountCents,
+          studio_amount_cents: studioAmountCents,
+          platform_amount_cents: platformAmountCents,
+          metadata: {
+            amountTokens: tx.tokenAmount,
+            isVIP: tx.isVIP,
+            reasonCode: tx.reasonCode,
+          },
         },
       }),
     ]);
