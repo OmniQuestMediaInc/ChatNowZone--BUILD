@@ -8,8 +8,17 @@ export class LedgerService {
     const rate = tx.isVIP ? this.RATES.VIP : this.RATES.REGULAR;
     const totalPayoutCents = Math.round(tx.tokenAmount * rate * 100);
 
-    const contract = await db.studio_contracts.findFirst({ 
-      where: { creator_id: tx.creatorId, is_active: true } 
+    const now = new Date();
+    const contract = await db.studio_contracts.findFirst({
+      where: {
+        performer_id: tx.creatorId,
+        status: 'ACTIVE',
+        effective_date: { lte: now },
+        OR: [
+          { expiry_date: null },
+          { expiry_date: { gt: now } }
+        ]
+      }
     });
 
     const studioPct = contract ? Number(contract.studio_commission_pct) : 0;
