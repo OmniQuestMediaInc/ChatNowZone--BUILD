@@ -77,6 +77,9 @@ export class LedgerService {
       });
       throw err;
     }
+  async recordSplitTip(tx: TipTransaction): Promise<unknown[]> {
+  async recordSplitTip(tx: TipTransaction): Promise<unknown> {
+    const rate = tx.isVIP ? this.RATES.VIP : this.RATES.REGULAR;
   constructor(private readonly db: PrismaService) {}
 
   async processSplitTransaction(tx: TipTransaction) {
@@ -95,6 +98,16 @@ export class LedgerService {
       orderBy: { effective_date: 'desc' },
     });
 
+    // Default 80/20 split: performer 80%, studio 20%, platform 0%
+    // A studio_contract override replaces these defaults entirely.
+    const studioSplit = contract ? Number(contract.studio_split) : 0.20;
+    const platformSplit = contract ? Number(contract.platform_split) : 0;
+
+    if (studioSplit + platformSplit > 1) {
+      throw new Error(
+        `Invalid contract splits: studio(${studioSplit}) + platform(${platformSplit}) > 1.0`,
+      );
+    }
     const studioSplit = contract ? Number(contract.studio_split) : 0;
     const studioCents = Math.round(totalPayoutCents * studioSplit);
     const performerCents = totalPayoutCents - studioCents;
@@ -114,6 +127,14 @@ export class LedgerService {
           gross_amount_cents: Math.round(tx.tokenAmount * 100),
           net_amount_cents: totalPayoutCents,
           entry_type: 'CHARGE',
+          performer_amount_cents: performerAmountCents,
+          studio_amount_cents: studioAmountCents,
+          platform_amount_cents: platformAmountCents,
+          metadata: {
+            amountTokens: tx.tokenAmount,
+            isVIP: tx.isVIP,
+            reasonCode: tx.reasonCode,
+          },
         },
       }),
     ]);
