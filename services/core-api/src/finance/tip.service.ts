@@ -1,4 +1,5 @@
 // WO: WO-INIT-001
+import { Injectable } from '@nestjs/common';
 import { LedgerService } from './ledger.service';
 import { TipTransaction } from './ledger.types';
 
@@ -15,6 +16,7 @@ import { TipTransaction } from './ledger.types';
  *     LedgerService.recordSplitTip — no side-effectful or Redis-derived
  *     balances are used as authoritative inputs.
  */
+@Injectable()
 export class TipService {
   private readonly ledger: LedgerService;
 
@@ -31,6 +33,9 @@ export class TipService {
    * Correctness notes versus the naive implementation:
    *   1. Balance enforcement is NOT done via a stale Redis read outside the
    *      transaction (TOCTOU).  The ledger accumulation is the source of truth;
+   * Correctness notes:
+   *   1. Balance enforcement is NOT done via a stale Redis read outside the
+   *      transaction (TOCTOU). The ledger accumulation is the source of truth;
    *      upstream callers must gate on a DB-consistent balance query before
    *      calling this method, or rely on downstream payment-gateway rejection.
    *   2. The ledger INSERT uses entry_type 'CHARGE' — the only valid type for
