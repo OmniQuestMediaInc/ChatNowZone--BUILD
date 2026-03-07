@@ -12,33 +12,31 @@ export class RegionSignalService {
     billingCountry: string;
     binCountry: string;
     isVpnDetected: boolean;
-  }): Promise<{ confidence: number; region: string; vpnRisk: boolean; flags: string[] }> {
+  }): Promise<{ confidence: number; region: string; vpnRisk: boolean }> {
     let score = 1.0;
-    const flags: string[] = [];
+    const mismatches = [];
 
-    // 1. VPN/Proxy Penalty
+    // 1. VPN Penalty
     if (data.isVpnDetected) {
       score -= 0.5;
-      flags.push('VPN_DETECTED');
     }
 
-    // 2. BIN vs Billing Mismatch (High Risk for Fraud)
+    // 2. BIN vs Billing Mismatch (High Risk)
     if (data.binCountry !== data.billingCountry) {
       score -= 0.3;
-      flags.push('BIN_BILLING_MISMATCH');
+      mismatches.push('BIN_BILLING_MISMATCH');
     }
 
-    // 3. IP vs Billing Mismatch (Moderate Risk / Travel)
+    // 3. IP vs Billing Mismatch (Moderate Risk)
     if (data.ipCountry !== data.billingCountry) {
       score -= 0.1;
-      flags.push('IP_LOCATION_MISMATCH');
+      mismatches.push('IP_LOCATION_MISMATCH');
     }
 
     return {
       confidence: Math.max(0, score),
       region: data.binCountry, // BIN is the 'Anchor of Trust'
-      vpnRisk: data.isVpnDetected,
-      flags: flags
+      vpnRisk: data.isVpnDetected
     };
   }
 }
