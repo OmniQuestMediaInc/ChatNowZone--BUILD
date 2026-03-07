@@ -252,14 +252,26 @@ CREATE TABLE IF NOT EXISTS transactions (
     created_at       TIMESTAMPTZ    NOT NULL DEFAULT NOW()
 );
 
+-- Enforce append-only for transactions via dedicated trigger function
+CREATE OR REPLACE FUNCTION transactions_block_mutation()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RAISE EXCEPTION
+        'Append-only violation on %: UPDATE and DELETE are not allowed by OQMI Doctrine (WO-INIT-001).',
+        TG_TABLE_NAME;
+END;
+$$;
+
 -- Enforce append-only: prevent UPDATE and DELETE via triggers that raise errors
 CREATE OR REPLACE TRIGGER trg_transactions_no_update
     BEFORE UPDATE ON transactions
-    FOR EACH ROW EXECUTE FUNCTION ledger_entries_block_mutation();
+    FOR EACH ROW EXECUTE FUNCTION transactions_block_mutation();
 
 CREATE OR REPLACE TRIGGER trg_transactions_no_delete
     BEFORE DELETE ON transactions
-    FOR EACH ROW EXECUTE FUNCTION ledger_entries_block_mutation();
+    FOR EACH ROW EXECUTE FUNCTION transactions_block_mutation();
 
 -- Indexing for fast financial reporting
 CREATE INDEX IF NOT EXISTS idx_broadcaster_earnings
