@@ -1,21 +1,7 @@
 // WO: WO-INIT-001
 import { Injectable } from '@nestjs/common';
 import { db } from '../db';
-import { logger } from '../logger';
 import { TipTransaction } from './ledger.types';
-
-const DEFAULT_STUDIO_SPLIT = 0.20;
-const DEFAULT_PERFORMER_SPLIT = 0.80;
-const DEFAULT_PLATFORM_SPLIT = 0.00;
-// Floating-point tolerance: splits summing to exactly 1.0 may differ by up to this amount
-const SPLIT_TOLERANCE = 0.0001;
-
-// WO: WO-PAYROLL-SPLIT-001
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { TipTransaction } from './ledger.types';
-
-@Injectable()
 export class LedgerService {
   private readonly REGULAR_PAYOUT_RATE = 0.065;
   private readonly VIP_PAYOUT_RATE = 0.080;
