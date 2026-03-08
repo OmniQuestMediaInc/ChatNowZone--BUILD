@@ -9,7 +9,10 @@ export class HumanCounterWorker {
    * @param streamId - Identifies the live stream source; forwarded to the Vision microservice on integration.
    * @param frameBuffer - Raw frame bytes to be analyzed.
    */
-  async analyzeFrame(streamId: string, frameBuffer: Buffer): Promise<{ humanCount: number; timestamp: number }> {
+  async analyzeFrame(
+    _streamId: string,
+    _frameBuffer: Buffer,
+  ): Promise<{ humanCount: number; timestamp: number }> {
     // Current Droid Placeholder: Returns 1 human.
     // Integration point for Python/FastAPI Vision microservice.
     return {

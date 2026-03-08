@@ -54,14 +54,6 @@ export class RiskScoreService {
         userId,
       });
       throw error;
-      return { userId, level, score };
-    } catch (err) {
-      logger.error('RiskScoreService.getScore failed', {
-        user_id: userId,
-        error: err instanceof Error ? err.message : String(err),
-      });
-      throw err;
     }
   }
 }
-

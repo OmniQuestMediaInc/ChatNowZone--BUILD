@@ -3,7 +3,4 @@ export class StatementsService {
   getCreatorStatement(): void {}
   getStudioStatement(): void {}
   generateAuditExport(): void {}
-  getCreatorStatement() {}
-  getStudioStatement() {}
-  generateAuditExport() {}
 }

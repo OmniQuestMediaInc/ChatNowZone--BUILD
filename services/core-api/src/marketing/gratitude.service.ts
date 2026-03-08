@@ -1,8 +1,14 @@
 // WO: WO-INIT-001
+import { logger } from '../logger';
+
 export class GratitudeService {
   private static readonly THIRTY_MINUTES_MS = 30 * 60 * 1000;
-  // Requirement: Users feel appreciated after the fact.
-  async triggerPostTipFollowup(userId: string, creatorName: string, amount: number) {
+
+  async triggerPostTipFollowup(
+    userId: string,
+    creatorName: string,
+    amount: number,
+  ): Promise<void> {
     const message = this.generatePraiseMessage(creatorName, amount);
 
     // Logic: Delay sending by 30 minutes to feel "authentic"
@@ -20,8 +26,13 @@ export class GratitudeService {
     return templates[index];
   }
 
-  private async queueMessage(userId: string, body: string, delayMs: number) {
+  private async queueMessage(userId: string, body: string, delayMs: number): Promise<void> {
     // Integration point for BullMQ or Redis delay queue
-    console.log(`[MARKETING] Queued message for [REDACTED] in ${delayMs}ms: ${body}`);
+    logger.info('[MARKETING] Queued gratitude message', {
+      context: 'GratitudeService',
+      userId,
+      delayMs,
+      messageLength: body.length,
+    });
   }
 }
