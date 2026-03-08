@@ -234,8 +234,6 @@ COMMENT ON COLUMN ledger_entries.parent_entry_id IS
 -- MUTATION POLICY: INSERT ONLY except status transitions. INSERT and status
 --                  UPDATE are permitted. All other UPDATE columns and all
 --                  DELETE operations are blocked by trigger.
--- PURPOSE: Tracks every single movement of value between users.
--- MUTATION POLICY: INSERT ONLY. No UPDATE. No DELETE. Ever.
 -- WO: WO-INIT-001
 -- =============================================================================
 CREATE TABLE IF NOT EXISTS transactions (
