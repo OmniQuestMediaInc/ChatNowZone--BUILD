@@ -6,20 +6,24 @@
 **Doctrine:** Loyalty & Retention (R1)
 
 ## Branch + HEAD
-- **Branch:** copilot/add-gratitude-engine
-- **HEAD:** (updated after commit)
+- **Branch:** `copilot/add-gratitude-engine`
+- **HEAD:** `ff2d9a3`
 
-## Files Changed
+## Files Changed (`git diff --stat 8fe2cf3..HEAD`)
 ```
-services/core-api/src/marketing/gratitude.service.ts  (new)
-PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md           (new)
+ PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md           | 40 ++++++++++++++++++++++++++++++++++++++++
+ services/core-api/src/marketing/gratitude.service.ts | 27 +++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
 ```
 
 ## Commands Run
 
 ```
-mkdir -p services/core-api/src/marketing
-mkdir -p PROGRAM_CONTROL/REPORT_BACK
+$ mkdir -p services/core-api/src/marketing
+(no output)
+
+$ mkdir -p PROGRAM_CONTROL/REPORT_BACK
+(no output)
 ```
 
 ## Governance Compliance
