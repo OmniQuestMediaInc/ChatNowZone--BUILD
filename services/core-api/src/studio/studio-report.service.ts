@@ -2,7 +2,11 @@
 import { db } from '../db';
 
 export class StudioReportService {
-  async getStudioEarnings(studioId: string, take = 100, skip = 0) {
+  async getStudioEarnings(
+    studioId: string,
+    take = 100,
+    skip = 0,
+  ): Promise<unknown[]> {
     if (!studioId) {
       throw new Error('studioId is required');
     }
