@@ -1,19 +1,4 @@
 // WO: WO-INIT-001
-import { Injectable, Logger } from '@nestjs/common';
-
-export interface RegionSignalInput {
-  ipCountry: string;
-  billingCountry: string;
-  binCountry: string;
-  isVpnDetected: boolean;
-}
-
-export interface RegionSignalResult {
-  confidence: number;
-  region: string;
-  vpnRisk: boolean;
-  flags: string[];
-}
 import { Injectable } from '@nestjs/common';
 
 export interface RegionSignalInput {
@@ -28,9 +13,6 @@ export interface RegionSignalResult {
   region: string;
   vpnRisk: boolean;
   flags: string[];
-}
-
-@Injectable()
 export class RegionSignalService {
   private readonly logger = new Logger(RegionSignalService.name);
 
