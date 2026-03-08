@@ -8,8 +8,11 @@
 ### Files Changed
 
 ```
-services/rewards-api/src/engine/points-calculator.logic.ts  (new)
-services/rewards-api/src/white-label/partner-config.schema.ts  (new)
+$ git diff --stat 68a46d4~1 68a46d4
+ PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md                    | 35 +++++++++++++++++++++++++++++++++++
+ services/rewards-api/src/engine/points-calculator.logic.ts    |  4 ++++
+ services/rewards-api/src/white-label/partner-config.schema.ts |  4 ++++
+ 3 files changed, 43 insertions(+)
 ```
 
 ### Commands Run
