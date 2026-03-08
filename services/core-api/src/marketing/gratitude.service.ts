@@ -16,7 +16,7 @@ export class GratitudeService {
       `That was a generous tip for ${name}. Hope to see you in the room again soon!`,
     ];
     // Deterministic selection: reproducible given the same inputs (no randomness)
-    const index = Math.abs(amount) % templates.length;
+    const index = Math.trunc(Math.abs(amount)) % templates.length;
     return templates[index];
   }
 
