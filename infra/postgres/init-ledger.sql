@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS user_risk_profiles (
     risk_score          NUMERIC(5, 2)  NOT NULL DEFAULT 0.00
                             CHECK (risk_score >= 0 AND risk_score <= 100),
     risk_tier           VARCHAR(20) NOT NULL DEFAULT 'UNRATED'
-                            CHECK (risk_tier IN ('UNRATED', 'LOW', 'MEDIUM', 'HIGH', 'BLOCKED')),
+                            CHECK (risk_tier IN ('UNRATED', 'LOW', 'MEDIUM', 'HIGH', 'BLOCKED')), 
 
     -- Credit bureau data
     total_charged_back  NUMERIC(12, 2) NOT NULL DEFAULT 0.00,
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS studio_contracts (
 
     -- Audit timestamps
     created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(), 
     created_by          UUID        NOT NULL
 );
 
@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS ledger_entries (
 
 -- Enforce append-only: prevent UPDATE and DELETE via triggers that raise errors
 CREATE OR REPLACE FUNCTION ledger_entries_block_mutation()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER AS $${
 BEGIN
     RAISE EXCEPTION
         'OQMI Append-Only Doctrine violation: % on ledger_entries is prohibited. '
@@ -238,69 +238,6 @@ COMMENT ON COLUMN ledger_entries.parent_entry_id IS
 -- WO: WO-INIT-001
 -- =============================================================================
 CREATE TABLE IF NOT EXISTS transactions (
-    id               UUID           PRIMARY KEY DEFAULT gen_random_uuid(),
-
-    -- Parties (UUID references; users table managed outside ledger schema)
-    sender_id        UUID           NOT NULL,
-    receiver_id      UUID           NOT NULL,
-
-    -- Prevent self-transactions
-    CONSTRAINT transactions_sender_receiver_differ CHECK (sender_id <> receiver_id),
-
-    -- Amount (must be positive; value always flows from sender to receiver)
-    amount           DECIMAL(10, 2) NOT NULL CHECK (amount > 0),
-
-    -- Classification (required for every transaction)
-    transaction_type VARCHAR(20)    NOT NULL
-                         CHECK (transaction_type IN ('tip', 'subscription', 'private_show')),
-
-    -- Immutable audit timestamp (no updated_at — append-only)
-    created_at       TIMESTAMPTZ    NOT NULL DEFAULT NOW()
-);
-
--- Enforce append-only: prevent UPDATE and DELETE via triggers that raise errors
-CREATE OR REPLACE TRIGGER trg_transactions_no_update
-    BEFORE UPDATE ON transactions
-    FOR EACH ROW EXECUTE FUNCTION ledger_entries_block_mutation();
-
-CREATE OR REPLACE TRIGGER trg_transactions_no_delete
-    BEFORE DELETE ON transactions
-    FOR EACH ROW EXECUTE FUNCTION ledger_entries_block_mutation();
--- Enforce append-only for transactions via dedicated trigger function
-CREATE OR REPLACE FUNCTION transactions_block_mutation()
-RETURNS trigger
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RAISE EXCEPTION
-        'Append-only violation on %: UPDATE and DELETE are not allowed by OQMI Doctrine (WO-INIT-001).',
-        TG_TABLE_NAME;
-END;
-$$;
-
--- Enforce append-only: prevent UPDATE and DELETE via triggers that raise errors
-CREATE OR REPLACE TRIGGER trg_transactions_no_update
-    BEFORE UPDATE ON transactions
-    FOR EACH ROW EXECUTE FUNCTION transactions_block_mutation();
-
-CREATE OR REPLACE TRIGGER trg_transactions_no_delete
-    BEFORE DELETE ON transactions
-    FOR EACH ROW EXECUTE FUNCTION transactions_block_mutation();
-
--- Indexing for fast financial reporting
-CREATE INDEX IF NOT EXISTS idx_broadcaster_earnings
-    ON transactions (receiver_id, created_at);
-
-COMMENT ON TABLE transactions IS
-    'Tracks every movement of value between users. IMMUTABLE by OQMI Doctrine. '
-    'INSERT ONLY — UPDATE and DELETE are blocked by database rules. '
-    'transaction_type is restricted to: tip, subscription, private_show.';
--- PURPOSE: High-level transaction record linking a user action (e.g. tip,
---          purchase) to one or more ledger_entries. Provides a single point
---          of reference for the originating event.
--- MUTATION POLICY: INSERT ONLY. Status field may be updated by policy.
--- =============================================================================
-CREATE TABLE IF NOT EXISTS transactions (
     id                  UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
 
     -- Identity
@@ -359,7 +296,7 @@ COMMENT ON TABLE transactions IS
 -- with the sole exception of status transitions).
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION transactions_block_mutation()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER AS $${
 BEGIN
     IF TG_OP = 'DELETE' THEN
         RAISE EXCEPTION
@@ -397,7 +334,7 @@ FOR EACH ROW EXECUTE FUNCTION transactions_block_mutation();
 -- Trigger: maintain updated_at when transaction status changes.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION set_transactions_updated_at()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER AS $${
 BEGIN
     IF NEW.status IS DISTINCT FROM OLD.status THEN
         NEW.updated_at := NOW();
@@ -409,4 +346,3 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_transactions_status_updated_at
 BEFORE UPDATE OF status ON transactions
 FOR EACH ROW EXECUTE FUNCTION set_transactions_updated_at();
-
