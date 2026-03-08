@@ -176,6 +176,7 @@ BEGIN
         'OQMI Append-Only Doctrine violation: % on ledger_entries is prohibited. '
         'Ledger entries are immutable. Create a new correcting entry instead.',
         TG_OP;
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
