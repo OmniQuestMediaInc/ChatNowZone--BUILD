@@ -1,10 +1,7 @@
 // WO: WO-INIT-001
 import { Injectable } from '@nestjs/common';
 import { db } from '../db';
-import { logger } from '../logger';
 import { TipTransaction } from './ledger.types';
-
-@Injectable()
 export class LedgerService {
   private readonly REGULAR_PAYOUT_RATE = 0.065;
   private readonly VIP_PAYOUT_RATE = 0.080;
