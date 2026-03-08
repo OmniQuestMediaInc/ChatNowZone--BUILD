@@ -1,23 +1,82 @@
-# ChatNow.Zone System State & OQMI Doctrine Tracker
-**Status:** Infrastructure Initialized [WO-INIT-001 COMPLETE]
-**Last Audit:** 2026-03-07
-**Doctrine:** OQMI Coding Doctrine (Append-Only, Deterministic, Idempotent)
+# OQMI System State — Source of Truth
 
-## 1. Active Epic: [CNZ-CORE-002] Financial Logic & Risk Engine
-- [X] Repository Structure Setup
-- [X] Dockerization (Network Isolated)
-- [X] Secure PostgreSQL Schema (NOT NULL Enforced)
-- [ ] Trusted Region Signal (VPN/Proxy Detection)
-- [ ] Studio-Aware Ledger Service
+## Project
+**ChatNow.Zone — BUILD**
+Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 
-## 2. Invariant Rules for Coding Agents
-1. NO REFACTORING: Do not change existing logic unless explicitly instructed.
-2. APPEND-ONLY FINANCE: No UPDATE calls on balance columns. Offsets only.
-3. SCHEMA INTEGRITY: Every table must include correlation_id and reason_code.
-4. DROID MODE: Execute the provided payload exactly as written.
-5. NETWORK ISOLATION: No internal ports (5432, 6379) mapped to public interfaces.
+## Doctrine
+- **Append-Only Ledger**: All financial transactions are immutable INSERTs. No UPDATE/DELETE on `ledger_entries`.
+- **Deterministic Logic**: All financial calculations are pure, reproducible functions.
+- **Work Order Governance**: No code change ships without a referenced, approved WO ID.
 
-## 3. Current Versioning
-- Core API: v0.0.1
-- Ledger Schema: v1.1 (BIGINT Cents/NOT NULL)
-- RedRoom API Contract: [PENDING]
+## Invariant Rules
+
+- NETWORK ISOLATION (Production): In production environments, no database or internal cache port may be mapped to the host IP or exposed publicly.
+  Only the API Gateway (Ports 80/443) is permitted to have public bindings in production. Local development may expose services on 127.0.0.1 for debugging when required.
+
+## Repository Structure
+
+```
+/
+├── .github/
+│   └── copilot-instructions.md   # Droid Mode governance rules
+├── docs/
+│   └── doctrine/                 # Governance documents
+├── infra/
+│   └── postgres/
+│       └── init-ledger.sql       # Core financial schema (append-only)
+├── services/
+│   ├── core-api/                 # Main NestJS application
+│   ├── risk-engine/              # Mini Credit Bureau API
+│   └── rewards-api/              # RedRoom Rewards White-label
+├── docker-compose.yml            # Orchestration: PostgreSQL, Redis, Core-API
+├── OQMI_SYSTEM_STATE.md          # This file — canonical source of truth
+└── README.md
+```
+
+## Core Services
+
+| Service | Path | Role |
+|---|---|---|
+| core-api | services/core-api | Main NestJS application; orchestrates all business logic |
+| risk-engine | services/risk-engine | Mini Credit Bureau API; user risk scoring |
+| rewards-api | services/rewards-api | RedRoom Rewards white-label integration |
+
+## Database Schema Summary
+
+| Table | Purpose | Mutation Policy |
+|---|---|---|
+| `user_risk_profiles` | Mini Credit Bureau scoring per user | INSERT + UPDATE allowed |
+| `studio_contracts` | Payroll split logic for studio/performer contracts | INSERT + UPDATE allowed |
+| `ledger_entries` | Append-only transaction history | INSERT ONLY — no UPDATE/DELETE |
+| `transactions` | High-level transaction records linking user actions to ledger entries | INSERT ONLY — status UPDATE allowed by policy |
+
+## Infrastructure
+
+| Component | Image | Purpose |
+|---|---|---|
+| PostgreSQL | postgres:15-alpine | Primary relational data store |
+| Redis | redis:7 | Caching and session state |
+| core-api (api) | (local build) | NestJS application server |
+| `transactions` | Tracks every movement of value between users (tip, subscription, private_show) | INSERT ONLY — no UPDATE/DELETE |
+
+## Infrastructure
+
+| Component | Image | Service Name | Purpose |
+|---|---|---|---|
+| PostgreSQL | postgres:15-alpine | db | Primary relational data store |
+| Redis | redis:7-alpine | redis | Caching and session state |
+| API | (local build) | api | NestJS application server |
+
+## Program Control Contacts
+- Authority: Kevin (Program Control / OmniQuestMedia)
+- Droid Executor: GitHub Copilot (Coding Agent)
+
+## Change Log
+
+| Date | WO ID | Description |
+|---|---|---|
+| 2026-03-06 | WO-INIT-001 | Initialize repository structure, ledger schema, docker-compose, governance files |
+| 2026-03-07 | WO-INIT-001 | Update docker-compose: postgres:15-alpine, chatnow_zone DB, ${DB_PASSWORD}, redis:7-alpine, service renames (db, api); add transactions table; structured logger; 80/20 default split; TipService; creator surfaces; RiskModule; ESLint/Prettier configs |
+| 2026-03-07 | WO-INIT-001 | Add structured logger, TipService, creator surface stubs, RiskModule; fix default 80/20 splits; add transactions table; align docker-compose to spec (postgres:15-alpine, db/redis/api); add ESLint/Prettier config; add NCII takedown log template |
+| 2026-03-07 | WO-INIT-001 | Update docker-compose: postgres:15-alpine, chatnow_zone DB, ${DB_PASSWORD}, redis:7-alpine, service renames (db, api) |
