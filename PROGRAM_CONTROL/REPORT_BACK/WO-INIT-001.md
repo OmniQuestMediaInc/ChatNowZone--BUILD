@@ -1,44 +1,43 @@
-# REPORT BACK — Gratitude Engine Install
+# PROGRAM CONTROL — REPORT BACK
+## Work Order: WO-INIT-001 (FASTTRACK REWARDS SCAFFOLDING)
 
-## Work Order Reference
-**WO:** WO-INIT-001
-**Command:** INSTALL GRATITUDE ENGINE
-**Doctrine:** Loyalty & Retention (R1)
+### Branch + HEAD
+- Branch: `copilot/setup-rewards-api-directories` (agent-managed PR branch; target merge: `main`)
+- HEAD: 52d8416
 
-## Branch + HEAD
-- **Branch:** `copilot/add-gratitude-engine`
-- **HEAD:** `ff2d9a3`
-
-## Files Changed (`git diff --stat 8fe2cf3..HEAD`)
-```
- PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md           | 40 ++++++++++++++++++++++++++++++++++++++++
- services/core-api/src/marketing/gratitude.service.ts | 27 +++++++++++++++++++++++++++
- 2 files changed, 67 insertions(+)
-```
-
-## Commands Run
+### Files Changed
 
 ```
-$ mkdir -p services/core-api/src/marketing
-(no output)
-
-$ mkdir -p PROGRAM_CONTROL/REPORT_BACK
-(no output)
+$ git diff --stat 68a46d4~1 68a46d4
+ PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md                    | 35 +++++++++++++++++++++++++++++++++++
+ services/rewards-api/src/engine/points-calculator.logic.ts    |  4 ++++
+ services/rewards-api/src/white-label/partner-config.schema.ts |  4 ++++
+ 3 files changed, 43 insertions(+)
 ```
 
-## Governance Compliance
-| Rule | Status |
+### Commands Run
+
+```
+mkdir -p services/rewards-api/src/engine
+# stdout: (no output)
+# stderr: (no output)
+
+mkdir -p services/rewards-api/src/white-label
+# stdout: (no output)
+# stderr: (no output)
+```
+
+### Files Created
+
+| File | Purpose |
 |---|---|
-| `// WO: WO-INIT-001` header on new TypeScript file | ✅ |
-| No NestJS decorators (none used in project) | ✅ |
-| PII-safe logging (`userId` redacted in `console.log`) | ✅ |
-| No financial logic touched | ✅ |
-| Append-only ledger untouched | ✅ |
+| `services/rewards-api/src/engine/points-calculator.logic.ts` | Placeholder points calculator logic for RedRoom Rewards |
+| `services/rewards-api/src/white-label/partner-config.schema.ts` | Placeholder white-label partner config schema |
 
-## Security Note
-The original payload logged `userId` directly in `console.log`. Per security constraints
-("Never log or paste secrets, tokens, credentials, or PII"), the `userId` parameter in
-`queueMessage` is replaced with `[REDACTED]` in the log output.
+### Governance Compliance
+- All new TypeScript files include `// WO: WO-INIT-001` as the first line per `.github/copilot-instructions.md` and `OQMI_SYSTEM_STATE.md`.
+- No financial logic was modified.
+- No ledger tables were altered.
 
-## Result
-✅ SUCCESS
+### Result
+✅ SUCCESS — MISSION COMPLETE
