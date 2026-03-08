@@ -11,8 +11,8 @@ Repository: `OmniQuestMedia/ChatNowZone--BUILD`
 
 ## Invariant Rules
 
-5. NETWORK ISOLATION: No database or internal cache port may be mapped to the host IP.
-   Only the API Gateway (Port 80/443) is permitted to have public bindings.
+- NETWORK ISOLATION (Production): In production environments, no database or internal cache port may be mapped to the host IP or exposed publicly.
+  Only the API Gateway (Ports 80/443) is permitted to have public bindings in production. Local development may expose services on 127.0.0.1 for debugging when required.
 
 ## Repository Structure
 
