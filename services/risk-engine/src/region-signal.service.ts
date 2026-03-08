@@ -13,9 +13,6 @@ export interface RegionSignalResult {
   region: string;
   vpnRisk: boolean;
   flags: string[];
-}
-
-@Injectable()
 export class RegionSignalService {
   private readonly logger = new Logger(RegionSignalService.name);
 
