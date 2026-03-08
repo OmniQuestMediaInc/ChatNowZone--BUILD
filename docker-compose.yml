@@ -1,3 +1,7 @@
+networks:
+  backend:
+    driver: bridge
+
 services:
   postgres:
     image: postgres:16
@@ -11,6 +15,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./infra/postgres/init-ledger.sql:/docker-entrypoint-initdb.d/01-init-ledger.sql:ro
+    networks:
+      - backend
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U chatnow_app -d chatnow"]
       interval: 10s
@@ -25,6 +31,8 @@ services:
     # PORTS REMOVED: Internal network only.
     volumes:
       - redis_data:/data
+    networks:
+      - backend
     healthcheck:
       test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD}", "ping"]
       interval: 10s
@@ -44,6 +52,8 @@ services:
       PORT: 3000
     ports:
       - "3000:3000"
+    networks:
+      - backend
     depends_on:
       postgres:
         condition: service_healthy
