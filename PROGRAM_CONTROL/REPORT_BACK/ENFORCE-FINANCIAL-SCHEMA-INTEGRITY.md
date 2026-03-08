@@ -2,7 +2,10 @@
 # Doctrine: OQMI Financial Invariants (R2)
 
 ## Branch
-`copilot/enforce-financial-schema-integrity` (merged via copilot/review-repair-merge)
+`copilot/enforce-financial-schema-integrity`
+
+## HEAD
+`369bd07`
 
 ## Files Changed
 ```
@@ -33,7 +36,7 @@ All three amount columns now have `NOT NULL DEFAULT 0`:
 ## Scope
 - No other tables modified.
 - Existing schema structure, triggers, indexes, and constraints are unchanged.
-- The full append-only trigger infrastructure is preserved.
+- The full append-only trigger infrastructure (`trg_ledger_entries_no_update`, `trg_ledger_entries_no_delete`) is preserved.
 
 ## Result
 ✅ SUCCESS
