@@ -16,7 +16,12 @@ services/rewards-api/src/white-label/partner-config.schema.ts  (new)
 
 ```
 mkdir -p services/rewards-api/src/engine
+# stdout: (no output)
+# stderr: (no output)
+
 mkdir -p services/rewards-api/src/white-label
+# stdout: (no output)
+# stderr: (no output)
 ```
 
 ### Files Created
