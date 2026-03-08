@@ -170,12 +170,13 @@ CREATE TABLE IF NOT EXISTS ledger_entries (
 
 -- Enforce append-only: prevent UPDATE and DELETE via triggers that raise errors
 CREATE OR REPLACE FUNCTION ledger_entries_block_mutation()
-RETURNS TRIGGER AS $${
+RETURNS TRIGGER AS $$
 BEGIN
     RAISE EXCEPTION
         'OQMI Append-Only Doctrine violation: % on ledger_entries is prohibited. '
         'Ledger entries are immutable. Create a new correcting entry instead.',
         TG_OP;
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -296,7 +297,7 @@ COMMENT ON TABLE transactions IS
 -- with the sole exception of status transitions).
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION transactions_block_mutation()
-RETURNS TRIGGER AS $${
+RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'DELETE' THEN
         RAISE EXCEPTION
@@ -334,7 +335,7 @@ FOR EACH ROW EXECUTE FUNCTION transactions_block_mutation();
 -- Trigger: maintain updated_at when transaction status changes.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION set_transactions_updated_at()
-RETURNS TRIGGER AS $${
+RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.status IS DISTINCT FROM OLD.status THEN
         NEW.updated_at := NOW();
