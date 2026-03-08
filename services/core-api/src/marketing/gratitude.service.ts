@@ -1,11 +1,12 @@
 // WO: WO-INIT-001
 export class GratitudeService {
+  private static readonly THIRTY_MINUTES_MS = 30 * 60 * 1000;
   // Requirement: Users feel appreciated after the fact.
   async triggerPostTipFollowup(userId: string, creatorName: string, amount: number) {
     const message = this.generatePraiseMessage(creatorName, amount);
 
     // Logic: Delay sending by 30 minutes to feel "authentic"
-    await this.queueMessage(userId, message, 1800000);
+    await this.queueMessage(userId, message, GratitudeService.THIRTY_MINUTES_MS);
   }
 
   private generatePraiseMessage(name: string, amount: number): string {
