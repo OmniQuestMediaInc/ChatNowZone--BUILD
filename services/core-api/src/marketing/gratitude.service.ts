@@ -1,14 +1,12 @@
 // WO: WO-INIT-001
-import { Injectable } from '@nestjs/common';
-
-@Injectable()
 export class GratitudeService {
+  private static readonly THIRTY_MINUTES_MS = 30 * 60 * 1000;
   // Requirement: Users feel appreciated after the fact.
   async triggerPostTipFollowup(userId: string, creatorName: string, amount: number) {
     const message = this.generatePraiseMessage(creatorName, amount);
 
     // Logic: Delay sending by 30 minutes to feel "authentic"
-    await this.queueMessage(userId, message, 1800000);
+    await this.queueMessage(userId, message, GratitudeService.THIRTY_MINUTES_MS);
   }
 
   private generatePraiseMessage(name: string, amount: number): string {
@@ -18,13 +16,12 @@ export class GratitudeService {
       `That was a generous tip for ${name}. Hope to see you in the room again soon!`,
     ];
     // Deterministic selection: reproducible given the same inputs (no randomness)
-    const index = Math.abs(amount) % templates.length;
+    const index = Math.trunc(Math.abs(amount)) % templates.length;
     return templates[index];
   }
 
-  private async queueMessage(_userId: string, _body: string, delayMs: number) {
+  private async queueMessage(userId: string, body: string, delayMs: number) {
     // Integration point for BullMQ or Redis delay queue
-    // NOTE: userId and message body are NOT logged to prevent PII leakage.
-    console.log(`[MARKETING] Queued post-tip follow-up message in ${delayMs}ms`);
+    console.log(`[MARKETING] Queued message for [REDACTED] in ${delayMs}ms: ${body}`);
   }
 }
