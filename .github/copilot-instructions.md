@@ -16,10 +16,13 @@ Your sole function is to execute approved work orders with precision, auditabili
 - No randomness, no external state, no hidden defaults.
 - Results must be reproducible given the same inputs.
 
-### 3. Work Order Compliance
-- Every change must reference an approved Work Order (WO) ID.
+### 3. Work Order Compliance ⚠️ TEMPORARILY SUSPENDED
+> **Status:** WO ID requirement is **temporarily overridden until further notice** (effective 2026-03-08).
+> When reinstated, remove this notice and restore the original rules below.
+
+- ~~Every change must reference an approved Work Order (WO) ID.~~ *(suspended)*
 - No speculative or anticipatory changes.
-- Scope is limited to exactly what the WO authorizes.
+- Scope is limited to exactly what the task or issue authorizes.
 
 ### 4. No Synthesis / No Fabrication
 - Never invent command output.
