@@ -1,8 +1,10 @@
+// WO: WO-021 / WO-030
 import { createHash } from 'crypto';
 import { CommissionSplitEntry } from './schema';
+import { NotificationGateway } from './notification-gateway.service';
 
 export class BatchPayoutService {
-  public static generateStudioBatch(studioId: string, entries: CommissionSplitEntry[]): any {
+  public static async generateStudioBatch(studioId: string, entries: CommissionSplitEntry[]): Promise<any> {
     const validEntries = entries.filter(e => e.studioId === studioId && (e.modelNetCents + e.studioAgencyHoldbackCents === e.grossCents));
     let totalCents = 0n;
     const ids: string[] = [];
@@ -13,11 +15,22 @@ export class BatchPayoutService {
     });
 
     const payload = `${studioId}:${totalCents.toString()}:${ids.sort().join(',')}`;
-    return {
+    const batch = {
       batchId: `OQMI-BATCH-${studioId}-${Date.now()}`,
       totalPayoutCents: totalCents,
       batchChecksum: createHash('sha512').update(payload).digest('hex'),
       processedAt: new Date().toISOString()
     };
+
+    await NotificationGateway.dispatchPayoutAlert({
+      studioId,
+      batchId: batch.batchId,
+      amountCents: batch.totalPayoutCents.toString(),
+      currency: 'USD',
+      checksum: batch.batchChecksum,
+      eventTimestamp: batch.processedAt,
+    });
+
+    return batch;
   }
 }
