@@ -28,6 +28,11 @@ export class AuditDashboardService {
 
     const entries = await db.ledger_entries.findMany({
       where: { studio_id: studioId },
+      select: {
+        id: true,
+        entry_type: true,
+        created_at: true,
+      },
       orderBy: { created_at: 'desc' },
       take: MAX_AUDIT_SCENARIOS,
     });

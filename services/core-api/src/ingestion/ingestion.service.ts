@@ -23,6 +23,7 @@ export class IngestionService {
     if (!data.modelId) missing.push('modelId');
     if (!data.studioId) missing.push('studioId');
     if (!data.eventType) missing.push('eventType');
+    if (data.payload == null) missing.push('payload');
     if (!data.correlationId) missing.push('correlationId');
 
     if (missing.length > 0) {

@@ -28,6 +28,22 @@ export interface BatchPayoutResult {
 
 export class BatchPayoutService {
   async aggregate(req: BatchPayoutRequest): Promise<BatchPayoutResult> {
+    const missing: string[] = [];
+    if (!req.studioId) missing.push('studioId');
+    if (!req.correlationId) missing.push('correlationId');
+    if (!req.periodStart) missing.push('periodStart');
+    if (!req.periodEnd) missing.push('periodEnd');
+    if (missing.length > 0) {
+      throw new Error(
+        `aggregate: invalid input — missing fields: ${missing.join(', ')}`,
+      );
+    }
+    if (req.periodStart > req.periodEnd) {
+      throw new Error(
+        'aggregate: invalid period — periodStart must be <= periodEnd',
+      );
+    }
+
     logger.info('aggregate: starting batch payout aggregation', {
       context: 'BatchPayoutService',
       correlationId: req.correlationId,
@@ -44,6 +60,11 @@ export class BatchPayoutService {
           gte: req.periodStart,
           lte: req.periodEnd,
         },
+      },
+      select: {
+        id: true,
+        performer_id: true,
+        performer_amount_cents: true,
       },
       orderBy: { created_at: 'asc' },
     });
