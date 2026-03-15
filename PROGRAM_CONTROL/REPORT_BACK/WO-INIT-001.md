@@ -41,3 +41,35 @@ mkdir -p services/rewards-api/src/white-label
 
 ### Result
 ✅ SUCCESS — MISSION COMPLETE
+
+---
+
+## Addendum: FT-033-BOTTLENECK-CLEARANCE — RedRoom Rewards Audit (TASK 3)
+
+### Directory Verification
+- **Path:** `services/rewards-api/`
+- **White-label structure confirmed:**
+  - `services/rewards-api/src/engine/points-calculator.logic.ts` — Points calculator logic
+  - `services/rewards-api/src/white-label/partner-config.schema.ts` — White-label partner config schema
+
+### git diff --stat (7e4908c..HEAD — services/rewards-api/)
+
+```
+$ git diff --stat 7e4908c HEAD -- services/rewards-api/
+ services/rewards-api/src/engine/points-calculator.logic.ts    | 5 +++++
+ services/rewards-api/src/white-label/partner-config.schema.ts | 4 ++++
+ 2 files changed, 9 insertions(+)
+```
+
+### Commands Run
+
+```
+git diff --stat 7e4908c HEAD -- services/rewards-api/
+# stdout: (see above)
+# stderr: (no output)
+
+git log --oneline -- services/rewards-api/ [NO_OUTPUT — internal verification only]
+```
+
+### Result
+✅ INFRA_ISOLATED_AND_REWARDS_SCAFFOLDED
