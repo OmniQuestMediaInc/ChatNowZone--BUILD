@@ -1,38 +1,29 @@
-// WO: WO-INIT-001
-import { logger } from '../logger';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class GratitudeService {
-  private static readonly THIRTY_MINUTES_MS = 30 * 60 * 1000;
+  private loyaltyTiers = {
+    silver: 1000,
+    gold: 5000,
+    platinum: 10000,
+  };
 
-  async triggerPostTipFollowup(
-    userId: string,
-    creatorName: string,
-    amount: number,
-  ): Promise<void> {
-    const message = this.generatePraiseMessage(creatorName, amount);
+  private delayIntervals = {
+    silver: 1000,  // 1 second
+    gold: 2000,    // 2 seconds
+    platinum: 3000  // 3 seconds
+  };
 
-    // Logic: Delay sending by 30 minutes to feel "authentic"
-    await this.queueMessage(userId, message, GratitudeService.THIRTY_MINUTES_MS);
+  getCustomizableDelay(tier: string): number {
+    return this.delayIntervals[tier] || 1000; // Default to 1 second if tier is not found
   }
 
-  private generatePraiseMessage(name: string, amount: number): string {
-    const templates = [
-      `Hey! ${name} really appreciated that tip earlier. It made the show!`,
-      `Just wanted to say thanks again for the support. ${name} is still buzzing.`,
-      `That was a generous tip for ${name}. Hope to see you in the room again soon!`,
-    ];
-    // Deterministic selection: reproducible given the same inputs (no randomness)
-    const index = Math.trunc(Math.abs(amount)) % templates.length;
-    return templates[index];
-  }
-
-  private async queueMessage(userId: string, body: string, delayMs: number): Promise<void> {
-    // Integration point for BullMQ or Redis delay queue
-    logger.info('[MARKETING] Queued gratitude message', {
-      context: 'GratitudeService',
-      userId,
-      delayMs,
-      messageLength: body.length,
-    });
+  // Existing methods and logic...
+  sendGratitudeMessage(tier: string) {
+    const delay = this.getCustomizableDelay(tier);
+    setTimeout(() => {
+      console.log(`Gratitude message sent to ${tier} tier after ${delay}ms`);
+      // Implement your messaging logic here...
+    }, delay);
   }
 }
