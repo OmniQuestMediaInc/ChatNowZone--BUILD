@@ -434,7 +434,9 @@ CREATE TABLE IF NOT EXISTS audit_events (
                             CHECK (event_type IN (
                                 'PUBLISH_ELIGIBILITY_CHECK',
                                 'VAULT_ACCESS',
-                                'EXPIRY_OVERRIDE'
+                                'EXPIRY_OVERRIDE',
+                                'NOTIFICATION_SENT',
+                                'NOTIFICATION_SUPPRESSED'
                             )),
 
     -- Actor / subject
@@ -446,6 +448,10 @@ CREATE TABLE IF NOT EXISTS audit_events (
     device_fingerprint  VARCHAR(255),
     outcome             VARCHAR(50),
     reason_code         VARCHAR(100),
+
+    -- Notification audit fields (WO-038)
+    template_id         VARCHAR(100),
+    consent_basis_id    VARCHAR(100),
 
     -- Arbitrary structured context (no raw PII)
     metadata            JSONB,
@@ -491,3 +497,233 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_audit_events_block_mutation
 BEFORE UPDATE OR DELETE ON audit_events
 FOR EACH ROW EXECUTE FUNCTION audit_events_block_mutation();
+
+-- =============================================================================
+-- TABLE: referral_links
+-- PURPOSE: Creator-Led Attribution Engine — tracks referral campaigns issued
+--          by creators. Each link carries a fixed attribution window.
+-- MUTATION POLICY: INSERT only. No UPDATE or DELETE permitted.
+-- WO: WO-037
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS referral_links (
+    id                  UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- Parties
+    creator_id          UUID        NOT NULL,
+    campaign_id         UUID        NOT NULL,
+
+    -- Attribution window in days (deterministic, no hidden defaults)
+    attribution_window_days  INTEGER NOT NULL CHECK (attribution_window_days > 0),
+
+    -- Slug used in the referral URL (unique, URL-safe)
+    link_slug           VARCHAR(100) NOT NULL UNIQUE,
+
+    -- Anti-fraud: device fingerprint and payment instrument captured at
+    -- link creation time to detect self-referral loops (WO-037 §anti-fraud).
+    device_fingerprint  VARCHAR(255),
+    payment_instrument_hash VARCHAR(64),   -- SHA-256 hash only — no raw PAN
+
+    -- Status
+    is_active           BOOLEAN     NOT NULL DEFAULT TRUE,
+
+    -- Platform time (America/Toronto context embedded in metadata)
+    metadata            JSONB,
+
+    -- Immutable audit timestamp
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_referral_links_creator_id
+    ON referral_links (creator_id);
+
+CREATE INDEX IF NOT EXISTS idx_referral_links_campaign_id
+    ON referral_links (campaign_id);
+
+CREATE INDEX IF NOT EXISTS idx_referral_links_link_slug
+    ON referral_links (link_slug);
+
+COMMENT ON TABLE referral_links IS
+    'Creator-Led Attribution Engine: referral campaign links issued by creators. '
+    'attribution_window_days determines the eligibility window for reward credit. '
+    'device_fingerprint and payment_instrument_hash enable anti-fraud self-referral '
+    'loop detection. INSERT only — no UPDATE or DELETE (WO-037).';
+
+-- Enforce append-only on referral_links.
+CREATE OR REPLACE FUNCTION referral_links_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'DELETE' THEN
+        RAISE EXCEPTION
+            'referral_links is append-only: DELETE is not permitted (id=%).', OLD.id;
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        RAISE EXCEPTION
+            'referral_links is append-only: UPDATE is not permitted (id=%).', OLD.id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_referral_links_block_mutation
+BEFORE UPDATE OR DELETE ON referral_links
+FOR EACH ROW EXECUTE FUNCTION referral_links_block_mutation();
+
+-- =============================================================================
+-- TABLE: attribution_events
+-- PURPOSE: Records every attribution event (click, sign-up, conversion)
+--          linked to a referral_link. Each row is immutable.
+-- MUTATION POLICY: INSERT only. No UPDATE or DELETE permitted.
+-- WO: WO-037
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS attribution_events (
+    id                  UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- Link back to the issuing referral
+    referral_link_id    UUID        NOT NULL REFERENCES referral_links(id),
+
+    -- Parties
+    creator_id          UUID        NOT NULL,
+    campaign_id         UUID        NOT NULL,
+
+    -- Attributed user (the newly referred user)
+    attributed_user_id  UUID        NOT NULL,
+
+    -- Event classification
+    event_type          VARCHAR(50) NOT NULL
+                            CHECK (event_type IN (
+                                'CLICK',
+                                'SIGNUP',
+                                'FIRST_PURCHASE',
+                                'CONVERSION'
+                            )),
+
+    -- Anti-fraud snapshot at event time
+    device_fingerprint  VARCHAR(255),
+    payment_instrument_hash VARCHAR(64),   -- SHA-256 hash only — no raw PAN
+
+    -- Ledger link: populated when a reward is credited
+    ledger_entry_id     UUID        REFERENCES ledger_entries(id),
+    rule_applied_id     VARCHAR(100),
+
+    -- Platform time (America/Toronto)
+    platform_time       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    -- Metadata
+    metadata            JSONB,
+
+    -- Immutable audit timestamp
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_attribution_events_referral_link_id
+    ON attribution_events (referral_link_id);
+
+CREATE INDEX IF NOT EXISTS idx_attribution_events_creator_id
+    ON attribution_events (creator_id);
+
+CREATE INDEX IF NOT EXISTS idx_attribution_events_attributed_user_id
+    ON attribution_events (attributed_user_id);
+
+CREATE INDEX IF NOT EXISTS idx_attribution_events_event_type
+    ON attribution_events (event_type);
+
+CREATE INDEX IF NOT EXISTS idx_attribution_events_created_at
+    ON attribution_events (created_at DESC);
+
+COMMENT ON TABLE attribution_events IS
+    'Immutable log of attribution events tied to referral_links. '
+    'Each rewarded conversion produces a ledger_entry (REWARD_CREDIT) and '
+    'records the ledger_entry_id and rule_applied_id here. '
+    'platform_time uses America/Toronto as primary timezone per OQMI doctrine. '
+    'INSERT only — no UPDATE or DELETE (WO-037).';
+
+-- Enforce append-only on attribution_events.
+CREATE OR REPLACE FUNCTION attribution_events_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'DELETE' THEN
+        RAISE EXCEPTION
+            'attribution_events is append-only: DELETE is not permitted (id=%).', OLD.id;
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        RAISE EXCEPTION
+            'attribution_events is append-only: UPDATE is not permitted (id=%).', OLD.id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_attribution_events_block_mutation
+BEFORE UPDATE OR DELETE ON attribution_events
+FOR EACH ROW EXECUTE FUNCTION attribution_events_block_mutation();
+
+-- =============================================================================
+-- TABLE: notification_consent_store
+-- PURPOSE: Consent-Aware Notification Service — stores per-user, per-channel
+--          opt-in/out state with jurisdiction rule versioning.
+-- MUTATION POLICY: INSERT and UPDATE allowed (consent state may change over time).
+--                  DELETE is prohibited — historical consent records are retained.
+-- WO: WO-038
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS notification_consent_store (
+    id                      UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- Subject
+    user_id                 UUID        NOT NULL,
+
+    -- Notification channel
+    channel                 VARCHAR(20) NOT NULL
+                                CHECK (channel IN ('Email', 'SMS', 'Push')),
+
+    -- Consent state
+    is_opted_in             BOOLEAN     NOT NULL DEFAULT FALSE,
+
+    -- Jurisdiction compliance
+    jurisdiction_rule_version VARCHAR(50) NOT NULL,
+
+    -- Audit timestamps
+    created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    -- One active record per user+channel
+    CONSTRAINT uq_notification_consent_user_channel UNIQUE (user_id, channel)
+);
+
+CREATE INDEX IF NOT EXISTS idx_notification_consent_store_user_id
+    ON notification_consent_store (user_id);
+
+CREATE INDEX IF NOT EXISTS idx_notification_consent_store_channel
+    ON notification_consent_store (channel);
+
+COMMENT ON TABLE notification_consent_store IS
+    'Per-user, per-channel notification consent records. '
+    'GuardedNotificationService checks is_opted_in before emitting any message. '
+    'jurisdiction_rule_version pins the regulation version under which consent '
+    'was captured (e.g. CASL-2024, GDPR-2023). '
+    'WO: WO-038.';
+
+-- Prevent deletion of consent records.
+CREATE OR REPLACE FUNCTION notification_consent_store_block_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION
+        'notification_consent_store is append-only: DELETE is not permitted (id=%).', OLD.id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_notification_consent_store_block_delete
+BEFORE DELETE ON notification_consent_store
+FOR EACH ROW EXECUTE FUNCTION notification_consent_store_block_delete();
+
+-- Maintain updated_at on consent change.
+CREATE OR REPLACE FUNCTION set_notification_consent_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at := NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_notification_consent_updated_at
+BEFORE UPDATE ON notification_consent_store
+FOR EACH ROW EXECUTE FUNCTION set_notification_consent_updated_at();

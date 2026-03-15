@@ -15,3 +15,6 @@ services/core-api/src/creator/creator.module.ts
 services/core-api/src/risk/risk-score.service.ts
 services/core-api/src/safety/safety.service.ts
 services/core-api/src/safety/safety.module.ts
+services/core-api/src/growth/referral-reward.service.ts
+services/core-api/src/growth/guarded-notification.service.ts
+services/core-api/src/growth/growth.module.ts
