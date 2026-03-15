@@ -44,7 +44,7 @@ export class CommissionSplittingEngine {
 
     // Step 4: Forensic Hash (WO-015 Compliance)
     const payload = `${grossCents}:${modelNet}:${agencyHoldback}:${serviceFeesTotal}:${platformFee}`;
-    const checksum = createHash('sha256').update(payload).digest('hex');
+    const checksum = createHash('sha512').update(payload).digest('hex');
 
     return {
       transactionId: `OQMI-WO18-${Date.now()}`,
