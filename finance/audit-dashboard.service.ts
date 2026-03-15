@@ -14,7 +14,7 @@ export interface AuditComplianceReport {
 export class AuditDashboardService {
   /**
    * Aggregates ledger entries into a visualizable compliance report.
-   * Scans for SHA-256 integrity and Red Book anomalies.
+   * Scans for SHA-512 integrity and Red Book anomalies.
    */
   public static generateComplianceReport(entries: CommissionSplitEntry[]): AuditComplianceReport {
     let totalGross = 0n;

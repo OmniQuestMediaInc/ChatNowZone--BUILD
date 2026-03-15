@@ -16,7 +16,7 @@ export class BatchPayoutService {
     return {
       batchId: `OQMI-BATCH-${studioId}-${Date.now()}`,
       totalPayoutCents: totalCents,
-      batchChecksum: createHash('sha256').update(payload).digest('hex'),
+      batchChecksum: createHash('sha512').update(payload).digest('hex'),
       processedAt: new Date().toISOString()
     };
   }
