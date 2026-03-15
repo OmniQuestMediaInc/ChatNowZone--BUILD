@@ -345,3 +345,70 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_transactions_status_updated_at
 BEFORE UPDATE OF status ON transactions
 FOR EACH ROW EXECUTE FUNCTION set_transactions_updated_at();
+
+-- =============================================================================
+-- TABLE: audit_events
+-- PURPOSE: Cryptographic hash-chained audit trail.
+-- MUTATION POLICY: INSERT ONLY. No UPDATE. No DELETE. Ever.
+-- WO: WO-032 — Foundation Repair (SHA-256 hash chaining)
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS audit_events (
+    id                  UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- Hash chain
+    hash_prev           CHAR(64)    NOT NULL,
+    hash_current        CHAR(64)    NOT NULL UNIQUE,
+
+    -- Timestamps (dual-timezone)
+    timestamp_utc       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    platform_time       TEXT        NOT NULL,   -- ISO 8601, America/Toronto
+
+    -- Identity
+    actor_id            VARCHAR(200) NOT NULL,
+    payload_hash        CHAR(64)    NOT NULL,
+    rule_applied_id     VARCHAR(100) NOT NULL DEFAULT 'GENERAL_GOVERNANCE_v10',
+
+    -- Metadata
+    metadata            JSONB
+);
+
+-- Enforce append-only: block UPDATE and DELETE via triggers
+CREATE OR REPLACE FUNCTION audit_events_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION
+        'DOCTRINE_VIOLATION_ERROR: % on audit_events is prohibited. '
+        'Audit entries are immutable. Create a new correcting entry instead.',
+        TG_OP;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_audit_events_no_update
+    BEFORE UPDATE ON audit_events
+    FOR EACH ROW EXECUTE FUNCTION audit_events_block_mutation();
+
+CREATE OR REPLACE TRIGGER trg_audit_events_no_delete
+    BEFORE DELETE ON audit_events
+    FOR EACH ROW EXECUTE FUNCTION audit_events_block_mutation();
+
+-- Indexes for common access patterns
+CREATE INDEX IF NOT EXISTS idx_audit_events_actor_id
+    ON audit_events (actor_id);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_timestamp_utc
+    ON audit_events (timestamp_utc DESC);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_rule_applied_id
+    ON audit_events (rule_applied_id);
+
+COMMENT ON TABLE audit_events IS
+    'Cryptographic SHA-256 hash-chained audit trail. IMMUTABLE by OQMI Doctrine. '
+    'INSERT ONLY — UPDATE and DELETE are blocked by database triggers. '
+    'hash_current = SHA256(hash_prev || timestamp_utc || platform_time || actor_id || payload_hash).';
+
+COMMENT ON COLUMN audit_events.hash_prev IS
+    'SHA-256 digest of the previous audit entry. Genesis entry uses 64 zero characters.';
+
+COMMENT ON COLUMN audit_events.hash_current IS
+    'SHA-256(hash_prev + timestamp_utc + platform_time + actor_id + payload_hash).';
