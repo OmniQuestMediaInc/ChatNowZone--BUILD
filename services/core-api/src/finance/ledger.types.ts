@@ -1,9 +1,6 @@
-// WO: WO-INIT-001
 export interface TipTransaction {
-  userId: string;
-  creatorId: string;
-  tokenAmount: number;
-  isVIP: boolean;
-  correlationId: string;
-  reasonCode?: string;
+    amount: number;
+    sender: string;
+    receiver: string;
+    timestamp: Date;
 }
