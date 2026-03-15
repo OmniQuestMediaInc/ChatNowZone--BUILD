@@ -347,82 +347,72 @@ BEFORE UPDATE OF status ON transactions
 FOR EACH ROW EXECUTE FUNCTION set_transactions_updated_at();
 
 -- =============================================================================
--- TABLE: content_hash_registry
--- PURPOSE: NCII Suppression Registry — tamper-evident, append-only record of
---          SHA-256 hashes for known suppressed content.
--- MUTATION POLICY: INSERT ONLY. No UPDATE. No DELETE. Ever.
--- WO: WO-034 (Corpus v10 Chapter 3 Alignment)
+-- TABLE: dispute_cases
+-- PURPOSE: Financial Dispute Engine — tracks each dispute lifecycle end-to-end.
+-- MUTATION POLICY: INSERT ONLY after creation. Status transitions via controlled
+--                  UPDATE only. DELETE is prohibited by OQMI Doctrine.
+-- WO: WO-035-FINANCIAL-DISPUTE-ENGINE
 -- =============================================================================
-CREATE TABLE IF NOT EXISTS content_hash_registry (
-    hash                CHAR(64)     PRIMARY KEY,       -- SHA-256 hex string (64 chars)
-    case_id             UUID         NOT NULL,           -- Reference to Incident Object
-    action_taken        VARCHAR(20)  NOT NULL
-                            CHECK (action_taken IN ('SUPPRESS', 'BLOCK_REUPLOAD')),
-    rule_applied_id     VARCHAR(100) NOT NULL,           -- Reference to Corpus v10 Section 5
-    created_at_utc      TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    created_at_toronto  TEXT         NOT NULL DEFAULT '' -- Computed by trigger: America/Toronto
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'dispute_status') THEN
+        CREATE TYPE dispute_status AS ENUM (
+            'OPENED',
+            'UNDER_REVIEW',
+            'ACTIONED',
+            'CLOSED'
+        );
+    END IF;
+END$$;
+
+CREATE TABLE IF NOT EXISTS dispute_cases (
+    dispute_id              UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- External reference from payment processor webhook
+    processor_reference     VARCHAR(200) NOT NULL,
+
+    -- Parties
+    user_id                 UUID        NOT NULL,
+
+    -- Amount in minor units (cents), reflecting the disputed gross amount
+    amount_gross            BIGINT      NOT NULL CHECK (amount_gross >= 0),
+
+    -- Lifecycle status
+    status                  dispute_status NOT NULL DEFAULT 'OPENED',
+
+    -- Classification
+    reason_code             VARCHAR(100) NOT NULL,
+
+    -- SLA: defaults to 48 hours from creation
+    sla_deadline            TIMESTAMPTZ NOT NULL
+                                DEFAULT (NOW() + INTERVAL '48 hours'),
+
+    -- Dual-timezone audit timestamps
+    created_at_utc          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    created_at_toronto      TEXT        NOT NULL
+                                DEFAULT TO_CHAR(
+                                    NOW() AT TIME ZONE 'America/Toronto',
+                                    'YYYY-MM-DD"T"HH24:MI:SS'
+                                )
 );
 
--- ---------------------------------------------------------------------------
--- Trigger: populate created_at_toronto on INSERT from created_at_utc.
--- Converts the UTC timestamp to the America/Toronto local representation.
--- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION content_hash_registry_set_toronto_ts()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.created_at_utc IS NULL THEN
-        NEW.created_at_utc := NOW();
-    END IF;
-    NEW.created_at_toronto :=
-        to_char(NEW.created_at_utc AT TIME ZONE 'America/Toronto', 'YYYY-MM-DD HH24:MI:SS')
-        || ' America/Toronto';
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+CREATE INDEX IF NOT EXISTS idx_dispute_cases_user_id
+    ON dispute_cases (user_id);
 
-CREATE TRIGGER trg_content_hash_registry_set_toronto_ts
-    BEFORE INSERT ON content_hash_registry
-    FOR EACH ROW EXECUTE FUNCTION content_hash_registry_set_toronto_ts();
+CREATE INDEX IF NOT EXISTS idx_dispute_cases_status
+    ON dispute_cases (status);
 
--- ---------------------------------------------------------------------------
--- Trigger: block all UPDATE and DELETE on content_hash_registry (append-only).
--- ---------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION content_hash_registry_block_mutation()
-RETURNS TRIGGER AS $$
-BEGIN
-    RAISE EXCEPTION
-        'OQMI Append-Only Doctrine violation: % on content_hash_registry is prohibited. '
-        'Hash registry entries are immutable for tamper-evidence. '
-        'WO-034: safety enforcement requires an unalterable audit trail.',
-        TG_OP;
-    RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
+CREATE INDEX IF NOT EXISTS idx_dispute_cases_sla_deadline
+    ON dispute_cases (sla_deadline);
 
-CREATE OR REPLACE TRIGGER trg_content_hash_registry_no_update
-    BEFORE UPDATE ON content_hash_registry
-    FOR EACH ROW EXECUTE FUNCTION content_hash_registry_block_mutation();
+CREATE INDEX IF NOT EXISTS idx_dispute_cases_processor_reference
+    ON dispute_cases (processor_reference);
 
-CREATE OR REPLACE TRIGGER trg_content_hash_registry_no_delete
-    BEFORE DELETE ON content_hash_registry
-    FOR EACH ROW EXECUTE FUNCTION content_hash_registry_block_mutation();
+COMMENT ON TABLE dispute_cases IS
+    'Financial Dispute Engine: tracks each dispute lifecycle. '
+    'INSERT on open; status transitions permitted; DELETE prohibited by OQMI Doctrine. '
+    'WO: WO-035-FINANCIAL-DISPUTE-ENGINE';
 
--- Indexes for common query patterns
-CREATE INDEX IF NOT EXISTS idx_content_hash_registry_case_id
-    ON content_hash_registry (case_id);
-
-CREATE INDEX IF NOT EXISTS idx_content_hash_registry_created_at
-    ON content_hash_registry (created_at_utc DESC);
-
-COMMENT ON TABLE content_hash_registry IS
-    'NCII Suppression Registry: append-only, tamper-evident SHA-256 hash store '
-    'for known suppressed content. INSERT ONLY — UPDATE and DELETE are blocked '
-    'by database triggers. WO-034: Corpus v10 Chapter 3 Alignment.';
-
-COMMENT ON COLUMN content_hash_registry.hash IS
-    'SHA-256 hex digest of suppressed content (64 hex characters). Primary key.';
-
-COMMENT ON COLUMN content_hash_registry.created_at_toronto IS
-    'Human-readable timestamp in America/Toronto local time. '
-    'Computed automatically from created_at_utc by trigger. '
-    'GovernanceConfigService timezone: America/Toronto (WO-016-B).';
+COMMENT ON COLUMN dispute_cases.created_at_toronto IS
+    'Wall-clock time at America/Toronto when the dispute was opened, stored as '
+    'ISO-8601 text for auditability without timezone conversion loss.';
