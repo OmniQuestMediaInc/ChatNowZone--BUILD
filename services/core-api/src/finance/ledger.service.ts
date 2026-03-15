@@ -63,6 +63,50 @@ export class LedgerService {
   }
 
   /**
+   * WO-035: Dispute Reversal — appends a negative-delta ledger entry linked to
+   * the originating event and the dispute case. The original PAYMENT_AUTHORIZED
+   * entry is never modified (Append-Only Doctrine).
+   */
+  async handleDisputeReversal(data: {
+    disputeId: string;
+    originalEventId: string;
+    userId: string;
+    amountGross: bigint;
+    reasonCode: string;
+    metadata?: Record<string, any>;
+  }): Promise<unknown> {
+    const idempotencyKey = `DISPUTE_REVERSAL:${data.disputeId}:${data.originalEventId}`;
+
+    const existing = await this.ledgerRepo.findOne({
+      where: { reference_id: idempotencyKey },
+    });
+    if (existing) {
+      this.logger.warn(
+        `Dispute reversal already recorded for dispute_id=${data.disputeId}. Skipping.`,
+      );
+      return existing;
+    }
+
+    const entry = this.ledgerRepo.create({
+      user_id: data.userId,
+      amount: (-data.amountGross).toString(),
+      entry_type: 'REVERSAL',
+      status: 'PENDING',
+      reference_id: idempotencyKey,
+      reason_code: data.reasonCode,
+      parent_entry_id: data.originalEventId,
+      metadata: {
+        ...data.metadata,
+        dispute_id: data.disputeId,
+        original_event_id: data.originalEventId,
+        governance_timezone: this.config.TIMEZONE,
+      },
+    });
+
+    return await this.ledgerRepo.save(entry);
+  }
+
+  /**
    * Derives balance from the sum of ledger entries.
    */
   async getBalance(userId: string, tokenType: TokenType): Promise<bigint> {

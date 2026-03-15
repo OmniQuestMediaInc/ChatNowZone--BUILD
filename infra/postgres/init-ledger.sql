@@ -345,3 +345,74 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_transactions_status_updated_at
 BEFORE UPDATE OF status ON transactions
 FOR EACH ROW EXECUTE FUNCTION set_transactions_updated_at();
+
+-- =============================================================================
+-- TABLE: dispute_cases
+-- PURPOSE: Financial Dispute Engine — tracks each dispute lifecycle end-to-end.
+-- MUTATION POLICY: INSERT ONLY after creation. Status transitions via controlled
+--                  UPDATE only. DELETE is prohibited by OQMI Doctrine.
+-- WO: WO-035-FINANCIAL-DISPUTE-ENGINE
+-- =============================================================================
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'dispute_status') THEN
+        CREATE TYPE dispute_status AS ENUM (
+            'OPENED',
+            'UNDER_REVIEW',
+            'ACTIONED',
+            'CLOSED'
+        );
+    END IF;
+END$$;
+
+CREATE TABLE IF NOT EXISTS dispute_cases (
+    dispute_id              UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- External reference from payment processor webhook
+    processor_reference     VARCHAR(200) NOT NULL,
+
+    -- Parties
+    user_id                 UUID        NOT NULL,
+
+    -- Amount in minor units (cents), reflecting the disputed gross amount
+    amount_gross            BIGINT      NOT NULL CHECK (amount_gross >= 0),
+
+    -- Lifecycle status
+    status                  dispute_status NOT NULL DEFAULT 'OPENED',
+
+    -- Classification
+    reason_code             VARCHAR(100) NOT NULL,
+
+    -- SLA: defaults to 48 hours from creation
+    sla_deadline            TIMESTAMPTZ NOT NULL
+                                DEFAULT (NOW() + INTERVAL '48 hours'),
+
+    -- Dual-timezone audit timestamps
+    created_at_utc          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    created_at_toronto      TEXT        NOT NULL
+                                DEFAULT TO_CHAR(
+                                    NOW() AT TIME ZONE 'America/Toronto',
+                                    'YYYY-MM-DD"T"HH24:MI:SS'
+                                )
+);
+
+CREATE INDEX IF NOT EXISTS idx_dispute_cases_user_id
+    ON dispute_cases (user_id);
+
+CREATE INDEX IF NOT EXISTS idx_dispute_cases_status
+    ON dispute_cases (status);
+
+CREATE INDEX IF NOT EXISTS idx_dispute_cases_sla_deadline
+    ON dispute_cases (sla_deadline);
+
+CREATE INDEX IF NOT EXISTS idx_dispute_cases_processor_reference
+    ON dispute_cases (processor_reference);
+
+COMMENT ON TABLE dispute_cases IS
+    'Financial Dispute Engine: tracks each dispute lifecycle. '
+    'INSERT on open; status transitions permitted; DELETE prohibited by OQMI Doctrine. '
+    'WO: WO-035-FINANCIAL-DISPUTE-ENGINE';
+
+COMMENT ON COLUMN dispute_cases.created_at_toronto IS
+    'Wall-clock time at America/Toronto when the dispute was opened, stored as '
+    'ISO-8601 text for auditability without timezone conversion loss.';
