@@ -1,91 +1,144 @@
 // WO: WO-021
-import { Injectable } from '@nestjs/common';
-import { db } from '../db';
 import { logger } from '../logger';
+import { db } from '../db';
 
 export interface BatchPayoutRequest {
   studioId: string;
-  batchCorrelationId: string;
   periodStart: Date;
   periodEnd: Date;
+  correlationId: string;
+}
+
+export interface BatchPayoutLine {
+  performerId: string;
+  studioId: string;
+  totalAmountCents: bigint;
+  entryCount: number;
 }
 
 export interface BatchPayoutResult {
+  correlationId: string;
   studioId: string;
-  batchCorrelationId: string;
-  totalAmountCents: bigint;
-  entryCount: number;
-  status: 'QUEUED' | 'INSUFFICIENT_ENTRIES';
+  periodStart: Date;
+  periodEnd: Date;
+  lines: BatchPayoutLine[];
+  grandTotalCents: bigint;
+  processedAt: Date;
 }
 
-/**
- * WO-021: Batch Payout Service
- * Deterministic aggregation of Ledger entries for bulk processing.
- * Append-only: results are recorded as new ledger entries, never mutated.
- * TODO: Implement full batch transaction and payout dispatch logic.
- */
-@Injectable()
 export class BatchPayoutService {
-  async aggregateForPayout(request: BatchPayoutRequest): Promise<BatchPayoutResult> {
-    if (!request.studioId || !request.batchCorrelationId) {
-      throw new Error('BatchPayoutService: studioId and batchCorrelationId are required');
+  async aggregate(req: BatchPayoutRequest): Promise<BatchPayoutResult> {
+    const missing: string[] = [];
+    if (!req.studioId) missing.push('studioId');
+    if (!req.correlationId) missing.push('correlationId');
+    if (!req.periodStart) missing.push('periodStart');
+    if (!req.periodEnd) missing.push('periodEnd');
+    if (missing.length > 0) {
+      throw new Error(
+        `aggregate: invalid input — missing fields: ${missing.join(', ')}`,
+      );
+    }
+    if (req.periodStart > req.periodEnd) {
+      throw new Error(
+        'aggregate: invalid period — periodStart must be <= periodEnd',
+      );
     }
 
-    logger.info('BatchPayoutService: aggregating ledger entries', {
+    logger.info('aggregate: starting batch payout aggregation', {
       context: 'BatchPayoutService',
-      studioId: request.studioId,
-      batchCorrelationId: request.batchCorrelationId,
-      periodStart: request.periodStart,
-      periodEnd: request.periodEnd,
+      correlationId: req.correlationId,
+      studioId: req.studioId,
+      periodStart: req.periodStart,
+      periodEnd: req.periodEnd,
     });
+
+    if (!req.correlationId || typeof req.correlationId !== 'string' || !req.correlationId.trim()) {
+      throw new Error('aggregate: missing or invalid correlationId');
+    }
+    if (!req.studioId || typeof req.studioId !== 'string' || !req.studioId.trim()) {
+      throw new Error('aggregate: missing or invalid studioId');
+    }
+    if (!(req.periodStart instanceof Date) || Number.isNaN(req.periodStart.getTime())) {
+      throw new Error('aggregate: missing or invalid periodStart');
+    }
+    if (!(req.periodEnd instanceof Date) || Number.isNaN(req.periodEnd.getTime())) {
+      throw new Error('aggregate: missing or invalid periodEnd');
+    }
+    if (req.periodStart > req.periodEnd) {
+      throw new Error('aggregate: periodStart must be less than or equal to periodEnd');
+    }
 
     const entries = await db.ledger_entries.findMany({
       where: {
-        studio_id: request.studioId,
-        studio_amount_cents: { gt: 0 },
+        studio_id: req.studioId,
+        entry_type: 'CHARGE',
         created_at: {
-          gte: request.periodStart,
-          lte: request.periodEnd,
+          gte: req.periodStart,
+          lte: req.periodEnd,
         },
+      },
+      select: {
+        id: true,
+        performer_id: true,
+        performer_amount_cents: true,
       },
       orderBy: { created_at: 'asc' },
     });
 
-    if (entries.length === 0) {
-      logger.info('BatchPayoutService: no entries found for period', {
-        context: 'BatchPayoutService',
-        studioId: request.studioId,
-        batchCorrelationId: request.batchCorrelationId,
-      });
-      return {
-        studioId: request.studioId,
-        batchCorrelationId: request.batchCorrelationId,
-        totalAmountCents: BigInt(0),
-        entryCount: 0,
-        status: 'INSUFFICIENT_ENTRIES',
-      };
+    const lineMap = new Map<string, BatchPayoutLine>();
+
+    for (const entry of entries) {
+      if (!entry.performer_id) {
+        throw new Error(
+          `aggregate: ledger entry ${entry.id} is missing performer_id — cannot build payout line`,
+        );
+      }
+      if (entry.performer_amount_cents === null || entry.performer_amount_cents === undefined) {
+        throw new Error(
+          `aggregate: ledger entry ${entry.id} is missing performer_amount_cents — cannot compute payout`,
+        );
+      }
+
+      const key = entry.performer_id;
+      const existing = lineMap.get(key);
+      const amount = BigInt(entry.performer_amount_cents);
+
+      if (existing) {
+        existing.totalAmountCents += amount;
+        existing.entryCount += 1;
+      } else {
+        lineMap.set(key, {
+          performerId: key,
+          studioId: req.studioId,
+          totalAmountCents: amount,
+          entryCount: 1,
+        });
+      }
     }
 
-    // Deterministic summation — no rounding, no hidden defaults
-    const totalAmountCents = entries.reduce(
-      (sum, entry) => sum + BigInt(String(entry.studio_amount_cents)),
+    const lines = Array.from(lineMap.values());
+    const grandTotalCents = lines.reduce(
+      (sum, l) => sum + l.totalAmountCents,
       BigInt(0),
     );
 
-    logger.info('BatchPayoutService: aggregation complete', {
+    const result: BatchPayoutResult = {
+      correlationId: req.correlationId,
+      studioId: req.studioId,
+      periodStart: req.periodStart,
+      periodEnd: req.periodEnd,
+      lines,
+      grandTotalCents,
+      processedAt: new Date(),
+    };
+
+    logger.info('aggregate: batch payout aggregation complete', {
       context: 'BatchPayoutService',
-      studioId: request.studioId,
-      batchCorrelationId: request.batchCorrelationId,
-      totalAmountCents: totalAmountCents.toString(),
-      entryCount: entries.length,
+      correlationId: req.correlationId,
+      lineCount: lines.length,
+      grandTotalCents: grandTotalCents.toString(),
     });
 
-    return {
-      studioId: request.studioId,
-      batchCorrelationId: request.batchCorrelationId,
-      totalAmountCents,
-      entryCount: entries.length,
-      status: 'QUEUED',
-    };
+    return result;
   }
 }
