@@ -1,10 +1,13 @@
-// WO: WO-034
+// WO: WO-036-KYC-VAULT-PUBLISH-GATE
 import { Module } from '@nestjs/common';
-import { ProvisionalSuppressionService } from './provisional-suppression.service';
-import { UploadInterceptorMiddleware } from './upload-interceptor.middleware';
+import { SafetyService } from './safety.service';
 
+/**
+ * WO-036-KYC-VAULT-PUBLISH-GATE: Safety Module
+ * Provides the deterministic publish gate and vault access audit service.
+ */
 @Module({
-  providers: [ProvisionalSuppressionService, UploadInterceptorMiddleware],
-  exports: [ProvisionalSuppressionService, UploadInterceptorMiddleware],
+  providers: [SafetyService],
+  exports: [SafetyService],
 })
 export class SafetyModule {}

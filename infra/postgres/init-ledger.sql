@@ -347,72 +347,147 @@ BEFORE UPDATE OF status ON transactions
 FOR EACH ROW EXECUTE FUNCTION set_transactions_updated_at();
 
 -- =============================================================================
--- TABLE: dispute_cases
--- PURPOSE: Financial Dispute Engine — tracks each dispute lifecycle end-to-end.
--- MUTATION POLICY: INSERT ONLY after creation. Status transitions via controlled
---                  UPDATE only. DELETE is prohibited by OQMI Doctrine.
--- WO: WO-035-FINANCIAL-DISPUTE-ENGINE
+-- TABLE: identity_verification
+-- WO: WO-036-KYC-VAULT-PUBLISH-GATE
+-- PURPOSE: KYC identity verification records for performers.
+--          Enforces Vault Segregation per Corpus v10 Section 4.2.
+-- MUTATION POLICY: INSERT only. Status changes produce new rows (append-only).
+--                  Expiry extension requires step-up auth (enforced in service
+--                  layer). No raw PII stored — document_hash is SHA-256 only.
 -- =============================================================================
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'dispute_status') THEN
-        CREATE TYPE dispute_status AS ENUM (
-            'OPENED',
-            'UNDER_REVIEW',
-            'ACTIONED',
-            'CLOSED'
-        );
-    END IF;
-END$$;
+CREATE TABLE IF NOT EXISTS identity_verification (
+    verification_id     UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    performer_id        UUID        NOT NULL,
 
-CREATE TABLE IF NOT EXISTS dispute_cases (
-    dispute_id              UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    -- Identity evidence (no raw PII — hash reference only per Corpus v10 §4.2)
+    document_hash       CHAR(64)    NOT NULL,  -- SHA-256 hex digest
 
-    -- External reference from payment processor webhook
-    processor_reference     VARCHAR(200) NOT NULL,
+    -- Age / eligibility
+    dob                 DATE        NOT NULL,
 
-    -- Parties
-    user_id                 UUID        NOT NULL,
+    -- Verification lifecycle
+    status              VARCHAR(20) NOT NULL DEFAULT 'PENDING'
+                            CHECK (status IN ('PENDING', 'VERIFIED', 'EXPIRED', 'REJECTED')),
+    expiry_date         TIMESTAMPTZ,
+    liveness_pass       BOOLEAN     NOT NULL DEFAULT FALSE,
 
-    -- Amount in minor units (cents), reflecting the disputed gross amount
-    amount_gross            BIGINT      NOT NULL CHECK (amount_gross >= 0),
+    -- Step-up audit trail for expiry overrides (populated on manual extension)
+    expiry_override_actor_id    UUID,
+    expiry_override_reason_code VARCHAR(100),
+    expiry_override_at          TIMESTAMPTZ,
 
-    -- Lifecycle status
-    status                  dispute_status NOT NULL DEFAULT 'OPENED',
-
-    -- Classification
-    reason_code             VARCHAR(100) NOT NULL,
-
-    -- SLA: defaults to 48 hours from creation
-    sla_deadline            TIMESTAMPTZ NOT NULL
-                                DEFAULT (NOW() + INTERVAL '48 hours'),
-
-    -- Dual-timezone audit timestamps
-    created_at_utc          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    created_at_toronto      TEXT        NOT NULL
-                                DEFAULT TO_CHAR(
-                                    NOW() AT TIME ZONE 'America/Toronto',
-                                    'YYYY-MM-DD"T"HH24:MI:SS'
-                                )
+    -- Audit timestamps
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX IF NOT EXISTS idx_dispute_cases_user_id
-    ON dispute_cases (user_id);
+CREATE INDEX IF NOT EXISTS idx_identity_verification_performer_id
+    ON identity_verification (performer_id);
 
-CREATE INDEX IF NOT EXISTS idx_dispute_cases_status
-    ON dispute_cases (status);
+CREATE INDEX IF NOT EXISTS idx_identity_verification_status
+    ON identity_verification (status);
 
-CREATE INDEX IF NOT EXISTS idx_dispute_cases_sla_deadline
-    ON dispute_cases (sla_deadline);
+COMMENT ON TABLE identity_verification IS
+    'KYC identity verification records for performers. '
+    'document_hash stores SHA-256 reference only — no raw PII (Corpus v10 §4.2). '
+    'Expiry extensions require step-up authentication and a reason_code. '
+    'WO: WO-036-KYC-VAULT-PUBLISH-GATE.';
 
-CREATE INDEX IF NOT EXISTS idx_dispute_cases_processor_reference
-    ON dispute_cases (processor_reference);
+-- Prevent deletion of identity_verification rows (append-only doctrine).
+CREATE OR REPLACE FUNCTION identity_verification_block_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION
+        'identity_verification is append-only: DELETE is not permitted (verification_id=%).', OLD.verification_id;
+END;
+$$ LANGUAGE plpgsql;
 
-COMMENT ON TABLE dispute_cases IS
-    'Financial Dispute Engine: tracks each dispute lifecycle. '
-    'INSERT on open; status transitions permitted; DELETE prohibited by OQMI Doctrine. '
-    'WO: WO-035-FINANCIAL-DISPUTE-ENGINE';
+CREATE TRIGGER trg_identity_verification_block_delete
+BEFORE DELETE ON identity_verification
+FOR EACH ROW EXECUTE FUNCTION identity_verification_block_delete();
 
-COMMENT ON COLUMN dispute_cases.created_at_toronto IS
-    'Wall-clock time at America/Toronto when the dispute was opened, stored as '
-    'ISO-8601 text for auditability without timezone conversion loss.';
+-- Maintain updated_at on status change.
+CREATE OR REPLACE FUNCTION set_identity_verification_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at := NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_identity_verification_updated_at
+BEFORE UPDATE ON identity_verification
+FOR EACH ROW EXECUTE FUNCTION set_identity_verification_updated_at();
+
+-- =============================================================================
+-- TABLE: audit_events
+-- WO: WO-036-KYC-VAULT-PUBLISH-GATE
+-- PURPOSE: Immutable audit chain for compliance events.
+--          Covers publish eligibility checks, vault access, and overrides.
+-- MUTATION POLICY: INSERT only. No UPDATE or DELETE permitted.
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS audit_events (
+    event_id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- Event classification
+    event_type          VARCHAR(50) NOT NULL
+                            CHECK (event_type IN (
+                                'PUBLISH_ELIGIBILITY_CHECK',
+                                'VAULT_ACCESS',
+                                'EXPIRY_OVERRIDE'
+                            )),
+
+    -- Actor / subject
+    actor_id            UUID        NOT NULL,
+    performer_id        UUID,
+
+    -- Event detail
+    purpose_code        VARCHAR(100),
+    device_fingerprint  VARCHAR(255),
+    outcome             VARCHAR(50),
+    reason_code         VARCHAR(100),
+
+    -- Arbitrary structured context (no raw PII)
+    metadata            JSONB,
+
+    -- Immutable timestamp
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_actor_id
+    ON audit_events (actor_id);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_performer_id
+    ON audit_events (performer_id);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_event_type
+    ON audit_events (event_type);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_created_at
+    ON audit_events (created_at DESC);
+
+COMMENT ON TABLE audit_events IS
+    'Immutable audit chain for compliance events. '
+    'Covers publish eligibility checks, vault access, and expiry overrides. '
+    'INSERT only — no UPDATE or DELETE permitted. '
+    'WO: WO-036-KYC-VAULT-PUBLISH-GATE.';
+
+-- Enforce append-only on audit_events.
+CREATE OR REPLACE FUNCTION audit_events_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'DELETE' THEN
+        RAISE EXCEPTION
+            'audit_events is append-only: DELETE is not permitted (event_id=%).', OLD.event_id;
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        RAISE EXCEPTION
+            'audit_events is append-only: UPDATE is not permitted (event_id=%).', OLD.event_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_audit_events_block_mutation
+BEFORE UPDATE OR DELETE ON audit_events
+FOR EACH ROW EXECUTE FUNCTION audit_events_block_mutation();
