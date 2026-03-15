@@ -52,6 +52,22 @@ export class BatchPayoutService {
       periodEnd: req.periodEnd,
     });
 
+    if (!req.correlationId || typeof req.correlationId !== 'string' || !req.correlationId.trim()) {
+      throw new Error('aggregate: missing or invalid correlationId');
+    }
+    if (!req.studioId || typeof req.studioId !== 'string' || !req.studioId.trim()) {
+      throw new Error('aggregate: missing or invalid studioId');
+    }
+    if (!(req.periodStart instanceof Date) || Number.isNaN(req.periodStart.getTime())) {
+      throw new Error('aggregate: missing or invalid periodStart');
+    }
+    if (!(req.periodEnd instanceof Date) || Number.isNaN(req.periodEnd.getTime())) {
+      throw new Error('aggregate: missing or invalid periodEnd');
+    }
+    if (req.periodStart > req.periodEnd) {
+      throw new Error('aggregate: periodStart must be less than or equal to periodEnd');
+    }
+
     const entries = await db.ledger_entries.findMany({
       where: {
         studio_id: req.studioId,
