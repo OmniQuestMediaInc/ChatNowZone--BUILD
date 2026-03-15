@@ -1,3 +1,16 @@
+// WO: WO-016-B
+
+/**
+ * GovernanceConfigService
+ * Canonical source for platform-wide governance constants.
+ * Timezone authority: America/Toronto (WO-016-B).
+ */
+export class GovernanceConfigService {
+  public readonly TIMEZONE = 'America/Toronto';
+  public readonly PAYOUT_RATE_SHOWTHEATER = 0.08;
+  public readonly PAYOUT_RATE_REGULAR = 0.065;
+}
+
 export const COMMISSION_DEFAULTS = {
   MODEL_TOKEN_VALUE_MIN: 0.065, // USD
   MODEL_TOKEN_VALUE_MAX: 0.08,  // USD
@@ -13,5 +26,3 @@ export enum StudioFeeType {
   PLATFORM_USAGE_PCT = 'PLATFORM_PCT',
   PENALTY = 'FINANCIAL_PENALTY'
 }
-
-public readonly TIMEZONE = 'America/Toronto'; // Standard timezone set by governance rules (WO-016-B).
