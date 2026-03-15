@@ -1,32 +1,16 @@
+# WO: WO-032 / FT-033
+# FT-033: Postgres and Redis are isolated to the internal backend network.
+#         No host port bindings for db or redis — internal traffic only.
 services:
   db:
-    image: postgres:15-alpine
+    image: postgres:16-alpine
     container_name: chatnow_db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: chatnow_zone
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - ./infra/postgres:/docker-entrypoint-initdb.d
-    ports:
-      - "5432:5432"
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
       POSTGRES_DB: chatnow
       POSTGRES_USER: chatnow_app
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    # PORTS REMOVED: Internal network only. (PR #20 — NETWORK ISOLATION invariant)
+    # PORTS REMOVED: Internal network only. (FT-033 — NETWORK ISOLATION invariant)
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./infra/postgres/init-ledger.sql:/docker-entrypoint-initdb.d/01-init-ledger.sql:ro
@@ -35,14 +19,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - backend
 
   redis:
-    # Redis with password authentication — REDIS_PASSWORD env var required.
     image: redis:7-alpine
     container_name: chatnow_redis
     restart: unless-stopped
     command: redis-server --requirepass ${REDIS_PASSWORD}
-    # PORTS REMOVED: Internal network only. (PR #20 — NETWORK ISOLATION invariant)
+    # PORTS REMOVED: Internal network only. (FT-033 — NETWORK ISOLATION invariant)
     volumes:
       - redis_data:/data
     healthcheck:
@@ -50,6 +35,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - backend
 
   api:
     build:
@@ -75,14 +62,13 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    networks:
+      - backend
 
 volumes:
   postgres_data:
   redis_data:
-    build: .
-    depends_on:
-      - db
-      - redis
-    environment:
-      - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/chatnow_zone
 
+networks:
+  backend:
+    driver: bridge

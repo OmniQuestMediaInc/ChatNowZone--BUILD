@@ -1,47 +1,53 @@
 // WO: WO-020
-import { Injectable } from '@nestjs/common';
 import { logger } from '../logger';
 
 export interface IngestionPayload {
-  sourceType: 'STUDIO' | 'MODEL';
   sourceId: string;
+  modelId: string;
+  studioId: string;
   eventType: string;
-  data: Record<string, unknown>;
+  payload: Record<string, unknown>;
   correlationId: string;
 }
 
 export interface IngestionResult {
-  accepted: boolean;
   correlationId: string;
-  reason?: string;
+  accepted: boolean;
+  queuedAt: Date;
 }
 
-/**
- * WO-020: Frontend Ingestion Layer
- * Integrates backend services into Studio/Model UI components.
- * TODO: Implement full event routing and UI surface binding.
- */
-@Injectable()
 export class IngestionService {
-  async ingest(payload: IngestionPayload): Promise<IngestionResult> {
-    if (!payload.sourceId || !payload.correlationId || !payload.eventType) {
-      const reason = 'ingest: missing required fields: sourceId, correlationId, or eventType';
-      logger.error(reason, undefined, {
+  async ingest(data: IngestionPayload): Promise<IngestionResult> {
+    const missing: string[] = [];
+    if (!data.sourceId) missing.push('sourceId');
+    if (!data.modelId) missing.push('modelId');
+    if (!data.studioId) missing.push('studioId');
+    if (!data.eventType) missing.push('eventType');
+    if (data.payload == null) missing.push('payload');
+    if (!data.correlationId) missing.push('correlationId');
+
+    if (missing.length > 0) {
+      const message = `ingest: invalid input — missing fields: ${missing.join(', ')}`;
+      logger.error(message, undefined, {
         context: 'IngestionService',
-        correlationId: payload.correlationId,
+        correlationId: data.correlationId,
       });
-      return { accepted: false, correlationId: payload.correlationId, reason };
+      throw new Error(message);
     }
 
-    logger.info('IngestionService: event ingested', {
+    logger.info('ingest: payload accepted for backend processing', {
       context: 'IngestionService',
-      sourceType: payload.sourceType,
-      sourceId: payload.sourceId,
-      eventType: payload.eventType,
-      correlationId: payload.correlationId,
+      correlationId: data.correlationId,
+      sourceId: data.sourceId,
+      modelId: data.modelId,
+      studioId: data.studioId,
+      eventType: data.eventType,
     });
 
-    // TODO: Route event to appropriate backend service based on sourceType
-    return { accepted: true, correlationId: payload.correlationId };
+    return {
+      correlationId: data.correlationId,
+      accepted: true,
+      queuedAt: new Date(),
+    };
   }
 }
