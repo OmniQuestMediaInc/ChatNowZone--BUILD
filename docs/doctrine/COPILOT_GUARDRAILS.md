@@ -1,7 +1,6 @@
-## Reflection Protocol (OQMI-RP-v1)
+### SECTION 4: THE REFLECTION PROTOCOL (OQMI-RP-v1)
 
-### Requirement:
-Before finalizing any code change or committing to `main`, the Agent must execute this 4-point self-audit to ensure the integrity of the ChatNow.Zone financial and operational layers.
+**Requirement:** Before finalizing any code change or committing to `main`, the Agent must execute this 4-point self-audit to ensure the integrity of the ChatNow.Zone financial and operational layers.
 
 ---
 
@@ -23,4 +22,4 @@ Before finalizing any code change or committing to `main`, the Agent must execut
 
 ---
 
-**Protocol Execution Status:** [[ ]] AUDIT PASSED | [[ ]] REPAIRS APPLIED
+**Protocol Execution Status:** [ ] AUDIT PASSED | [ ] REPAIRS APPLIED
