@@ -345,3 +345,149 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_transactions_status_updated_at
 BEFORE UPDATE OF status ON transactions
 FOR EACH ROW EXECUTE FUNCTION set_transactions_updated_at();
+
+-- =============================================================================
+-- TABLE: identity_verification
+-- WO: WO-036-KYC-VAULT-PUBLISH-GATE
+-- PURPOSE: KYC identity verification records for performers.
+--          Enforces Vault Segregation per Corpus v10 Section 4.2.
+-- MUTATION POLICY: INSERT only. Status changes produce new rows (append-only).
+--                  Expiry extension requires step-up auth (enforced in service
+--                  layer). No raw PII stored — document_hash is SHA-256 only.
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS identity_verification (
+    verification_id     UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    performer_id        UUID        NOT NULL,
+
+    -- Identity evidence (no raw PII — hash reference only per Corpus v10 §4.2)
+    document_hash       CHAR(64)    NOT NULL,  -- SHA-256 hex digest
+
+    -- Age / eligibility
+    dob                 DATE        NOT NULL,
+
+    -- Verification lifecycle
+    status              VARCHAR(20) NOT NULL DEFAULT 'PENDING'
+                            CHECK (status IN ('PENDING', 'VERIFIED', 'EXPIRED', 'REJECTED')),
+    expiry_date         TIMESTAMPTZ,
+    liveness_pass       BOOLEAN     NOT NULL DEFAULT FALSE,
+
+    -- Step-up audit trail for expiry overrides (populated on manual extension)
+    expiry_override_actor_id    UUID,
+    expiry_override_reason_code VARCHAR(100),
+    expiry_override_at          TIMESTAMPTZ,
+
+    -- Audit timestamps
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_identity_verification_performer_id
+    ON identity_verification (performer_id);
+
+CREATE INDEX IF NOT EXISTS idx_identity_verification_status
+    ON identity_verification (status);
+
+COMMENT ON TABLE identity_verification IS
+    'KYC identity verification records for performers. '
+    'document_hash stores SHA-256 reference only — no raw PII (Corpus v10 §4.2). '
+    'Expiry extensions require step-up authentication and a reason_code. '
+    'WO: WO-036-KYC-VAULT-PUBLISH-GATE.';
+
+-- Prevent deletion of identity_verification rows (append-only doctrine).
+CREATE OR REPLACE FUNCTION identity_verification_block_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION
+        'identity_verification is append-only: DELETE is not permitted (verification_id=%).', OLD.verification_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_identity_verification_block_delete
+BEFORE DELETE ON identity_verification
+FOR EACH ROW EXECUTE FUNCTION identity_verification_block_delete();
+
+-- Maintain updated_at on status change.
+CREATE OR REPLACE FUNCTION set_identity_verification_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at := NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_identity_verification_updated_at
+BEFORE UPDATE ON identity_verification
+FOR EACH ROW EXECUTE FUNCTION set_identity_verification_updated_at();
+
+-- =============================================================================
+-- TABLE: audit_events
+-- WO: WO-036-KYC-VAULT-PUBLISH-GATE
+-- PURPOSE: Immutable audit chain for compliance events.
+--          Covers publish eligibility checks, vault access, and overrides.
+-- MUTATION POLICY: INSERT only. No UPDATE or DELETE permitted.
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS audit_events (
+    event_id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- Event classification
+    event_type          VARCHAR(50) NOT NULL
+                            CHECK (event_type IN (
+                                'PUBLISH_ELIGIBILITY_CHECK',
+                                'VAULT_ACCESS',
+                                'EXPIRY_OVERRIDE'
+                            )),
+
+    -- Actor / subject
+    actor_id            UUID        NOT NULL,
+    performer_id        UUID,
+
+    -- Event detail
+    purpose_code        VARCHAR(100),
+    device_fingerprint  VARCHAR(255),
+    outcome             VARCHAR(50),
+    reason_code         VARCHAR(100),
+
+    -- Arbitrary structured context (no raw PII)
+    metadata            JSONB,
+
+    -- Immutable timestamp
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_actor_id
+    ON audit_events (actor_id);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_performer_id
+    ON audit_events (performer_id);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_event_type
+    ON audit_events (event_type);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_created_at
+    ON audit_events (created_at DESC);
+
+COMMENT ON TABLE audit_events IS
+    'Immutable audit chain for compliance events. '
+    'Covers publish eligibility checks, vault access, and expiry overrides. '
+    'INSERT only — no UPDATE or DELETE permitted. '
+    'WO: WO-036-KYC-VAULT-PUBLISH-GATE.';
+
+-- Enforce append-only on audit_events.
+CREATE OR REPLACE FUNCTION audit_events_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'DELETE' THEN
+        RAISE EXCEPTION
+            'audit_events is append-only: DELETE is not permitted (event_id=%).', OLD.event_id;
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        RAISE EXCEPTION
+            'audit_events is append-only: UPDATE is not permitted (event_id=%).', OLD.event_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_audit_events_block_mutation
+BEFORE UPDATE OR DELETE ON audit_events
+FOR EACH ROW EXECUTE FUNCTION audit_events_block_mutation();

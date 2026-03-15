@@ -13,3 +13,5 @@ services/core-api/src/creator/statements.service.ts
 services/core-api/src/creator/statements.controller.ts
 services/core-api/src/creator/creator.module.ts
 services/core-api/src/risk/risk-score.service.ts
+services/core-api/src/safety/safety.service.ts
+services/core-api/src/safety/safety.module.ts
