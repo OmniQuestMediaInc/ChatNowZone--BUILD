@@ -345,3 +345,84 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_transactions_status_updated_at
 BEFORE UPDATE OF status ON transactions
 FOR EACH ROW EXECUTE FUNCTION set_transactions_updated_at();
+
+-- =============================================================================
+-- TABLE: content_hash_registry
+-- PURPOSE: NCII Suppression Registry — tamper-evident, append-only record of
+--          SHA-256 hashes for known suppressed content.
+-- MUTATION POLICY: INSERT ONLY. No UPDATE. No DELETE. Ever.
+-- WO: WO-034 (Corpus v10 Chapter 3 Alignment)
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS content_hash_registry (
+    hash                CHAR(64)     PRIMARY KEY,       -- SHA-256 hex string (64 chars)
+    case_id             UUID         NOT NULL,           -- Reference to Incident Object
+    action_taken        VARCHAR(20)  NOT NULL
+                            CHECK (action_taken IN ('SUPPRESS', 'BLOCK_REUPLOAD')),
+    rule_applied_id     VARCHAR(100) NOT NULL,           -- Reference to Corpus v10 Section 5
+    created_at_utc      TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    created_at_toronto  TEXT         NOT NULL DEFAULT '' -- Computed by trigger: America/Toronto
+);
+
+-- ---------------------------------------------------------------------------
+-- Trigger: populate created_at_toronto on INSERT from created_at_utc.
+-- Converts the UTC timestamp to the America/Toronto local representation.
+-- ---------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION content_hash_registry_set_toronto_ts()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.created_at_utc IS NULL THEN
+        NEW.created_at_utc := NOW();
+    END IF;
+    NEW.created_at_toronto :=
+        to_char(NEW.created_at_utc AT TIME ZONE 'America/Toronto', 'YYYY-MM-DD HH24:MI:SS')
+        || ' America/Toronto';
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_content_hash_registry_set_toronto_ts
+    BEFORE INSERT ON content_hash_registry
+    FOR EACH ROW EXECUTE FUNCTION content_hash_registry_set_toronto_ts();
+
+-- ---------------------------------------------------------------------------
+-- Trigger: block all UPDATE and DELETE on content_hash_registry (append-only).
+-- ---------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION content_hash_registry_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION
+        'OQMI Append-Only Doctrine violation: % on content_hash_registry is prohibited. '
+        'Hash registry entries are immutable for tamper-evidence. '
+        'WO-034: safety enforcement requires an unalterable audit trail.',
+        TG_OP;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_content_hash_registry_no_update
+    BEFORE UPDATE ON content_hash_registry
+    FOR EACH ROW EXECUTE FUNCTION content_hash_registry_block_mutation();
+
+CREATE OR REPLACE TRIGGER trg_content_hash_registry_no_delete
+    BEFORE DELETE ON content_hash_registry
+    FOR EACH ROW EXECUTE FUNCTION content_hash_registry_block_mutation();
+
+-- Indexes for common query patterns
+CREATE INDEX IF NOT EXISTS idx_content_hash_registry_case_id
+    ON content_hash_registry (case_id);
+
+CREATE INDEX IF NOT EXISTS idx_content_hash_registry_created_at
+    ON content_hash_registry (created_at_utc DESC);
+
+COMMENT ON TABLE content_hash_registry IS
+    'NCII Suppression Registry: append-only, tamper-evident SHA-256 hash store '
+    'for known suppressed content. INSERT ONLY — UPDATE and DELETE are blocked '
+    'by database triggers. WO-034: Corpus v10 Chapter 3 Alignment.';
+
+COMMENT ON COLUMN content_hash_registry.hash IS
+    'SHA-256 hex digest of suppressed content (64 hex characters). Primary key.';
+
+COMMENT ON COLUMN content_hash_registry.created_at_toronto IS
+    'Human-readable timestamp in America/Toronto local time. '
+    'Computed automatically from created_at_utc by trigger. '
+    'GovernanceConfigService timezone: America/Toronto (WO-016-B).';
