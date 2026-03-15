@@ -1,0 +1,202 @@
+[
+  {
+    "id": "sc_001",
+    "category": "Payments",
+    "title": "Friendly Fraud Dispute",
+    "trigger_code": "CHARGEBACK",
+    "severity": 2,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_002",
+    "category": "Payments",
+    "title": "Refund Pressure - High Velocity",
+    "trigger_code": "REFUND_PRESSURE",
+    "severity": 3,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_003",
+    "category": "Payments",
+    "title": "Card Testing Attack",
+    "trigger_code": "CARD_TEST",
+    "severity": 4,
+    "expected_action": "ACCOUNT_FREEZE"
+  },
+  {
+    "id": "sc_004",
+    "category": "Payments",
+    "title": "Velocity Abuse - Single Merchant",
+    "trigger_code": "VELOCITY_SINGLE_MERCHANT",
+    "severity": 3,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_005",
+    "category": "Payments",
+    "title": "Split Transaction Structuring",
+    "trigger_code": "STRUCTURING",
+    "severity": 3,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_006",
+    "category": "Payments",
+    "title": "Stolen Card Usage",
+    "trigger_code": "STOLEN_CARD",
+    "severity": 5,
+    "expected_action": "ACCOUNT_FREEZE"
+  },
+  {
+    "id": "sc_007",
+    "category": "Payments",
+    "title": "Account Takeover - Payment",
+    "trigger_code": "ATO_PAYMENT",
+    "severity": 5,
+    "expected_action": "ACCOUNT_FREEZE"
+  },
+  {
+    "id": "sc_008",
+    "category": "Payments",
+    "title": "Synthetic Identity Fraud",
+    "trigger_code": "SYNTHETIC_ID",
+    "severity": 4,
+    "expected_action": "ACCOUNT_FREEZE"
+  },
+  {
+    "id": "sc_009",
+    "category": "Payments",
+    "title": "Money Mule Activity",
+    "trigger_code": "MONEY_MULE",
+    "severity": 5,
+    "expected_action": "ACCOUNT_SUSPEND"
+  },
+  {
+    "id": "sc_010",
+    "category": "Payments",
+    "title": "Micro-Transaction Probe",
+    "trigger_code": "MICRO_PROBE",
+    "severity": 2,
+    "expected_action": "ALERT_ONLY"
+  },
+  {
+    "id": "sc_011",
+    "category": "Payments",
+    "title": "Declined Card Cycling",
+    "trigger_code": "DECLINED_CYCLING",
+    "severity": 3,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_012",
+    "category": "Payments",
+    "title": "Cross-Border Velocity",
+    "trigger_code": "CROSS_BORDER_VELOCITY",
+    "severity": 3,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_013",
+    "category": "Payments",
+    "title": "Duplicate Payment Submission",
+    "trigger_code": "DUPLICATE_PAYMENT",
+    "severity": 2,
+    "expected_action": "ALERT_ONLY"
+  },
+  {
+    "id": "sc_014",
+    "category": "Payments",
+    "title": "Late Dispute Filing",
+    "trigger_code": "LATE_DISPUTE",
+    "severity": 1,
+    "expected_action": "ALERT_ONLY"
+  },
+  {
+    "id": "sc_015",
+    "category": "Payments",
+    "title": "Excessive Refund Rate",
+    "trigger_code": "EXCESSIVE_REFUND",
+    "severity": 3,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_016",
+    "category": "Payments",
+    "title": "High-Risk Merchant Pattern",
+    "trigger_code": "HIGH_RISK_MERCHANT",
+    "severity": 3,
+    "expected_action": "ALERT_ONLY"
+  },
+  {
+    "id": "sc_017",
+    "category": "Payments",
+    "title": "Payment Reversal Abuse",
+    "trigger_code": "REVERSAL_ABUSE",
+    "severity": 4,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_018",
+    "category": "Payments",
+    "title": "PCI Scope Exposure",
+    "trigger_code": "PCI_EXPOSURE",
+    "severity": 5,
+    "expected_action": "ACCOUNT_FREEZE"
+  },
+  {
+    "id": "sc_019",
+    "category": "Payments",
+    "title": "Chargeback Threshold Breach",
+    "trigger_code": "CHARGEBACK_THRESHOLD",
+    "severity": 4,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_020",
+    "category": "Payments",
+    "title": "Recurring Billing Anomaly",
+    "trigger_code": "RECURRING_ANOMALY",
+    "severity": 2,
+    "expected_action": "ALERT_ONLY"
+  },
+  {
+    "id": "sc_021",
+    "category": "Payments",
+    "title": "Payment Credential Stuffing",
+    "trigger_code": "CREDENTIAL_STUFF",
+    "severity": 4,
+    "expected_action": "ACCOUNT_FREEZE"
+  },
+  {
+    "id": "sc_022",
+    "category": "Payments",
+    "title": "Insider Payment Manipulation",
+    "trigger_code": "INSIDER_PAYMENT",
+    "severity": 5,
+    "expected_action": "ACCOUNT_SUSPEND"
+  },
+  {
+    "id": "sc_023",
+    "category": "Payments",
+    "title": "Batch Payment Anomaly",
+    "trigger_code": "BATCH_ANOMALY",
+    "severity": 3,
+    "expected_action": "ALERT_ONLY"
+  },
+  {
+    "id": "sc_024",
+    "category": "Payments",
+    "title": "Tip Inflation Scheme",
+    "trigger_code": "TIP_INFLATION",
+    "severity": 3,
+    "expected_action": "SPENDING_LOCK"
+  },
+  {
+    "id": "sc_025",
+    "category": "Payments",
+    "title": "Subscription Stacking Fraud",
+    "trigger_code": "SUB_STACKING",
+    "severity": 3,
+    "expected_action": "SPENDING_LOCK"
+  }
+]
