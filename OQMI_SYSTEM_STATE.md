@@ -11,13 +11,20 @@
 - [ ] Studio-Aware Ledger Service
 
 ## 2. Invariant Rules for Coding Agents
-1. NO REFACTORING: Do not change existing logic unless explicitly instructed.
-2. APPEND-ONLY FINANCE: No UPDATE calls on balance columns. Offsets only.
-3. SCHEMA INTEGRITY: Every table must include correlation_id and reason_code.
-4. DROID MODE: Execute the provided payload exactly as written.
-5. NETWORK ISOLATION: No internal ports (5432, 6379) mapped to public interfaces.
+- **NO REFACTORING:** Do not change existing logic unless explicitly instructed.
+- **APPEND-ONLY FINANCE:** No UPDATE calls on balance columns. Offsets only.
+- **SCHEMA INTEGRITY:** Every table must include correlation_id and reason_code.
+- **DROID MODE:** Execute the provided payload exactly as written.
+- **NETWORK ISOLATION:** No internal ports (5432, 6379) mapped to public interfaces.
 
-## 3. Current Versioning
-- Core API: v0.0.1
-- Ledger Schema: v1.1 (BIGINT Cents/NOT NULL)
-- RedRoom API Contract: [PENDING]
+## 3. Production Scope Rules
+- **NETWORK ISOLATION:**
+  - Postgres (5432) and Redis (6379) must never be bound to a public host interface.
+  - All database and cache services are assigned to the `backend` bridge network exclusively.
+  - Only the application API layer (port 3000) may expose a host port.
+  - Any violation constitutes an `INFRA_SECURITY_VIOLATION`.
+
+## 4. Current Versioning
+- **Core API:** v0.0.1
+- **Ledger Schema:** v1.1 (BIGINT Cents/NOT NULL)
+- **RedRoom API Contract:** [PENDING]
