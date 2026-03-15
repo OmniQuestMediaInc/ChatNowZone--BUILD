@@ -1,16 +1,1 @@
-{
-  "name": "@chatnow/vision-monitor",
-  "version": "0.1.0",
-  "description": "Screen Activity Monitor — AI Vision Service skeleton (Behavioral Enforcement R2)",
-  "main": "src/human-counter.worker.ts",
-  "scripts": {
-    "build": "tsc"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^10.0.0",
-    "opencv4nodejs": "^6.0.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  }
-}
+{\n  "name": "vision-monitor",\n  "version": "1.0.0",\n  "description": "Vision monitoring services",\n  "main": "index.js",\n  "peerDependencies": {\n    "@tensorflow/tfjs-node": "^3.0.0"\n  },\n  "dependencies": {},\n  "devDependencies": {},\n  "scripts": {}\n}
