@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GovernanceConfigService } from '../config/governance.config';
+import { TipTransaction } from './ledger.types';
 
 /**
  * WO-003 / WO-032: Deterministic Ledger Service
@@ -246,5 +247,18 @@ export class LedgerService {
         spendPriority,
       }))
     );
+  }
+
+  /**
+   * Stub: full implementation pending GM-003 (LedgerService integration).
+   * Routes tip through debitWallet() once wallet buckets are wired.
+   */
+  async recordSplitTip(tx: TipTransaction): Promise<void> {
+    this.logger.log('LedgerService: recordSplitTip stub called', {
+      userId: tx.userId,
+      creatorId: tx.creatorId,
+      tokenAmount: tx.tokenAmount,
+      correlationId: tx.correlationId,
+    });
   }
 }

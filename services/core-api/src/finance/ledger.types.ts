@@ -1,6 +1,7 @@
 export interface TipTransaction {
-    amount: number;
-    sender: string;
-    receiver: string;
-    timestamp: Date;
+  userId: string;
+  creatorId: string;
+  correlationId: string;
+  tokenAmount: number;
+  isVIP?: boolean;
 }

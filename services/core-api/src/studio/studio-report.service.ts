@@ -1,6 +1,8 @@
 // WO: WO-INIT-001
+import { Injectable } from '@nestjs/common';
 import { db } from '../db';
 
+@Injectable()
 export class StudioReportService {
   async getStudioEarnings(
     studioId: string,
