@@ -3,8 +3,9 @@ import { Module } from '@nestjs/common';
 import { CreatorModule } from './creator/creator.module';
 import { SafetyModule } from './safety/safety.module';
 import { GrowthModule } from './growth/growth.module';
+import { GamesModule } from './games/games.module';
 
 @Module({
-  imports: [CreatorModule, SafetyModule, GrowthModule],
+  imports: [CreatorModule, SafetyModule, GrowthModule, GamesModule],
 })
 export class AppModule {}
