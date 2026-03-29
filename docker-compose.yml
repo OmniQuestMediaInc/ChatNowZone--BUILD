@@ -38,6 +38,29 @@ services:
     networks:
       - backend
 
+  nats:
+    image: nats:2.10-alpine
+    container_name: chatnow_nats
+    restart: unless-stopped
+    # INFRA: NATS.io message fabric — all chat and haptic events route through here.
+    # Latency Invariant: REST polling is prohibited. All real-time events via NATS.
+    command: >
+      -js
+      -sd /data
+      -m 8222
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    volumes:
+      - nats_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8222/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
   api:
     build:
       context: ./services/core-api
@@ -56,6 +79,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      nats:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:3000/health || exit 1"]
       interval: 30s
@@ -68,6 +93,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  nats_data:
 
 networks:
   backend:
