@@ -7,7 +7,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { SovereignCaCMiddleware } from './compliance/sovereign-cac.middleware';
 
 @Module({
-  imports: [CreatorModule, SafetyModule, GrowthModule, AnalyticsModule],
+  imports: [CreatorModule, SafetyModule, GrowthModule, AnalyticsModule, ComplianceModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
