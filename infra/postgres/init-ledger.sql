@@ -727,3 +727,190 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_notification_consent_updated_at
 BEFORE UPDATE ON notification_consent_store
 FOR EACH ROW EXECUTE FUNCTION set_notification_consent_updated_at();
+
+-- =============================================================================
+-- TABLE: tip_menu_items
+-- PURPOSE: Creator-defined tip menu. Versioned, append-only.
+-- All changes create new rows — no UPDATE on price or description columns.
+-- MUTATION POLICY: INSERT only for new versions. UPDATE allowed on is_active only.
+-- WO: FIZ-004
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS tip_menu_items (
+    id                  UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    creator_id          UUID        NOT NULL,
+    item_name           VARCHAR(100) NOT NULL,
+    description         TEXT,
+    base_price_tokens   INTEGER     NOT NULL CHECK (base_price_tokens > 0),
+    -- Geo-tier prices (NULL = use multiplier from GovernanceConfigService)
+    geo_price_low       INTEGER,
+    geo_price_med       INTEGER,
+    is_active           BOOLEAN     NOT NULL DEFAULT TRUE,
+    version             INTEGER     NOT NULL DEFAULT 1,
+    rule_applied_id     VARCHAR(100) NOT NULL DEFAULT 'TIP_MENU_v1',
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_tip_menu_items_creator_id ON tip_menu_items (creator_id);
+CREATE INDEX IF NOT EXISTS idx_tip_menu_items_is_active  ON tip_menu_items (creator_id, is_active);
+COMMENT ON TABLE tip_menu_items IS
+    'Creator tip menu items. Append-only for new versions. is_active toggle permitted. '
+    'Geo prices override multiplier if set. FIZ-004.';
+
+-- =============================================================================
+-- TABLE: game_sessions
+-- PURPOSE: Immutable record of every gamification play (Wheel/Slots/Dice).
+-- Token debit MUST occur before outcome is resolved. Append-only.
+-- MUTATION POLICY: INSERT only. No UPDATE or DELETE.
+-- WO: FIZ-004
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS game_sessions (
+    session_id          UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id             UUID        NOT NULL,
+    creator_id          UUID        NOT NULL,
+    game_type           VARCHAR(20) NOT NULL
+                            CHECK (game_type IN ('SPIN_WHEEL', 'SLOT_MACHINE', 'DICE')),
+    token_tier          INTEGER     NOT NULL CHECK (token_tier IN (25, 45, 60)),
+    tokens_paid         INTEGER     NOT NULL CHECK (tokens_paid > 0),
+    ledger_entry_id     UUID,       -- FK to ledger_entries.id (set after debit)
+    outcome             JSONB,      -- {die_values: [3,4], total: 7} or {segment: 'PRIZE_A'}
+    prize_awarded       TEXT,
+    prize_table_version VARCHAR(50) NOT NULL,
+    idempotency_key     VARCHAR(200) NOT NULL UNIQUE,
+    rule_applied_id     VARCHAR(100) NOT NULL DEFAULT 'GAMIFICATION_v1',
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_game_sessions_user_id    ON game_sessions (user_id);
+CREATE INDEX IF NOT EXISTS idx_game_sessions_creator_id ON game_sessions (creator_id);
+CREATE INDEX IF NOT EXISTS idx_game_sessions_game_type  ON game_sessions (game_type);
+COMMENT ON TABLE game_sessions IS
+    'Immutable gamification play log. Token debit precedes outcome. Append-only. FIZ-004.';
+
+CREATE OR REPLACE FUNCTION game_sessions_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION 'game_sessions is append-only: % is not permitted (session_id=%).', TG_OP, OLD.session_id;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER trg_game_sessions_block_mutation
+BEFORE UPDATE OR DELETE ON game_sessions
+FOR EACH ROW EXECUTE FUNCTION game_sessions_block_mutation();
+
+-- =============================================================================
+-- TABLE: prize_tables
+-- PURPOSE: Creator-configured prize tables for gamification. Versioned.
+-- MUTATION POLICY: INSERT only. Deactivation via new row with is_active=false.
+-- WO: FIZ-004
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS prize_tables (
+    id                  UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    creator_id          UUID        NOT NULL,
+    game_type           VARCHAR(20) NOT NULL
+                            CHECK (game_type IN ('SPIN_WHEEL', 'SLOT_MACHINE', 'DICE')),
+    token_tier          INTEGER     NOT NULL CHECK (token_tier IN (25, 45, 60)),
+    prize_slot          VARCHAR(20) NOT NULL, -- e.g. '7' for dice, 'SEG_A' for wheel
+    prize_description   TEXT        NOT NULL,
+    is_active           BOOLEAN     NOT NULL DEFAULT TRUE,
+    version             VARCHAR(50) NOT NULL,
+    rule_applied_id     VARCHAR(100) NOT NULL DEFAULT 'PRIZE_TABLE_v1',
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_prize_tables_creator_game ON prize_tables (creator_id, game_type, token_tier, is_active);
+COMMENT ON TABLE prize_tables IS 'Creator prize tables for gamification. Versioned, append-only. FIZ-004.';
+
+-- =============================================================================
+-- TABLE: call_bookings
+-- PURPOSE: PrivateCall booking records. Append-only.
+-- MUTATION POLICY: INSERT only. Status transitions via new events table.
+-- WO: FIZ-004
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS call_bookings (
+    booking_id              UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    creator_id              UUID        NOT NULL,
+    vip_user_id             UUID        NOT NULL,
+    scheduled_at_utc        TIMESTAMPTZ NOT NULL,
+    block_type              VARCHAR(20) NOT NULL
+                                CHECK (block_type IN ('MINI_6', 'STANDARD_12', 'PREMIUM_24', 'PER_MINUTE')),
+    block_duration_mins     INTEGER     NOT NULL CHECK (block_duration_mins > 0),
+    price_usd               NUMERIC(10,2) NOT NULL CHECK (price_usd > 0),
+    status                  VARCHAR(20) NOT NULL DEFAULT 'SCHEDULED'
+                                CHECK (status IN ('SCHEDULED','CONFIRMED','ACTIVE','COMPLETED',
+                                                   'CANCELLED_VIP','CANCELLED_CREATOR','NO_SHOW_VIP','NO_SHOW_CREATOR')),
+    reschedule_fee_usd      NUMERIC(10,2) NOT NULL DEFAULT 0.00,
+    ledger_entry_id         UUID,
+    idempotency_key         VARCHAR(200) NOT NULL UNIQUE,
+    rule_applied_id         VARCHAR(100) NOT NULL DEFAULT 'PRIVATE_CALL_v1',
+    created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_call_bookings_creator_id  ON call_bookings (creator_id);
+CREATE INDEX IF NOT EXISTS idx_call_bookings_vip_user_id ON call_bookings (vip_user_id);
+CREATE INDEX IF NOT EXISTS idx_call_bookings_scheduled   ON call_bookings (scheduled_at_utc);
+COMMENT ON TABLE call_bookings IS 'PrivateCall booking records. Append-only. FIZ-004.';
+
+-- =============================================================================
+-- TABLE: call_sessions
+-- PURPOSE: Immutable real-time session log for PrivateCalls.
+--          Login/ready/start/end timestamps are the evidence of attendance.
+-- MUTATION POLICY: INSERT only. No UPDATE or DELETE — ever.
+-- WO: FIZ-004
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS call_sessions (
+    session_id              UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    booking_id              UUID        NOT NULL REFERENCES call_bookings(booking_id),
+    creator_login_at        TIMESTAMPTZ,
+    vip_login_at            TIMESTAMPTZ,
+    creator_ready_at        TIMESTAMPTZ,
+    vip_ready_at            TIMESTAMPTZ,
+    call_start_at           TIMESTAMPTZ,
+    call_end_at             TIMESTAMPTZ,
+    actual_duration_secs    INTEGER,
+    creator_no_show         BOOLEAN     NOT NULL DEFAULT FALSE,
+    vip_no_show             BOOLEAN     NOT NULL DEFAULT FALSE,
+    voip_session_id         VARCHAR(200),
+    rule_applied_id         VARCHAR(100) NOT NULL DEFAULT 'PRIVATE_CALL_v1',
+    created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_call_sessions_booking_id ON call_sessions (booking_id);
+COMMENT ON TABLE call_sessions IS
+    'Immutable PrivateCall session log. Login/ready timestamps are attendance evidence. '
+    'No UPDATE or DELETE permitted. FIZ-004.';
+
+CREATE OR REPLACE FUNCTION call_sessions_block_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION 'call_sessions is immutable: % is not permitted (session_id=%).', TG_OP, OLD.session_id;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER trg_call_sessions_block_mutation
+BEFORE UPDATE OR DELETE ON call_sessions
+FOR EACH ROW EXECUTE FUNCTION call_sessions_block_mutation();
+
+-- =============================================================================
+-- TABLE: voucher_vault
+-- PURPOSE: GWP (Gift With Purchase) offer catalog. is_permanent enforced.
+-- MUTATION POLICY: INSERT only. No DELETE. is_active toggle on UPDATE permitted.
+-- WO: FIZ-004
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS voucher_vault (
+    voucher_id          UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    offer_name          VARCHAR(100) NOT NULL,
+    description         Text,
+    eligible_tiers      TEXT[]      NOT NULL,   -- e.g. ['GOLD','PLATINUM','DIAMOND']
+    trigger_type        VARCHAR(50) NOT NULL DEFAULT 'LOGIN',
+    token_value         INTEGER,                -- Bonus tokens if applicable
+    is_permanent        BOOLEAN     NOT NULL DEFAULT TRUE,   -- is_permanent=true enforced
+    is_active           BOOLEAN     NOT NULL DEFAULT TRUE,
+    rule_applied_id     VARCHAR(100) NOT NULL DEFAULT 'GWP_VAULT_v1',
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+COMMENT ON TABLE voucher_vault IS
+    'GWP offer catalog. is_permanent=true: entries are never deleted. '
+    'Deactivation via is_active=false only. FIZ-004.';
+
+CREATE OR REPLACE FUNCTION voucher_vault_block_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION 'voucher_vault is permanent: DELETE is not permitted (voucher_id=%).', OLD.voucher_id;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER trg_voucher_vault_block_delete
+BEFORE DELETE ON voucher_vault
+FOR EACH ROW EXECUTE FUNCTION voucher_vault_block_delete();
