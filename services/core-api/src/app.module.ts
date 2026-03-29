@@ -4,8 +4,9 @@ import { CreatorModule } from './creator/creator.module';
 import { SafetyModule } from './safety/safety.module';
 import { GrowthModule } from './growth/growth.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { ComplianceModule } from './compliance/compliance.module';
 
 @Module({
-  imports: [CreatorModule, SafetyModule, GrowthModule, AnalyticsModule],
+  imports: [CreatorModule, SafetyModule, GrowthModule, AnalyticsModule, ComplianceModule],
 })
 export class AppModule {}
