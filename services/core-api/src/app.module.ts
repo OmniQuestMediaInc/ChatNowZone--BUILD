@@ -7,6 +7,7 @@ import { GrowthModule } from './growth/growth.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ComplianceModule } from './compliance/compliance.module';
 import { NatsModule } from './nats/nats.module';
+import { PrismaModule } from './prisma.module';
 import { GamesModule } from './games/games.module';
 import { SovereignCaCMiddleware } from './compliance/sovereign-cac.middleware';
 import { ZoneGptModule } from '../../zone-gpt/src/zone-gpt.module';
@@ -14,6 +15,7 @@ import { ZoneGptModule } from '../../zone-gpt/src/zone-gpt.module';
 @Module({
   imports: [
     NatsModule,        // FIRST — global module, must be registered before all others
+    PrismaModule,      // SECOND — global Prisma client
     CreatorModule,
     SafetyModule,
     GrowthModule,
