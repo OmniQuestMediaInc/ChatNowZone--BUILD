@@ -6,7 +6,7 @@ import { TipTransaction } from './ledger.types';
 
 @Injectable()
 export class TipService {
-  constructor(private readonly ledger: LedgerService = new LedgerService()) {}
+  constructor(private readonly ledger: LedgerService) {}
 
   async processTip(tx: TipTransaction): Promise<void> {
     const missing: string[] = [];
