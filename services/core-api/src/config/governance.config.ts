@@ -23,15 +23,10 @@ export const GEO_PRICING = {
   COUNTRY_TIER_MAP: {
     CO: 'LOW',
     VE: 'LOW',
-    PE: 'LOW',
-    BO: 'LOW',
-    PY: 'LOW',
+    PH: 'LOW',
     BR: 'MED',
     MX: 'MED',
     AR: 'MED',
-    CL: 'MED',
-    PL: 'MED',
-    RO: 'MED',
     DEFAULT: 'HIGH',
   } as Record<string, string>,
   TIERS: {
