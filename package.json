@@ -5,7 +5,9 @@
   "scripts": {
     "lint": "eslint 'services/**/*.ts' --max-warnings 0",
     "typecheck": "tsc --noEmit --project tsconfig.json",
-    "typecheck:api": "tsc --noEmit --project services/core-api/tsconfig.json"
+    "typecheck:api": "tsc --noEmit --project services/core-api/tsconfig.json",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push --skip-generate"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.15",

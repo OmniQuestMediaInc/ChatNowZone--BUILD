@@ -1,0 +1,279 @@
+// prisma/schema.prisma
+// PRISMA-001: Prisma schema mirroring infra/postgres/init-ledger.sql
+// All 15 tables. Append-only tables documented with @@map and comments.
+// DO NOT add relations that don't exist in the SQL — match schema exactly.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Append-only: no update/delete permitted (enforced by DB triggers) ──────
+
+model LedgerEntry {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  transaction_ref       String   @unique @db.VarChar(100)
+  idempotency_key       String   @unique @db.VarChar(200)
+  parent_entry_id       String?  @db.Uuid
+  user_id               String   @db.Uuid
+  studio_id             String?  @db.Uuid
+  performer_id          String?  @db.Uuid
+  contract_id           String?  @db.Uuid
+  entry_type            String   @db.VarChar(50)
+  status                String   @default("PENDING") @db.VarChar(20)
+  gross_amount_cents    BigInt
+  fee_amount_cents      BigInt   @default(0)
+  net_amount_cents      BigInt
+  currency              String   @default("USD") @db.Char(3)
+  studio_amount_cents   BigInt   @default(0)
+  performer_amount_cents BigInt  @default(0)
+  platform_amount_cents BigInt   @default(0)
+  gateway               String?  @db.VarChar(50)
+  gateway_txn_id        String?  @db.VarChar(200)
+  gateway_response      Json?
+  description           String?
+  metadata              Json?
+  created_at            DateTime @default(now()) @db.Timestamptz
+
+  @@map("ledger_entries")
+}
+
+model Transaction {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  transaction_ref  String   @unique @db.VarChar(100)
+  idempotency_key  String   @unique @db.VarChar(200)
+  user_id          String   @db.Uuid
+  performer_id     String?  @db.Uuid
+  studio_id        String?  @db.Uuid
+  transaction_type String   @db.VarChar(50)
+  status           String   @default("PENDING") @db.VarChar(20)
+  gross_amount_cents BigInt
+  currency         String   @default("USD") @db.Char(3)
+  metadata         Json?
+  created_at       DateTime @default(now()) @db.Timestamptz
+  updated_at       DateTime @default(now()) @db.Timestamptz
+
+  @@map("transactions")
+}
+
+model AuditEvent {
+  event_id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  event_type         String   @db.VarChar(50)
+  actor_id           String   @db.Uuid
+  performer_id       String?  @db.Uuid
+  purpose_code       String?  @db.VarChar(100)
+  device_fingerprint String?  @db.VarChar(255)
+  outcome            String?  @db.VarChar(50)
+  reason_code        String?  @db.VarChar(100)
+  template_id        String?  @db.VarChar(100)
+  consent_basis_id   String?  @db.VarChar(100)
+  metadata           Json?
+  created_at         DateTime @default(now()) @db.Timestamptz
+
+  @@map("audit_events")
+}
+
+model IdentityVerification {
+  verification_id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  performer_id                 String    @db.Uuid
+  document_hash                String    @db.Char(64)
+  dob                          DateTime  @db.Date
+  status                       String    @default("PENDING") @db.VarChar(20)
+  expiry_date                  DateTime? @db.Timestamptz
+  liveness_pass                Boolean   @default(false)
+  expiry_override_actor_id     String?   @db.Uuid
+  expiry_override_reason_code  String?   @db.VarChar(100)
+  expiry_override_at           DateTime? @db.Timestamptz
+  created_at                   DateTime  @default(now()) @db.Timestamptz
+  updated_at                   DateTime  @default(now()) @db.Timestamptz
+
+  @@map("identity_verification")
+}
+
+model UserRiskProfile {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id             String    @unique @db.Uuid
+  risk_score          Decimal   @default(0.00) @db.Decimal(5, 2)
+  risk_tier           String    @default("UNRATED") @db.VarChar(20)
+  total_charged_back  Decimal   @default(0.00) @db.Decimal(12, 2)
+  total_disputed      Decimal   @default(0.00) @db.Decimal(12, 2)
+  total_approved      Decimal   @default(0.00) @db.Decimal(12, 2)
+  chargeback_ratio    Decimal   @default(0.0000) @db.Decimal(5, 4)
+  daily_spend_limit   Decimal   @default(500.00) @db.Decimal(12, 2)
+  monthly_spend_limit Decimal   @default(5000.00) @db.Decimal(12, 2)
+  created_at          DateTime  @default(now()) @db.Timestamptz
+  updated_at          DateTime  @default(now()) @db.Timestamptz
+  last_evaluated_at   DateTime? @db.Timestamptz
+
+  @@map("user_risk_profiles")
+}
+
+model StudioContract {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  studio_id                  String    @db.Uuid
+  performer_id               String    @db.Uuid
+  contract_ref               String    @unique @db.VarChar(100)
+  effective_date             DateTime  @db.Date
+  expiry_date                DateTime? @db.Date
+  status                     String    @default("ACTIVE") @db.VarChar(20)
+  studio_split               Decimal   @db.Decimal(5, 4)
+  performer_split            Decimal   @db.Decimal(5, 4)
+  platform_split             Decimal   @default(0.0000) @db.Decimal(5, 4)
+  performer_floor_per_minute Decimal?  @db.Decimal(8, 4)
+  created_at                 DateTime  @default(now()) @db.Timestamptz
+  updated_at                 DateTime  @default(now()) @db.Timestamptz
+  created_by                 String    @db.Uuid
+
+  @@map("studio_contracts")
+}
+
+model ReferralLink {
+  id                       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creator_id               String   @db.Uuid
+  campaign_id              String   @db.Uuid
+  attribution_window_days  Int
+  link_slug                String   @unique @db.VarChar(100)
+  device_fingerprint       String?  @db.VarChar(255)
+  payment_instrument_hash  String?  @db.VarChar(64)
+  is_active                Boolean  @default(true)
+  metadata                 Json?
+  created_at               DateTime @default(now()) @db.Timestamptz
+
+  @@map("referral_links")
+}
+
+model AttributionEvent {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referral_link_id        String   @db.Uuid
+  creator_id              String   @db.Uuid
+  campaign_id             String   @db.Uuid
+  attributed_user_id      String   @db.Uuid
+  event_type              String   @db.VarChar(50)
+  device_fingerprint      String?  @db.VarChar(255)
+  payment_instrument_hash String?  @db.VarChar(64)
+  ledger_entry_id         String?  @db.Uuid
+  rule_applied_id         String?  @db.VarChar(100)
+  platform_time           DateTime @default(now()) @db.Timestamptz
+  metadata                Json?
+  created_at              DateTime @default(now()) @db.Timestamptz
+
+  @@map("attribution_events")
+}
+
+model NotificationConsentStore {
+  id                       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                  String   @db.Uuid
+  channel                  String   @db.VarChar(20)
+  is_opted_in              Boolean  @default(false)
+  jurisdiction_rule_version String  @db.VarChar(50)
+  created_at               DateTime @default(now()) @db.Timestamptz
+  updated_at               DateTime @default(now()) @db.Timestamptz
+
+  @@unique([user_id, channel])
+  @@map("notification_consent_store")
+}
+
+model TipMenuItem {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creator_id        String   @db.Uuid
+  item_name         String   @db.VarChar(100)
+  description       String?
+  base_price_tokens Int
+  geo_price_low     Int?
+  geo_price_med     Int?
+  is_active         Boolean  @default(true)
+  version           Int      @default(1)
+  rule_applied_id   String   @default("TIP_MENU_v1") @db.VarChar(100)
+  created_at        DateTime @default(now()) @db.Timestamptz
+
+  @@map("tip_menu_items")
+}
+
+model GameSession {
+  session_id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id             String   @db.Uuid
+  creator_id          String   @db.Uuid
+  game_type           String   @db.VarChar(20)
+  token_tier          Int
+  tokens_paid         Int
+  ledger_entry_id     String?  @db.Uuid
+  outcome             Json?
+  prize_awarded       String?
+  prize_table_version String   @db.VarChar(50)
+  idempotency_key     String   @unique @db.VarChar(200)
+  rule_applied_id     String   @default("GAMIFICATION_v1") @db.VarChar(100)
+  created_at          DateTime @default(now()) @db.Timestamptz
+
+  @@map("game_sessions")
+}
+
+model PrizeTable {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creator_id        String   @db.Uuid
+  game_type         String   @db.VarChar(20)
+  token_tier        Int
+  prize_slot        String   @db.VarChar(20)
+  prize_description String
+  is_active         Boolean  @default(true)
+  version           String   @db.VarChar(50)
+  rule_applied_id   String   @default("PRIZE_TABLE_v1") @db.VarChar(100)
+  created_at        DateTime @default(now()) @db.Timestamptz
+
+  @@map("prize_tables")
+}
+
+model CallBooking {
+  booking_id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creator_id         String   @db.Uuid
+  vip_user_id        String   @db.Uuid
+  scheduled_at_utc   DateTime @db.Timestamptz
+  block_type         String   @db.VarChar(20)
+  block_duration_mins Int
+  price_usd          Decimal  @db.Decimal(10, 2)
+  status             String   @default("SCHEDULED") @db.VarChar(20)
+  reschedule_fee_usd Decimal  @default(0.00) @db.Decimal(10, 2)
+  ledger_entry_id    String?  @db.Uuid
+  idempotency_key    String   @unique @db.VarChar(200)
+  rule_applied_id    String   @default("PRIVATE_CALL_v1") @db.VarChar(100)
+  created_at         DateTime @default(now()) @db.Timestamptz
+
+  @@map("call_bookings")
+}
+
+model CallSession {
+  session_id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  booking_id          String    @db.Uuid
+  creator_login_at    DateTime? @db.Timestamptz
+  vip_login_at        DateTime? @db.Timestamptz
+  creator_ready_at    DateTime? @db.Timestamptz
+  vip_ready_at        DateTime? @db.Timestamptz
+  call_start_at       DateTime? @db.Timestamptz
+  call_end_at         DateTime? @db.Timestamptz
+  actual_duration_secs Int?
+  creator_no_show     Boolean   @default(false)
+  vip_no_show         Boolean   @default(false)
+  voip_session_id     String?   @db.VarChar(200)
+  rule_applied_id     String    @default("PRIVATE_CALL_v1") @db.VarChar(100)
+  created_at          DateTime  @default(now()) @db.Timestamptz
+
+  @@map("call_sessions")
+}
+
+model VoucherVault {
+  voucher_id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  offer_name      String   @db.VarChar(100)
+  description     String?
+  eligible_tiers  String[]
+  trigger_type    String   @default("LOGIN") @db.VarChar(50)
+  token_value     Int?
+  is_permanent    Boolean  @default(true)
+  is_active       Boolean  @default(true)
+  rule_applied_id String   @default("GWP_VAULT_v1") @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@map("voucher_vault")
+}
