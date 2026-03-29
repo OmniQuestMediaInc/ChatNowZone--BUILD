@@ -1,4 +1,5 @@
 import { createHash } from 'crypto';
+import { CommissionSplitEntry } from './schema';
 
 /**
  * @class CommissionSplittingEngine

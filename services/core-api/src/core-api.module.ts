@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { StatementsService } from '../services/statements.service';
+import { StatementsService } from './creator/surfaces/statements.service';
 
 @Module({
   providers: [StatementsService],

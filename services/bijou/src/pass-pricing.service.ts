@@ -37,7 +37,7 @@ export class PassPricingService {
   computePassPrice(input: PassPriceInput): PassPriceResult {
     const config = input.venue === 'BIJOU' ? BIJOU_PRICING : SHOWZONE_PRICING;
 
-    const base = config.ADMISSION_ST_TOKENS_BASE ?? (SHOWZONE_PRICING as typeof SHOWZONE_PRICING).PASS_BASE_ST_TOKENS;
+    const base = (config as typeof BIJOU_PRICING).ADMISSION_ST_TOKENS_BASE ?? (SHOWZONE_PRICING as typeof SHOWZONE_PRICING).PASS_BASE_ST_TOKENS;
     const day_multiplier = config.DAY_MULTIPLIERS[input.day_of_week];
     const time_multiplier = this.resolveTimeMultiplier(input.show_start_hour_toronto, input.venue);
     const creator_tier_multiplier = input.venue === 'SHOWZONE'
