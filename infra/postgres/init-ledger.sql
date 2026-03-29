@@ -914,3 +914,42 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_voucher_vault_block_delete
 BEFORE DELETE ON voucher_vault
 FOR EACH ROW EXECUTE FUNCTION voucher_vault_block_delete();
+
+-- =============================================================================
+-- TABLE: content_suppression_queue
+-- PURPOSE: DB-backed provisional suppression store (replaces in-memory Map).
+-- MUTATION POLICY: INSERT for new records. UPDATE allowed on status only.
+--                  DELETE prohibited.
+-- WO: PRISMA-002
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS content_suppression_queue (
+    id                  UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    content_id          VARCHAR(200) NOT NULL,
+    case_id             VARCHAR(200) NOT NULL,
+    rule_applied_id     VARCHAR(100) NOT NULL,
+    status              VARCHAR(20)  NOT NULL DEFAULT 'PROVISIONAL'
+                            CHECK (status IN ('PROVISIONAL', 'FINALIZED', 'LIFTED')),
+    content_hash        CHAR(64),
+    suppressed_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    finalized_at        TIMESTAMPTZ,
+    lifted_at           TIMESTAMPTZ,
+    lifted_by           UUID,
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_suppression_queue_content_id
+    ON content_suppression_queue (content_id);
+CREATE INDEX IF NOT EXISTS idx_suppression_queue_case_id
+    ON content_suppression_queue (case_id);
+CREATE INDEX IF NOT EXISTS idx_suppression_queue_status
+    ON content_suppression_queue (status);
+
+CREATE OR REPLACE FUNCTION content_suppression_queue_block_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION
+        'content_suppression_queue is append-only: DELETE is not permitted (id=%).', OLD.id;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER trg_content_suppression_queue_block_delete
+BEFORE DELETE ON content_suppression_queue
+FOR EACH ROW EXECUTE FUNCTION content_suppression_queue_block_delete();
