@@ -4,6 +4,7 @@
 **Status:** COMPLETE
 **Commit prefix:** BIJOU:
 **Date:** 2026-03-29
+**Branch:** claude/setup-showzone-service-uAlrU
 
 ---
 
@@ -46,8 +47,26 @@ The directive's import referenced `GOVERNANCE_TIMEZONE` from governance.config. 
 
 ---
 
+## AppModule Import List (Post-Registration)
+
+1. NatsModule (FIRST — global)
+2. PrismaModule (SECOND — global)
+3. CreatorModule
+4. SafetyModule
+5. GrowthModule
+6. AnalyticsModule
+7. ComplianceModule
+8. GamesModule
+9. ZoneGptModule
+10. BijouModule
+11. **ShowZoneModule** (added)
+
+NatsModule/PrismaModule order intact. ShowZoneModule positioned after all existing feature modules.
+
+---
+
 ## HANDOFF
 
-**Built:** ShowZone room lifecycle state machine with deterministic transitions, min-seat gate, and reconciliation snapshot.
-**Left incomplete:** Nothing — all 3 tasks complete.
+**Built:** ShowZone room lifecycle state machine with deterministic transitions, min-seat gate, and reconciliation snapshot. ShowZoneModule registered in AppModule.
+**Left incomplete:** Nothing — all 4 tasks complete.
 **Next agent's first task:** BIJOU-002 (Bijou Session Service) can now begin — it shares patterns with this directive.
