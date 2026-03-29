@@ -1,13 +1,27 @@
-// WO: WO-INIT-001, WO-036-KYC-VAULT-PUBLISH-GATE, WO-037, WO-038
+// services/core-api/src/app.module.ts
+// CHORE: HOUSE-001 — restore missing module registrations dropped in merge
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { CreatorModule } from './creator/creator.module';
 import { SafetyModule } from './safety/safety.module';
 import { GrowthModule } from './growth/growth.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { ComplianceModule } from './compliance/compliance.module';
+import { NatsModule } from './nats/nats.module';
+import { GamesModule } from './games/games.module';
 import { SovereignCaCMiddleware } from './compliance/sovereign-cac.middleware';
+import { ZoneGptModule } from '../../zone-gpt/src/zone-gpt.module';
 
 @Module({
-  imports: [CreatorModule, SafetyModule, GrowthModule, AnalyticsModule, ComplianceModule],
+  imports: [
+    NatsModule,        // FIRST — global module, must be registered before all others
+    CreatorModule,
+    SafetyModule,
+    GrowthModule,
+    AnalyticsModule,
+    ComplianceModule,
+    GamesModule,
+    ZoneGptModule,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
