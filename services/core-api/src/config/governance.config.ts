@@ -19,23 +19,6 @@ export const COMMISSION_DEFAULTS = {
   TIERED_PAYOUT_ENABLED_DEFAULT: false,
 };
 
-export const GEO_PRICING = {
-  COUNTRY_TIER_MAP: {
-    CO: 'LOW',
-    VE: 'LOW',
-    PH: 'LOW',
-    BR: 'MED',
-    MX: 'MED',
-    AR: 'MED',
-    DEFAULT: 'HIGH',
-  } as Record<string, string>,
-  TIERS: {
-    LOW:  { multiplier_min: 0.33 },
-    MED:  { multiplier_min: 0.60 },
-    HIGH: { multiplier_min: 1.00 },
-  },
-};
-
 export enum StudioFeeType {
   MEMBERSHIP = 'MEMBERSHIP_FIXED',
   HOURLY_SERVICE = 'SERVICE_HOURLY',
