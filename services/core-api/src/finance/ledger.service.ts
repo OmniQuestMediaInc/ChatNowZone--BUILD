@@ -12,7 +12,20 @@ import { GovernanceConfigService } from '../config/governance.config';
 
 export enum TokenType {
   REGULAR = 'REGULAR',
-  SHOW_THEATER = 'SHOW_THEATER'
+  SHOW_THEATER = 'SHOW_THEATER',
+  BIJOU = 'BIJOU',
+}
+
+export enum WalletBucket {
+  PROMOTIONAL_BONUS = 'PROMOTIONAL_BONUS',   // Priority 1 — spend first
+  MEMBERSHIP_ALLOCATION = 'MEMBERSHIP',      // Priority 2
+  PURCHASED = 'PURCHASED',                   // Priority 3 — spend last
+}
+
+export interface BucketBalance {
+  bucket: WalletBucket;
+  balance: bigint;
+  spendPriority: 1 | 2 | 3;
 }
 
 @Injectable()
@@ -138,5 +151,100 @@ export class LedgerService {
       .getRawOne();
 
     return BigInt(result?.total || 0);
+  }
+
+  /**
+   * FIZ-003: Three-Bucket Wallet — deterministic spend-order debit.
+   * Spend order: PROMOTIONAL_BONUS (1) → MEMBERSHIP_ALLOCATION (2) → PURCHASED (3).
+   * This order is system-enforced and cannot be user-selected.
+   * Each bucket debit is a separate append-only ledger entry.
+   */
+  async debitWallet(data: {
+    userId: string;
+    amountTokens: bigint;
+    tokenType: TokenType;
+    referenceId: string;
+    reasonCode: string;
+    ruleAppliedId?: string;
+    metadata?: Record<string, unknown>;
+  }): Promise<{ entries: unknown[]; total_debited: bigint }> {
+    const SPEND_ORDER: WalletBucket[] = [
+      WalletBucket.PROMOTIONAL_BONUS,
+      WalletBucket.MEMBERSHIP_ALLOCATION,
+      WalletBucket.PURCHASED,
+    ];
+
+    let remaining = data.amountTokens;
+    const entries: unknown[] = [];
+
+    for (const bucket of SPEND_ORDER) {
+      if (remaining <= 0n) break;
+
+      // Derive bucket balance from ledger history
+      const bucketBalance = await this.getBucketBalance(data.userId, data.tokenType, bucket);
+      if (bucketBalance <= 0n) continue;
+
+      const debitAmount = remaining < bucketBalance ? remaining : bucketBalance;
+      remaining -= debitAmount;
+
+      const entry = await this.recordEntry({
+        userId: data.userId,
+        amount: -debitAmount,
+        tokenType: data.tokenType,
+        referenceId: `${data.referenceId}:${bucket}`,
+        reasonCode: data.reasonCode,
+        ruleAppliedId: data.ruleAppliedId ?? 'THREE_BUCKET_DEBIT_v1',
+        metadata: {
+          ...data.metadata,
+          wallet_bucket: bucket,
+          spend_priority: SPEND_ORDER.indexOf(bucket) + 1,
+        },
+      });
+      entries.push(entry);
+    }
+
+    if (remaining > 0n) {
+      throw new Error(
+        `INSUFFICIENT_BALANCE: Could not debit ${data.amountTokens} tokens for user ${data.userId}. ` +
+        `Shortfall: ${remaining} tokens across all three buckets.`
+      );
+    }
+
+    return { entries, total_debited: data.amountTokens };
+  }
+
+  /**
+   * Derives balance for a specific wallet bucket from ledger history.
+   * Bucket is stored in entry metadata.wallet_bucket.
+   */
+  async getBucketBalance(userId: string, tokenType: TokenType, bucket: WalletBucket): Promise<bigint> {
+    const result = await this.ledgerRepo
+      .createQueryBuilder('ledger')
+      .select('SUM(ledger.amount)', 'total')
+      .where('ledger.user_id = :userId', { userId })
+      .andWhere('ledger.token_type = :tokenType', { tokenType })
+      .andWhere("ledger.metadata->>'wallet_bucket' = :bucket", { bucket })
+      .getRawOne();
+
+    return BigInt(result?.total || 0);
+  }
+
+  /**
+   * Returns all three bucket balances for a user in spend-priority order.
+   */
+  async getAllBucketBalances(userId: string, tokenType: TokenType): Promise<BucketBalance[]> {
+    const buckets = [
+      { bucket: WalletBucket.PROMOTIONAL_BONUS,   spendPriority: 1 as const },
+      { bucket: WalletBucket.MEMBERSHIP_ALLOCATION, spendPriority: 2 as const },
+      { bucket: WalletBucket.PURCHASED,           spendPriority: 3 as const },
+    ];
+
+    return Promise.all(
+      buckets.map(async ({ bucket, spendPriority }) => ({
+        bucket,
+        balance: await this.getBucketBalance(userId, tokenType, bucket),
+        spendPriority,
+      }))
+    );
   }
 }
