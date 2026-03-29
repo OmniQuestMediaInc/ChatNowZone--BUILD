@@ -277,3 +277,19 @@ model VoucherVault {
 
   @@map("voucher_vault")
 }
+
+model ContentSuppressionQueue {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content_id      String    @db.VarChar(200)
+  case_id         String    @db.VarChar(200)
+  rule_applied_id String    @db.VarChar(100)
+  status          String    @default("PROVISIONAL") @db.VarChar(20)
+  content_hash    String?   @db.Char(64)
+  suppressed_at   DateTime  @default(now()) @db.Timestamptz
+  finalized_at    DateTime? @db.Timestamptz
+  lifted_at       DateTime? @db.Timestamptz
+  lifted_by       String?   @db.Uuid
+  created_at      DateTime  @default(now()) @db.Timestamptz
+
+  @@map("content_suppression_queue")
+}
