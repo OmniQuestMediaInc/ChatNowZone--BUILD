@@ -4,10 +4,10 @@ import { CreatorModule } from './creator/creator.module';
 import { SafetyModule } from './safety/safety.module';
 import { GrowthModule } from './growth/growth.module';
 import { AnalyticsModule } from './analytics/analytics.module';
-import { SovereignCaCMiddleware } from './compliance/sovereign-cac.middleware';
+import { ZoneGptModule } from '../../zone-gpt/src/zone-gpt.module';
 
 @Module({
-  imports: [NatsModule, CreatorModule, SafetyModule, GrowthModule, AnalyticsModule],
+  imports: [CreatorModule, SafetyModule, GrowthModule, AnalyticsModule, ZoneGptModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
