@@ -4,6 +4,8 @@
 **Commit prefix:** BIJOU:
 **Risk class:** R1
 **Date:** 2026-03-29
+**Commit SHA:** da3e077 (original), updated on branch `claude/setup-growth-module-59Gyu`
+**Branch:** `claude/setup-growth-module-59Gyu`
 
 ## What Was Built
 
@@ -25,6 +27,20 @@
 | `evaluateOnLogin()` returns `eligible: false` when no offers | PASS (code logic verified) |
 | NATS publish called on eligible offer and on acceptance | PASS (code logic verified) |
 | `npx tsc --noEmit` zero new errors | PASS — only pre-existing module resolution errors (node_modules not installed) |
+
+## NATS Topics Confirmed
+
+- `GWP_OFFER_TRIGGERED: 'gwp.offer.triggered'` — present in `services/nats/topics.registry.ts` line 41
+- `GWP_OFFER_ACCEPTED: 'gwp.offer.accepted'` — present in `services/nats/topics.registry.ts` line 42
+
+## GrowthModule Wiring Confirmed
+
+- `GwpService` in `providers` array — `services/core-api/src/growth/growth.module.ts` line 19
+- `GwpService` in `exports` array — `services/core-api/src/growth/growth.module.ts` line 22
+
+## npx tsc --noEmit Result
+
+Zero new errors. All errors are pre-existing module resolution failures (`@nestjs/common`, `crypto`, `typeorm`, etc.) due to `node_modules` not being installed. No errors introduced by GWP-001.
 
 ## HANDOFF
 
