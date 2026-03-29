@@ -11,7 +11,7 @@ import { PrismaModule } from './prisma.module';
 import { GamesModule } from './games/games.module';
 import { SovereignCaCMiddleware } from './compliance/sovereign-cac.middleware';
 import { ZoneGptModule } from '../../zone-gpt/src/zone-gpt.module';
-import { ShowZoneModule } from '../../showzone/src/showzone.module';
+import { BijouModule } from '../../bijou/src/bijou.module';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { ShowZoneModule } from '../../showzone/src/showzone.module';
     ComplianceModule,
     GamesModule,
     ZoneGptModule,
-    ShowZoneModule,
+    BijouModule,
   ],
 })
 export class AppModule implements NestModule {
