@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.4.15",
-    "@nestjs/core": "^11.1.17",
-    "@nestjs/platform-express": "^11.1.17",
+    "@nestjs/core": "^11.1.18",
+    "@nestjs/platform-express": "^11.1.18",
     "@nestjs/typeorm": "^11.0.0",
     "@prisma/client": "^6.2.1",
     "nats": "^2.29.0",
@@ -25,7 +25,7 @@
     "@typescript-eslint/parser": "7.18.0",
     "@types/node": "^22.10.0",
     "eslint": "8.57.1",
-    "prisma": "^6.2.1",
+    "prisma": "^6.19.3",
     "typescript": "5.9.3"
   }
 }
