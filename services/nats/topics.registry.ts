@@ -41,6 +41,11 @@ export const NATS_TOPICS = {
   GWP_OFFER_TRIGGERED:      'gwp.offer.triggered',
   GWP_OFFER_ACCEPTED:       'gwp.offer.accepted',
 
+  // ── Step-up authentication ─────────────────────────────────────────────
+  STEP_UP_CHALLENGE_ISSUED:   'auth.step_up.challenge.issued',
+  STEP_UP_CHALLENGE_VERIFIED: 'auth.step_up.challenge.verified',
+  STEP_UP_CHALLENGE_FAILED:   'auth.step_up.challenge.failed',
+
   // ── Audit & compliance ─────────────────────────────────────────────────
   AUDIT_EVENT_WRITTEN:      'audit.event.written',
   WORM_EXPORT_TRIGGERED:    'worm.export.triggered',
