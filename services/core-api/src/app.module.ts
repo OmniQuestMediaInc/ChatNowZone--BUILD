@@ -12,6 +12,7 @@ import { GamesModule } from './games/games.module';
 import { SovereignCaCMiddleware } from './compliance/sovereign-cac.middleware';
 import { ZoneGptModule } from '../../zone-gpt/src/zone-gpt.module';
 import { BijouModule } from '../../bijou/src/bijou.module';
+import { AuthModule } from './auth/auth.module';
 import { ShowZoneModule } from '../../showzone/src/showzone.module';
 
 @Module({
@@ -26,6 +27,7 @@ import { ShowZoneModule } from '../../showzone/src/showzone.module';
     GamesModule,
     ZoneGptModule,
     BijouModule,
+    AuthModule,
     ShowZoneModule,
   ],
 })
