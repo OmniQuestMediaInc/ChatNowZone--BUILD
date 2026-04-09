@@ -23,7 +23,7 @@ export class AuditDashboardController {
       context: 'AuditDashboardController',
     });
 
-    const totalLedgerEntries = await db.ledger_entries.count();
+    const totalLedgerEntries = await db.ledgerEntry.count();
 
     return {
       totalLedgerEntries,
@@ -48,7 +48,7 @@ export class AuditDashboardController {
     if (studioId) where['studio_id'] = studioId;
     if (performerId) where['performer_id'] = performerId;
 
-    return await db.ledger_entries.findMany({
+    return await db.ledgerEntry.findMany({
       where,
       orderBy: { created_at: 'desc' },
       take: 100,
