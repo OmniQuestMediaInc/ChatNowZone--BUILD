@@ -50,6 +50,9 @@ export const NATS_TOPICS = {
   PUBLISH_GATE_APPROVED:    'kyc.publish_gate.approved',
   PUBLISH_GATE_BLOCKED:     'kyc.publish_gate.blocked',
 
+  // ── Moderation / Incident lifecycle ─────────────────────────────────────
+  INCIDENT_TRANSITION:      'moderation.incident.transition',
+
   // ── Audit & compliance ─────────────────────────────────────────────────
   AUDIT_EVENT_WRITTEN:      'audit.event.written',
   WORM_EXPORT_TRIGGERED:    'worm.export.triggered',
