@@ -46,6 +46,13 @@ export const NATS_TOPICS = {
   STEP_UP_CHALLENGE_VERIFIED: 'auth.step_up.challenge.verified',
   STEP_UP_CHALLENGE_FAILED:   'auth.step_up.challenge.failed',
 
+  // ── KYC / Publish gate ─────────────────────────────────────────────────
+  PUBLISH_GATE_APPROVED:    'kyc.publish_gate.approved',
+  PUBLISH_GATE_BLOCKED:     'kyc.publish_gate.blocked',
+
+  // ── Moderation / Incident lifecycle ─────────────────────────────────────
+  INCIDENT_TRANSITION:      'moderation.incident.transition',
+
   // ── Audit & compliance ─────────────────────────────────────────────────
   AUDIT_EVENT_WRITTEN:      'audit.event.written',
   WORM_EXPORT_TRIGGERED:    'worm.export.triggered',
