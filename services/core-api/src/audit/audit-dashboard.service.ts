@@ -26,7 +26,7 @@ export class AuditDashboardService {
 
     const MAX_AUDIT_SCENARIOS = 100;
 
-    const entries = await db.ledger_entries.findMany({
+    const entries = await db.ledgerEntry.findMany({
       where: { studio_id: studioId },
       select: {
         id: true,

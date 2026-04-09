@@ -68,7 +68,7 @@ export class BatchPayoutService {
       throw new Error('aggregate: periodStart must be less than or equal to periodEnd');
     }
 
-    const entries = await db.ledger_entries.findMany({
+    const entries = await db.ledgerEntry.findMany({
       where: {
         studio_id: req.studioId,
         entry_type: 'CHARGE',
