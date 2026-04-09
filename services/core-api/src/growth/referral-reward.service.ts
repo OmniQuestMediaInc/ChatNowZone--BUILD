@@ -40,11 +40,11 @@ export class ReferralRewardService {
   private readonly logger = new Logger(ReferralRewardService.name);
 
   constructor(
-    @InjectRepository('referral_links')
+    @InjectRepository('referral_links' as any)
     private readonly referralLinksRepo: Repository<Record<string, unknown>>,
-    @InjectRepository('attribution_events')
+    @InjectRepository('attribution_events' as any)
     private readonly attributionEventsRepo: Repository<Record<string, unknown>>,
-    @InjectRepository('ledger_entries')
+    @InjectRepository('ledger_entries' as any)
     private readonly ledgerRepo: Repository<Record<string, unknown>>,
     private readonly config: GovernanceConfigService,
   ) {}
