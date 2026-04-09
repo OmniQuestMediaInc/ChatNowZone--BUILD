@@ -13,7 +13,7 @@ export interface RiskScore {
 export class RiskScoreService {
   async getScore(userId: string): Promise<RiskScore> {
     try {
-      const profile = await db.user_risk_profiles.findUnique({
+      const profile = await db.userRiskProfile.findUnique({
         where: { user_id: userId },
       });
 
