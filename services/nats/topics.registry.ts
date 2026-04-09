@@ -57,6 +57,10 @@ export const NATS_TOPICS = {
   AUDIT_EVENT_WRITTEN:              'audit.event.written',
   AUDIT_CHAIN_INTEGRITY_FAILURE:    'audit.chain.integrity_failure',
   WORM_EXPORT_TRIGGERED:            'worm.export.triggered',
+
+  // ── Legal hold ─────────────────────────────────────────────────────────
+  LEGAL_HOLD_APPLIED:       'compliance.legal_hold.applied',
+  LEGAL_HOLD_LIFTED:        'compliance.legal_hold.lifted',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];

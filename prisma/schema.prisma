@@ -278,6 +278,22 @@ model VoucherVault {
   @@map("voucher_vault")
 }
 
+model LegalHold {
+  id              String    @id @default(uuid())
+  hold_id         String    @unique
+  subject_id      String
+  subject_type    String
+  applied_by      String
+  applied_at_utc  DateTime
+  lifted_by       String?
+  lifted_at_utc   DateTime?
+  reason_code     String
+  rule_applied_id String
+  created_at      DateTime  @default(now())
+
+  @@map("legal_holds")
+}
+
 model ContentSuppressionQueue {
   id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   content_id      String    @db.VarChar(200)
