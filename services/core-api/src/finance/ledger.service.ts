@@ -34,7 +34,7 @@ export class LedgerService {
   private readonly logger = new Logger(LedgerService.name);
 
   constructor(
-    @InjectRepository('ledger_entries')
+    @InjectRepository('ledger_entries' as any)
     private readonly ledgerRepo: Repository<Record<string, unknown>>,
     private readonly config: GovernanceConfigService,
   ) {}

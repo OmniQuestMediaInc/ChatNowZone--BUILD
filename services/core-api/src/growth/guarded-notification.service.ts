@@ -38,9 +38,9 @@ export class GuardedNotificationService {
   private readonly logger = new Logger(GuardedNotificationService.name);
 
   constructor(
-    @InjectRepository('notification_consent_store')
+    @InjectRepository('notification_consent_store' as any)
     private readonly consentRepo: Repository<Record<string, unknown>>,
-    @InjectRepository('audit_events')
+    @InjectRepository('audit_events' as any)
     private readonly auditRepo: Repository<Record<string, unknown>>,
     private readonly config: GovernanceConfigService,
   ) {}
