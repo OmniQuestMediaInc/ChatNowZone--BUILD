@@ -54,8 +54,9 @@ export const NATS_TOPICS = {
   INCIDENT_TRANSITION:      'moderation.incident.transition',
 
   // ── Audit & compliance ─────────────────────────────────────────────────
-  AUDIT_EVENT_WRITTEN:      'audit.event.written',
-  WORM_EXPORT_TRIGGERED:    'worm.export.triggered',
+  AUDIT_EVENT_WRITTEN:              'audit.event.written',
+  AUDIT_CHAIN_INTEGRITY_FAILURE:    'audit.chain.integrity_failure',
+  WORM_EXPORT_TRIGGERED:            'worm.export.triggered',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];
