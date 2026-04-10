@@ -41,11 +41,11 @@ export interface InboundWebhookPayload {
 @Injectable()
 export class WebhookHardeningService {
   private readonly logger = new Logger(WebhookHardeningService.name);
-  private readonly govConfig = new GovernanceConfigService();
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly nats: NatsService,
+    private readonly govConfig: GovernanceConfigService,
   ) {}
 
   /**
@@ -133,14 +133,13 @@ export class WebhookHardeningService {
     if (!this.validateSchema(payload)) {
       this.logger.error(
         'WebhookHardeningService: schema validation failed — rejecting payload',
-        undefined,
-        {
+        JSON.stringify({
           rule_applied_id: RULE_APPLIED_ID,
           event_id: payload.event_id,
           expected_schema_version: this.govConfig.WEBHOOK_EVENT_SCHEMA_VERSION,
           received_schema_version: payload.schema_version,
           correlation_id,
-        },
+        }),
       );
       this.nats.publish(NATS_TOPICS.WEBHOOK_REJECTED, {
         event_id: payload.event_id,
@@ -322,6 +321,8 @@ export class WebhookHardeningService {
   /**
    * Returns the current timestamp formatted as ISO 8601 in America/Toronto timezone.
    * All timestamps in this service use Toronto local time per platform governance.
+   * Note: 'sv' (Swedish) locale is intentional — it produces ISO 8601 date-time format
+   * (YYYY-MM-DD HH:mm:ss) without any locale-specific separators or AM/PM markers.
    */
   private torontoTimestamp(): string {
     return new Intl.DateTimeFormat('sv', {
