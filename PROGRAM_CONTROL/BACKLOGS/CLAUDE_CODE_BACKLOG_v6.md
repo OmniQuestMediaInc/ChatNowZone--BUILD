@@ -41,6 +41,11 @@ Sequence logic:
 **Gate: All v5 code directives complete. GOV-FINTRAC + GOV-AGCO legal opinions
 in hand before any directive in this tier goes to Claude Code.**
 
+> **EXCEPTION — 2026-04-10:** PROC-001 is CEO-AUTHORIZED-STAGED-2026-04-10.
+> PROC-001 is scoped to webhook infrastructure only — no ledger writes, no balance
+> columns, no transaction execution. DFSP-001 onward still requires GOV-FINTRAC +
+> GOV-AGCO legal opinions before execution.
+
 ---
 
 ### DIRECTIVE: PROC-001
@@ -49,7 +54,7 @@ in hand before any directive in this tier goes to Claude Code.**
 **Commit prefix:** `FIZ:`
 **Target path:** `services/core-api/src/payments/webhook-hardening.service.ts` (CREATE)
 **Risk class:** R0 (FIZ-prefix — four-line commit format required)
-**Gate:** v5 complete. GOV-FINTRAC + GOV-AGCO opinions confirmed.
+**Gate:** CEO-AUTHORIZED-STAGED-2026-04-10 (scoped to webhook infrastructure only — no ledger writes, no balance columns, no transaction execution).
 
 **Context:**
 FIZ-003 LedgerService has basic webhook signature validation. Gap: no replay
