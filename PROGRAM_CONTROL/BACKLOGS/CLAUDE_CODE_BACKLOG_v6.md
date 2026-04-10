@@ -50,7 +50,7 @@ in hand before any directive in this tier goes to Claude Code.**
 
 ### DIRECTIVE: PROC-001
 
-**Status:** `[ ] TODO`
+**Status:** `[x] DONE — 0aa416c — 2026-04-10 — CEO-AUTHORIZED-STAGED`
 **Commit prefix:** `FIZ:`
 **Target path:** `services/core-api/src/payments/webhook-hardening.service.ts` (CREATE)
 **Risk class:** R0 (FIZ-prefix — four-line commit format required)
