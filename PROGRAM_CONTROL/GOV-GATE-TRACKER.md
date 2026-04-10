@@ -62,8 +62,33 @@ across jurisdictions (provincial, federal, global)
 
 ---
 
+## Evidentiary records (machine-verifiable)
+
+Per-gate clearance artifacts live in `PROGRAM_CONTROL/CLEARANCES/`.
+Each file carries YAML frontmatter with `gate_id`, `status`, and
+`ceo_acknowledgment` fields that the gate verifier script reads.
+
+Machine check (run from repo root before any gated directive):
+```bash
+./scripts/verify-gov-gate.sh GOV-FINTRAC
+./scripts/verify-gov-gate.sh GOV-AGCO
+```
+
+Both must exit `0` before DFSP-001 (or any GOV-FINTRAC/GOV-AGCO-gated
+directive) may proceed. The signing contract, filename convention,
+and explicit prohibition against agent-authored clearance records are
+documented in `PROGRAM_CONTROL/CLEARANCES/README.md`.
+
+The checkboxes above remain the human-readable aggregation view —
+update them in lockstep with the clearance artifact so the tracker
+and the per-gate records do not drift.
+
+---
+
 ## Notes
 - Gate progress updates: Kevin or counsel commits directly to this file
+- Per-gate evidentiary records: `PROGRAM_CONTROL/CLEARANCES/` — signed
+  by CEO or retained counsel only, never by an AI agent
 - Drive INTEL folder: OQMI INTEL GDrive (legal opinions filed there,
   not in repo)
 - Next agent reading this file: check checkbox status above before
