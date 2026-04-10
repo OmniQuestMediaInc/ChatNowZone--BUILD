@@ -4,9 +4,20 @@ import { WormExportService } from './worm-export.service';
 import { AuditChainService } from './audit-chain.service';
 import { LegalHoldService } from './legal-hold.service';
 import { GeoFencingService } from './geo-fencing.service';
+import { ReconciliationService } from './reconciliation.service';
 
 @Module({
-  providers: [WormExportService, AuditChainService, LegalHoldService],
-  exports: [WormExportService, AuditChainService, LegalHoldService],
+  providers: [
+    WormExportService,
+    AuditChainService,
+    LegalHoldService,
+    ReconciliationService,
+  ],
+  exports: [
+    WormExportService,
+    AuditChainService,
+    LegalHoldService,
+    ReconciliationService,
+  ],
 })
 export class ComplianceModule {}
