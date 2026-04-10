@@ -34,7 +34,7 @@ Sequence logic:
 
 ## TIER 9 — CREATOR + GUEST-FACING PRODUCT + DFSP AGENT OPERATIONS
 
-Gate: All v6 directives complete.
+**Gate: All v6 directives complete.**
 
 ---
 
@@ -47,23 +47,18 @@ Gate: All v6 directives complete.
 **Gate:** v6 complete.
 
 **Context:**
-ShowZone Phase 1 (SHOWZONE-001) implemented the room lifecycle state machine:
-room creation, active session, phase triggers, room close. Phase 2 extends
-this with the full revenue mechanics: tiered seat pricing (BIJOU-001 baseline),
-Phase 2 rate escalation trigger, show end payout calculation, and
-multi-performer room support.
+ShowZone Phase 1 (SHOWZONE-001) implemented the room lifecycle state machine.
+Phase 2 extends with full revenue mechanics: tiered seat pricing, Phase 2 rate
+escalation trigger, show end payout calculation, and multi-performer room support.
 
 **Scope:**
-- Phase 2 trigger: auto-escalate token rate at SHOWZONE_PHASE2_TRIGGER event
+- Phase 2 trigger: auto-escalate token rate at SHOWZONE_PHASE2_TRIGGER
   (threshold from GovernanceConfig — $0.09/token floor)
-- Multi-performer room: support co-host performer_ids on ShowZone room record
-- Show end payout: calculate per-performer split at SHOWZONE_SHOW_ENDED
-  based on declared split ratios (equal split default)
-- Seat pricing tiers: MinSeatGateService (BIJOU-001) integration with
-  dynamic seat count enforcement
-- NATS events: showzone.phase2.activated, showzone.payout.calculated,
-  showzone.split.applied
-- All payout calculations read rates from GovernanceConfig
+- Multi-performer room: co-host performer_ids on ShowZone room record
+- Show end payout: per-performer split at SHOWZONE_SHOW_ENDED (equal split default)
+- Seat pricing tiers: MinSeatGateService (BIJOU-001) integration
+- NATS events: showzone.phase2.activated, showzone.payout.calculated, showzone.split.applied
+- All rates from GovernanceConfig
 - rule_applied_id on every output
 
 **Validation:**
@@ -84,42 +79,82 @@ multi-performer room support.
 **Target path:** `services/core-api/src/zone-gpt/` (MODIFY)
 **Risk class:** R1
 **Gate:** v6 complete.
-**Parallel-safe with:** SHOWZONE-002 (disjoint paths)
+**Parallel-safe with:** SHOWZONE-002
 
 **Context:**
-ZoneGPT ProposalService (GOV-003) handles ACCEPT/REJECT/MODIFY governance
-proposals. V7 extends ZoneGPT into a segmented agent architecture:
-three distinct agents with isolated context, separate system prompts,
-and scoped data access. AI is advisory only in all cases.
+ZoneGPT ProposalService (GOV-003) handles governance proposals. V7 extends ZoneGPT
+into a segmented three-agent architecture with isolated context and scoped data access.
+AI is advisory only in all cases.
 
 **Agents:**
-- **Strategy Agent:** platform growth, creator acquisition, pricing strategy.
-  Read access: GovernanceConfig, HeatScore, GeoPricing. No financial execution.
-- **Compliance Agent:** regulatory posture, incident triage guidance, hold
-  recommendations. Read access: AuditChain, LegalHold, IncidentService.
-  Output flagged ADVISORY — no enforcement execution.
-- **Accounting Agent:** earnings summaries, payout reconciliation queries,
-  My Bookkeeper export triggers. Read access: ReconciliationService,
-  PayoutSchedulingService. No ledger writes.
+- Strategy Agent: platform growth, creator acquisition, pricing strategy
+- Compliance Agent: regulatory posture, incident triage — ADVISORY only, no enforcement
+- Accounting Agent: earnings summaries, payout reconciliation — no ledger writes
 
 **Scope:**
-- Agent router: routes query to correct agent by intent classification
-- Each agent has isolated system prompt + scoped tool access list
-- RAG hardening: retrieval grounded in platform doctrine documents
-  (Canonical Corpus, GovernanceConfig) — no hallucinated constants
-- All agent outputs tagged with: agent_id, query_id, advisory_flag: true,
-  rule_applied_id
-- NATS event on agent invocation (for audit trail)
+- Agent router: intent classification → correct agent
+- Each agent: isolated system prompt + scoped tool access list
+- RAG hardening: grounded in Canonical Corpus + GovernanceConfig
+- All outputs: agent_id, query_id, advisory_flag: true, rule_applied_id
+- NATS event on every agent invocation
 
 **Validation:**
-- [ ] Strategy Agent cannot access LegalHold or AuditChain data
+- [ ] Strategy Agent cannot access LegalHold or AuditChain
 - [ ] Compliance Agent output always carries advisory_flag: true
 - [ ] Accounting Agent cannot trigger ledger writes
-- [ ] All outputs carry rule_applied_id
 - [ ] NATS published on every agent invocation
 - [ ] npx tsc --noEmit zero new errors
 
 **Report-back file:** `PROGRAM_CONTROL/REPORT_BACK/GPT-001-AGENT-SEGMENTATION.md`
+
+---
+
+### DIRECTIVE: DFSP-009
+
+**Status:** `[ ] TODO`
+**Commit prefix:** `FIZ:`
+**Target path:** `services/core-api/src/dfsp/agent-dashboard.service.ts` (CREATE)
+**Risk class:** R1
+**Gate:** PROC-002 + DFSP-005 + DFSP-006 on main.
+**Parallel-safe with:** SHOWZONE-002, GPT-001
+**DFSP Module:** 18 (Agent Dashboard)
+
+**Context:**
+Unified real-time interface for Diamond Concierge agents and supervisors to manage
+all DFSP workflows. Websocket-connected. Role-based access: concierge_agent,
+supervisor, compliance, executive.
+
+**Scope:**
+- `AgentDashboardService`
+- Dashboard data modules (all real-time):
+  A. Intake Queue: incoming configurator handoffs, sorted by risk tier (RED first)
+  B. Active Contracts: status board for all non-terminal contracts
+  C. Monitoring Flags: open flags by type/severity/assignment
+  D. Account Hold Management: active holds, time remaining, release queue
+  E. Dispute Package Status: open chargebacks, package build status, response deadlines
+  F. Voice Sample Tracker: sample count per account (0/1/2/3)
+  G. Executive Consultation Queue: incoming 100K+ requests, scheduling board
+- Role-based access:
+  - concierge_agent: intake queue, OTP verification, contract issuance, call notes, flag review
+  - supervisor: all above + Expedited Access approval, account hold management, flag escalation
+  - compliance: flags, model flags, dispute packages, structuring reports
+  - executive: all above + Treasury Override approval
+- Each intake queue item: account summary, risk flags, configurator inputs,
+  expedited access eligibility, required action checklist
+- NATS subscriptions: real-time updates from all DFSP NATS events
+- rule_applied_id on every output
+
+**FIZ commit format required.**
+
+**Validation:**
+- [ ] Intake queue sorted by risk tier (RED first, then AMBER, then GREEN)
+- [ ] concierge_agent cannot access Treasury Override approval
+- [ ] compliance role can see dispute packages and structuring reports
+- [ ] Dashboard data updates in real-time via NATS subscription
+- [ ] NATS subscriptions do not trigger writes (read-only aggregation)
+- [ ] npx tsc --noEmit zero new errors
+
+**Report-back file:** `PROGRAM_CONTROL/REPORT_BACK/DFSP-009-AGENT-DASHBOARD.md`
 
 ---
 
@@ -129,30 +164,26 @@ and scoped data access. AI is advisory only in all cases.
 **Commit prefix:** `DASH:`
 **Target path:** `services/core-api/src/creator/dashboard.service.ts` (CREATE)
 **Risk class:** R1
-**Gate:** PROC-004 (payout scheduling) on main.
+**Gate:** PROC-004 on main.
 
 **Context:**
-Creators currently have no self-service view of earnings, payout status,
-or rate card configuration. DASH-001 provides the data layer for the
-creator dashboard UI. My Bookkeeper export (PROC-004) is the accounting
-output — DASH-001 makes it human-readable and self-service.
+Creator self-service dashboard data layer. Earnings, payout status, rate card,
+My Bookkeeper export trigger, HeatScore. No ledger writes from any dashboard method.
 
 **Scope:**
 - `CreatorDashboardService`
-- Earnings summary: current period, prior period, lifetime (read from ledger)
-- Payout status: next scheduled disbursement, hold release dates, history
-- Rate card view: current rates, Diamond tier status, Phase 2 threshold progress
-- My Bookkeeper export trigger: creator-initiated CSV download for their
-  own earnings records
-- HeatScore display: current score + trend (advisory, from HeatScoreService)
-- All reads are non-mutating — no ledger writes from dashboard
+- Earnings summary: current/prior/lifetime from ledger (read-only)
+- Payout status: next scheduled, hold release dates, history
+- Rate card: current rates, Diamond tier status, Phase 2 threshold progress
+- My Bookkeeper export: creator-initiated CSV download for their own records
+- HeatScore: current + trend (advisory, from HeatScoreService)
+- All reads non-mutating
 - rule_applied_id on every output
 
 **Validation:**
-- [ ] Earnings summary reads from ledger (no hardcoded values)
+- [ ] Earnings reads from ledger (no hardcoded values)
 - [ ] Payout status reflects TokenHoldService state
 - [ ] Rate card reads from GovernanceConfig
-- [ ] My Bookkeeper export produces valid CSV for creator's own records
 - [ ] No ledger writes from any dashboard method
 - [ ] npx tsc --noEmit zero new errors
 
@@ -166,25 +197,23 @@ output — DASH-001 makes it human-readable and self-service.
 **Commit prefix:** `CS:`
 **Target path:** `services/core-api/src/cs/guest-zone.service.ts` (CREATE)
 **Risk class:** R1
-**Gate:** DASH-001 on main.
+**Gate:** DASH-001 + DFSP-009 on main.
 
 **Context:**
 GuestZone CS tooling — unified recovery dashboard for the support team.
-Three tabs: Diamond, VIP, ShowZone. Each surfaces account state, transaction
-history, hold status, incident history, and available recovery actions.
-Reduces manual support burden and enforces RBAC on recovery actions.
+Three tabs: Diamond, VIP, ShowZone. RBAC on all recovery actions.
+All recovery actions require step-up authentication.
 
 **Scope:**
 - `GuestZoneService`
-- Account state query: wallet balance, hold status, KYC status, incident history
+- Account state: wallet balance, hold status, KYC status, incident history
 - Diamond tab: contract status, rate tier, high-value transaction log
 - VIP tab: membership allocation, ShowZone access history, payout history
 - ShowZone tab: room history, phase trigger log, performer split records
-- Recovery actions (RBAC-gated):
+- Recovery actions (RBAC-gated, all require step-up):
   - MODERATOR: flag account, suspend stream
   - COMPLIANCE: apply/lift hold, override KYC block
   - ADMIN: manual ledger adjustment (append-only ADJUSTMENT entry)
-- All recovery actions require step-up authentication
 - Full audit trail on every recovery action
 - rule_applied_id on every output
 
@@ -209,33 +238,24 @@ Reduces manual support burden and enforces RBAC on recovery actions.
 **Gate:** CS-001 on main.
 
 **Context:**
-Notification consent and communication automation. Two critical automations
-from the Canonical Corpus:
-1. 48-hour expiry warning: notify creator when KYC or membership is expiring
-2. Day 46 Last Call: notify creator on Day 46 of 48-day billing cycle
-   that last chance to reach FairPay threshold is approaching
-All notifications require prior consent (opt-in). No notification sent
-without explicit consent record.
+Notification consent and communication automation. All notifications require
+prior explicit opt-in. No notification sent without consent record.
 
 **Scope:**
 - `NotificationService`
 - Consent store: creator_id, notification_type, opted_in, consented_at_utc
-- Template registry: typed templates for each notification type
-  (KYC_EXPIRY_48H, MEMBERSHIP_EXPIRY_48H, DAY_46_LAST_CALL, PAYOUT_SCHEDULED,
-  PAYOUT_COMPLETED, HOLD_RELEASED)
-- Trigger hooks:
-  - KYC expiry: fires when kyc_expiry_date is within 48 hours
-  - Day 46: fires on Day 46 of billing cycle (read billing_start from
-    creator record)
-- Delivery abstraction: email / in-app / push (channel from creator preference)
+- Template registry: KYC_EXPIRY_48H, MEMBERSHIP_EXPIRY_48H, DAY_46_LAST_CALL,
+  PAYOUT_SCHEDULED, PAYOUT_COMPLETED, HOLD_RELEASED
+- Trigger hooks: KYC expiry 48h, Day 46 of billing cycle (exact — not 45, not 47)
+- Delivery abstraction: email / in-app / push (from creator preference)
 - Consent gate: every send checks consent record — no send without opt-in
-- NATS event on every notification send and consent change
+- NATS event on every send and consent change
 - rule_applied_id on every output
 
 **Validation:**
 - [ ] Notification blocked without consent record
 - [ ] KYC_EXPIRY_48H fires at correct window
-- [ ] DAY_46_LAST_CALL fires on Day 46 (not Day 47, not Day 45)
+- [ ] DAY_46_LAST_CALL fires on Day 46 (not 45, not 47)
 - [ ] Template registry covers all notification types
 - [ ] NATS published on every send and consent change
 - [ ] npx tsc --noEmit zero new errors
