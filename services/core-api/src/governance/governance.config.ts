@@ -31,4 +31,12 @@ export const GovernanceConfig = {
 
   // ── Contract Offer ────────────────────────────────────────────────────────
   DFSP_CONTRACT_OFFER_EXPIRY_HOURS: 24,
+
+  // ── PROC-001: Webhook Hardening (FIZ) ────────────────────────────────────
+  // CEO-AUTHORIZED-STAGED-2026-04-10 — webhook infrastructure only.
+  // No ledger writes, no balance columns, no transaction execution.
+  /** Maximum allowed drift (seconds) between processor timestamp and server clock. */
+  WEBHOOK_REPLAY_WINDOW_SECONDS: 300,   // 5 minutes
+  /** TTL (seconds) for entries in the nonce / event_id dedup stores. */
+  WEBHOOK_NONCE_STORE_TTL_SECONDS: 600, // 10 minutes
 } as const;

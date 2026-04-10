@@ -7,6 +7,7 @@ import { GrowthModule } from './growth/growth.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ComplianceModule } from './compliance/compliance.module';
 import { DfspModule } from './dfsp/dfsp.module';
+import { PaymentsModule } from './payments/payments.module';
 import { NatsModule } from './nats/nats.module';
 import { PrismaModule } from './prisma.module';
 import { GamesModule } from './games/games.module';
@@ -27,6 +28,7 @@ import { PaymentsModule } from './payments/payments.module';
     AnalyticsModule,
     ComplianceModule,
     DfspModule,
+    PaymentsModule,
     GamesModule,
     ZoneGptModule,
     BijouModule,
