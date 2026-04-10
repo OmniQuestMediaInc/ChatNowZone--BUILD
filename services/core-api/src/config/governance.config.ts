@@ -15,6 +15,16 @@ export class GovernanceConfigService {
   public readonly WEBHOOK_REPLAY_WINDOW_SECONDS = 300;   // 5 minutes
   /** TTL (seconds) for entries in the in-process nonce store before cleanup. */
   public readonly WEBHOOK_NONCE_STORE_TTL_SECONDS = 600; // 10 minutes
+  /** HMAC algorithm used for signature verification. */
+  public readonly WEBHOOK_SIGNATURE_ALGO = 'sha256';
+  /** Idempotency TTL in milliseconds (derived from WEBHOOK_NONCE_STORE_TTL_SECONDS). */
+  public readonly WEBHOOK_IDEMPOTENCY_TTL_MS = 600_000; // 600s × 1000
+  /** Processor event envelope schema version accepted by this service. */
+  public readonly WEBHOOK_EVENT_SCHEMA_VERSION = 'v1';
+  /** Webhook signing secret — read from environment, never hardcoded. */
+  public get WEBHOOK_SIGNING_SECRET(): string {
+    return process.env.WEBHOOK_SIGNING_SECRET ?? '';
+  }
 }
 
 export const COMMISSION_DEFAULTS = {
