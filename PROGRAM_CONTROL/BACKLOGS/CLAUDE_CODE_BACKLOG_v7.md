@@ -1,11 +1,12 @@
 # CLAUDE CODE BACKLOG v7 — ChatNow.Zone
 
 **Authority:** OmniQuest Media Inc. | CEO Kevin B. Hartley
-**Backlog Version:** 7.0
-**Supersedes:** v6 (Tier 8 complete)
+**Backlog Version:** 7.1
+**Supersedes:** v7.0 (pre-DFSP Agent Dashboard)
 **Platform Time Standard:** America/Toronto
 **Canonical Authority:** OQMI Coding Doctrine v2.0 · Canonical Corpus v10
-**Theme:** Creator and Guest-Facing Product Experience
+**DFSP Authority:** Diamond Financial Security Platform Engineering Spec v1.0 + v1.1 + v1.1a
+**Theme:** Creator and Guest-Facing Product Experience + DFSP Agent Operations
 
 ---
 
@@ -16,16 +17,22 @@ the product features that creators and guests interact with directly.
 The ledger is reconciled, the processor is hardened, the payout schedule is live.
 Now we build the surfaces that make those systems legible and valuable to users.
 
+V7.1 adds DFSP Agent Dashboard (Module 18) — the operations-facing interface that
+makes the DFSP pipeline legible to agents, compliance officers, and executives.
+Module 18 is the last unbuilt DFSP module and lands in v7 because it depends on
+all v6 DFSP services being live before the dashboard has data to surface.
+
 Sequence logic:
 - ShowZone Phase 2 extends the room lifecycle established in Tier 6
 - ZoneGPT agent hardening makes the AI layer production-grade
 - Creator dashboard makes earnings and tooling self-service
 - GuestZone CS tooling reduces manual support burden
 - Notification automation closes the retention loop
+- DFSP-AGT-001 (Module 18) requires all v6 DFSP services on main
 
 ---
 
-## TIER 9 — CREATOR + GUEST-FACING PRODUCT
+## TIER 9 — CREATOR + GUEST-FACING PRODUCT + DFSP AGENT OPERATIONS
 
 Gate: All v6 directives complete.
 
@@ -243,6 +250,101 @@ Same as v5 and v6. All 15 invariants apply.
 
 ---
 
-*End of CLAUDE_CODE_BACKLOG_v7.md — Version 7.0*
+### DIRECTIVE: DFSP-AGT-001
+
+**Status:** `[ ] TODO`
+**Commit prefix:** `FIZ:`
+**Target path:** `services/core-api/src/dfsp/agent-dashboard.service.ts` (CREATE)
+**Risk class:** R0 (FIZ-prefix — four-line commit format required)
+**Gate:** All v6 DFSP directives on main (DFSP-001 through DFSP-008, PROC-002 through PROC-005).
+**DFSP Module:** 18 (DFSP Agent Operations Dashboard)
+
+**Context:**
+Module 18 is the operations layer that makes the entire DFSP pipeline visible and
+actionable to agents, compliance officers, and Diamond Sales executives.
+It surfaces real-time queue state, contract lifecycle status, monitoring flags,
+integrity hold balances, and agent action history — all in one read-optimized
+service. No ledger writes originate here; all mutations are delegated to the
+owning services (DiamondContractService, TokenHoldService, AccountRecoveryHoldService, etc.).
+
+**Scope:**
+- `AgentDashboardService`
+
+**Queue views (read-only aggregations):**
+- `getContractQueue(filters)` — Diamond contracts in draft/issued/viewed/accepted states,
+  sorted by offer_expires_at_utc ascending; agent workload triage
+- `getOtpHoldQueue()` — active account holds with pending OTP failure triggers;
+  shows hold_type, triggered_by, time remaining, release requirements
+- `getMonitoringFlagQueue(status)` — open monitoring flags from DFSP-005 (VELOCITY,
+  FLUSH, TIP_CORRELATION, GEO_DRIFT, STRUCTURING); sorted by raised_at_utc
+- `getModelFlagQueue()` — model accounts in enhanced_monitoring state; shows
+  compliance_review_due, overdue flag if review_due < now()
+- `getCollectionsQueue()` — open collections_queue records with days since creation;
+  highlights records approaching 30-day suspension threshold and 60-day referral threshold
+- `getExpeditedAccessPendingApprovals()` — expedited access requests awaiting
+  agent or supervisor approval
+
+**Contract detail view:**
+- `getContractDetail(contractRef)` — full contract record + event log +
+  integrity hold status + OTP event chain + dispute package status (if built) +
+  voice sample consent record
+- Returns structured read-only snapshot; no mutation
+
+**Agent action dispatch (delegates to owning services, append-only):**
+- `approveContractAction(contractRef, agentId, action, correlationId)` — routes to
+  DiamondContractService; valid actions: CONFIRM_GENERATION, CONFIRM_ACCEPTANCE,
+  ESCALATE_TO_SUPERVISOR
+- `resolveMonitoringFlag(flagId, agentId, resolution, correlationId)` — delegates to
+  MonitoringJobsService; appends resolution to monitoring_flags
+- `signOffHoldRelease(holdId, agentId, correlationId)` — one of three required
+  release conditions for AccountRecoveryHold; delegates to AccountRecoveryHoldService
+- `queueComplianceReview(modelId, agentId, correlationId)` — marks model for
+  compliance review; delegates to ModelSideFlaggingService
+
+**Executive consultation routing view:**
+- `getConsultationQueue()` — open EXECUTIVE_CONSULTATION_REQUESTED records;
+  shows desired_qty_text, preferred slots, language, days waiting
+- `assignConsultationLead(consultationId, leadId, agentId, correlationId)` —
+  delegates to ExecutiveConsultationService; sets assigned_lead_id
+
+**Audit and reporting:**
+- Every agent action dispatched through AgentDashboardService appends an
+  AGENT_DASHBOARD_ACTION event to AuditEvent (event_type, actor_id, target_ref,
+  action_type, outcome, correlation_id)
+- `getAgentActionHistory(agentId, limit)` — returns recent action log for agent
+- NATS event on every agent action dispatch: AGENT_DASHBOARD_ACTION_DISPATCHED
+
+**RBAC enforcement:**
+- AGENT role: read all queues, approveContractAction, resolveMonitoringFlag
+- COMPLIANCE role: all AGENT permissions + signOffHoldRelease + queueComplianceReview
+- SUPERVISOR role: all COMPLIANCE permissions + assignConsultationLead + escalation sign-off
+- ADMIN role: full access
+- Any role mismatch: returns RBAC_INSUFFICIENT error, logged to AuditEvent
+
+**rule_applied_id on every output.**
+
+**FIZ commit format required.**
+
+**Validation:**
+- [ ] Contract queue sorted by offer_expires_at_utc ascending
+- [ ] Collections queue highlights records within 5 days of 30-day threshold
+- [ ] getContractDetail returns all 9 component types
+- [ ] Agent action dispatch appends AuditEvent (not a direct DB write)
+- [ ] RBAC blocks AGENT role from signOffHoldRelease
+- [ ] NATS published on every agent action dispatch
+- [ ] No ledger writes originate in AgentDashboardService
+- [ ] npx tsc --noEmit zero new errors
+
+**Report-back file:** `PROGRAM_CONTROL/REPORT_BACK/DFSP-AGT-001-AGENT-DASHBOARD.md`
+
+---
+
+## STANDING INVARIANTS (unchanged)
+
+Same as v5 and v6. All 15 invariants apply.
+
+---
+
+*End of CLAUDE_CODE_BACKLOG_v7.md — Version 7.1*
 *Next version issued after Tier 9 completion.*
 *All changes require human authorization from Kevin B. Hartley / Program Control.*
