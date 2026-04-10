@@ -6,6 +6,7 @@ import { SafetyModule } from './safety/safety.module';
 import { GrowthModule } from './growth/growth.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ComplianceModule } from './compliance/compliance.module';
+import { DfspModule } from './dfsp/dfsp.module';
 import { NatsModule } from './nats/nats.module';
 import { PrismaModule } from './prisma.module';
 import { GamesModule } from './games/games.module';
@@ -24,6 +25,7 @@ import { ShowZoneModule } from '../../showzone/src/showzone.module';
     GrowthModule,
     AnalyticsModule,
     ComplianceModule,
+    DfspModule,
     GamesModule,
     ZoneGptModule,
     BijouModule,

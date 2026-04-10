@@ -309,3 +309,347 @@ model ContentSuppressionQueue {
 
   @@map("content_suppression_queue")
 }
+
+// ─── DFSP — Diamond Financial Security Platform™ (PV-001) ────────────────────
+// Migration: dfsp_foundation_schema
+// Multi-tenant mandate (v1.1a — LOCKED): all models include organization_id and tenant_id.
+
+model PurchaseWindowConfig {
+  id                String   @id @default(uuid())
+  country_code      String?
+  tier              String
+  window_open_hour  Int
+  window_close_hour Int
+  active            Boolean  @default(true)
+  updated_at        DateTime @updatedAt
+  updated_by        String?
+  organization_id   String
+  tenant_id         String
+
+  @@map("purchase_window_config")
+}
+
+model RiskAssessment {
+  id                        String   @id @default(uuid())
+  account_id                String
+  purchase_attempt_id       String?
+  score                     Int
+  tier                      String
+  flags                     Json
+  expedited_access_eligible Boolean
+  auto_bar                  Boolean
+  calculated_at             DateTime @default(now())
+  weight_config_version     String
+  organization_id           String
+  tenant_id                 String
+
+  @@map("risk_assessments")
+}
+
+model IntegrityHold {
+  id                       String    @id @default(uuid())
+  contract_id              String
+  account_id               String
+  hold_amount              Decimal   @db.Decimal(8, 2)
+  processor_auth_reference String?
+  authorized_at            DateTime?
+  status                   String
+  released_at              DateTime?
+  captured_at              DateTime?
+  capture_reason           String?
+  chargeback_reference     String?
+  organization_id          String
+  tenant_id                String
+  created_at               DateTime  @default(now())
+
+  @@map("integrity_holds")
+}
+
+model CheckoutConfirmation {
+  id                                  String    @id @default(uuid())
+  transaction_id                      String
+  account_id                          String
+  checkbox_age_confirmed              Boolean
+  checkbox_age_confirmed_at           DateTime?
+  checkbox_no_refund_confirmed        Boolean
+  checkbox_no_refund_confirmed_at     DateTime?
+  checkbox_authorization_confirmed    Boolean
+  checkbox_authorization_confirmed_at DateTime?
+  email_receipt_sent                  Boolean   @default(false)
+  email_receipt_sent_at               DateTime?
+  sms_notification_sent               Boolean   @default(false)
+  sms_notification_sent_at            DateTime?
+  session_ip                          String?
+  session_fingerprint                 String?
+  organization_id                     String
+  tenant_id                           String
+  created_at                          DateTime  @default(now())
+
+  @@map("checkout_confirmations")
+}
+
+model OtpEvent {
+  id              String    @id @default(uuid())
+  account_id      String
+  transaction_id  String?
+  code_hash       String
+  channel         String
+  issued_at       DateTime  @default(now())
+  expires_at      DateTime
+  used_at         DateTime?
+  failed_attempts Int       @default(0)
+  status          String
+  organization_id String
+  tenant_id       String
+
+  @@map("otp_events")
+}
+
+model AccountHold {
+  id                     String    @id @default(uuid())
+  account_id             String
+  trigger_type           String
+  trigger_transaction_id String?
+  triggered_at           DateTime  @default(now())
+  hold_until             DateTime
+  released_at            DateTime?
+  released_by            String?
+  release_reason         String?
+  identity_reverified    Boolean   @default(false)
+  organization_id        String
+  tenant_id              String
+
+  @@map("account_holds")
+}
+
+model VoiceSample {
+  id                String    @id @default(uuid())
+  account_id        String
+  transaction_id    String?
+  agent_id          String?
+  recorded_at       DateTime
+  file_reference    String
+  duration_seconds  Int?
+  consent_given     Boolean
+  consent_timestamp DateTime
+  sample_sequence   Int
+  retention_until   DateTime
+  disposed_at       DateTime?
+  organization_id   String
+  tenant_id         String
+
+  @@map("voice_samples")
+}
+
+model QuoteSession {
+  id                   String    @id @default(uuid())
+  account_id           String
+  token_qty            Int
+  lifespan_days        Int
+  payment_method       String
+  indicative_rate_min  Decimal   @db.Decimal(10, 6)
+  indicative_rate_max  Decimal   @db.Decimal(10, 6)
+  risk_score           Int?
+  risk_tier            String?
+  is_requote           Boolean   @default(false)
+  source_contract_id   String?
+  agent_intake_sent_at DateTime?
+  agent_id             String?
+  created_at           DateTime  @default(now())
+  expires_at           DateTime
+  organization_id      String
+  tenant_id            String
+
+  @@map("quote_sessions")
+}
+
+model DiamondContract {
+  id                           String    @id @default(uuid())
+  contract_ref                 String    @unique
+  account_id                   String
+  agent_id                     String?
+  quote_session_id             String?
+  token_qty                    Int
+  token_lifespan_days          Int
+  token_expiry_date            DateTime
+  rate_per_token               Decimal   @db.Decimal(10, 6)
+  total_price_cad              Decimal   @db.Decimal(12, 2)
+  payment_method               String
+  advance_qty                  Int       @default(0)
+  advance_rate                 Decimal?  @db.Decimal(10, 6)
+  advance_price_cad            Decimal?  @db.Decimal(12, 2)
+  remainder_rate               Decimal?  @db.Decimal(10, 6)
+  integrity_hold_amount        Decimal   @db.Decimal(8, 2)
+  carf_amount                  Decimal   @db.Decimal(8, 2)
+  contract_url_token           String?
+  contract_url_expires_at      DateTime?
+  issued_at                    DateTime?
+  viewed_at                    DateTime?
+  accepted_at                  DateTime?
+  acceptance_ip                String?
+  acceptance_fingerprint       String?
+  verbal_confirmation_event_id String?
+  otp_event_id                 String?
+  recording_id                 String?
+  status                       String
+  voided_at                    DateTime?
+  voided_reason                String?
+  organization_id              String
+  tenant_id                    String
+  created_at                   DateTime  @default(now())
+
+  @@map("diamond_contracts")
+}
+
+model TokenBalance {
+  id                  String   @id @default(uuid())
+  account_id          String
+  contract_id         String?
+  quantity            Int
+  state               String
+  state_changed_at    DateTime @default(now())
+  state_changed_by    String?
+  state_change_reason String?
+  issued_at           DateTime @default(now())
+  lifespan_days       Int
+  expires_at          DateTime
+  frozen_reason       String?
+  compliance_review_id String?
+  organization_id     String
+  tenant_id           String
+
+  @@map("token_balances")
+}
+
+model ExpeditedAccessEvent {
+  id                           String    @id @default(uuid())
+  contract_id                  String
+  account_id                   String
+  approved_by_agent            String?
+  supervisor_approval_required Boolean
+  supervisor_id                String?
+  advance_qty                  Int
+  advance_rate                 Decimal   @db.Decimal(10, 6)
+  advance_total                Decimal   @db.Decimal(12, 2)
+  released_at                  DateTime?
+  payment_cleared              Boolean   @default(false)
+  payment_cleared_at           DateTime?
+  tokens_frozen                Boolean   @default(false)
+  tokens_frozen_at             DateTime?
+  prior_clean_contracts_count  Int
+  organization_id              String
+  tenant_id                    String
+  created_at                   DateTime  @default(now())
+
+  @@map("expedited_access_events")
+}
+
+model MonitoringFlag {
+  id                    String    @id @default(uuid())
+  account_id            String
+  flag_type             String
+  severity              String
+  description           String
+  job_run_at            DateTime
+  auto_action_taken     String?
+  agent_review_required Boolean
+  agent_id              String?
+  reviewed_at           DateTime?
+  resolution            String?
+  related_contract_ids  String[]
+  organization_id       String
+  tenant_id             String
+  created_at            DateTime  @default(now())
+
+  @@map("monitoring_flags")
+}
+
+model ModelFlag {
+  id                        String    @id @default(uuid())
+  model_account_id          String
+  trigger_type              String
+  trigger_source_account_id String?
+  trigger_event_id          String?
+  flagged_at                DateTime  @default(now())
+  monitoring_state          String
+  compliance_reviewer_id    String?
+  reviewed_at               DateTime?
+  resolution                String?
+  organization_id           String
+  tenant_id                 String
+
+  @@map("model_flags")
+}
+
+model TreasuryOverride {
+  id                         String    @id @default(uuid())
+  account_id                 String
+  requested_by               String
+  requested_at               DateTime  @default(now())
+  token_qty                  Int
+  installment_count          Int
+  installment_amount_cad     Decimal   @db.Decimal(12, 2)
+  payment_plan_premium_pct   Decimal   @db.Decimal(5, 2)
+  ceo_approved_by            String?
+  ceo_approved_at            DateTime?
+  cfo_approved_by            String?
+  cfo_approved_at            DateTime?
+  compliance_approved_by     String?
+  compliance_approved_at     DateTime?
+  finance_approved_by        String?
+  finance_approved_at        DateTime?
+  legal_approved_by          String?
+  legal_approved_at          DateTime?
+  status                     String
+  rejection_reason           String?
+  legal_instrument_reference String?
+  organization_id            String
+  tenant_id                  String
+
+  @@map("treasury_overrides")
+}
+
+model ExecutiveConsultation {
+  id                        String    @id @default(uuid())
+  account_id                String
+  requested_at              DateTime  @default(now())
+  desired_qty_text          String?
+  preferred_times           Json?
+  assigned_exec             String?
+  scheduled_at              DateTime?
+  video_platform            String?
+  video_link_encrypted      String?
+  call_completed            Boolean   @default(false)
+  call_completed_at         DateTime?
+  recording_id              String?
+  video_recording_reference String?
+  visual_consent_given      Boolean?
+  visual_consent_refused    Boolean?
+  outcome                   String?
+  notes                     String?
+  organization_id           String
+  tenant_id                 String
+
+  @@map("executive_consultations")
+}
+
+model CollectionsQueue {
+  id                         String    @id @default(uuid())
+  account_id                 String
+  contract_id                String?
+  chargeback_reference       String?
+  processor_fee_amount       Decimal   @db.Decimal(8, 2)
+  integrity_hold_captured    Decimal   @db.Decimal(8, 2)
+  outstanding_amount         Decimal   @db.Decimal(8, 2)
+  notified_at                DateTime?
+  account_suspended_at       DateTime?
+  referred_to_collections_at DateTime?
+  collected_at               DateTime?
+  collected_amount           Decimal?  @db.Decimal(8, 2)
+  status                     String
+  organization_id            String
+  tenant_id                  String
+  created_at                 DateTime  @default(now())
+
+  @@map("collections_queue")
+}
