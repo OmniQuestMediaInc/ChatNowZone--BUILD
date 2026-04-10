@@ -6,6 +6,7 @@
 export const NATS_TOPICS = {
   // ── Geo-pricing & chat stream ──────────────────────────────────────────
   GEO_TIP_TRANSLATED:       'geo.tip.translated',
+  GEO_BLOCK_ENFORCED:       'geo.block.enforced',
 
   // ── Gamification ──────────────────────────────────────────────────────
   GAME_OUTCOME:             'game.outcome',        // game.outcome.<session_id>
@@ -65,6 +66,17 @@ export const NATS_TOPICS = {
   // ── PROC-001: Webhook hardening (FIZ) ─────────────────────────────────
   WEBHOOK_VALIDATION_FAILURE: 'fiz.webhook.validation.failure',
   WEBHOOK_DLQ:                'fiz.webhook.dlq',
+
+  // ── DFSP — Diamond Financial Security Platform (PV-001) ───────────────
+  PURCHASE_WINDOW_BLOCKED:             'dfsp.purchase_window.blocked',
+  RISK_ASSESSMENT_COMPLETED:           'dfsp.risk.assessment_completed',
+  RISK_AUTO_BAR_TRIGGERED:             'dfsp.risk.auto_bar_triggered',
+  INTEGRITY_HOLD_AUTHORIZED:           'dfsp.integrity_hold.authorized',
+  INTEGRITY_HOLD_RELEASED:             'dfsp.integrity_hold.released',
+  INTEGRITY_HOLD_CAPTURED:             'dfsp.integrity_hold.captured',
+  CHECKOUT_CONFIRMED:                  'dfsp.checkout.confirmed',
+  CHECKOUT_EMAIL_RECEIPT_REQUESTED:    'dfsp.checkout.email_receipt_requested',
+  CHECKOUT_SMS_NOTIFICATION_REQUESTED: 'dfsp.checkout.sms_notification_requested',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];
