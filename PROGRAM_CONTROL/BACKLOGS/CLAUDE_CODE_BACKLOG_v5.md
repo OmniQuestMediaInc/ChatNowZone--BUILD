@@ -151,7 +151,11 @@ GeoPricingService (GOV-001) has country-tier resolution — extend, do not repla
 **Commit prefix:** `AV:`
 **Target path:** `services/core-api/src/safety/age-verification.service.ts` (CREATE)
 **Risk class:** R1
-**Gate:** GEO-001 complete. Requires legal sign-off before go-live (see GOV-AV below).
+**Gate:** GEO-001 complete. Requires GOV-AV legal sign-off before go-live.
+
+> **BRANCH-AND-HOLD (2026-04-10):** GOV-AV is independent — it does **not** gate V6
+> or any DFSP/PROC directive. AV-001 waits on GOV-AV only. V6 and all DFSP/PROC
+> directives proceed on their own gate conditions. Do not block V6 execution on GOV-AV.
 
 **Context:**
 Tiered viewer age verification to control third-party AV vendor cost at scale.
