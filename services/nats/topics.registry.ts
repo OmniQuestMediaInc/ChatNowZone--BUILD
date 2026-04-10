@@ -72,6 +72,16 @@ export const NATS_TOPICS = {
   WEBHOOK_DUPLICATE:          'payments.webhook.duplicate',
   WEBHOOK_DEAD_LETTER:        'payments.webhook.dead_letter',
 
+  // ── DFSP Module 3 — Platform OTP ──────────────────────────────────────
+  DFSP_OTP_ISSUED:              'dfsp.otp.issued',
+  DFSP_OTP_VERIFIED:            'dfsp.otp.verified',
+  DFSP_OTP_FAILED:              'dfsp.otp.failed',
+  DFSP_OTP_EXPIRED:             'dfsp.otp.expired',
+
+  // ── DFSP Module 4 — Account Recovery Hold ─────────────────────────────
+  DFSP_ACCOUNT_HOLD_APPLIED:    'dfsp.account.hold.applied',
+  DFSP_ACCOUNT_HOLD_RELEASED:   'dfsp.account.hold.released',
+
   // ── DFSP — Diamond Financial Security Platform (PV-001) ───────────────
   PURCHASE_WINDOW_BLOCKED:             'dfsp.purchase_window.blocked',
   RISK_ASSESSMENT_COMPLETED:           'dfsp.risk.assessment_completed',
