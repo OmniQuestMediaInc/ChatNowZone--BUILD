@@ -653,3 +653,18 @@ model CollectionsQueue {
 
   @@map("collections_queue")
 }
+
+// ── PROC-001: Webhook Idempotency Log (append-only — no UPDATE or DELETE permitted) ──
+model WebhookIdempotencyLog {
+  id             String   @id @default(uuid())
+  event_id       String   @unique @db.VarChar(200)
+  event_type     String   @db.VarChar(100)
+  schema_version String   @db.VarChar(20)
+  correlation_id String   @db.VarChar(64)
+  reason_code    String   @db.VarChar(100)
+  organization_id String  @db.VarChar(100)
+  tenant_id      String   @db.VarChar(100)
+  received_at    DateTime @default(now())
+
+  @@map("webhook_idempotency_log")
+}
