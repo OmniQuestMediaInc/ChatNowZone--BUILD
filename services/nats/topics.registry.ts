@@ -63,6 +63,9 @@ export const NATS_TOPICS = {
   LEGAL_HOLD_APPLIED:       'compliance.legal_hold.applied',
   LEGAL_HOLD_LIFTED:        'compliance.legal_hold.lifted',
 
+  // ── Reconciliation (INFRA-004 — L0 ship-gate) ─────────────────────────
+  RECONCILIATION_DRIFT_DETECTED: 'compliance.reconciliation.drift_detected',
+
   // ── PROC-001: Webhook hardening (FIZ) ─────────────────────────────────
   WEBHOOK_VALIDATION_FAILURE: 'fiz.webhook.validation.failure',
   WEBHOOK_DLQ:                'fiz.webhook.dlq',
