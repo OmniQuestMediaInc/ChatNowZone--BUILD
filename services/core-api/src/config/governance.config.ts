@@ -9,6 +9,12 @@ export class GovernanceConfigService {
   public readonly TIMEZONE = 'America/Toronto';
   public readonly PAYOUT_RATE_SHOWTHEATER = 0.08;
   public readonly PAYOUT_RATE_REGULAR = 0.065;
+
+  // ── PROC-001: Webhook Hardening ───────────────────────────────────────────
+  /** Maximum allowed drift (seconds) between webhook timestamp and server clock. */
+  public readonly WEBHOOK_REPLAY_WINDOW_SECONDS = 300;   // 5 minutes
+  /** TTL (seconds) for entries in the in-process nonce store before cleanup. */
+  public readonly WEBHOOK_NONCE_STORE_TTL_SECONDS = 600; // 10 minutes
 }
 
 export const COMMISSION_DEFAULTS = {

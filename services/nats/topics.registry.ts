@@ -61,6 +61,10 @@ export const NATS_TOPICS = {
   // ── Legal hold ─────────────────────────────────────────────────────────
   LEGAL_HOLD_APPLIED:       'compliance.legal_hold.applied',
   LEGAL_HOLD_LIFTED:        'compliance.legal_hold.lifted',
+
+  // ── PROC-001: Webhook hardening (FIZ) ─────────────────────────────────
+  WEBHOOK_VALIDATION_FAILURE: 'fiz.webhook.validation.failure',
+  WEBHOOK_DLQ:                'fiz.webhook.dlq',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];
