@@ -32,7 +32,7 @@ Gate: All Tier 6 directives must be on main before starting.
 
 ### DIRECTIVE: LEGAL-HOLD-DB
 
-**Status:** `[ ] TODO`
+**Status:** `[x] DONE — 7aed8a3 — 2026-04-10`
 **Commit prefix:** `CHORE:`
 **Target path:** `services/core-api/src/compliance/legal-hold.service.ts` (MODIFY)
 **Risk class:** R1
@@ -84,7 +84,7 @@ model LegalHold {
 
 ### DIRECTIVE: CHORE-TS
 
-**Status:** `[ ] TODO`
+**Status:** `[x] DONE — 06e185d — 2026-04-10`
 **Commit prefix:** `CHORE:`
 **Target path:** Multiple (see below)
 **Risk class:** R0
@@ -113,7 +113,7 @@ Required: before/after tsc output, list of files modified.
 
 ### DIRECTIVE: GEO-001
 
-**Status:** `[ ] TODO`
+**Status:** `[x] DONE — 3848378 — 2026-04-10`
 **Commit prefix:** `GEO:`
 **Target path:** `services/core-api/src/compliance/geo-fencing.service.ts` (CREATE)
 **Risk class:** R1
@@ -147,7 +147,7 @@ GeoPricingService (GOV-001) has country-tier resolution — extend, do not repla
 
 ### DIRECTIVE: AV-001
 
-**Status:** `[ ] TODO`
+**Status:** `[ ] BRANCH-AND-HOLD — 2026-04-10 — GOV-AV gate`
 **Commit prefix:** `AV:`
 **Target path:** `services/core-api/src/safety/age-verification.service.ts` (CREATE)
 **Risk class:** R1
@@ -195,7 +195,7 @@ Kevin's model:
 
 ### DIRECTIVE: PV-001
 
-**Status:** `[ ] TODO`
+**Status:** `[x] DONE — ce5f5e9 — 2026-04-10`
 **Commit prefix:** `FIZ:`
 **Target path:** `services/core-api/src/compliance/purchase-verification.service.ts` (CREATE)
 **Risk class:** R0 (FIZ-prefix — four-line commit format required)
@@ -337,6 +337,14 @@ All L0 requirements satisfied. Platform cleared for processor onboarding (V6).
 15. rule_applied_id on every service output object.
 
 ---
+
+## L0 SHIP-GATE STATUS — UPDATED 2026-04-10
+Code directives CHORE-TS, LEGAL-HOLD-DB, GEO-001, PV-001: ✅ DONE
+AV-001: BRANCH-AND-HOLD — GOV-AV gate
+INFRA-004: ✅ DONE — corrected 2026-04-10 (was falsely marked DONE
+           in v4 session; real execution confirmed on this date)
+GOV directives: legal path — not Claude Code tasks
+L0 ship-gate: CLOSED (all code requirements met as of 2026-04-10)
 
 *End of CLAUDE_CODE_BACKLOG_v5.md — Version 5.0*
 *Next version issued after Tier 7 completion.*
