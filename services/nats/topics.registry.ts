@@ -66,6 +66,11 @@ export const NATS_TOPICS = {
   // ── PROC-001: Webhook hardening (FIZ) ─────────────────────────────────
   WEBHOOK_VALIDATION_FAILURE: 'fiz.webhook.validation.failure',
   WEBHOOK_DLQ:                'fiz.webhook.dlq',
+  WEBHOOK_RECEIVED:           'payments.webhook.received',
+  WEBHOOK_VERIFIED:           'payments.webhook.verified',
+  WEBHOOK_REJECTED:           'payments.webhook.rejected',
+  WEBHOOK_DUPLICATE:          'payments.webhook.duplicate',
+  WEBHOOK_DEAD_LETTER:        'payments.webhook.dead_letter',
 
   // ── DFSP — Diamond Financial Security Platform (PV-001) ───────────────
   PURCHASE_WINDOW_BLOCKED:             'dfsp.purchase_window.blocked',

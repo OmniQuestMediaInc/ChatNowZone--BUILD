@@ -15,6 +15,7 @@ import { ZoneGptModule } from '../../zone-gpt/src/zone-gpt.module';
 import { BijouModule } from '../../bijou/src/bijou.module';
 import { AuthModule } from './auth/auth.module';
 import { ShowZoneModule } from '../../showzone/src/showzone.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ShowZoneModule } from '../../showzone/src/showzone.module';
     BijouModule,
     AuthModule,
     ShowZoneModule,
+    PaymentsModule,
   ],
 })
 export class AppModule implements NestModule {
