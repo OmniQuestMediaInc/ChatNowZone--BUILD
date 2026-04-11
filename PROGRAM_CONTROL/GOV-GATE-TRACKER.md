@@ -1,5 +1,5 @@
 # GOV Gate Tracker
-Last updated: 2026-04-10
+Last updated: 2026-04-11
 Authority: Kevin B. Hartley, CEO — OmniQuest Media Inc.
 
 ---
@@ -10,13 +10,14 @@ Authority: Kevin B. Hartley, CEO — OmniQuest Media Inc.
 **Primary defence:** No cash-out design — tokens cannot be redeemed
 for cash or cash equivalents.
 **Risk signal:** 50 recent MSB revocations indicate active enforcement.
-**Status:** ⏳ Awaiting counsel retention + written opinion
+**Status:** ✅ CEO-AUTHORIZED-STAGED — 2026-04-11
+**Staged authorization:** PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md
 **Counsel retained:** [ ] Not yet / [ ] Yes — retained on: ___________
 **Opinion received:** [ ] Not yet / [ ] Yes — received on: ___________
 **Filed to Drive INTEL:** [ ] Not yet / [ ] Yes
-**Blocking:** DFSP-001, DFSP-002, PROC-002, DFSP-003, PROC-003,
+**Blocking:** ~~DFSP-001, DFSP-002, PROC-002, DFSP-003, PROC-003,
              DFSP-004, DFSP-005, DFSP-006, PROC-004, PROC-005,
-             DFSP-007, DFSP-008
+             DFSP-007, DFSP-008~~ — UNBLOCKED by CEO-AUTHORIZED-STAGED-2026-04-11
 
 ---
 
@@ -25,11 +26,12 @@ for cash or cash equivalents.
 **Question:** Are CNZ tokens gambling-adjacent under AGCO rules?
 **Primary defence:** Documentation that tokens have no cash-out value
 and cannot be redeemed for cash or cash equivalents.
-**Status:** ⏳ Awaiting documentation + counsel review
+**Status:** ✅ CEO-AUTHORIZED-STAGED — 2026-04-11
+**Staged authorization:** PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md
 **Documentation prepared:** [ ] Not yet / [ ] Yes — prepared on: ______
 **Counsel reviewed:** [ ] Not yet / [ ] Yes — reviewed on: ____________
 **Filed to Drive INTEL:** [ ] Not yet / [ ] Yes
-**Blocking:** Same as GOV-FINTRAC above
+**Blocking:** ~~Same as GOV-FINTRAC above~~ — UNBLOCKED by CEO-AUTHORIZED-STAGED-2026-04-11
 
 ---
 
@@ -59,6 +61,18 @@ across jurisdictions (provincial, federal, global)
 | Directive | Authorization date | Scope |
 |---|---|---|
 | PROC-001 | 2026-04-10 | Webhook infrastructure only — no ledger writes, no balance columns, no transaction execution |
+| DFSP-001 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-002 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| PROC-002 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-003 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| PROC-003 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-004 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-005 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-006 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| PROC-004 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| PROC-005 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-007 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-008 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
 
 ---
 
@@ -67,6 +81,8 @@ across jurisdictions (provincial, federal, global)
 Per-gate clearance artifacts live in `PROGRAM_CONTROL/CLEARANCES/`.
 Each file carries YAML frontmatter with `gate_id`, `status`, and
 `ceo_acknowledgment` fields that the gate verifier script reads.
+CEO-AUTHORIZED-STAGED authorization records carry `gates_covered`,
+`status: CEO_AUTHORIZED_STAGED`, and `ceo_acknowledgment: SIGNED`.
 
 Machine check (run from repo root before any gated directive):
 ```bash
@@ -75,9 +91,11 @@ Machine check (run from repo root before any gated directive):
 ```
 
 Both must exit `0` before DFSP-001 (or any GOV-FINTRAC/GOV-AGCO-gated
-directive) may proceed. The signing contract, filename convention,
-and explicit prohibition against agent-authored clearance records are
-documented in `PROGRAM_CONTROL/CLEARANCES/README.md`.
+directive) may proceed. The verifier accepts `CLEARED` or
+`CEO_AUTHORIZED_STAGED` as valid exit-0 statuses. The signing contract,
+filename convention, and explicit prohibition against agent-authored
+clearance records are documented in
+`PROGRAM_CONTROL/CLEARANCES/README.md`.
 
 The checkboxes above remain the human-readable aggregation view —
 update them in lockstep with the clearance artifact so the tracker
