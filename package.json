@@ -4,10 +4,34 @@
   "private": true,
   "scripts": {
     "lint": "eslint 'services/**/*.ts' --max-warnings 0",
+    "test": "jest --testPathPatterns='tests/integration' --passWithNoTests",
     "typecheck": "tsc --noEmit --project tsconfig.json",
     "typecheck:api": "tsc --noEmit --project services/core-api/tsconfig.json",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push --skip-generate"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "rootDir": ".",
+    "roots": ["<rootDir>/tests/integration"],
+    "testMatch": ["<rootDir>/tests/integration/**/*.spec.ts"],
+    "moduleFileExtensions": ["ts", "js", "json"],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": {
+          "module": "commonjs",
+          "target": "ES2021",
+          "experimentalDecorators": true,
+          "emitDecoratorMetadata": true,
+          "esModuleInterop": true,
+          "resolveJsonModule": true,
+          "skipLibCheck": true,
+          "strictNullChecks": true,
+          "noImplicitAny": false
+        }
+      }
+    }
   },
   "dependencies": {
     "@nestjs/common": "^10.4.15",
@@ -27,7 +51,9 @@
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "eslint": "8.57.1",
+    "jest": "^30.3.0",
     "prisma": "^6.19.3",
+    "ts-jest": "^29.4.9",
     "typescript": "5.9.3"
   }
 }
