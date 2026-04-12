@@ -218,6 +218,23 @@ export const MEMBERSHIP = {
   ],
 } as const;
 
+// ─── TOKEN EXTENSION ──────────────────────────────────────────────────────────
+export const TOKEN_EXTENSION = {
+  // Option A: pay extension fee on expired tokens — no new token purchase
+  OPTION_A_FEE_PCT:         0.20,  // fee = 20% of expired volume at 1K-bundle rate
+  OPTION_A_LIFESPAN_DAYS:   46,    // 45 + 1
+
+  // Option B: buy 2500 new tokens at VIP rate — 25% of expired volume forfeited
+  OPTION_B_TOKEN_PURCHASE:  2500,
+  OPTION_B_FORFEITURE_PCT:  0.25,
+  OPTION_B_LIFESPAN_DAYS:   46,    // 45 + 1
+
+  // Option C: buy 5000 new tokens at VIP rate — 20% of expired volume forfeited
+  OPTION_C_TOKEN_PURCHASE:  5000,
+  OPTION_C_FORFEITURE_PCT:  0.20,
+  OPTION_C_LIFESPAN_DAYS:   91,    // 90 + 1
+} as const;
+
 // ─── PRIVATE CALL (PrivateCall Feature) ───────────────────────────────────────
 export const PRIVATE_CALL = {
   BLOCK_DURATIONS_MINS: [6, 12, 24],
