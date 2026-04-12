@@ -17,6 +17,7 @@ import { BijouModule } from '../../bijou/src/bijou.module';
 import { AuthModule } from './auth/auth.module';
 import { ShowZoneModule } from '../../showzone/src/showzone.module';
 import { PaymentsModule } from './payments/payments.module';
+import { SchedulingModule } from './scheduling/scheduling.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { PaymentsModule } from './payments/payments.module';
     AuthModule,
     ShowZoneModule,
     PaymentsModule,
+    SchedulingModule,
   ],
 })
 export class AppModule implements NestModule {

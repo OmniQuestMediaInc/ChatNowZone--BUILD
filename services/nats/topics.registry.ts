@@ -95,6 +95,23 @@ export const NATS_TOPICS = {
   CHECKOUT_CONFIRMED:                  'dfsp.checkout.confirmed',
   CHECKOUT_EMAIL_RECEIPT_REQUESTED:    'dfsp.checkout.email_receipt_requested',
   CHECKOUT_SMS_NOTIFICATION_REQUESTED: 'dfsp.checkout.sms_notification_requested',
+
+  // ── GZ Scheduling Module ──────────────────────────────────────────────────
+  SCHEDULE_PERIOD_CREATED:         'gz.schedule.period.created',
+  SCHEDULE_PERIOD_B_LOCKED:        'gz.schedule.period.b_locked',
+  SCHEDULE_PERIOD_FINAL_LOCKED:    'gz.schedule.period.final_locked',
+  SCHEDULE_SHIFT_ASSIGNED:         'gz.schedule.shift.assigned',
+  SCHEDULE_SHIFT_SWAPPED:          'gz.schedule.shift.swapped',
+  SCHEDULE_GAP_POSTED:             'gz.schedule.gap.posted',
+  SCHEDULE_GAP_FILLED:             'gz.schedule.gap.filled',
+  SCHEDULE_ZONEBOT_LOTTERY_RUN:    'gz.schedule.zonebot.lottery_run',
+  SCHEDULE_ZONEBOT_BID_OFFERED:    'gz.schedule.zonebot.bid_offered',
+  SCHEDULE_ZONEBOT_BID_AWARDED:    'gz.schedule.zonebot.bid_awarded',
+  SCHEDULE_ZONEBOT_BID_EXPIRED:    'gz.schedule.zonebot.bid_expired',
+  SCHEDULE_COMPLIANCE_VIOLATION:   'gz.schedule.compliance.violation',
+  SCHEDULE_COVERAGE_GAP_DETECTED:  'gz.schedule.coverage.gap_detected',
+  SCHEDULE_STAT_HOLIDAY_ALERT:     'gz.schedule.stat_holiday.alert',
+  SCHEDULE_REMINDER_BLOCK_CUTOFF:  'gz.schedule.reminder.block_cutoff',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];

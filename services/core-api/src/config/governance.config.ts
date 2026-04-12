@@ -253,3 +253,58 @@ export const GAMIFICATION = {
   DICE_RANGE: { min: 2, max: 12 },       // Sum of 2d6
   PHASE2_SEAT_CAPACITY_WINDOW: 0.25,     // Phase 2 = 25% of Phase 1 attendee count
 } as const;
+
+// ─── GZ SCHEDULING — GuestZone Operations Scheduling Config ─────────────────
+export const GZ_SCHEDULING = {
+  // ── Rolling Two-Week Cycle ──────────────────────────────────────────────
+  PERIOD_LENGTH_DAYS: 14,
+  BLOCK_CUTOFF_DAYS_BEFORE: 21,          // B-Lock closes 21 days before period start
+  FINAL_LOCK_DAYS_BEFORE: 14,            // Schedule locked 14 days before period start
+  BLOCK_REMINDER_DAYS: [24, 22],         // Automated reminders sent at these intervals
+
+  // ── ZoneBot 1-2-3 Rule ─────────────────────────────────────────────────
+  ZONEBOT_MAX_LOTTERY_POSITIONS: 3,      // Positions 1, 2, 3
+  ZONEBOT_CONFIRMATION_HOURS: 16,        // 16-hour confirmation clock
+  ZONEBOT_SUPPRESSION_CYCLES: 2,         // Awarded staff suppressed for 2 subsequent cycles
+
+  // ── Ontario ESA 2026 Compliance ────────────────────────────────────────
+  SHIFT_NOTICE_HOURS: 96,               // 96 hours notice for schedules
+  SHIFT_CHANGE_NOTICE_HOURS: 24,        // 24 hours notice for changes
+  MAX_CONSECUTIVE_DAYS: 6,              // No 7-day streaks (min 1 day off per 7)
+  MIN_CONSECUTIVE_DAYS_OFF_FT: 2,       // Full-time: 2 consecutive days off
+  MIN_CONSECUTIVE_DAYS_OFF_PT: 3,       // Part-time Edge: 3 consecutive days off
+  MAX_DAILY_HOURS: 8,                   // Standard 8-hour day
+  MAX_WEEKLY_HOURS_STANDARD: 44,        // Ontario ESA standard
+  MAX_WEEKLY_HOURS_EXCESS: 48,          // With excess hours agreement
+  MIN_VACATION_DAYS_ANNUAL: 10,         // 2 weeks minimum (FT)
+
+  // ── Stat Holiday Pay ───────────────────────────────────────────────────
+  STAT_HOLIDAY_PAY_MULTIPLIER: 1.50,    // 1.5x Premium Pay
+  STAT_HOLIDAY_INCLUDES_PUBLIC_PAY: true,
+
+  // ── Transit Safety ─────────────────────────────────────────────────────
+  TRANSIT_UNSAFE_START_HOUR: 0,          // Midnight
+  TRANSIT_UNSAFE_END_HOUR: 6.25,        // 6:15 AM — no shifts start/end in this window
+
+  // ── Waterfall Shift Blocks (GuestZone) ─────────────────────────────────
+  SHIFTS: {
+    A: { code: 'A', label: 'Morning',  start: '07:00', end: '15:45', duration_hours: 8.75, meal_break_start: '11:30', meal_break_mins: 30 },
+    B: { code: 'B', label: 'Swing',    start: '15:15', end: '00:00', duration_hours: 8.75, meal_break_start: '19:30', meal_break_mins: 30 },
+    C: { code: 'C', label: 'Night',    start: '23:30', end: '08:15', duration_hours: 8.75, meal_break_start: '03:00', meal_break_mins: 30 },
+  },
+
+  // ── Minimum Coverage Baselines ─────────────────────────────────────────
+  GZ_MIN_AGENTS_PER_SHIFT: 3,           // 3-GZSA baseline during peak traffic
+  GZ_DIALPAD_LICENSES: 4,               // 4 Dialpad licenses, 1 "Safety Seat" open
+  GZ_CROSSOVER_MINS: 15,                // 15-minute staggered crossover
+
+  // ── Departmental Hours ─────────────────────────────────────────────────
+  DEPARTMENTS: {
+    GUESTZONE:   { hours_24_7: true },
+    FINANCE:     { start: '09:00', end: '21:00', days: 'DAILY' },
+    TECH:        { hours_24_7: true },
+    LEGAL:       { start: '09:00', end: '20:00', days: 'MON_FRI', on_call_24_7: true },
+    MAINTENANCE: { start: '07:00', end: '22:00', days: 'DAILY' },
+    RECEPTION:   { start: '08:00', end: '17:00', days: 'DAILY' },
+  },
+} as const;
