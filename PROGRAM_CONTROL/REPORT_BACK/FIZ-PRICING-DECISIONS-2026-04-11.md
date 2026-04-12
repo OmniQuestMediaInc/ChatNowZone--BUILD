@@ -10,7 +10,7 @@
 
 ## HEAD
 
-See commit hash below (populated post-commit).
+`8b49fb4` — FIZ: Lock April 11 CEO pricing decisions into governance.config.ts
 
 ---
 
