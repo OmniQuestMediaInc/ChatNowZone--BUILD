@@ -405,80 +405,129 @@ export class SchedulingService {
   }
 
   /**
-   * Seeds the default GuestZone shift templates (A/B/C Waterfall).
-   * Idempotent — skips templates that already exist.
+   * Swaps a shift assignment between two staff members on the same date.
+   * Validates compliance for both members before executing.
+   * Publishes SCHEDULE_SHIFT_SWAPPED event and audit logs the swap.
    */
-  async seedShiftTemplates(correlation_id: string): Promise<void> {
-    const shifts = GZ_SCHEDULING.SHIFTS;
+  async swapShift(params: {
+    assignment_id_a: string;
+    assignment_id_b: string;
+    actor_id: string;
+    correlation_id: string;
+    reason_code: string;
+  }): Promise<{ swapped: boolean; compliance_warnings: import('./scheduling.interfaces').ComplianceWarning[]; rule_applied_id: string }> {
+    const assignmentA = await this.prisma.shiftAssignment.findUnique({
+      where: { id: params.assignment_id_a },
+    });
+    const assignmentB = await this.prisma.shiftAssignment.findUnique({
+      where: { id: params.assignment_id_b },
+    });
 
-    for (const [code, def] of Object.entries(shifts)) {
-      const existing = await this.prisma.shiftTemplate.findFirst({
-        where: { shift_code: code, department: 'GUESTZONE' },
-      });
-
-      if (existing) {
-        this.logger.log(`SchedulingService: shift template ${code} already exists, skipping`);
-        continue;
-      }
-
-      await this.prisma.shiftTemplate.create({
-        data: {
-          shift_code: code,
-          department: 'GUESTZONE',
-          shift_label: def.label,
-          start_time: def.start,
-          end_time: def.end,
-          duration_hours: def.duration_hours,
-          meal_break_start: def.meal_break_start,
-          meal_break_mins: def.meal_break_mins,
-          correlation_id,
-          reason_code: 'SEED_SHIFT_TEMPLATES',
-          rule_applied_id: 'GZ_SHIFT_TEMPLATE_v1',
-        },
-      });
+    if (!assignmentA || !assignmentB) {
+      throw new Error('SHIFT_SWAP_NOT_FOUND: One or both assignments do not exist');
     }
 
-    this.logger.log('SchedulingService: shift templates seeded', {
-      department: 'GUESTZONE',
-      shifts: Object.keys(shifts),
-      rule_applied_id: this.RULE_ID,
+    const templateA = await this.prisma.shiftTemplate.findUnique({
+      where: { id: assignmentA.shift_template_id },
     });
-  }
+    const templateB = await this.prisma.shiftTemplate.findUnique({
+      where: { id: assignmentB.shift_template_id },
+    });
 
-  /**
-   * Seeds Ontario 2026 statutory holidays into the database.
-   * Idempotent — skips holidays that already exist.
-   */
-  async seedStatHolidays(
-    holidays: Array<{ date: string; name: string }>,
-    correlation_id: string,
-  ): Promise<void> {
-    for (const holiday of holidays) {
-      const existing = await this.prisma.statHoliday.findFirst({
-        where: { holiday_date: new Date(holiday.date) },
-      });
-
-      if (existing) {
-        continue;
-      }
-
-      await this.prisma.statHoliday.create({
-        data: {
-          holiday_date: new Date(holiday.date),
-          holiday_name: holiday.name,
-          pay_multiplier: GZ_SCHEDULING.STAT_HOLIDAY_PAY_MULTIPLIER,
-          requires_on_call_manager: true,
-          correlation_id,
-          reason_code: 'SEED_STAT_HOLIDAYS',
-          rule_applied_id: 'GZ_STAT_HOLIDAY_v1',
-        },
-      });
+    if (!templateA || !templateB) {
+      throw new Error('SHIFT_SWAP_TEMPLATE_NOT_FOUND: Shift templates missing');
     }
 
-    this.logger.log('SchedulingService: stat holidays seeded', {
-      count: holidays.length,
+    // Validate compliance for staff A taking staff B's shift
+    const checkA = await this.complianceGuard.validateAssignment({
+      staff_member_id: assignmentA.staff_member_id,
+      proposed_date: assignmentB.shift_date.toISOString().split('T')[0],
+      proposed_shift_code: templateB.shift_code as ShiftCode,
+      schedule_period_id: assignmentB.schedule_period_id,
+    });
+
+    // Validate compliance for staff B taking staff A's shift
+    const checkB = await this.complianceGuard.validateAssignment({
+      staff_member_id: assignmentB.staff_member_id,
+      proposed_date: assignmentA.shift_date.toISOString().split('T')[0],
+      proposed_shift_code: templateA.shift_code as ShiftCode,
+      schedule_period_id: assignmentA.schedule_period_id,
+    });
+
+    const allWarnings = [...checkA.warnings, ...checkB.warnings];
+
+    if (!checkA.is_compliant || !checkB.is_compliant) {
+      this.logger.warn('SchedulingService: shift swap blocked by compliance', {
+        assignment_id_a: params.assignment_id_a,
+        assignment_id_b: params.assignment_id_b,
+        violations: allWarnings.filter((w) => w.severity === 'ERROR'),
+        rule_applied_id: this.RULE_ID,
+      });
+
+      return {
+        swapped: false,
+        compliance_warnings: allWarnings,
+        rule_applied_id: this.RULE_ID,
+      };
+    }
+
+    // Execute the swap — exchange staff_member_id and assignment_source
+    await this.prisma.shiftAssignment.update({
+      where: { id: params.assignment_id_a },
+      data: {
+        staff_member_id: assignmentB.staff_member_id,
+        assignment_source: 'SWAP',
+      },
+    });
+
+    await this.prisma.shiftAssignment.update({
+      where: { id: params.assignment_id_b },
+      data: {
+        staff_member_id: assignmentA.staff_member_id,
+        assignment_source: 'SWAP',
+      },
+    });
+
+    this.logger.log('SchedulingService: shift swap completed', {
+      assignment_id_a: params.assignment_id_a,
+      assignment_id_b: params.assignment_id_b,
+      staff_a: assignmentA.staff_member_id,
+      staff_b: assignmentB.staff_member_id,
       rule_applied_id: this.RULE_ID,
     });
+
+    this.nats.publish(NATS_TOPICS.SCHEDULE_SHIFT_SWAPPED, {
+      assignment_id_a: params.assignment_id_a,
+      assignment_id_b: params.assignment_id_b,
+      staff_a: assignmentA.staff_member_id,
+      staff_b: assignmentB.staff_member_id,
+      correlation_id: params.correlation_id,
+      rule_applied_id: this.RULE_ID,
+    });
+
+    await this.prisma.scheduleAuditLog.create({
+      data: {
+        event_type: 'SHIFT_SWAPPED',
+        actor_id: params.actor_id,
+        target_id: params.assignment_id_a,
+        target_type: 'SHIFT',
+        details: {
+          assignment_id_a: params.assignment_id_a,
+          assignment_id_b: params.assignment_id_b,
+          staff_a: assignmentA.staff_member_id,
+          staff_b: assignmentB.staff_member_id,
+        },
+        correlation_id: params.correlation_id,
+        reason_code: params.reason_code,
+        rule_applied_id: this.RULE_ID,
+      },
+    });
+
+    return {
+      swapped: true,
+      compliance_warnings: allWarnings,
+      rule_applied_id: this.RULE_ID,
+    };
   }
 
   /**

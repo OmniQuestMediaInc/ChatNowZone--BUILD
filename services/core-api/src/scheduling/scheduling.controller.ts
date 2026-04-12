@@ -120,6 +120,25 @@ export class ShiftAssignmentController {
   async assignShift(@Body() body: AssignShiftRequest) {
     return this.schedulingService.assignShift(body);
   }
+
+  /**
+   * POST /scheduling/shifts/swap
+   * Swaps shift assignments between two staff members.
+   * Validates compliance for both before executing.
+   */
+  @Post('swap')
+  @HttpCode(HttpStatus.OK)
+  async swapShift(
+    @Body() body: {
+      assignment_id_a: string;
+      assignment_id_b: string;
+      actor_id: string;
+      correlation_id: string;
+      reason_code: string;
+    },
+  ) {
+    return this.schedulingService.swapShift(body);
+  }
 }
 
 // ─── ZoneBot Controller ──────────────────────────────────────────────────────
@@ -366,5 +385,16 @@ export class ScheduleSeedController {
   async seedDepartmentCoverage(@Body() body: { correlation_id?: string }) {
     const correlation_id = body.correlation_id ?? `SEED-COVERAGE-${Date.now()}`;
     return this.seedService.seedDepartmentCoverage(correlation_id);
+  }
+
+  /**
+   * POST /scheduling/seed/master-roster
+   * Seeds the GZ Master Roster positions. Idempotent.
+   */
+  @Post('master-roster')
+  @HttpCode(HttpStatus.OK)
+  async seedMasterRoster(@Body() body: { correlation_id?: string }) {
+    const correlation_id = body.correlation_id ?? `SEED-ROSTER-${Date.now()}`;
+    return this.seedService.seedMasterRoster(correlation_id);
   }
 }

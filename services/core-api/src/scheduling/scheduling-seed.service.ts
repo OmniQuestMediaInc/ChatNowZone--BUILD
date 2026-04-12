@@ -14,11 +14,9 @@ import {
 } from './stat-holidays.seed';
 import {
   FINANCE_COVERAGE,
-  LEGAL_COVERAGE,
   MAINTENANCE_COVERAGE,
   RECEPTION_COVERAGE,
   GZ_MASTER_ROSTER,
-  DAY_LABELS,
 } from './scheduling.constants';
 
 @Injectable()
@@ -42,6 +40,7 @@ export class SchedulingSeedService {
     results.shift_templates = await this.seedShiftTemplates(correlation_id);
     results.stat_holidays = await this.seedRollingStatHolidays(correlation_id);
     results.department_coverage = await this.seedDepartmentCoverage(correlation_id);
+    results.master_roster = await this.seedMasterRoster(correlation_id);
 
     this.logger.log('SchedulingSeedService: full seed completed', {
       results,
@@ -304,6 +303,75 @@ export class SchedulingSeedService {
     }
 
     this.logger.log('SchedulingSeedService: department coverage seeded', {
+      created,
+      skipped,
+      rule_applied_id: this.RULE_ID,
+    });
+
+    return { created, skipped };
+  }
+
+  /**
+   * Seeds the GZ Master Roster — canonical staff positions from the
+   * Operations Handbook. Creates placeholder StaffMember records for
+   * each position across all three shifts (A/B/C).
+   * Idempotent — skips positions that already exist by employee_ref.
+   */
+  async seedMasterRoster(
+    correlation_id: string,
+  ): Promise<{ created: number; skipped: number }> {
+    let created = 0;
+    let skipped = 0;
+
+    const shiftEntries = [
+      { shift: 'A', roster: GZ_MASTER_ROSTER.SHIFT_A },
+      { shift: 'B', roster: GZ_MASTER_ROSTER.SHIFT_B },
+      { shift: 'C', roster: GZ_MASTER_ROSTER.SHIFT_C },
+    ] as const;
+
+    for (const { shift, roster } of shiftEntries) {
+      for (const position of roster) {
+        const employeeRef = `GZ-${position.position}`;
+
+        const existing = await this.prisma.staffMember.findFirst({
+          where: { employee_ref: employeeRef },
+        });
+
+        if (existing) {
+          skipped++;
+          continue;
+        }
+
+        const employmentType = position.category === 'EDGE' ? 'PT' : 'FT';
+        const isSalaried = employmentType === 'FT' && position.role !== 'GZSA';
+
+        await this.prisma.staffMember.create({
+          data: {
+            employee_ref: employeeRef,
+            display_name: `${position.position} (${position.role})`,
+            role: position.role,
+            employment_type: employmentType,
+            staff_category: position.category,
+            department: 'GUESTZONE',
+            languages: ['EN'],
+            hourly_rate_cad: isSalaried ? null : 22.00,
+            annual_salary_cad: isSalaried
+              ? position.role === 'GZM' ? 82500.00
+              : position.role === 'GZAM' ? 75000.00
+              : position.role === 'GZS' ? 63500.00
+              : null
+              : null,
+            is_active: true,
+            hire_date: new Date(),
+            correlation_id,
+            reason_code: 'SEED_MASTER_ROSTER',
+          },
+        });
+        created++;
+      }
+    }
+
+    this.logger.log('SchedulingSeedService: master roster seeded', {
       created,
       skipped,
       rule_applied_id: this.RULE_ID,
