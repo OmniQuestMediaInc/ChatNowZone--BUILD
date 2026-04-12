@@ -211,7 +211,6 @@ export class ComplianceGuardService {
           lte: weekEnd,
         },
       },
-      include: { },
     });
 
     // Look up shift templates to calculate hours

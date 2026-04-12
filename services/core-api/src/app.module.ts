@@ -1,6 +1,7 @@
 // services/core-api/src/app.module.ts
 // CHORE: HOUSE-001 — restore missing module registrations dropped in merge
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { BullModule } from '@nestjs/bull';
 import { CreatorModule } from './creator/creator.module';
 import { SafetyModule } from './safety/safety.module';
 import { GrowthModule } from './growth/growth.module';
@@ -16,13 +17,18 @@ import { ZoneGptModule } from '../../zone-gpt/src/zone-gpt.module';
 import { BijouModule } from '../../bijou/src/bijou.module';
 import { AuthModule } from './auth/auth.module';
 import { ShowZoneModule } from '../../showzone/src/showzone.module';
-import { PaymentsModule } from './payments/payments.module';
 import { SchedulingModule } from './scheduling/scheduling.module';
 
 @Module({
   imports: [
     NatsModule,        // FIRST — global module, must be registered before all others
     PrismaModule,      // SECOND — global Prisma client
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST ?? 'localhost',
+        port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
+      },
+    }),
     CreatorModule,
     SafetyModule,
     GrowthModule,
@@ -35,7 +41,6 @@ import { SchedulingModule } from './scheduling/scheduling.module';
     BijouModule,
     AuthModule,
     ShowZoneModule,
-    PaymentsModule,
     SchedulingModule,
   ],
 })

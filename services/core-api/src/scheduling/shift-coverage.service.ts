@@ -71,8 +71,8 @@ export class ShiftCoverageService {
     ).length;
 
     // Determine coverage requirements — use DB config or fall back to governance defaults
-    let requiredCount = GZ_SCHEDULING.GZ_MIN_AGENTS_PER_SHIFT;
-    let requiredSupervisors = 1;
+    let requiredCount: number = GZ_SCHEDULING.GZ_MIN_AGENTS_PER_SHIFT;
+    let requiredSupervisors: number = 1;
     let requiresManager = false;
 
     if (coverageReqs.length > 0) {

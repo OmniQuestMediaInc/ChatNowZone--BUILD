@@ -14,9 +14,17 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "rootDir": ".",
-    "roots": ["<rootDir>/tests/integration"],
-    "testMatch": ["<rootDir>/tests/integration/**/*.spec.ts"],
-    "moduleFileExtensions": ["ts", "js", "json"],
+    "roots": [
+      "<rootDir>/tests/integration"
+    ],
+    "testMatch": [
+      "<rootDir>/tests/integration/**/*.spec.ts"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
     "globals": {
       "ts-jest": {
         "tsconfig": {
@@ -34,11 +42,13 @@
     }
   },
   "dependencies": {
+    "@nestjs/bull": "^11.0.4",
     "@nestjs/common": "^10.4.15",
     "@nestjs/core": "^11.1.18",
     "@nestjs/platform-express": "^11.1.18",
     "@nestjs/typeorm": "^11.0.0",
     "@prisma/client": "^6.2.1",
+    "bull": "^4.16.5",
     "decimal.js": "10.6.0",
     "nats": "^2.29.0",
     "reflect-metadata": "^0.2.2",
@@ -46,6 +56,7 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/bull": "^4.10.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.0",
     "@typescript-eslint/eslint-plugin": "7.18.0",
