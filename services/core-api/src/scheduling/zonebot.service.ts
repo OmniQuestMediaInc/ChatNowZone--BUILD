@@ -339,15 +339,25 @@ export class ZoneBotService {
       },
     });
 
-    // Mark the gap as awarded
+    // Mark the gap as filled
     if (gap) {
       await this.prisma.shiftGap.update({
         where: { id: gap.id },
         data: {
-          status: 'AWARDED',
+          status: 'FILLED',
           filled_by: bid.staff_member_id,
           filled_at: now,
         },
+      });
+
+      this.nats.publish(NATS_TOPICS.SCHEDULE_GAP_FILLED, {
+        gap_id: gap.id,
+        shift_gap_id: bid.shift_gap_id,
+        filled_by: bid.staff_member_id,
+        gap_date: gap.gap_date.toISOString().split('T')[0],
+        department: gap.department,
+        correlation_id,
+        rule_applied_id: this.RULE_ID,
       });
     }
 
