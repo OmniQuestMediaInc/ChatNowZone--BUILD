@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/add-directives-queue-YqGjM`
-**Commit:** `8d4460e60b8a4e803553fbad2bd3ab79fe892a4c`
-**Generated:** 2026-04-13T21:18:38Z
+**Branch:** `main`
+**Commit:** `d87a2257ff3b0b6c39c36fd45c2951b6d14eb981`
+**Generated:** 2026-04-13T21:28:11Z
 
 ## All Files
 
