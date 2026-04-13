@@ -2,19 +2,21 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `b927376ee9abf4a944392678080ceb5038ee3572`
-**Generated:** 2026-04-13T21:58:04Z
+**Branch:** `claude/execute-gov-const-001-and-cleanup`
+**Commit:** `099a617a0489c8d74d01cf19201a1df17488e32e`
+**Generated:** 2026-04-13T22:22:51Z
 
 ## All Files
 
 - `.devcontainer/devcontainer.json`
 - `.eslintrc.js`
 - `.github/CODEOWNERS`
+- `.github/ISSUE_TEMPLATE/directive.yml`
 - `.github/copilot-instructions.md`
 - `.github/required-files.txt`
 - `.github/workflows/auto-merge.yml`
 - `.github/workflows/ci.yml`
+- `.github/workflows/directive-intake.yml`
 - `.github/workflows/notify.yml`
 - `.github/workflows/populate-issues.yml`
 - `.github/workflows/repo-manifest.yml`
@@ -22,13 +24,13 @@ Auto-generated on every push. Do not edit manually.
 - `.prettierrc`
 - `CLAUDE.md`
 - `OQMI_SYSTEM_STATE.md`
-- `PROGRAM_CONTROL/BACKLOGS/CLAUDE_CODE_BACKLOG_v5.md`
-- `PROGRAM_CONTROL/BACKLOGS/CLAUDE_CODE_BACKLOG_v6.md`
 - `PROGRAM_CONTROL/BACKLOGS/CLAUDE_CODE_BACKLOG_v7.md`
 - `PROGRAM_CONTROL/BACKLOGS/LEGACY/CLAUDE_CODE_BACKLOG_v1_LEGACY.md`
 - `PROGRAM_CONTROL/BACKLOGS/LEGACY/CLAUDE_CODE_BACKLOG_v2_LEGACY.md`
 - `PROGRAM_CONTROL/BACKLOGS/LEGACY/CLAUDE_CODE_BACKLOG_v3_LEGACY.md`
 - `PROGRAM_CONTROL/BACKLOGS/LEGACY/CLAUDE_CODE_BACKLOG_v4_LEGACY.md`
+- `PROGRAM_CONTROL/BACKLOGS/LEGACY/CLAUDE_CODE_BACKLOG_v5_LEGACY.md`
+- `PROGRAM_CONTROL/BACKLOGS/LEGACY/CLAUDE_CODE_BACKLOG_v6_LEGACY.md`
 - `PROGRAM_CONTROL/CLEARANCES/.gitkeep`
 - `PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md`
 - `PROGRAM_CONTROL/CLEARANCES/README.md`
@@ -155,8 +157,6 @@ Auto-generated on every push. Do not edit manually.
 - `finance/token-extension.service.ts`
 - `governance/pre-ship-audit.service.ts`
 - `infra/postgres/init-ledger.sql`
-- `issues/WO-019.md`
-- `issues/WO-021.md`
 - `package.json`
 - `prisma/migrations/20260409000000_legal_hold_db_migration/migration.sql`
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
@@ -198,7 +198,6 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/creator/surfaces/dashboard.controller.ts`
 - `services/core-api/src/creator/surfaces/roster.gateway.ts`
 - `services/core-api/src/creator/surfaces/statements.service.ts`
-- `services/core-api/src/database/migrations/1710500000000-CreateLedgerAndAudit.ts`
 - `services/core-api/src/db.ts`
 - `services/core-api/src/dfsp/checkout-confirmation.service.ts`
 - `services/core-api/src/dfsp/dfsp.module.ts`
