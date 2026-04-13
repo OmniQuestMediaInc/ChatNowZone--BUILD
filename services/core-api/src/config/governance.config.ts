@@ -308,3 +308,58 @@ export const GZ_SCHEDULING = {
     RECEPTION:   { start: '08:00', end: '17:00', days: 'DAILY' },
   },
 } as const;
+
+// ─── PLATFORM GLOBAL (CEO-DECISIONS-2026-04-12) ───────────────────────────────
+export const PLATFORM_GLOBAL = {
+  CURRENCY: 'USD',             // ISO 4217 — current trading currency
+  MARKETPLACE_FEE_PCT: 0.18,   // 18% — locked CEO 2026-04-12 (revised from 12.5%)
+  // Applied to: digital merchandise, physical merchandise, digital content vault downloads,
+  // post-embargo PPV/catalog recording sales.
+  // NOT applied to: performance recordings purchased pre/during/post-show (within 24hr).
+} as const;
+
+// ─── MERCHANDISE CONFIG (CEO-DECISIONS-2026-04-12) ────────────────────────────
+export const MERCHANDISE_CONFIG = {
+  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN',       // ShowTokens rejected at checkout — no exceptions
+  CREATOR_PAYOUT_PER_TOKEN_USD: 0.075,    // $0.075 USD per ChatToken — locked 2026-04-12
+  DISPUTE_HOLD_TRIGGER: 'IMMEDIATE',      // Hold applied on ticket creation
+  DISPUTE_CREATOR_WINDOW_HOURS: 72,       // 72h (3 business days) to resolve
+  DISPUTE_REMINDER_HOURS: [0, 24],        // Reminders at ticket creation and 24h
+  REFUND_ORIGINAL_CARD_ONLY: true,        // No alternate card — no exceptions
+} as const;
+
+// ─── PERFORMANCE RECORDING (CEO-DECISIONS-2026-04-12) ─────────────────────────
+export const PERFORMANCE_RECORDING = {
+  POST_SHOW_PURCHASE_WINDOW_HOURS: 24,    // Last-call window after show ends
+  EMBARGO_DAYS: 10,                       // Suppression period after post-show window
+  CATALOG_RELEASE_DAY: 11,                // Day 11 — available in creator PPV/merch catalog
+  DM_ON_SHOW_START: true,                 // DM sent to all attendees at show start
+  DM_ON_SHOW_END: true,                   // DM sent to non-purchasers at show end
+} as const;
+
+// ─── CONCIERGE APPOINTMENT (CEO-DECISIONS-2026-04-12) ─────────────────────────
+export const CONCIERGE_APPT = {
+  OPEN_HOUR: 11,        // 11:00 AM billing-address TZ
+  CUTOFF_HOUR: 22,      // 10:00 PM — no new appointments after this hour
+  CUTOFF_MINUTE: 30,    // Combined: 10:30 PM hard cutoff for new appointments
+  // Guests with existing appointments booked before cutoff may still execute
+  // purchase up to DFSP_PURCHASE_WINDOW_CLOSE_HOUR (23:00).
+} as const;
+
+// ─── FAN CLUB (CEO-DECISIONS-2026-04-12-B) ────────────────────────────────────
+export const FAN_CLUB = {
+  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN',                 // ShowTokens not accepted
+  BILLING_CYCLES: ['MONTHLY', 'ANNUAL'] as const,
+  // Fan club fee applies PLATFORM_GLOBAL.MARKETPLACE_FEE_PCT (18%) — no separate constant.
+} as const;
+
+// ─── CREATOR SAAS (CEO-DECISIONS-2026-04-12-B) ────────────────────────────────
+export const CREATOR_SAAS = {
+  TIERS_ACTIVE: false,            // Master kill switch — admin toggles on
+  FREE_TIER_ENABLED: true,
+  TIER_1_MONTHLY_USD: 19.95,
+  TIER_2_MONTHLY_USD: 24.95,
+  TIER_3_MONTHLY_USD: 49.95,
+  BILLING_CYCLES: ['MONTHLY', 'ANNUAL'] as const,
+  // Build and ship. INACTIVE at launch. Admin-side activation only.
+} as const;
