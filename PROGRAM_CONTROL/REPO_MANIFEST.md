@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `c607c5b8e0c98834cb0b6bfe5f7830d105db953f`
-**Generated:** 2026-04-13T12:53:23Z
+**Branch:** `copilot/fix-merge-conflicts-governance-config`
+**Commit:** `77a20bde22841b2978dc7c369badc03109b8fa8d`
+**Generated:** 2026-04-13T13:05:05Z
 
 ## All Files
 
@@ -132,6 +132,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001-sql-fix.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
+- `PROGRAM_CONTROL/REPO_MANIFEST.md`
 - `README.md`
 - `Sovereign_Kernel.md.pdf`
 - `docker-compose.yml`
