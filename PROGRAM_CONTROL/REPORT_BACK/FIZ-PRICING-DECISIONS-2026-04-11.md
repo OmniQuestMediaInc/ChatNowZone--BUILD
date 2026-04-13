@@ -1,95 +1,97 @@
-# FIZ-PRICING-DECISIONS-2026-04-11 — Report Back
+# REPORT_BACK: FIZ-PRICING-DECISIONS-2026-04-11
 
-**Directive Batch:** FIZ-PRICING-DECISIONS-2026-04-11
+**Task / WorkOrder ID:** FIZ-PRICING-DECISIONS-2026-04-11
 **Repo:** OmniQuestMediaInc/ChatNowZone--BUILD
-**Branch:** copilot/fiz-pricing-decisions-2026-04-11
+**Branch:** copilot/fiz-lock-april-11-ceo-pricing
+**CORRELATION_ID:** e16b7527-ae73-4fd2-bf4f-50fcbfb02cf7
+**GATE:** CEO-AUTHORIZED-STAGED-2026-04-11
 
 ---
 
-## COMMIT 1 of 4
+## HEAD
 
-**HEAD:** `59ce944`
-**Message:** FIZ: Lock April 11 CEO pricing decisions into governance.config.ts
-**File changed:** `services/core-api/src/config/governance.config.ts` (1 file, +11/-4)
+`8b49fb4` — FIZ: Lock April 11 CEO pricing decisions into governance.config.ts
 
-### CHANGE 1 — SHOWTOKEN_EXCHANGE confirmed
+---
 
-Keys renamed and values updated exactly as directed:
+## Files Changed
 
 ```
-VIP_COST_PCT:      0.05,   // 5%   — highest friction
-SILVER_COST_PCT:   0.04,   // 4%
-GOLD_COST_PCT:     0.025,  // 2.5%
-PLATINUM_COST_PCT: 0.025,  // 2.5%
-DIAMOND_COST_PCT:  0.00,   // 0%   — fee-free earned perk, locked 2026-04-11
+services/core-api/src/config/governance.config.ts | 9 +++++++--
 ```
 
-### CHANGE 2 — MEMBERSHIP.TIERS canonical comment confirmed
+---
 
-Canonical comment added immediately above the TIERS line:
+## Changes Applied
 
+### CHANGE 1 — SHOWTOKEN_EXCHANGE penalty values replaced ✅
+
+**Before:**
+```typescript
+SILVER_COST_PCT:   0.20,
+GOLD_COST_PCT:     0.15,
+PLATINUM_COST_PCT: 0.10,
+DIAMOND_COST_PCT:  0.00,
 ```
-// CANONICAL — 5-tier repo structure locked 2026-04-11.
-// Pricing doc names (Day Pass / Annual Pass / OmniPass Plus / Diamond)
+
+**After:**
+```typescript
+VIP_COST_PCT:      0.05,   // 5%   — VIP: highest friction
+SILVER_COST_PCT:   0.04,   // 4%   — SILVER
+GOLD_COST_PCT:     0.025,  // 2.5% — GOLD
+PLATINUM_COST_PCT: 0.025,  // 2.5% — PLATINUM
+DIAMOND_COST_PCT:  0.00,   // 0%   — DIAMOND: fee-free earned perk
+```
+
+### CHANGE 2 — Canonical comment added to MEMBERSHIP.TIERS ✅
+
+```typescript
+// CANONICAL — locked 2026-04-11. 5-tier repo structure is authoritative.
+// Pricing doc names (Day Pass / Annual Pass / OmniPass·Plus / Diamond)
 // refer to PASS PRODUCTS, not membership tiers.
-// Pass product eligibility by tier: see DOMAIN_GLOSSARY.md
+// Pass product eligibility by tier documented in DOMAIN_GLOSSARY.md.
 TIERS: ['VIP', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'] as const,
 ```
 
-### CHANGE 3 — DIAMOND_TIER.VOLUME_TIERS canonical comment confirmed
+### CHANGE 3 — Canonical comment added to DIAMOND_TIER.VOLUME_TIERS ✅
 
-Canonical comment added immediately above the VOLUME_TIERS array:
-
-```
+```typescript
 // CANONICAL — 3-tier structure locked 2026-04-11.
-// Pricing Architecture v1.3 5-tier Concierge table superseded by this.
+// Pricing Architecture v1.3 5-tier Concierge table is superseded by this.
 VOLUME_TIERS: [
-  { min_tokens: 10000,  max_tokens: 27499,    base_rate: 0.095 },
-  { min_tokens: 30000,  max_tokens: 57499,    base_rate: 0.088 },
+  { min_tokens: 10000,  max_tokens: 27499,  base_rate: 0.095 },
+  { min_tokens: 30000,  max_tokens: 57499,  base_rate: 0.088 },
   { min_tokens: 60000,  max_tokens: Infinity, base_rate: 0.082 },
 ],
 ```
 
-### TSC Result
+---
 
-Pre-existing errors only (unrelated to this commit):
-```
-services/core-api/src/app.module.ts(10,10): error TS2300: Duplicate identifier 'PaymentsModule'.
-services/core-api/src/app.module.ts(19,10): error TS2300: Duplicate identifier 'PaymentsModule'.
-```
-Zero new errors introduced.
+## npx tsc --noEmit Result
 
-**Result: SUCCESS**
+Command run: `yarn typecheck` (`tsc --noEmit --project tsconfig.json`)
+
+Result: Pre-existing error in `services/core-api/src/app.module.ts` (duplicate identifier `PaymentsModule`) — **confirmed pre-existing, unrelated to this task** (zero diff on that file).
+
+**Zero new TypeScript errors introduced by this change.**
 
 ---
 
-## COMMIT 2 of 4
+## Confirmation: No Service Logic Altered
 
-**HEAD:** `7d79182`
-**Message:** FIZ: Add TOKEN_EXTENSION constant block to governance.config.ts
-**File changed:** `services/core-api/src/config/governance.config.ts` (1 file, +17/0)
+- Constants and comments only.
+- No service logic changed.
+- No migrations generated or run.
+- No schema changes.
 
-### TOKEN_EXTENSION block confirmed
+---
 
-New constant block added after MEMBERSHIP section (before PRIVATE_CALL):
+## Result
 
-```typescript
-export const TOKEN_EXTENSION = {
-  OPTION_A_FEE_PCT:         0.20,  // fee = 20% of expired volume at 1K-bundle rate
-  OPTION_A_LIFESPAN_DAYS:   46,    // 45 + 1
-  OPTION_B_TOKEN_PURCHASE:  2500,
-  OPTION_B_FORFEITURE_PCT:  0.25,
-  OPTION_B_LIFESPAN_DAYS:   46,    // 45 + 1
-  OPTION_C_TOKEN_PURCHASE:  5000,
-  OPTION_C_FORFEITURE_PCT:  0.20,
-  OPTION_C_LIFESPAN_DAYS:   91,    // 90 + 1
-} as const;
-```
+**SUCCESS**
 
-No existing constants modified. No service logic. No schema changes. No migrations.
+---
 
-### TSC Result
+## Blockers
 
-Same pre-existing errors only — zero new errors introduced.
-
-**Result: SUCCESS**
+None.
