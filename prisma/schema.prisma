@@ -654,6 +654,180 @@ model CollectionsQueue {
   @@map("collections_queue")
 }
 
+// ─── GZ SCHEDULING MODULE — GuestZone Operations Scheduling ─────────────────
+// Waterfall shift model, ZoneBot lottery, multi-department coverage,
+// Ontario ESA 2026 compliance. Append-only for audit logs.
+
+model StaffMember {
+  id                String   @id @default(uuid())
+  employee_ref      String   @unique @db.VarChar(50)
+  display_name      String   @db.VarChar(100)
+  role              String   @db.VarChar(20)       // GZM, GZAM, GZS, GZSA
+  employment_type   String   @db.VarChar(10)       // FT, PT
+  staff_category    String   @db.VarChar(10)       // CORE, EDGE
+  department        String   @db.VarChar(30)       // GUESTZONE, FINANCE, TECH, LEGAL, MAINTENANCE, RECEPTION
+  languages         String[]                       // e.g. ['EN','FR','ES']
+  hourly_rate_cad   Decimal? @db.Decimal(8, 2)     // Hourly staff
+  annual_salary_cad Decimal? @db.Decimal(10, 2)    // Salaried staff
+  is_active         Boolean  @default(true)
+  hire_date         DateTime @db.Date
+  correlation_id    String   @db.VarChar(64)
+  reason_code       String   @db.VarChar(100)
+  created_at        DateTime @default(now()) @db.Timestamptz
+
+  @@map("staff_members")
+}
+
+model SchedulePeriod {
+  id                  String    @id @default(uuid())
+  period_ref          String    @unique @db.VarChar(50)
+  department          String    @db.VarChar(30)
+  period_start        DateTime  @db.Date
+  period_end          DateTime  @db.Date
+  block_cutoff_at     DateTime  @db.Timestamptz      // B-Lock: 21 days before period_start
+  final_lock_at       DateTime  @db.Timestamptz      // Final Lock: 14 days before period_start
+  status              String    @default("DRAFT") @db.VarChar(20) // DRAFT, B_LOCKED, FINAL_LOCKED, ACTIVE, ARCHIVED
+  published_by        String?   @db.Uuid
+  published_at        DateTime? @db.Timestamptz
+  correlation_id      String    @db.VarChar(64)
+  reason_code         String    @db.VarChar(100)
+  rule_applied_id     String    @default("GZ_SCHEDULE_v1") @db.VarChar(100)
+  created_at          DateTime  @default(now()) @db.Timestamptz
+
+  @@map("schedule_periods")
+}
+
+model ShiftTemplate {
+  id                String   @id @default(uuid())
+  shift_code        String   @db.VarChar(10)       // A, B, C
+  department        String   @db.VarChar(30)
+  shift_label       String   @db.VarChar(50)       // "Morning", "Swing", "Night"
+  start_time        String   @db.VarChar(5)        // "07:00" (HH:mm, America/Toronto)
+  end_time          String   @db.VarChar(5)        // "15:45"
+  duration_hours    Decimal  @db.Decimal(4, 2)     // 8.75
+  meal_break_start  String?  @db.VarChar(5)        // "11:30"
+  meal_break_mins   Int?                           // 30
+  is_active         Boolean  @default(true)
+  correlation_id    String   @db.VarChar(64)
+  reason_code       String   @db.VarChar(100)
+  rule_applied_id   String   @default("GZ_SHIFT_TEMPLATE_v1") @db.VarChar(100)
+  created_at        DateTime @default(now()) @db.Timestamptz
+
+  @@unique([shift_code, department])
+  @@map("shift_templates")
+}
+
+model ShiftAssignment {
+  id                  String   @id @default(uuid())
+  schedule_period_id  String   @db.Uuid
+  staff_member_id     String   @db.Uuid
+  shift_template_id   String   @db.Uuid
+  shift_date          DateTime @db.Date
+  override_start_time String?  @db.VarChar(5)       // Edge staff may have different start
+  override_end_time   String?  @db.VarChar(5)
+  is_stat_holiday     Boolean  @default(false)
+  pay_multiplier      Decimal  @default(1.00) @db.Decimal(3, 2) // 1.50 for stat holiday
+  assignment_source   String   @db.VarChar(20)       // ROSTER, ZONEBOT, MANUAL, SWAP
+  on_call             Boolean  @default(false)
+  meal_cover_role     Boolean  @default(false)       // True if this person covers meal breaks
+  correlation_id      String   @db.VarChar(64)
+  reason_code         String   @db.VarChar(100)
+  rule_applied_id     String   @default("GZ_SHIFT_ASSIGN_v1") @db.VarChar(100)
+  created_at          DateTime @default(now()) @db.Timestamptz
+
+  @@unique([staff_member_id, shift_date])
+  @@map("shift_assignments")
+}
+
+model ShiftGap {
+  id                  String    @id @default(uuid())
+  schedule_period_id  String    @db.Uuid
+  shift_template_id   String    @db.Uuid
+  gap_date            DateTime  @db.Date
+  department          String    @db.VarChar(30)
+  required_role       String    @db.VarChar(20)
+  status              String    @default("OPEN") @db.VarChar(20) // OPEN, BIDDING, AWARDED, FILLED, CANCELLED
+  posted_at           DateTime  @default(now()) @db.Timestamptz
+  filled_at           DateTime? @db.Timestamptz
+  filled_by           String?   @db.Uuid
+  correlation_id      String    @db.VarChar(64)
+  reason_code         String    @db.VarChar(100)
+  rule_applied_id     String    @default("GZ_SHIFT_GAP_v1") @db.VarChar(100)
+  created_at          DateTime  @default(now()) @db.Timestamptz
+
+  @@map("shift_gaps")
+}
+
+model ShiftBid {
+  id              String    @id @default(uuid())
+  shift_gap_id    String    @db.Uuid
+  staff_member_id String    @db.Uuid
+  lottery_position Int?                           // 1, 2, or 3 (assigned by ZoneBot)
+  status          String    @default("PENDING") @db.VarChar(20) // PENDING, POSITION_ASSIGNED, OFFERED, ACCEPTED, DECLINED, EXPIRED
+  offered_at      DateTime? @db.Timestamptz
+  expires_at      DateTime? @db.Timestamptz       // 16-hour confirmation clock
+  responded_at    DateTime? @db.Timestamptz
+  suppressed_until DateTime? @db.Date             // Suppressed for next 2 cycles after award
+  correlation_id  String    @db.VarChar(64)
+  reason_code     String    @db.VarChar(100)
+  rule_applied_id String    @default("GZ_ZONEBOT_BID_v1") @db.VarChar(100)
+  created_at      DateTime  @default(now()) @db.Timestamptz
+
+  @@unique([shift_gap_id, staff_member_id])
+  @@map("shift_bids")
+}
+
+// Append-only: no UPDATE or DELETE permitted
+model ScheduleAuditLog {
+  id              String   @id @default(uuid())
+  event_type      String   @db.VarChar(50)        // PERIOD_CREATED, SHIFT_ASSIGNED, GAP_POSTED, LOTTERY_RUN, BID_AWARDED, COMPLIANCE_VIOLATION, COVERAGE_GAP
+  actor_id        String   @db.VarChar(100)       // Staff ID or 'ZONEBOT'
+  target_id       String?  @db.VarChar(100)       // Entity being acted upon
+  target_type     String?  @db.VarChar(30)        // PERIOD, SHIFT, GAP, BID, STAFF
+  department      String?  @db.VarChar(30)
+  details         Json?                           // Structured event payload
+  correlation_id  String   @db.VarChar(64)
+  reason_code     String   @db.VarChar(100)
+  rule_applied_id String   @default("GZ_SCHEDULE_AUDIT_v1") @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@map("schedule_audit_log")
+}
+
+model DepartmentCoverage {
+  id                  String   @id @default(uuid())
+  department          String   @db.VarChar(30)
+  day_of_week         Int                          // 0=Mon, 6=Sun
+  coverage_start      String   @db.VarChar(5)      // "09:00"
+  coverage_end        String   @db.VarChar(5)      // "21:00"
+  min_staff_count     Int
+  min_supervisor_count Int     @default(1)
+  requires_manager    Boolean  @default(false)
+  is_on_call_only     Boolean  @default(false)     // e.g. Legal weekends
+  crossover_mins      Int      @default(30)        // Handoff/crossover buffer
+  correlation_id      String   @db.VarChar(64)
+  reason_code         String   @db.VarChar(100)
+  rule_applied_id     String   @default("GZ_DEPT_COVERAGE_v1") @db.VarChar(100)
+  created_at          DateTime @default(now()) @db.Timestamptz
+
+  @@unique([department, day_of_week, coverage_start])
+  @@map("department_coverage")
+}
+
+model StatHoliday {
+  id              String   @id @default(uuid())
+  holiday_date    DateTime @unique @db.Date
+  holiday_name    String   @db.VarChar(100)
+  pay_multiplier  Decimal  @default(1.50) @db.Decimal(3, 2) // 1.5x Premium Pay
+  requires_on_call_manager Boolean @default(true)
+  correlation_id  String   @db.VarChar(64)
+  reason_code     String   @db.VarChar(100)
+  rule_applied_id String   @default("GZ_STAT_HOLIDAY_v1") @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@map("stat_holidays")
+}
+
 // ── PROC-001: Webhook Idempotency Log (append-only — no UPDATE or DELETE permitted) ──
 model WebhookIdempotencyLog {
   id             String   @id @default(uuid())

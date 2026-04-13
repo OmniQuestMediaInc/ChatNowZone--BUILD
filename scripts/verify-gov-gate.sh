@@ -15,11 +15,18 @@
 #   ./scripts/verify-gov-gate.sh GOV-AGCO
 #
 # Exit codes:
-#   0 — gate is CLEARED and CEO-acknowledged
+#   0 — gate is CLEARED (full legal clearance) or CEO_AUTHORIZED_STAGED
+#         (staged CEO authorization), and CEO-acknowledged
 #   1 — gate is NOT cleared, or no record exists, or record is malformed
 #   2 — usage error
 #
 # Notes:
+# - For gate-specific files (<GATE_ID>-YYYY-MM-DD.md), the verifier
+#   accepts status: CLEARED (full clearance) as a valid exit-0.
+# - If no gate-specific file exists, the verifier falls back to the
+#   latest CEO-AUTHORIZED-STAGED-*.md file and accepts
+#   status: CEO_AUTHORIZED_STAGED as a valid exit-0, provided the
+#   requested gate appears in the gates_covered field.
 # - Reads the latest (lexicographically greatest) clearance file for
 #   the gate id. Filenames are <GATE_ID>-YYYY-MM-DD.md so lex order
 #   == date order.
@@ -49,35 +56,8 @@ if [ ! -d "${CLEARANCE_DIR}" ]; then
   exit 1
 fi
 
-# Collect candidate clearance files for this gate id.
-shopt -s nullglob
-CANDIDATES=("${CLEARANCE_DIR}/${GATE_ID}"-*.md)
-shopt -u nullglob
-
-if [ "${#CANDIDATES[@]}" -eq 0 ]; then
-  echo "FAIL — no clearance record for ${GATE_ID}" >&2
-  echo "       expected: ${CLEARANCE_DIR}/${GATE_ID}-YYYY-MM-DD.md" >&2
-  echo "       see PROGRAM_CONTROL/CLEARANCES/README.md for the signing contract" >&2
-  exit 1
-fi
-
-# Pick the lexicographically latest record.
-LATEST="$(printf '%s\n' "${CANDIDATES[@]}" | LC_ALL=C sort | tail -n 1)"
-
-# Extract YAML frontmatter between the first two '---' lines.
-FRONTMATTER="$(awk '
-  /^---[[:space:]]*$/ { count++; next }
-  count == 1         { print }
-  count >= 2         { exit }
-' "${LATEST}")"
-
-if [ -z "${FRONTMATTER}" ]; then
-  echo "FAIL — ${LATEST}: missing or empty YAML frontmatter" >&2
-  exit 1
-fi
-
 # Read a scalar field from the frontmatter. Handles optional quotes
-# and trailing '# comment'.
+# and trailing '# comment'. Reads from the ${FRONTMATTER} variable.
 get_field() {
   local key="$1"
   printf '%s\n' "${FRONTMATTER}" | awk -v key="${key}" '
@@ -102,6 +82,77 @@ get_field() {
     }
   '
 }
+
+# Collect candidate clearance files for this gate id.
+shopt -s nullglob
+CANDIDATES=("${CLEARANCE_DIR}/${GATE_ID}"-*.md)
+shopt -u nullglob
+
+if [ "${#CANDIDATES[@]}" -eq 0 ]; then
+  # No gate-specific file: check CEO-AUTHORIZED-STAGED fallback.
+  shopt -s nullglob
+  STAGED_CANDIDATES=("${CLEARANCE_DIR}/CEO-AUTHORIZED-STAGED"-*.md)
+  shopt -u nullglob
+
+  if [ "${#STAGED_CANDIDATES[@]}" -eq 0 ]; then
+    echo "FAIL — no clearance record for ${GATE_ID}" >&2
+    echo "       expected: ${CLEARANCE_DIR}/${GATE_ID}-YYYY-MM-DD.md" >&2
+    echo "       see PROGRAM_CONTROL/CLEARANCES/README.md for the signing contract" >&2
+    exit 1
+  fi
+
+  # Use latest staged auth file (lex order == date order).
+  LATEST="$(printf '%s\n' "${STAGED_CANDIDATES[@]}" | LC_ALL=C sort | tail -n 1)"
+
+  FRONTMATTER="$(awk '
+    /^---[[:space:]]*$/ { count++; next }
+    count == 1         { print }
+    count >= 2         { exit }
+  ' "${LATEST}")"
+
+  if [ -z "${FRONTMATTER}" ]; then
+    echo "FAIL — ${LATEST}: missing or empty YAML frontmatter" >&2
+    exit 1
+  fi
+
+  STAGED_STATUS="$(get_field status)"
+  STAGED_ACK="$(get_field ceo_acknowledgment)"
+  STAGED_GATES="$(get_field gates_covered)"
+  REL_PATH="${LATEST#${REPO_ROOT}/}"
+
+  if [ "${STAGED_STATUS}" != "CEO_AUTHORIZED_STAGED" ]; then
+    echo "FAIL — ${REL_PATH}: staged authorization status is '${STAGED_STATUS}', expected 'CEO_AUTHORIZED_STAGED'" >&2
+    exit 1
+  fi
+
+  if [ "${STAGED_ACK}" != "SIGNED" ]; then
+    echo "FAIL — ${REL_PATH}: ceo_acknowledgment is '${STAGED_ACK}', expected 'SIGNED'" >&2
+    exit 1
+  fi
+
+  if ! printf '%s\n' "${STAGED_GATES}" | grep -qw "${GATE_ID}"; then
+    echo "FAIL — ${REL_PATH}: gates_covered does not include '${GATE_ID}'" >&2
+    exit 1
+  fi
+
+  echo "PASS — ${GATE_ID} CEO_AUTHORIZED_STAGED — evidence: ${REL_PATH}"
+  exit 0
+fi
+
+# Pick the lexicographically latest record.
+LATEST="$(printf '%s\n' "${CANDIDATES[@]}" | LC_ALL=C sort | tail -n 1)"
+
+# Extract YAML frontmatter between the first two '---' lines.
+FRONTMATTER="$(awk '
+  /^---[[:space:]]*$/ { count++; next }
+  count == 1         { print }
+  count >= 2         { exit }
+' "${LATEST}")"
+
+if [ -z "${FRONTMATTER}" ]; then
+  echo "FAIL — ${LATEST}: missing or empty YAML frontmatter" >&2
+  exit 1
+fi
 
 FILE_GATE_ID="$(get_field gate_id)"
 STATUS="$(get_field status)"
