@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `119517f19ecbf253ff2091669483c7da4220e73d`
-**Generated:** 2026-04-13T13:16:54Z
+**Branch:** `claude/add-directives-queue-YqGjM`
+**Commit:** `8d4460e60b8a4e803553fbad2bd3ab79fe892a4c`
+**Generated:** 2026-04-13T21:18:38Z
 
 ## All Files
 
@@ -48,6 +48,8 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/DFSP-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/GOV-CONST-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/M5-VOICE-SAMPLE-COLLECTION.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/NATS-DFSP001-TOPICS.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
