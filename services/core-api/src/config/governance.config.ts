@@ -53,6 +53,8 @@ export const DIAMOND_TIER = {
   EXPIRED_CREATOR_POOL_PCT: 0.70,        // % of expired tokens to creator bonus pool
   EXPIRED_PLATFORM_MGMT_PCT: 0.30,       // % retained by OQMI as management fee
   VIP_BASELINE_PER_1000: 0.12,           // Comparison baseline shown in estimator
+  // CANONICAL — 3-tier structure locked 2026-04-11.
+  // Pricing Architecture v1.3 5-tier Concierge table is superseded by this.
   VOLUME_TIERS: [
     { min_tokens: 10000,  max_tokens: 27499,  base_rate: 0.095 },
     { min_tokens: 30000,  max_tokens: 57499,  base_rate: 0.088 },
@@ -69,10 +71,11 @@ export const DIAMOND_TIER = {
 
 // ─── SHOWTOKEN EXCHANGE COSTS (ShowZone → Regular) ───────────────────────────
 export const SHOWTOKEN_EXCHANGE = {
-  SILVER_COST_PCT:   0.20,
-  GOLD_COST_PCT:     0.15,
-  PLATINUM_COST_PCT: 0.10,
-  DIAMOND_COST_PCT:  0.00,
+  VIP_COST_PCT:      0.05,   // 5%   — VIP: highest friction
+  SILVER_COST_PCT:   0.04,   // 4%   — SILVER
+  GOLD_COST_PCT:     0.025,  // 2.5% — GOLD
+  PLATINUM_COST_PCT: 0.025,  // 2.5% — PLATINUM
+  DIAMOND_COST_PCT:  0.00,   // 0%   — DIAMOND: fee-free earned perk
   DIAMOND_FLOOR_RATE: 0.065,             // Break-even rate for Diamond conversion
   SETTLEMENT_DAYS_MIN: 3,
   SETTLEMENT_DAYS_MAX: 5,
@@ -193,6 +196,10 @@ export const WRISTBAND = {
 
 // ─── MEMBERSHIP TIERS ─────────────────────────────────────────────────────────
 export const MEMBERSHIP = {
+  // CANONICAL — locked 2026-04-11. 5-tier repo structure is authoritative.
+  // Pricing doc names (Day Pass / Annual Pass / OmniPass·Plus / Diamond)
+  // refer to PASS PRODUCTS, not membership tiers.
+  // Pass product eligibility by tier documented in DOMAIN_GLOSSARY.md.
   TIERS: ['VIP', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'] as const,
   BUNDLE_TENURE_GATE_WEEKS: 5,           // Limited menu for first 5 weeks
   BUNDLE_CAPS: {
@@ -209,6 +216,23 @@ export const MEMBERSHIP = {
     { paid_months: 6,  bonus_months: 2, loyalty_multiplier: 1.2 },
     { paid_months: 12, bonus_months: 3, loyalty_multiplier: 1.5 },
   ],
+} as const;
+
+// ─── TOKEN EXTENSION ──────────────────────────────────────────────────────────
+export const TOKEN_EXTENSION = {
+  // Option A: pay extension fee on expired tokens — no new token purchase
+  OPTION_A_FEE_PCT:         0.20,  // fee = 20% of expired volume at 1K-bundle rate
+  OPTION_A_LIFESPAN_DAYS:   46,    // 45 + 1
+
+  // Option B: buy 2500 new tokens at VIP rate — 25% of expired volume forfeited
+  OPTION_B_TOKEN_PURCHASE:  2500,
+  OPTION_B_FORFEITURE_PCT:  0.25,
+  OPTION_B_LIFESPAN_DAYS:   46,    // 45 + 1
+
+  // Option C: buy 5000 new tokens at VIP rate — 20% of expired volume forfeited
+  OPTION_C_TOKEN_PURCHASE:  5000,
+  OPTION_C_FORFEITURE_PCT:  0.20,
+  OPTION_C_LIFESPAN_DAYS:   91,    // 90 + 1
 } as const;
 
 // ─── PRIVATE CALL (PrivateCall Feature) ───────────────────────────────────────
@@ -228,4 +252,59 @@ export const GAMIFICATION = {
   GAME_TYPES: ['SPIN_WHEEL', 'SLOT_MACHINE', 'DICE'] as const,
   DICE_RANGE: { min: 2, max: 12 },       // Sum of 2d6
   PHASE2_SEAT_CAPACITY_WINDOW: 0.25,     // Phase 2 = 25% of Phase 1 attendee count
+} as const;
+
+// ─── GZ SCHEDULING — GuestZone Operations Scheduling Config ─────────────────
+export const GZ_SCHEDULING = {
+  // ── Rolling Two-Week Cycle ──────────────────────────────────────────────
+  PERIOD_LENGTH_DAYS: 14,
+  BLOCK_CUTOFF_DAYS_BEFORE: 21,          // B-Lock closes 21 days before period start
+  FINAL_LOCK_DAYS_BEFORE: 14,            // Schedule locked 14 days before period start
+  BLOCK_REMINDER_DAYS: [24, 22],         // Automated reminders sent at these intervals
+
+  // ── ZoneBot 1-2-3 Rule ─────────────────────────────────────────────────
+  ZONEBOT_MAX_LOTTERY_POSITIONS: 3,      // Positions 1, 2, 3
+  ZONEBOT_CONFIRMATION_HOURS: 16,        // 16-hour confirmation clock
+  ZONEBOT_SUPPRESSION_CYCLES: 2,         // Awarded staff suppressed for 2 subsequent cycles
+
+  // ── Ontario ESA 2026 Compliance ────────────────────────────────────────
+  SHIFT_NOTICE_HOURS: 96,               // 96 hours notice for schedules
+  SHIFT_CHANGE_NOTICE_HOURS: 24,        // 24 hours notice for changes
+  MAX_CONSECUTIVE_DAYS: 6,              // No 7-day streaks (min 1 day off per 7)
+  MIN_CONSECUTIVE_DAYS_OFF_FT: 2,       // Full-time: 2 consecutive days off
+  MIN_CONSECUTIVE_DAYS_OFF_PT: 3,       // Part-time Edge: 3 consecutive days off
+  MAX_DAILY_HOURS: 8,                   // Standard 8-hour day
+  MAX_WEEKLY_HOURS_STANDARD: 44,        // Ontario ESA standard
+  MAX_WEEKLY_HOURS_EXCESS: 48,          // With excess hours agreement
+  MIN_VACATION_DAYS_ANNUAL: 10,         // 2 weeks minimum (FT)
+
+  // ── Stat Holiday Pay ───────────────────────────────────────────────────
+  STAT_HOLIDAY_PAY_MULTIPLIER: 1.50,    // 1.5x Premium Pay
+  STAT_HOLIDAY_INCLUDES_PUBLIC_PAY: true,
+
+  // ── Transit Safety ─────────────────────────────────────────────────────
+  TRANSIT_UNSAFE_START_HOUR: 0,          // Midnight
+  TRANSIT_UNSAFE_END_HOUR: 6.25,        // 6:15 AM — no shifts start/end in this window
+
+  // ── Waterfall Shift Blocks (GuestZone) ─────────────────────────────────
+  SHIFTS: {
+    A: { code: 'A', label: 'Morning',  start: '07:00', end: '15:45', duration_hours: 8.75, meal_break_start: '11:30', meal_break_mins: 30 },
+    B: { code: 'B', label: 'Swing',    start: '15:15', end: '00:00', duration_hours: 8.75, meal_break_start: '19:30', meal_break_mins: 30 },
+    C: { code: 'C', label: 'Night',    start: '23:30', end: '08:15', duration_hours: 8.75, meal_break_start: '03:00', meal_break_mins: 30 },
+  },
+
+  // ── Minimum Coverage Baselines ─────────────────────────────────────────
+  GZ_MIN_AGENTS_PER_SHIFT: 3,           // 3-GZSA baseline during peak traffic
+  GZ_DIALPAD_LICENSES: 4,               // 4 Dialpad licenses, 1 "Safety Seat" open
+  GZ_CROSSOVER_MINS: 15,                // 15-minute staggered crossover
+
+  // ── Departmental Hours ─────────────────────────────────────────────────
+  DEPARTMENTS: {
+    GUESTZONE:   { hours_24_7: true },
+    FINANCE:     { start: '09:00', end: '21:00', days: 'DAILY' },
+    TECH:        { hours_24_7: true },
+    LEGAL:       { start: '09:00', end: '20:00', days: 'MON_FRI', on_call_24_7: true },
+    MAINTENANCE: { start: '07:00', end: '22:00', days: 'DAILY' },
+    RECEPTION:   { start: '08:00', end: '17:00', days: 'DAILY' },
+  },
 } as const;

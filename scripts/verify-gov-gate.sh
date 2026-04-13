@@ -15,11 +15,18 @@
 #   ./scripts/verify-gov-gate.sh GOV-AGCO
 #
 # Exit codes:
-#   0 — gate is CLEARED and CEO-acknowledged
+#   0 — gate is CLEARED (full legal clearance) or CEO_AUTHORIZED_STAGED
+#         (staged CEO authorization), and CEO-acknowledged
 #   1 — gate is NOT cleared, or no record exists, or record is malformed
 #   2 — usage error
 #
 # Notes:
+# - For gate-specific files (<GATE_ID>-YYYY-MM-DD.md), the verifier
+#   accepts status: CLEARED (full clearance) as a valid exit-0.
+# - If no gate-specific file exists, the verifier falls back to the
+#   latest CEO-AUTHORIZED-STAGED-*.md file and accepts
+#   status: CEO_AUTHORIZED_STAGED as a valid exit-0, provided the
+#   requested gate appears in the gates_covered field.
 # - Reads the latest (lexicographically greatest) clearance file for
 #   the gate id. Filenames are <GATE_ID>-YYYY-MM-DD.md so lex order
 #   == date order.
