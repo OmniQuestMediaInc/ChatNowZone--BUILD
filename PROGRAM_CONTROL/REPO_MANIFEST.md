@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/m5-reseed-2-readd`
-**Commit:** `ec496938d0b246caa2bad80a5aa4ee42805e49f3`
-**Generated:** 2026-04-13T23:02:14Z
+**Branch:** `claude/m5-reseed-1-remove`
+**Commit:** `77ed716e730dbbfdcd92dd3492c9985042794bfd`
+**Generated:** 2026-04-13T23:03:20Z
 
 ## All Files
 
@@ -51,7 +51,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/DFSP-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/GOV-CONST-001.md`
-- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/M5-VOICE-SAMPLE-COLLECTION.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/NATS-DFSP001-TOPICS.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
