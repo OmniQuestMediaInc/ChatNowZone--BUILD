@@ -54,7 +54,7 @@ export const DIAMOND_TIER = {
   EXPIRED_PLATFORM_MGMT_PCT: 0.30,       // % retained by OQMI as management fee
   VIP_BASELINE_PER_1000: 0.12,           // Comparison baseline shown in estimator
   // CANONICAL — 3-tier structure locked 2026-04-11.
-  // Pricing Architecture v1.3 5-tier Concierge table superseded by this.
+  // Pricing Architecture v1.3 5-tier Concierge table is superseded by this.
   VOLUME_TIERS: [
     { min_tokens: 10000,  max_tokens: 27499,  base_rate: 0.095 },
     { min_tokens: 30000,  max_tokens: 57499,  base_rate: 0.088 },
@@ -71,11 +71,11 @@ export const DIAMOND_TIER = {
 
 // ─── SHOWTOKEN EXCHANGE COSTS (ShowZone → Regular) ───────────────────────────
 export const SHOWTOKEN_EXCHANGE = {
-  VIP_COST_PCT:      0.05,   // 5%   — highest friction
-  SILVER_COST_PCT:   0.04,   // 4%
-  GOLD_COST_PCT:     0.025,  // 2.5%
-  PLATINUM_COST_PCT: 0.025,  // 2.5%
-  DIAMOND_COST_PCT:  0.00,   // 0%   — fee-free earned perk, locked 2026-04-11
+  VIP_COST_PCT:      0.05,   // 5%   — VIP: highest friction
+  SILVER_COST_PCT:   0.04,   // 4%   — SILVER
+  GOLD_COST_PCT:     0.025,  // 2.5% — GOLD
+  PLATINUM_COST_PCT: 0.025,  // 2.5% — PLATINUM
+  DIAMOND_COST_PCT:  0.00,   // 0%   — DIAMOND: fee-free earned perk
   DIAMOND_FLOOR_RATE: 0.065,             // Break-even rate for Diamond conversion
   SETTLEMENT_DAYS_MIN: 3,
   SETTLEMENT_DAYS_MAX: 5,
@@ -196,10 +196,10 @@ export const WRISTBAND = {
 
 // ─── MEMBERSHIP TIERS ─────────────────────────────────────────────────────────
 export const MEMBERSHIP = {
-  // CANONICAL — 5-tier repo structure locked 2026-04-11.
-  // Pricing doc names (Day Pass / Annual Pass / OmniPass Plus / Diamond)
+  // CANONICAL — locked 2026-04-11. 5-tier repo structure is authoritative.
+  // Pricing doc names (Day Pass / Annual Pass / OmniPass·Plus / Diamond)
   // refer to PASS PRODUCTS, not membership tiers.
-  // Pass product eligibility by tier: see DOMAIN_GLOSSARY.md
+  // Pass product eligibility by tier documented in DOMAIN_GLOSSARY.md.
   TIERS: ['VIP', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'] as const,
   BUNDLE_TENURE_GATE_WEEKS: 5,           // Limited menu for first 5 weeks
   BUNDLE_CAPS: {
