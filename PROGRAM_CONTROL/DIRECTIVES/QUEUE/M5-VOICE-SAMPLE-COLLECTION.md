@@ -150,6 +150,6 @@ Must include:
 - VoiceSample schema confirmed from PV-001 -- no migrations
 - updateMany SUPERSEDED write exception documented
 - Encrypted path reference pattern confirmed -- no raw audio in DB
-- All 15 invariants confirmed or flagged
+- All 11 invariants confirmed or flagged
 - Multi-tenant confirmed
 - npx tsc --noEmit result -- zero new errors
