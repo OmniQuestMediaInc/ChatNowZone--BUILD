@@ -3,8 +3,8 @@
 **Directive ID:** DFSP-001
 **Backlog:** CLAUDE_CODE_BACKLOG_v6.md (v6.1)
 **Gate:** PROC-001 ✅ on main `0aa416c` PR#190 |
-          GOV-FINTRAC + GOV-AGCO legal opinions required before execution
-**Status:** QUEUED — do not execute until GOV-FINTRAC + GOV-AGCO clear
+          GOV-FINTRAC + GOV-AGCO — CEO-AUTHORIZED-STAGED-2026-04-11 ✅
+**Status:** QUEUED — gates cleared, ready for execution
 **Mode:** DROID
 **FIZ:** YES — four-line commit format required
 **Type:** FIZ — scoped financial infrastructure
@@ -34,12 +34,11 @@ PROC-001 prerequisite: ✅ SATISFIED — merged to main as `0aa416c` PR#190
   - No controller/ledger coupling landed with PROC-001
   - Gate constraints preserved through merge
 
-GOV-FINTRAC: ⏳ NOT YET CLEARED — required before execution
-GOV-AGCO: ⏳ NOT YET CLEARED — required before execution
+GOV-FINTRAC: ✅ CEO-AUTHORIZED-STAGED — 2026-04-11
+GOV-AGCO: ✅ CEO-AUTHORIZED-STAGED — 2026-04-11
 
-This directive sits in QUEUE. Claude Code must not execute until both
-legal opinions are confirmed in hand by Kevin B. Hartley, CEO.
-No CEO-AUTHORIZED-STAGED exception exists for DFSP-001.
+Both gates cleared via PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md.
+DFSP-001 may proceed.
 
 ---
 

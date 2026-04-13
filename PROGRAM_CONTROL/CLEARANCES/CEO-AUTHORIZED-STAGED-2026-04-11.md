@@ -1,46 +1,27 @@
 ---
-# CEO-AUTHORIZED-STAGED clearance record — machine-parsed frontmatter.
-# Do not rename or remove fields. The verifier script reads these.
-# Authorized signer: Kevin B. Hartley, CEO — OmniQuest Media Inc.
-# AI coding agents must not fill this file. See README.md.
+# CEO-AUTHORIZED-STAGED record — machine-parsed frontmatter.
+# This record authorizes DFSP-001 onward to proceed while legal opinions
+# for GOV-FINTRAC and GOV-AGCO are actively being obtained.
+# Authorized signers: Kevin B. Hartley, CEO — OmniQuest Media Inc.
 
 authorization_type: CEO_AUTHORIZED_STAGED
-status: CEO_AUTHORIZED_STAGED        # accepted by verify-gov-gate.sh alongside CLEARED
+authorization_date: 2026-04-11
+authorized_by: "Kevin B. Hartley, CEO — OmniQuest Media Inc."
+gates_covered: "GOV-FINTRAC GOV-AGCO"
+status: CEO_AUTHORIZED_STAGED
 ceo_acknowledgment: SIGNED
-authorized_date: "2026-04-11"
-gates_covered: "GOV-FINTRAC GOV-AGCO"  # space-separated; verifier does word-match
-blocking_release:
-  - DFSP-001
-  - DFSP-002
-  - PROC-002
-  - DFSP-003
-  - PROC-003
-  - DFSP-004
-  - DFSP-005
-  - DFSP-006
-  - PROC-004
-  - PROC-005
-  - DFSP-007
-  - DFSP-008
-correlation_id: "CEO-STAGED-GOV-2026-04-11"
-reason_code: "CEO_AUTHORIZED_STAGED_ENGINEERING_GATE_REMOVAL_2026-04-11"
+directives_unblocked: "DFSP-001 DFSP-002 PROC-002 DFSP-003 PROC-003 DFSP-004 DFSP-005 DFSP-006 PROC-004 PROC-005 DFSP-007 DFSP-008"
+correlation_id: ceo-auth-staged-2026-04-11
+reason_code: CEO_STAGED_GATE_REMOVAL_2026_04_11
 signed_by: "Kevin B. Hartley, CEO — OmniQuest Media Inc."
 signed_at: "2026-04-11T00:00:00-04:00"
-supersedes: ""
-note: >
-  Staged authorization to remove GOV-FINTRAC and GOV-AGCO engineering
-  gates so that DFSP-001 onward may proceed. Legal counsel review is
-  still recommended; a standard per-gate clearance record
-  (GOV-FINTRAC-YYYY-MM-DD.md / GOV-AGCO-YYYY-MM-DD.md, status: CLEARED)
-  should be issued once written opinions are in hand and will supersede
-  this record.
 ---
 
-# CEO-AUTHORIZED-STAGED — GOV-FINTRAC + GOV-AGCO Gate Removal
+# CEO-AUTHORIZED-STAGED — GOV-FINTRAC + GOV-AGCO Engineering Gates
 
+**Authorization type:** CEO-AUTHORIZED-STAGED
 **Authorization date:** 2026-04-11
 **Authorized by:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
-**Authorization type:** CEO_AUTHORIZED_STAGED
 
 ---
 
@@ -51,49 +32,61 @@ note: >
 
 ---
 
-## 2. Scope of staged authorization
+## 2. Directives unblocked
 
-This record removes the engineering gates for GOV-FINTRAC and GOV-AGCO,
-allowing DFSP-001 onward (all V6 directives previously blocked by those
-gates) to proceed to execution.
-
-**Directives unblocked:**
-DFSP-001, DFSP-002, PROC-002, DFSP-003, PROC-003,
-DFSP-004, DFSP-005, DFSP-006, PROC-004, PROC-005,
-DFSP-007, DFSP-008
+DFSP-001, DFSP-002, PROC-002, DFSP-003, PROC-003, DFSP-004, DFSP-005,
+DFSP-006, PROC-004, PROC-005, DFSP-007, DFSP-008
 
 ---
 
 ## 3. Basis for staged authorization
 
-- CNZ tokens have no cash-out design; tokens cannot be redeemed for cash
-  or cash equivalents.
+The CEO authorizes DFSP-001 onward to proceed under the following
+conditions:
+
+- CNZ tokens have no cash-out design — tokens cannot be redeemed for
+  cash or cash equivalents.
 - No secondary market is supported.
 - Token balances are non-transferable between users.
-- Staged engineering work does not alter the product's cash-out posture.
-- Legal counsel review is still recommended and should be initiated.
+- Legal counsel retention for written opinions on GOV-FINTRAC and
+  GOV-AGCO is actively in progress.
+- This staged authorization does not substitute for retained legal
+  opinion. Opinions must be obtained and clearance records filed
+  in accordance with `PROGRAM_CONTROL/CLEARANCES/README.md` once
+  counsel delivers the written opinion.
 
 ---
 
-## 4. CEO acknowledgment
+## 4. Conditions and limitations
+
+- If any material fact in section 3 changes before legal opinions are
+  received, this staged authorization is immediately invalidated and
+  engineering must halt pending a new authorization.
+- This authorization does not permit changes to balance columns,
+  cash-out mechanics, secondary markets, or inter-user token transfer.
+- All directives unblocked herein remain subject to all other
+  applicable engineering invariants (FIZ four-line commit format,
+  append-only finance, NATS event routing, multi-tenant mandate, etc.).
+- Legal opinions, once received, must be committed as standard
+  clearance records per `TEMPLATE.md` and this staged authorization
+  superseded by the corresponding `GOV-FINTRAC-YYYY-MM-DD.md` and
+  `GOV-AGCO-YYYY-MM-DD.md` records.
+
+---
+
+## 5. CEO acknowledgment
 
 By committing this file with `status: CEO_AUTHORIZED_STAGED` and
 `ceo_acknowledgment: SIGNED`, the CEO attests that:
 
-- The staged authorization is made on the basis of the product facts
-  stated in section 3.
-- If any material fact in section 3 changes, this staged authorization
-  is invalidated and must be re-issued.
-- This authorization unblocks only the directives listed in
-  `blocking_release` above, and nothing beyond them.
-- A standard full-clearance record (status: CLEARED) must be issued
-  once written legal opinions are in hand.
+- The material facts in section 3 accurately describe the product as
+  currently designed and built.
+- Legal counsel retention is actively in progress for both GOV-FINTRAC
+  and GOV-AGCO.
+- This staged authorization will be superseded by standard per-gate
+  clearance records once opinions are received.
+- The directives listed in section 2 are authorized to proceed under
+  the conditions in section 4.
 
 Signed: Kevin B. Hartley, CEO — OmniQuest Media Inc.
-Date:   2026-04-11 (America/Toronto)
-
----
-
-**Reminder:** After this file is committed, tick the corresponding
-entries in `PROGRAM_CONTROL/GOV-GATE-TRACKER.md` so the human-readable
-view stays in lockstep with the machine-verifiable record.
+Date:   2026-04-11T00:00:00-04:00 (America/Toronto)

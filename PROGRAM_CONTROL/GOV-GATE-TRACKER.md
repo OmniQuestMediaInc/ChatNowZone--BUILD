@@ -10,17 +10,14 @@ Authority: Kevin B. Hartley, CEO — OmniQuest Media Inc.
 **Primary defence:** No cash-out design — tokens cannot be redeemed
 for cash or cash equivalents.
 **Risk signal:** 50 recent MSB revocations indicate active enforcement.
-**Status:** ✅ CEO-AUTHORIZED-STAGED — engineering gate removed 2026-04-11
-**Engineering gate:** REMOVED — see `PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md`
+**Status:** ✅ CEO-AUTHORIZED-STAGED — 2026-04-11
+**Staged authorization:** PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md
 **Counsel retained:** [ ] Not yet / [ ] Yes — retained on: ___________
 **Opinion received:** [ ] Not yet / [ ] Yes — received on: ___________
 **Filed to Drive INTEL:** [ ] Not yet / [ ] Yes
-**Note:** Legal opinion still recommended; staged authorization allows
-engineering to proceed. When counsel opinion is received, replace with
-a standard `GOV-FINTRAC-YYYY-MM-DD.md` clearance record (status: CLEARED).
-**Blocking:** ~~DFSP-001, DFSP-002, PROC-002, DFSP-003, PROC-003,~~
-             ~~DFSP-004, DFSP-005, DFSP-006, PROC-004, PROC-005,~~
-             ~~DFSP-007, DFSP-008~~ — unblocked by CEO-AUTHORIZED-STAGED-2026-04-11
+**Blocking:** ~~DFSP-001, DFSP-002, PROC-002, DFSP-003, PROC-003,
+             DFSP-004, DFSP-005, DFSP-006, PROC-004, PROC-005,
+             DFSP-007, DFSP-008~~ — UNBLOCKED by CEO-AUTHORIZED-STAGED-2026-04-11
 
 ---
 
@@ -29,14 +26,12 @@ a standard `GOV-FINTRAC-YYYY-MM-DD.md` clearance record (status: CLEARED).
 **Question:** Are CNZ tokens gambling-adjacent under AGCO rules?
 **Primary defence:** Documentation that tokens have no cash-out value
 and cannot be redeemed for cash or cash equivalents.
-**Status:** ✅ CEO-AUTHORIZED-STAGED — engineering gate removed 2026-04-11
-**Engineering gate:** REMOVED — see `PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md`
+**Status:** ✅ CEO-AUTHORIZED-STAGED — 2026-04-11
+**Staged authorization:** PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md
 **Documentation prepared:** [ ] Not yet / [ ] Yes — prepared on: ______
 **Counsel reviewed:** [ ] Not yet / [ ] Yes — reviewed on: ____________
 **Filed to Drive INTEL:** [ ] Not yet / [ ] Yes
-**Note:** Same staged authorization as GOV-FINTRAC. When counsel review
-is complete, replace with `GOV-AGCO-YYYY-MM-DD.md` (status: CLEARED).
-**Blocking:** ~~Same as GOV-FINTRAC above~~ — unblocked by CEO-AUTHORIZED-STAGED-2026-04-11
+**Blocking:** ~~Same as GOV-FINTRAC above~~ — UNBLOCKED by CEO-AUTHORIZED-STAGED-2026-04-11
 
 ---
 
@@ -66,22 +61,28 @@ across jurisdictions (provincial, federal, global)
 | Directive | Authorization date | Scope |
 |---|---|---|
 | PROC-001 | 2026-04-10 | Webhook infrastructure only — no ledger writes, no balance columns, no transaction execution |
-| DFSP-001 onward | 2026-04-11 | All GOV-FINTRAC + GOV-AGCO gated directives — staged engineering authorization; legal opinion still recommended |
+| DFSP-001 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-002 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| PROC-002 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-003 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| PROC-003 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-004 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-005 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-006 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| PROC-004 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| PROC-005 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-007 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
+| DFSP-008 | 2026-04-11 | GOV-FINTRAC + GOV-AGCO gates staged — proceed while legal opinions are in process |
 
 ---
 
 ## Evidentiary records (machine-verifiable)
 
 Per-gate clearance artifacts live in `PROGRAM_CONTROL/CLEARANCES/`.
-Each file carries YAML frontmatter that the gate verifier script reads.
-
-**Standard clearance** (`GOV-FINTRAC-YYYY-MM-DD.md`, `GOV-AGCO-YYYY-MM-DD.md`):
-fields `gate_id`, `status: CLEARED`, `ceo_acknowledgment: SIGNED`.
-
-**Staged authorization** (`CEO-AUTHORIZED-STAGED-YYYY-MM-DD.md`):
-fields `status: CEO_AUTHORIZED_STAGED`, `ceo_acknowledgment: SIGNED`,
-`gates_covered` listing gates covered by this authorization.
-Current: `PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md`
+Each file carries YAML frontmatter with `gate_id`, `status`, and
+`ceo_acknowledgment` fields that the gate verifier script reads.
+CEO-AUTHORIZED-STAGED authorization records carry `gates_covered`,
+`status: CEO_AUTHORIZED_STAGED`, and `ceo_acknowledgment: SIGNED`.
 
 Machine check (run from repo root before any gated directive):
 ```bash
@@ -89,11 +90,11 @@ Machine check (run from repo root before any gated directive):
 ./scripts/verify-gov-gate.sh GOV-AGCO
 ```
 
-Both now exit `0` via the staged authorization record. The verifier
-accepts `CLEARED` (standard full clearance) **or** `CEO_AUTHORIZED_STAGED`
-(staged CEO authorization) as valid exit-0 statuses. The signing
-contract, filename convention, and explicit prohibition against
-agent-authored clearance records are documented in
+Both must exit `0` before DFSP-001 (or any GOV-FINTRAC/GOV-AGCO-gated
+directive) may proceed. The verifier accepts `CLEARED` or
+`CEO_AUTHORIZED_STAGED` as valid exit-0 statuses. The signing contract,
+filename convention, and explicit prohibition against agent-authored
+clearance records are documented in
 `PROGRAM_CONTROL/CLEARANCES/README.md`.
 
 The checkboxes above remain the human-readable aggregation view —

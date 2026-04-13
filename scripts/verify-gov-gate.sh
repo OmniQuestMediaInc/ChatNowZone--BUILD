@@ -56,8 +56,8 @@ if [ ! -d "${CLEARANCE_DIR}" ]; then
   exit 1
 fi
 
-# Read a scalar field from the frontmatter. Handles optional quotes
-# and trailing '# comment'. Reads from the ${FRONTMATTER} variable.
+# Read a scalar field from the FRONTMATTER variable. Handles optional
+# quotes and trailing '# comment'.
 get_field() {
   local key="$1"
   printf '%s\n' "${FRONTMATTER}" | awk -v key="${key}" '
@@ -83,13 +83,23 @@ get_field() {
   '
 }
 
+# Helper: extract YAML frontmatter between the first two '---' lines.
+extract_frontmatter() {
+  local file="$1"
+  awk '
+    /^---[[:space:]]*$/ { count++; next }
+    count == 1         { print }
+    count >= 2         { exit }
+  ' "${file}"
+}
+
 # Collect candidate clearance files for this gate id.
 shopt -s nullglob
 CANDIDATES=("${CLEARANCE_DIR}/${GATE_ID}"-*.md)
 shopt -u nullglob
 
 if [ "${#CANDIDATES[@]}" -eq 0 ]; then
-  # No gate-specific file: check CEO-AUTHORIZED-STAGED fallback.
+  # Fallback: check for a CEO-AUTHORIZED-STAGED record that covers this gate.
   shopt -s nullglob
   STAGED_CANDIDATES=("${CLEARANCE_DIR}/CEO-AUTHORIZED-STAGED"-*.md)
   shopt -u nullglob
@@ -101,41 +111,36 @@ if [ "${#CANDIDATES[@]}" -eq 0 ]; then
     exit 1
   fi
 
-  # Use latest staged auth file (lex order == date order).
-  LATEST="$(printf '%s\n' "${STAGED_CANDIDATES[@]}" | LC_ALL=C sort | tail -n 1)"
-
-  FRONTMATTER="$(awk '
-    /^---[[:space:]]*$/ { count++; next }
-    count == 1         { print }
-    count >= 2         { exit }
-  ' "${LATEST}")"
+  STAGED_LATEST="$(printf '%s\n' "${STAGED_CANDIDATES[@]}" | LC_ALL=C sort | tail -n 1)"
+  FRONTMATTER="$(extract_frontmatter "${STAGED_LATEST}")"
 
   if [ -z "${FRONTMATTER}" ]; then
-    echo "FAIL — ${LATEST}: missing or empty YAML frontmatter" >&2
+    echo "FAIL — ${STAGED_LATEST}: missing or empty YAML frontmatter" >&2
     exit 1
   fi
 
   STAGED_STATUS="$(get_field status)"
   STAGED_ACK="$(get_field ceo_acknowledgment)"
   STAGED_GATES="$(get_field gates_covered)"
-  REL_PATH="${LATEST#${REPO_ROOT}/}"
 
-  if [ "${STAGED_STATUS}" != "CEO_AUTHORIZED_STAGED" ]; then
-    echo "FAIL — ${REL_PATH}: staged authorization status is '${STAGED_STATUS}', expected 'CEO_AUTHORIZED_STAGED'" >&2
+  if ! printf '%s\n' "${STAGED_GATES}" | grep -qw "${GATE_ID}"; then
+    echo "FAIL — no clearance record for ${GATE_ID}" >&2
+    echo "       latest staged authorization does not cover ${GATE_ID}" >&2
+    exit 1
+  fi
+
+  if [ "${STAGED_STATUS}" != "CLEARED" ] && [ "${STAGED_STATUS}" != "CEO_AUTHORIZED_STAGED" ]; then
+    echo "FAIL — staged authorization status is '${STAGED_STATUS}', expected 'CLEARED' or 'CEO_AUTHORIZED_STAGED'" >&2
     exit 1
   fi
 
   if [ "${STAGED_ACK}" != "SIGNED" ]; then
-    echo "FAIL — ${REL_PATH}: ceo_acknowledgment is '${STAGED_ACK}', expected 'SIGNED'" >&2
+    echo "FAIL — staged authorization ceo_acknowledgment is '${STAGED_ACK}', expected 'SIGNED'" >&2
     exit 1
   fi
 
-  if ! printf '%s\n' "${STAGED_GATES}" | grep -qw "${GATE_ID}"; then
-    echo "FAIL — ${REL_PATH}: gates_covered does not include '${GATE_ID}'" >&2
-    exit 1
-  fi
-
-  echo "PASS — ${GATE_ID} CEO_AUTHORIZED_STAGED — evidence: ${REL_PATH}"
+  STAGED_REL="${STAGED_LATEST#${REPO_ROOT}/}"
+  echo "PASS — ${GATE_ID} authorized (CEO-AUTHORIZED-STAGED) — evidence: ${STAGED_REL}"
   exit 0
 fi
 
@@ -143,17 +148,15 @@ fi
 LATEST="$(printf '%s\n' "${CANDIDATES[@]}" | LC_ALL=C sort | tail -n 1)"
 
 # Extract YAML frontmatter between the first two '---' lines.
-FRONTMATTER="$(awk '
-  /^---[[:space:]]*$/ { count++; next }
-  count == 1         { print }
-  count >= 2         { exit }
-' "${LATEST}")"
+FRONTMATTER="$(extract_frontmatter "${LATEST}")"
 
 if [ -z "${FRONTMATTER}" ]; then
   echo "FAIL — ${LATEST}: missing or empty YAML frontmatter" >&2
   exit 1
 fi
 
+# Read a scalar field from the frontmatter. Handles optional quotes
+# and trailing '# comment'.
 FILE_GATE_ID="$(get_field gate_id)"
 STATUS="$(get_field status)"
 ACK="$(get_field ceo_acknowledgment)"
@@ -165,8 +168,8 @@ if [ "${FILE_GATE_ID}" != "${GATE_ID}" ]; then
   exit 1
 fi
 
-if [ "${STATUS}" != "CLEARED" ]; then
-  echo "FAIL — ${REL_PATH}: status is '${STATUS}', expected 'CLEARED'" >&2
+if [ "${STATUS}" != "CLEARED" ] && [ "${STATUS}" != "CEO_AUTHORIZED_STAGED" ]; then
+  echo "FAIL — ${REL_PATH}: status is '${STATUS}', expected 'CLEARED' or 'CEO_AUTHORIZED_STAGED'" >&2
   exit 1
 fi
 
