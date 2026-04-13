@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `ceebeb947e01e245c23713aa2fa5b013097dd021`
-**Generated:** 2026-04-13T21:45:24Z
+**Branch:** `copilot/cleanup-repo-noise`
+**Commit:** `37ce5e43441a2885d411c90cb280b9bd8d00748f`
+**Generated:** 2026-04-13T21:54:56Z
 
 ## All Files
 
@@ -67,6 +67,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/BIJOU-002-SESSION-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-GOV-GATE-CLEARANCE-2026-04-11.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-TS-CLEANUP.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CLEAN-SWEEP-2026-04-13.md`
 - `PROGRAM_CONTROL/REPORT_BACK/ENFORCE-FINANCIAL-SCHEMA-INTEGRITY.md`
 - `PROGRAM_CONTROL/REPORT_BACK/FASTTRACK-STATEMENT-SURFACES.md`
 - `PROGRAM_CONTROL/REPORT_BACK/FIZ-001-GOVERNANCE-CONSTANTS.md`
@@ -143,7 +144,6 @@ Auto-generated on every push. Do not edit manually.
 - `docs/compliance/evidence_templates/NCII_TAKEDOWN_LOG.md`
 - `docs/doctrine/.gitkeep`
 - `docs/doctrine/COPILOT_GUARDRAILS.md`
-- `docs/manuals`
 - `finance/audit-dashboard.service.ts`
 - `finance/batch-payout.service.ts`
 - `finance/commission-splitting.service.ts`
@@ -157,7 +157,6 @@ Auto-generated on every push. Do not edit manually.
 - `infra/postgres/init-ledger.sql`
 - `issues/WO-019.md`
 - `issues/WO-021.md`
-- `package-lock.json`
 - `package.json`
 - `prisma/migrations/20260409000000_legal_hold_db_migration/migration.sql`
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
@@ -173,7 +172,6 @@ Auto-generated on every push. Do not edit manually.
 - `services/bijou/src/bijou.module.ts`
 - `services/bijou/src/min-seat-gate.service.ts`
 - `services/bijou/src/pass-pricing.service.ts`
-- `services/core-api/.gitkeep`
 - `services/core-api/src/analytics/analytics.module.ts`
 - `services/core-api/src/analytics/heat-score.service.ts`
 - `services/core-api/src/app.module.ts`
@@ -255,10 +253,8 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/studio/studio-report.service.ts`
 - `services/core-api/tsconfig.json`
 - `services/nats/topics.registry.ts`
-- `services/rewards-api/.gitkeep`
 - `services/rewards-api/src/engine/points-calculator.logic.ts`
 - `services/rewards-api/src/white-label/partner-config.schema.ts`
-- `services/risk-engine/.gitkeep`
 - `services/risk-engine/src/region-signal.service.ts`
 - `services/risk-engine/src/risk.module.ts`
 - `services/showzone/src/room-session.service.ts`
