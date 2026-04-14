@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `8f2c0341fa8a896ea3b6317d7a37635c3adfe5be`
-**Generated:** 2026-04-13T23:03:35Z
+**Branch:** `copilot/m5-voice-sample-collection`
+**Commit:** `03482de5ad19a7597f286e3af0341cc7b5faa500`
+**Generated:** 2026-04-14T10:31:27Z
 
 ## All Files
 
@@ -203,6 +203,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/dfsp/integrity-hold.service.ts`
 - `services/core-api/src/dfsp/purchase-hours-gate.service.ts`
 - `services/core-api/src/dfsp/risk-scoring.service.ts`
+- `services/core-api/src/dfsp/voice-sample.service.ts`
 - `services/core-api/src/events/audit.service.ts`
 - `services/core-api/src/finance/batch-payout.service.ts`
 - `services/core-api/src/finance/ledger.module.ts`
