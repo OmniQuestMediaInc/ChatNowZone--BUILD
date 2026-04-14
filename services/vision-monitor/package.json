@@ -1,1 +1,12 @@
-{\n  "name": "vision-monitor",\n  "version": "1.0.0",\n  "description": "Vision monitoring services",\n  "main": "index.js",\n  "peerDependencies": {\n    "@tensorflow/tfjs-node": "^3.0.0"\n  },\n  "dependencies": {},\n  "devDependencies": {},\n  "scripts": {}\n}
+{
+  "name": "vision-monitor",
+  "version": "1.0.0",
+  "description": "Vision monitoring services",
+  "main": "index.js",
+  "peerDependencies": {
+    "@tensorflow/tfjs-node": "^3.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {}
+}

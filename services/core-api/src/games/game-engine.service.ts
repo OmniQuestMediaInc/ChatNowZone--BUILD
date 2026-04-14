@@ -36,10 +36,10 @@ export class GameEngineService {
     game_type: GameType;
     token_tier: number;
   }): { idempotency_key: string; valid: boolean; error?: string } {
-    if (!GAMIFICATION.GAME_TYPES.includes(params.game_type as any)) {
+    if (!GAMIFICATION.GAME_TYPES.includes(params.game_type)) {
       return { idempotency_key: '', valid: false, error: `Invalid game_type: ${params.game_type}` };
     }
-    if (!GAMIFICATION.TOKEN_TIERS.includes(params.token_tier as any)) {
+    if (!GAMIFICATION.TOKEN_TIERS.includes(params.token_tier as 25 | 45 | 60)) {
       return { idempotency_key: '', valid: false,
         error: `Invalid token_tier: ${params.token_tier}. Must be one of ${GAMIFICATION.TOKEN_TIERS.join(', ')}` };
     }

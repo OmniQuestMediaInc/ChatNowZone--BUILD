@@ -324,12 +324,12 @@ export class SchedulingSeedService {
     let skipped = 0;
 
     const shiftEntries = [
-      { shift: 'A', roster: GZ_MASTER_ROSTER.SHIFT_A },
-      { shift: 'B', roster: GZ_MASTER_ROSTER.SHIFT_B },
-      { shift: 'C', roster: GZ_MASTER_ROSTER.SHIFT_C },
+      { roster: GZ_MASTER_ROSTER.SHIFT_A },
+      { roster: GZ_MASTER_ROSTER.SHIFT_B },
+      { roster: GZ_MASTER_ROSTER.SHIFT_C },
     ] as const;
 
-    for (const { shift, roster } of shiftEntries) {
+    for (const { roster } of shiftEntries) {
       for (const position of roster) {
         const employeeRef = `GZ-${position.position}`;
 

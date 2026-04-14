@@ -85,7 +85,7 @@ export class PurchaseHoursGateService {
     };
   }
 
-  private async getWindowConfig(country_code: string | null, tier: string) {
+  private async getWindowConfig(country_code: string | null, tier: string): Promise<{ window_open_hour: number; window_close_hour: number } | null> {
     if (country_code) {
       const specific = await this.prisma.purchaseWindowConfig.findFirst({
         where: { country_code, tier, active: true },

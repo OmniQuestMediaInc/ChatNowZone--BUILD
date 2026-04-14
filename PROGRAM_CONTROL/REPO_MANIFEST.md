@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `281d7d51448d34c44a93ed2f4629e1b887e4967e`
-**Generated:** 2026-04-14T18:28:37Z
+**Branch:** `claude/fix-commitment-errors`
+**Commit:** `653217ec80879cb8de4184460eb5fa61ad119ab5`
+**Generated:** 2026-04-14T18:42:40Z
 
 ## All Files
 

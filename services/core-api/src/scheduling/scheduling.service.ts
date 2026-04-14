@@ -3,7 +3,6 @@
 // Manages schedule periods (rolling 2-week cycles), shift assignments,
 // B-Lock/Final Lock lifecycle, and integrates compliance + coverage checks.
 import { Injectable, Logger } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 import { PrismaService } from '../prisma.service';
 import { NatsService } from '../nats/nats.service';
 import { NATS_TOPICS } from '../../../nats/topics.registry';
@@ -15,7 +14,6 @@ import type {
   CreatePeriodResult,
   AssignShiftRequest,
   AssignShiftResult,
-  PeriodStatus,
   ShiftCode,
 } from './scheduling.interfaces';
 
