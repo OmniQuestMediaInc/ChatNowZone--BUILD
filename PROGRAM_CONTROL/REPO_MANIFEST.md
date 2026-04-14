@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `ed8612a8178e4d7cf5283f2a3e3531d7d0bd57c6`
-**Generated:** 2026-04-14T18:22:48Z
+**Branch:** `copilot/m5-voice-sample-collection`
+**Commit:** `3d0a7d7d0233c03cfbb1c6e4771d48a865f4b22d`
+**Generated:** 2026-04-14T18:27:50Z
 
 ## All Files
 
@@ -99,6 +99,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/INFRA-004-RECONCILIATION-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/KYC-001-PUBLISH-GATE-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/LEGAL-HOLD-DB-MIGRATION.md`
+- `PROGRAM_CONTROL/REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION-EXEC.md`
 - `PROGRAM_CONTROL/REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MOD-001-INCIDENT-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-001-FABRIC-SCAFFOLD.md`
@@ -204,6 +205,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/dfsp/integrity-hold.service.ts`
 - `services/core-api/src/dfsp/purchase-hours-gate.service.ts`
 - `services/core-api/src/dfsp/risk-scoring.service.ts`
+- `services/core-api/src/dfsp/voice-sample.service.ts`
 - `services/core-api/src/events/audit.service.ts`
 - `services/core-api/src/finance/batch-payout.service.ts`
 - `services/core-api/src/finance/ledger.module.ts`

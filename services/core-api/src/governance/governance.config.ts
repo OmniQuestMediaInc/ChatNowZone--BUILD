@@ -32,6 +32,11 @@ export const GovernanceConfig = {
   // ── Contract Offer ────────────────────────────────────────────────────────
   DFSP_CONTRACT_OFFER_EXPIRY_HOURS: 24,
 
+  // ── Voice Sample (DFSP Module 5) ─────────────────────────────────────────
+  DFSP_VOICE_SAMPLE_MAX_COUNT: 3,
+  DFSP_VOICE_SAMPLE_RETENTION_DAYS: 2555,  // 7 years — financial record standard
+  DFSP_VOICE_SAMPLE_MIN_DURATION_SECONDS: 3,
+
   // ── PROC-001: Webhook Hardening (FIZ) ────────────────────────────────────
   // CEO-AUTHORIZED-STAGED-2026-04-10 — webhook infrastructure only.
   // No ledger writes, no balance columns, no transaction execution.
