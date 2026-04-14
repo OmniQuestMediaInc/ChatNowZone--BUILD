@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma.service';
 import { NatsService } from '../nats/nats.service';
 import { NATS_TOPICS } from '../../../nats/topics.registry';
 import { GZ_SCHEDULING } from '../config/governance.config';
+import type { ShiftTemplate } from '@prisma/client';
 import type {
   ComplianceWarning,
   ComplianceCheckRequest,
@@ -218,7 +219,7 @@ export class ComplianceGuardService {
     const templates = await this.prisma.shiftTemplate.findMany({
       where: { id: { in: templateIds } },
     });
-    const templateMap = new Map(templates.map((t) => [t.id, t]));
+    const templateMap = new Map<string, ShiftTemplate>(templates.map((t) => [t.id, t]));
 
     let totalHours = 0;
     for (const assignment of assignments) {
@@ -347,7 +348,7 @@ export class ComplianceGuardService {
     const templates = await this.prisma.shiftTemplate.findMany({
       where: { id: { in: templateIds } },
     });
-    const templateMap = new Map(templates.map((t) => [t.id, t]));
+    const templateMap = new Map<string, ShiftTemplate>(templates.map((t) => [t.id, t]));
 
     let totalHours = 0;
     let statHolidayHours = 0;
