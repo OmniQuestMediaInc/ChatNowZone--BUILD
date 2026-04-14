@@ -350,6 +350,7 @@ export const CONCIERGE_APPT = {
 export const FAN_CLUB = {
   ACCEPTED_TOKEN_TYPE: 'CHATTOKEN',                 // ShowTokens not accepted
   BILLING_CYCLES: ['MONTHLY', 'ANNUAL'] as const,
+  ANNUAL_DISCOUNT_PCT: null,                        // TBD — pending CEO confirmation
   // Fan club fee applies PLATFORM_GLOBAL.MARKETPLACE_FEE_PCT (18%) — no separate constant.
 } as const;
 
@@ -361,5 +362,6 @@ export const CREATOR_SAAS = {
   TIER_2_MONTHLY_USD: 24.95,
   TIER_3_MONTHLY_USD: 49.95,
   BILLING_CYCLES: ['MONTHLY', 'ANNUAL'] as const,
+  ANNUAL_DISCOUNT_PCT: null,      // TBD — pending CEO confirmation
   // Build and ship. INACTIVE at launch. Admin-side activation only.
 } as const;
