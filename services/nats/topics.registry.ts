@@ -96,6 +96,12 @@ export const NATS_TOPICS = {
   CHECKOUT_EMAIL_RECEIPT_REQUESTED:    'dfsp.checkout.email_receipt_requested',
   CHECKOUT_SMS_NOTIFICATION_REQUESTED: 'dfsp.checkout.sms_notification_requested',
 
+  // ── DFSP Module 5 — Voice Sample ──────────────────────────────────────────
+  DFSP_VOICE_SAMPLE_CONSENT_RECORDED: 'dfsp.voice_sample.consent_recorded',
+  DFSP_VOICE_SAMPLE_COLLECTED:        'dfsp.voice_sample.collected',
+  DFSP_VOICE_SAMPLE_DISPOSED:         'dfsp.voice_sample.disposed',
+  DFSP_VOICE_SAMPLE_LIMIT_REACHED:    'dfsp.voice_sample.limit_reached',
+
   // ── GZ Scheduling Module ──────────────────────────────────────────────────
   SCHEDULE_PERIOD_CREATED:         'gz.schedule.period.created',
   SCHEDULE_PERIOD_B_LOCKED:        'gz.schedule.period.b_locked',

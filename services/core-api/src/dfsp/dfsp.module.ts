@@ -6,6 +6,7 @@ import { PurchaseHoursGateService } from './purchase-hours-gate.service';
 import { RiskScoringService } from './risk-scoring.service';
 import { IntegrityHoldService } from './integrity-hold.service';
 import { CheckoutConfirmationService } from './checkout-confirmation.service';
+import { VoiceSampleService } from './voice-sample.service';
 
 @Module({
   providers: [
@@ -13,12 +14,14 @@ import { CheckoutConfirmationService } from './checkout-confirmation.service';
     RiskScoringService,
     IntegrityHoldService,
     CheckoutConfirmationService,
+    VoiceSampleService,
   ],
   exports: [
     PurchaseHoursGateService,
     RiskScoringService,
     IntegrityHoldService,
     CheckoutConfirmationService,
+    VoiceSampleService,
   ],
 })
 export class DfspModule {}
