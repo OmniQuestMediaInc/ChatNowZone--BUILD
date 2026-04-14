@@ -221,7 +221,10 @@ export class VoiceSampleService {
       };
     }
 
-    // Phase 2 write: attach file_reference, duration_seconds, agent_id
+    // Phase 2 write: attach file_reference, duration_seconds, and agent_id.
+    // agent_id is intentionally set here because the collecting agent may differ
+    // from the consenting agent recorded in Phase 1. The schema carries a single
+    // agent_id field representing the agent who physically collected the sample.
     const updated = await this.prisma.voiceSample.update({
       where: { id: params.sampleId },
       data: {
