@@ -3,9 +3,9 @@
 **Task:** M5-VOICE-SAMPLE-COLLECTION
 **Directive:** DFSP Module 5 — VoiceSampleService
 **Repo:** OmniQuestMediaInc/ChatNowZone--BUILD
-**Branch:** claude/add-voice-sample-service
-**HEAD:** `727e2ff0679fbe13334c7442a260c8155c1bee33`
-**Implementation Commit:** `993f2ad413c026a45f46951ea69349efeb982b0b`
+**Branch:** copilot/add-voice-sample-service
+**HEAD:** `6fbb351f9c27bdb6e49f5adb2522bedd86efba82`
+**Implementation Commit:** `993f2ad413c026a45f46951ea69349efeb982b0b` (landed via PR #217 → merged into base)
 
 ---
 
@@ -191,7 +191,7 @@ tenant_id: params.tenantId,
 
 ```
 $ node_modules/.bin/tsc --noEmit -p services/core-api/tsconfig.json
-(run from repo root — TypeScript 5.9.3)
+(run from repo root — TypeScript 5.9.3, branch copilot/add-voice-sample-service HEAD 6fbb351)
 
 EXIT:0
 ```
@@ -241,7 +241,7 @@ GATE: DFSP-001-COMPLETE | GOV-FINTRAC-CLEARED | GOV-AGCO-CLEARED
 **SUCCESS**
 
 Implementation Commit: `993f2ad413c026a45f46951ea69349efeb982b0b`
-Current HEAD: `727e2ff0679fbe13334c7442a260c8155c1bee33`
-Branch: `claude/add-voice-sample-service`
+Current HEAD: `6fbb351f9c27bdb6e49f5adb2522bedd86efba82`
+Branch: `copilot/add-voice-sample-service`
 
 All M5-VOICE-SAMPLE-COLLECTION requirements satisfied. Service operational and ready for integration testing.
