@@ -34,7 +34,7 @@ export class LedgerService {
   private readonly logger = new Logger(LedgerService.name);
 
   constructor(
-    @InjectRepository('ledger_entries' as any)
+    @InjectRepository('ledger_entries' as never)
     private readonly ledgerRepo: Repository<Record<string, unknown>>,
     private readonly config: GovernanceConfigService,
   ) {}
@@ -107,7 +107,7 @@ export class LedgerService {
     userId: string;
     amountGross: bigint;
     reasonCode: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<unknown> {
     const idempotencyKey = `DISPUTE_REVERSAL:${data.disputeId}:${data.originalEventId}`;
 

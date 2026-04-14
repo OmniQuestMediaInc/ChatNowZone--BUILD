@@ -84,7 +84,7 @@ export class IntegrityHoldService {
       hold_amount: params.hold_amount.toFixed(2),
       rule_applied_id: this.RULE_ID,
     });
-    return this.toRecord(record);
+    return this.toRecord(record as typeof record & { status: 'authorized' | 'released' | 'captured' });
   }
 
   /**
@@ -101,7 +101,7 @@ export class IntegrityHoldService {
       contract_id: record.contract_id,
       rule_applied_id: this.RULE_ID,
     });
-    return this.toRecord(record);
+    return this.toRecord(record as typeof record & { status: 'authorized' | 'released' | 'captured' });
   }
 
   /**
@@ -128,10 +128,21 @@ export class IntegrityHoldService {
       capture_reason: params.capture_reason,
       rule_applied_id: this.RULE_ID,
     });
-    return this.toRecord(record);
+    return this.toRecord(record as typeof record & { status: 'authorized' | 'released' | 'captured' });
   }
 
-  private toRecord(r: any): IntegrityHoldRecord {
+  private toRecord(r: {
+    id: string;
+    contract_id: string;
+    account_id: string;
+    hold_amount: { toString: () => string };
+    status: 'authorized' | 'released' | 'captured';
+    authorized_at: Date | null;
+    released_at: Date | null;
+    captured_at: Date | null;
+    capture_reason: string | null;
+    chargeback_reference: string | null;
+  }): IntegrityHoldRecord {
     return {
       id: r.id,
       contract_id: r.contract_id,

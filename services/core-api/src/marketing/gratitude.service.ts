@@ -19,10 +19,9 @@ export class GratitudeService {
   }
 
   // Existing methods and logic...
-  sendGratitudeMessage(tier: string) {
+  sendGratitudeMessage(tier: string): void {
     const delay = this.getCustomizableDelay(tier);
     setTimeout(() => {
-      console.log(`Gratitude message sent to ${tier} tier after ${delay}ms`);
       // Implement your messaging logic here...
     }, delay);
   }

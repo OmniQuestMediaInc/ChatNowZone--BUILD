@@ -6,7 +6,7 @@ export class StudioReportController {
   constructor(private readonly studioReportService: StudioReportService) {}
 
   @Get('earnings')
-  async getEarnings() {
+  async getEarnings(): Promise<unknown> {
     return this.studioReportService.getStudioEarnings();
   }
 }

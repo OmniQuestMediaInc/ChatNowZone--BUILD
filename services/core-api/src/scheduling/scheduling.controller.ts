@@ -41,7 +41,7 @@ export class SchedulePeriodController {
    */
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async createPeriod(@Body() body: CreatePeriodRequest) {
+  async createPeriod(@Body() body: CreatePeriodRequest): Promise<unknown> {
     return this.schedulingService.createPeriod(body);
   }
 
@@ -50,7 +50,7 @@ export class SchedulePeriodController {
    * Retrieves a schedule period with all associated assignments.
    */
   @Get(':id')
-  async getPeriod(@Param('id') id: string) {
+  async getPeriod(@Param('id') id: string): Promise<unknown> {
     return this.schedulingService.getPeriod(id);
   }
 
@@ -63,7 +63,7 @@ export class SchedulePeriodController {
   async bLockPeriod(
     @Param('id') id: string,
     @Body() body: { actor_id: string; correlation_id: string },
-  ) {
+  ): Promise<{ status: string; period_id: string; rule_applied_id: string }> {
     await this.schedulingService.lockPeriodBLock(
       id,
       body.actor_id,
@@ -82,7 +82,7 @@ export class SchedulePeriodController {
   async finalLockPeriod(
     @Param('id') id: string,
     @Body() body: { actor_id: string; correlation_id: string },
-  ) {
+  ): Promise<{ status: string; period_id: string; rule_applied_id: string }> {
     await this.schedulingService.lockPeriodFinal(
       id,
       body.actor_id,
@@ -97,7 +97,7 @@ export class SchedulePeriodController {
    */
   @Post('check-deadlines')
   @HttpCode(HttpStatus.OK)
-  async checkDeadlines(@Body() body: { correlation_id: string }) {
+  async checkDeadlines(@Body() body: { correlation_id: string }): Promise<{ status: string; rule_applied_id: string }> {
     await this.schedulingService.checkPeriodDeadlines(body.correlation_id);
     return { status: 'OK', rule_applied_id: 'GZ_SCHEDULING_v1' };
   }
@@ -117,7 +117,7 @@ export class ShiftAssignmentController {
    */
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async assignShift(@Body() body: AssignShiftRequest) {
+  async assignShift(@Body() body: AssignShiftRequest): Promise<unknown> {
     return this.schedulingService.assignShift(body);
   }
 
@@ -136,7 +136,7 @@ export class ShiftAssignmentController {
       correlation_id: string;
       reason_code: string;
     },
-  ) {
+  ): Promise<unknown> {
     return this.schedulingService.swapShift(body);
   }
 }
@@ -155,7 +155,7 @@ export class ZoneBotController {
    */
   @Post('bids')
   @HttpCode(HttpStatus.CREATED)
-  async submitBid(@Body() body: SubmitBidRequest) {
+  async submitBid(@Body() body: SubmitBidRequest): Promise<{ bid_id: string; status: string; rule_applied_id: string }> {
     const bid_id = await this.zoneBotService.submitBid(body);
     return { bid_id, status: 'PENDING', rule_applied_id: 'GZ_ZONEBOT_v1' };
   }
@@ -170,7 +170,7 @@ export class ZoneBotController {
   async runLottery(
     @Param('gapId') gapId: string,
     @Body() body: { correlation_id: string },
-  ) {
+  ): Promise<unknown> {
     return this.zoneBotService.runLottery(gapId, body.correlation_id);
   }
 
@@ -183,7 +183,7 @@ export class ZoneBotController {
   async acceptBid(
     @Param('bidId') bidId: string,
     @Body() body: { correlation_id: string },
-  ) {
+  ): Promise<{ bid_id: string; status: string; rule_applied_id: string }> {
     await this.zoneBotService.acceptBid(bidId, body.correlation_id);
     return { bid_id: bidId, status: 'ACCEPTED', rule_applied_id: 'GZ_ZONEBOT_v1' };
   }
@@ -197,7 +197,7 @@ export class ZoneBotController {
   async declineBid(
     @Param('bidId') bidId: string,
     @Body() body: { correlation_id: string },
-  ) {
+  ): Promise<{ bid_id: string; status: string; rule_applied_id: string }> {
     await this.zoneBotService.declineBid(bidId, body.correlation_id);
     return { bid_id: bidId, status: 'DECLINED', rule_applied_id: 'GZ_ZONEBOT_v1' };
   }
@@ -208,7 +208,7 @@ export class ZoneBotController {
    */
   @Post('process-expired')
   @HttpCode(HttpStatus.OK)
-  async processExpired(@Body() body: { correlation_id: string }) {
+  async processExpired(@Body() body: { correlation_id: string }): Promise<{ expired_count: number; rule_applied_id: string }> {
     const count = await this.zoneBotService.processExpiredOffers(body.correlation_id);
     return { expired_count: count, rule_applied_id: 'GZ_ZONEBOT_v1' };
   }
@@ -231,7 +231,7 @@ export class CoverageController {
     @Query('department') department: string,
     @Query('date') date: string,
     @Query('shift') shift: string,
-  ) {
+  ): Promise<unknown> {
     return this.shiftCoverage.evaluateCoverage(
       department as Department,
       date,
@@ -244,7 +244,7 @@ export class CoverageController {
    * Scans an entire schedule period for coverage gaps.
    */
   @Get('scan/:periodId')
-  async scanPeriodCoverage(@Param('periodId') periodId: string) {
+  async scanPeriodCoverage(@Param('periodId') periodId: string): Promise<{ period_id: string; total_gaps: number; gaps: unknown[]; rule_applied_id: string }> {
     const gaps = await this.shiftCoverage.scanPeriodCoverage(periodId);
     return {
       period_id: periodId,
@@ -260,7 +260,7 @@ export class CoverageController {
    */
   @Post('gaps')
   @HttpCode(HttpStatus.CREATED)
-  async postGap(@Body() body: PostGapRequest) {
+  async postGap(@Body() body: PostGapRequest): Promise<{ gap_id: string; status: string; rule_applied_id: string }> {
     const gap_id = await this.shiftCoverage.postGap(body);
     return { gap_id, status: 'OPEN', rule_applied_id: 'GZ_SHIFT_GAP_v1' };
   }
@@ -270,7 +270,7 @@ export class CoverageController {
    * Checks if a date is a stat holiday and validates on-call manager coverage.
    */
   @Get('stat-holiday')
-  async checkStatHoliday(@Query('date') date: string) {
+  async checkStatHoliday(@Query('date') date: string): Promise<{ date: string; is_stat_holiday: boolean; pay_multiplier: number; has_on_call_manager: boolean; rule_applied_id: string }> {
     const multiplier = await this.shiftCoverage.getStatHolidayMultiplier(date);
     const hasOnCallManager = await this.shiftCoverage.validateStatHolidayOnCall(date);
     return {
@@ -304,7 +304,7 @@ export class ComplianceController {
       proposed_shift_code: ShiftCode;
       schedule_period_id: string;
     },
-  ) {
+  ): Promise<unknown> {
     return this.complianceGuard.validateAssignment(body);
   }
 
@@ -316,7 +316,7 @@ export class ComplianceController {
   async getWeeklySummary(
     @Query('staff_id') staff_id: string,
     @Query('week_start') week_start: string,
-  ) {
+  ): Promise<unknown> {
     return this.complianceGuard.getWeeklySummary(staff_id, week_start);
   }
 }
@@ -336,7 +336,7 @@ export class ScheduleSeedController {
    */
   @Post('all')
   @HttpCode(HttpStatus.OK)
-  async seedAll() {
+  async seedAll(): Promise<unknown> {
     return this.seedService.seedAll();
   }
 
@@ -347,7 +347,7 @@ export class ScheduleSeedController {
    */
   @Post('holidays')
   @HttpCode(HttpStatus.OK)
-  async seedHolidays(@Body() body: { base_year?: number; correlation_id?: string }) {
+  async seedHolidays(@Body() body: { base_year?: number; correlation_id?: string }): Promise<unknown> {
     const correlation_id = body.correlation_id ?? `SEED-HOLIDAYS-${Date.now()}`;
     return this.seedService.seedRollingStatHolidays(correlation_id, body.base_year);
   }
@@ -360,7 +360,7 @@ export class ScheduleSeedController {
   @HttpCode(HttpStatus.OK)
   async seedHolidaysForYears(
     @Body() body: { years: number[]; correlation_id?: string },
-  ) {
+  ): Promise<unknown> {
     const correlation_id = body.correlation_id ?? `SEED-HOLIDAYS-${Date.now()}`;
     return this.seedService.seedStatHolidaysForYears(body.years, correlation_id);
   }
@@ -371,7 +371,7 @@ export class ScheduleSeedController {
    */
   @Post('shift-templates')
   @HttpCode(HttpStatus.OK)
-  async seedShiftTemplates(@Body() body: { correlation_id?: string }) {
+  async seedShiftTemplates(@Body() body: { correlation_id?: string }): Promise<unknown> {
     const correlation_id = body.correlation_id ?? `SEED-TEMPLATES-${Date.now()}`;
     return this.seedService.seedShiftTemplates(correlation_id);
   }
@@ -382,7 +382,7 @@ export class ScheduleSeedController {
    */
   @Post('department-coverage')
   @HttpCode(HttpStatus.OK)
-  async seedDepartmentCoverage(@Body() body: { correlation_id?: string }) {
+  async seedDepartmentCoverage(@Body() body: { correlation_id?: string }): Promise<unknown> {
     const correlation_id = body.correlation_id ?? `SEED-COVERAGE-${Date.now()}`;
     return this.seedService.seedDepartmentCoverage(correlation_id);
   }
@@ -393,7 +393,7 @@ export class ScheduleSeedController {
    */
   @Post('master-roster')
   @HttpCode(HttpStatus.OK)
-  async seedMasterRoster(@Body() body: { correlation_id?: string }) {
+  async seedMasterRoster(@Body() body: { correlation_id?: string }): Promise<unknown> {
     const correlation_id = body.correlation_id ?? `SEED-ROSTER-${Date.now()}`;
     return this.seedService.seedMasterRoster(correlation_id);
   }

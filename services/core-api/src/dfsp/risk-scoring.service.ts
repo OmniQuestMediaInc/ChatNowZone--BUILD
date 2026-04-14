@@ -138,7 +138,7 @@ export class RiskScoringService {
     return result;
   }
 
-  private async persistAssessment(input: RiskSignalInput, result: RiskAssessmentResult) {
+  private async persistAssessment(input: RiskSignalInput, result: RiskAssessmentResult): Promise<void> {
     await this.prisma.riskAssessment.create({
       data: {
         account_id: result.account_id,

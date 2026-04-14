@@ -3,7 +3,7 @@
 // Implements the 1-2-3 Awarding Rule with 16-hour confirmation clock and
 // 2-cycle suppression for fairness. Uses crypto.randomInt() per Invariant #4.
 import { Injectable, Logger } from '@nestjs/common';
-import { randomInt, randomUUID } from 'crypto';
+import { randomInt } from 'crypto';
 import { PrismaService } from '../prisma.service';
 import { NatsService } from '../nats/nats.service';
 import { NATS_TOPICS } from '../../../nats/topics.registry';
@@ -11,7 +11,6 @@ import { GZ_SCHEDULING } from '../config/governance.config';
 import type {
   LotteryResult,
   SubmitBidRequest,
-  BidStatus,
 } from './scheduling.interfaces';
 
 @Injectable()
