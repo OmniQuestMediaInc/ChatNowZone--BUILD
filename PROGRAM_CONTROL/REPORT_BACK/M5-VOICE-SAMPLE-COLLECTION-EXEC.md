@@ -151,7 +151,7 @@ const count = await this.prisma.voiceSample.count({
 | 3 | No hardcoded constants — all values from GovernanceConfig | ✅ PASS |
 | 4 | crypto.randomInt() — N/A (no random generation in this service) | ✅ N/A |
 | 5 | No @angular/core imports | ✅ PASS |
-| 6 | npx tsc --noEmit zero new errors before commit | ✅ PASS (only tsconfig deprecation warning — see tsc output below) |
+| 6 | npx tsc --noEmit zero new errors before commit | ✅ PASS — EXIT:0 (zero errors confirmed with project TypeScript 5.9.3 via node_modules/.bin/tsc) |
 | 7 | Logger instance on VoiceSampleService | ✅ PASS — `private readonly logger = new Logger(VoiceSampleService.name)` (line 71) |
 | 8 | Report-back filed before DONE | ✅ PASS — this document |
 | 9 | NATS topics from NATS_TOPICS.DFSP_VOICE_SAMPLE_* only — no string literals | ✅ PASS |
@@ -190,17 +190,13 @@ tenant_id: params.tenantId,
 ## tsc --noEmit Output
 
 ```
-$ /usr/local/bin/tsc --noEmit
-(run from services/core-api)
+$ node_modules/.bin/tsc --noEmit -p services/core-api/tsconfig.json
+(run from repo root — TypeScript 5.9.3)
 
-Version 6.0.2
-tsconfig.json(4,5): error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-  Visit https://aka.ms/ts6 for migration information.
-
-EXIT: (only tsconfig warning, no compilation errors)
+EXIT:0
 ```
 
-**Assessment:** Only tsconfig deprecation warning for `baseUrl` option. This is a pre-existing configuration issue unrelated to M5 changes. Zero compilation errors. M5 files compile cleanly.
+**Assessment:** Zero errors. Confirmed with project's own TypeScript (5.9.3 via node_modules). M5 files compile cleanly.
 
 ---
 
@@ -236,7 +232,7 @@ GATE: DFSP-001-COMPLETE | GOV-FINTRAC-CLEARED | GOV-AGCO-CLEARED
 - [x] Multi-tenant mandate confirmed
 - [x] FIZ four-line commit with GATE line filled accurately
 - [x] Report-back filed to REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION-EXEC.md
-- [x] npx tsc --noEmit clean (zero compilation errors; only tsconfig deprecation warning)
+- [x] npx tsc --noEmit clean (EXIT:0 — zero errors confirmed with project TypeScript 5.9.3)
 
 ---
 
