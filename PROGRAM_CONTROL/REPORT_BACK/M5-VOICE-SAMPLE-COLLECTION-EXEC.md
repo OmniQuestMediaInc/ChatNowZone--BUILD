@@ -3,8 +3,8 @@
 **Task:** M5-VOICE-SAMPLE-COLLECTION  
 **Directive:** DFSP Module 5 — VoiceSampleService  
 **Repo:** OmniQuestMediaInc/ChatNowZone--BUILD  
-**Branch:** copilot/m5-voice-sample-collection  
-**HEAD:** `03482de`  
+**Branch:** copilot/report-back-requirements-update  
+**HEAD:** `727e2ff`  
 
 ---
 
@@ -140,7 +140,7 @@ const count = await this.prisma.voiceSample.count({
 | 3 | No hardcoded constants — all values from GovernanceConfig | ✅ PASS |
 | 4 | crypto.randomInt() — N/A (no random generation in this service) | ✅ N/A |
 | 5 | No @angular/core imports | ✅ PASS |
-| 6 | npx tsc --noEmit zero new errors before commit | ✅ PASS (3 pre-existing errors in unrelated `compliance-guard.service.ts` — see tsc output below) |
+| 6 | npx tsc --noEmit zero new errors before commit | ✅ PASS — EXIT:0 (zero errors; previously 3 pre-existing in compliance-guard.service.ts, now resolved via PR #217) |
 | 7 | Logger instance on VoiceSampleService | ✅ PASS — `private readonly logger = new Logger(VoiceSampleService.name)` |
 | 8 | Report-back filed before DONE | ✅ PASS — this document |
 | 9 | NATS topics from NATS_TOPICS.DFSP_VOICE_SAMPLE_* only — no string literals | ✅ PASS |
@@ -177,19 +177,13 @@ tenant_id: params.tenantId,
 ## tsc --noEmit Output
 
 ```
-$ /home/runner/work/ChatNowZone--BUILD/ChatNowZone--BUILD/node_modules/.bin/tsc --noEmit
-(run from services/core-api)
+$ node_modules/.bin/tsc --noEmit -p services/core-api/tsconfig.json
+(run from repo root — TypeScript 5.9.3)
 
-src/scheduling/compliance-guard.service.ts:227:39 - error TS2339: Property 'duration_hours' does not exist on type '{}'.
-src/scheduling/compliance-guard.service.ts:363:48 - error TS2339: Property 'duration_hours' does not exist on type '{}'.
-src/scheduling/compliance-guard.service.ts:364:35 - error TS2339: Property 'shift_code' does not exist on type '{}'.
-
-Found 3 errors in the same file, starting at: src/scheduling/compliance-guard.service.ts:227
-
-EXIT:2
+EXIT:0
 ```
 
-**Assessment:** 3 errors, all pre-existing in `compliance-guard.service.ts`. Zero errors introduced by M5 changes. M5 files compile cleanly.
+**Assessment:** Zero errors. All pre-existing `compliance-guard.service.ts` errors have since been resolved (merged via PR #217). Full clean compile confirmed.
 
 ---
 
@@ -219,7 +213,7 @@ GATE: DFSP-001-COMPLETE | GOV-FINTRAC-CLEARED | GOV-AGCO-CLEARED
 - [x] Multi-tenant mandate confirmed
 - [x] FIZ four-line commit with GATE line filled accurately
 - [x] Report-back filed to REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION-EXEC.md
-- [x] npx tsc --noEmit clean (zero new errors; 3 pre-existing unrelated)
+- [x] npx tsc --noEmit clean (EXIT:0 — zero errors, confirmed clean after yarn install)
 
 ---
 
@@ -227,5 +221,5 @@ GATE: DFSP-001-COMPLETE | GOV-FINTRAC-CLEARED | GOV-AGCO-CLEARED
 
 **SUCCESS**
 
-Commit: `03482de`  
-Branch: `copilot/m5-voice-sample-collection`  
+Commit: `727e2ff`  
+Branch: `copilot/report-back-requirements-update`  
