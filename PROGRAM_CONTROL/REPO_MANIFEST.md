@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/report-back-requirements-update`
-**Commit:** `829b22c1742fe7e11f964178fbd38902d0e97d13`
-**Generated:** 2026-04-14T19:38:26Z
+**Branch:** `main`
+**Commit:** `48f9abb434e41b957849ebfb5025f1f9c10a9132`
+**Generated:** 2026-04-14T19:41:05Z
 
 ## All Files
 
@@ -169,9 +169,21 @@ Auto-generated on every push. Do not edit manually.
 - `scripts/verify-vault-delivery.ts`
 - `services/assets/DigitalVaultService.ts`
 - `services/assets/WatermarkUtility.ts`
+- `services/bijou/src/bijou-session.service.d.ts`
+- `services/bijou/src/bijou-session.service.js`
+- `services/bijou/src/bijou-session.service.js.map`
 - `services/bijou/src/bijou-session.service.ts`
+- `services/bijou/src/bijou.module.d.ts`
+- `services/bijou/src/bijou.module.js`
+- `services/bijou/src/bijou.module.js.map`
 - `services/bijou/src/bijou.module.ts`
+- `services/bijou/src/min-seat-gate.service.d.ts`
+- `services/bijou/src/min-seat-gate.service.js`
+- `services/bijou/src/min-seat-gate.service.js.map`
 - `services/bijou/src/min-seat-gate.service.ts`
+- `services/bijou/src/pass-pricing.service.d.ts`
+- `services/bijou/src/pass-pricing.service.js`
+- `services/bijou/src/pass-pricing.service.js.map`
 - `services/bijou/src/pass-pricing.service.ts`
 - `services/core-api/src/analytics/analytics.module.ts`
 - `services/core-api/src/analytics/heat-score.service.ts`
@@ -253,16 +265,31 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/studio/studio-report.controller.ts`
 - `services/core-api/src/studio/studio-report.service.ts`
 - `services/core-api/tsconfig.json`
+- `services/nats/topics.registry.d.ts`
+- `services/nats/topics.registry.js`
+- `services/nats/topics.registry.js.map`
 - `services/nats/topics.registry.ts`
 - `services/rewards-api/src/engine/points-calculator.logic.ts`
 - `services/rewards-api/src/white-label/partner-config.schema.ts`
 - `services/risk-engine/src/region-signal.service.ts`
 - `services/risk-engine/src/risk.module.ts`
+- `services/showzone/src/room-session.service.d.ts`
+- `services/showzone/src/room-session.service.js`
+- `services/showzone/src/room-session.service.js.map`
 - `services/showzone/src/room-session.service.ts`
+- `services/showzone/src/showzone.module.d.ts`
+- `services/showzone/src/showzone.module.js`
+- `services/showzone/src/showzone.module.js.map`
 - `services/showzone/src/showzone.module.ts`
 - `services/vision-monitor/package.json`
 - `services/vision-monitor/src/human-counter.worker.ts`
+- `services/zone-gpt/src/proposal.service.d.ts`
+- `services/zone-gpt/src/proposal.service.js`
+- `services/zone-gpt/src/proposal.service.js.map`
 - `services/zone-gpt/src/proposal.service.ts`
+- `services/zone-gpt/src/zone-gpt.module.d.ts`
+- `services/zone-gpt/src/zone-gpt.module.js`
+- `services/zone-gpt/src/zone-gpt.module.js.map`
 - `services/zone-gpt/src/zone-gpt.module.ts`
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
