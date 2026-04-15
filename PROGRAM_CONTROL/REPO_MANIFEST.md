@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/review-governance-config-xT9Td`
-**Commit:** `301a5cb0edc2d2c77598214891a27399b0be5b22`
-**Generated:** 2026-04-15T21:21:34Z
+**Branch:** `main`
+**Commit:** `03e840fd91bf05698dd25adad861cd8707ff0342`
+**Generated:** 2026-04-15T21:21:58Z
 
 ## All Files
 
