@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `821330f29ca8f46c9405c6c1d40d7c989216e37d`
-**Generated:** 2026-04-15T19:39:05Z
+**Branch:** `claude/chore-infra-bcrypt-001`
+**Commit:** `ff79822873f20f441b7a606d7ac4d4b53e8edee6`
+**Generated:** 2026-04-15T20:05:32Z
 
 ## All Files
 
@@ -39,6 +39,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-002.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-NOTE-2026-04-10.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-TS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GEO-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GOV-CONST-001.md`
