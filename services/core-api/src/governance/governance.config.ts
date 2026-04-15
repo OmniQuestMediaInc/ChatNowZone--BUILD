@@ -24,6 +24,12 @@ export const GovernanceConfig = {
   // ── OTP ───────────────────────────────────────────────────────────────────
   DFSP_OTP_TTL_SECONDS: 900,
   DFSP_OTP_MAX_ATTEMPTS: 5,
+  // DFSP-001 — Module 3 PlatformOtpService. Invariant #13 carve-out: bcrypt
+  // (not SHA-256) for OtpEvent.code_hash per DFSP Engineering Spec v1.0.
+  // SHA-256 is GPU-brute-forceable against the constrained OTP space on DB
+  // breach; bcrypt's work factor defeats that attack. Invariant #13 still
+  // applies to all other hash operations in all services.
+  DFSP_OTP_BCRYPT_COST: 12,
 
   // ── Account Recovery & Expedited Access ───────────────────────────────────
   DFSP_ACCOUNT_RECOVERY_HOLD_HOURS: 48,

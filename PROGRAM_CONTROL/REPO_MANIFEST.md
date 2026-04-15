@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `2cfa2b4a00de15d7f2e5086f1b425219fa1ccf23`
-**Generated:** 2026-04-15T20:08:29Z
+**Branch:** `claude/review-governance-config-xT9Td`
+**Commit:** `301a5cb0edc2d2c77598214891a27399b0be5b22`
+**Generated:** 2026-04-15T21:21:34Z
 
 ## All Files
 
@@ -41,6 +41,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-NOTE-2026-04-10.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-TS.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/DFSP-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GEO-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GOV-CONST-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/HOTFIX-AUTH-001.md`
@@ -52,7 +53,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/PV-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
-- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/DFSP-001.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-09.md`
@@ -72,6 +72,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-TS-CLEANUP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CLEAN-SWEEP-2026-04-13.md`
 - `PROGRAM_CONTROL/REPORT_BACK/DFSP-001-BLOCKED.md`
+- `PROGRAM_CONTROL/REPORT_BACK/DFSP-001-OTP-ACCOUNT-HOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/ENFORCE-FINANCIAL-SCHEMA-INTEGRITY.md`
 - `PROGRAM_CONTROL/REPORT_BACK/FASTTRACK-STATEMENT-SURFACES.md`
 - `PROGRAM_CONTROL/REPORT_BACK/FIZ-001-GOVERNANCE-CONSTANTS.md`
@@ -215,9 +216,11 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/creator/surfaces/roster.gateway.ts`
 - `services/core-api/src/creator/surfaces/statements.service.ts`
 - `services/core-api/src/db.ts`
+- `services/core-api/src/dfsp/account-recovery-hold.service.ts`
 - `services/core-api/src/dfsp/checkout-confirmation.service.ts`
 - `services/core-api/src/dfsp/dfsp.module.ts`
 - `services/core-api/src/dfsp/integrity-hold.service.ts`
+- `services/core-api/src/dfsp/platform-otp.service.ts`
 - `services/core-api/src/dfsp/purchase-hours-gate.service.ts`
 - `services/core-api/src/dfsp/risk-scoring.service.ts`
 - `services/core-api/src/dfsp/voice-sample.service.ts`
