@@ -7,6 +7,8 @@ import { RiskScoringService } from './risk-scoring.service';
 import { IntegrityHoldService } from './integrity-hold.service';
 import { CheckoutConfirmationService } from './checkout-confirmation.service';
 import { VoiceSampleService } from './voice-sample.service';
+import { PlatformOtpService } from './platform-otp.service';
+import { AccountRecoveryHoldService } from './account-recovery-hold.service';
 
 @Module({
   providers: [
@@ -15,6 +17,8 @@ import { VoiceSampleService } from './voice-sample.service';
     IntegrityHoldService,
     CheckoutConfirmationService,
     VoiceSampleService,
+    PlatformOtpService,
+    AccountRecoveryHoldService,
   ],
   exports: [
     PurchaseHoursGateService,
@@ -22,6 +26,8 @@ import { VoiceSampleService } from './voice-sample.service';
     IntegrityHoldService,
     CheckoutConfirmationService,
     VoiceSampleService,
+    PlatformOtpService,
+    AccountRecoveryHoldService,
   ],
 })
 export class DfspModule {}
