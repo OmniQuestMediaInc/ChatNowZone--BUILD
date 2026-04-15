@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `4c1349d333594a7dd2df730dde121551e9df9335`
-**Generated:** 2026-04-15T19:11:18Z
+**Branch:** `claude/dfsp-001-add-bcrypt-dependency`
+**Commit:** `a32dbd7257465f5614c336e2686c2c406fd8777c`
+**Generated:** 2026-04-15T19:24:59Z
 
 ## All Files
 
@@ -67,6 +67,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/BIJOU-001-PASS-PRICING-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/BIJOU-002-SESSION-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-GOV-GATE-CLEARANCE-2026-04-11.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-TS-CLEANUP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CLEAN-SWEEP-2026-04-13.md`
 - `PROGRAM_CONTROL/REPORT_BACK/DFSP-001-BLOCKED.md`
