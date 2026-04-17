@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `06b11c2966a440041e372e4aa36a9fe2ce435cf6`
-**Generated:** 2026-04-17T08:16:28Z
+**Branch:** `copilot/choregov-const-001-patch`
+**Commit:** `85a48ae203d108ca8e9a208c7f53f4baf9425be5`
+**Generated:** 2026-04-17T09:13:45Z
 
 ## All Files
 
@@ -65,6 +65,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-RETIRE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/THREAD11-COPILOT-INTAKE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/THREAD11-DIRECTIVE-SERIES-001.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
