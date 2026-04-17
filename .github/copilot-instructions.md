@@ -80,6 +80,12 @@ If you are not in a workspace checkout, HARD_STOP.
   - `UI:` Frontend / Black-Glass
   - `GOV:` Compliance / Sovereign CaC
   - `CHORE:` Tooling, linting, formatting
+  - `GGS:` GateGuard Sentinel™ core service
+  - `GGS-AV:` GateGuard Sentinel™ AV module
+  - `CYR:` Cyrano™ subsystem
+  - `GGS: + FIZ:` Dual prefix — GateGuard Sentinel commits touching
+    ledger, payout, balance, or escrow (both prefixes required,
+    FIZ: format with REASON/IMPACT/CORRELATION_ID)
 - FIZ-scoped changes require `REASON:`, `IMPACT:`, and `CORRELATION_ID:` in commit message.
 
 ---
@@ -145,6 +151,20 @@ These apply to all coding agents at all times:
 - **LATENCY INVARIANT** — All chat and haptic events via NATS.io. No REST polling.
 - **DROID MODE** — Execute provided payloads exactly as written. No creative deviation.
 
+### FIZ Path Expansions (Tech Debt Delta 2026-04-16)
+
+The following paths are added to the Financial Integrity Zone.
+All existing FIZ rules apply (REASON, IMPACT, CORRELATION_ID in commit):
+
+- `services/gateguard-sentinel/` — GGS ledger-touching logic, welfare
+  decisions that block or modify transactions, ZK proof audit records
+- `services/gateguard-sentinel/av/` — AV verification token issuance
+  and archival
+- `services/cyrano/` (payout-touching paths only) — Cyrano™ premium
+  feature gating that touches CZT spend or creator payout
+- Any schema migration touching: `pixel_legacy`, `payout_rate`,
+  `rate_state`, `welcome_credit_active`, `go_no_go_decision`
+
 ---
 
 ## 9) Agent Handoff Protocol
@@ -154,6 +174,93 @@ When work is handed between agents (Claude, Copilot, KIMI, etc.):
 1. The handing agent leaves a `## HANDOFF` block at the bottom of the relevant file or in a `HANDOFF.md` in the affected service folder.
 2. The block must state: what was built, what was intentionally left incomplete, and what the next agent's first task is.
 3. No agent modifies another agent's completed work without an explicit instruction from a human operator.
+
+---
+
+## 10) Autonomous Directive Protocol
+
+When operating in autonomous / background / Workspace mode, Copilot
+follows this protocol without waiting for human prompting per task.
+
+### Step 1 — Sync
+Run: `git fetch origin && git reset --hard origin/main`
+Never act on cached or stale repo state.
+
+### Step 2 — Find next task
+Check `PROGRAM_CONTROL/DIRECTIVES/QUEUE/` for directive files where:
+  - `**Agent:** COPILOT` is in the header
+  - No corresponding file exists in `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/`
+  - No open PR exists referencing this directive ID
+Pick the oldest file by filename sort (alphabetical).
+If no eligible directive exists: stop. Do not invent work.
+
+### Step 3 — Conflict check
+Read the `**Touches:**` field of the selected directive.
+Check all other directives in QUEUE and IN_PROGRESS for overlapping
+file paths.
+If overlap found:
+  - Do NOT proceed with the conflicting directive.
+  - Open a GitHub Issue titled: `CONFLICT: [ID-A] × [ID-B] — [filepath]`
+  - Label: `needs-conflict-review`
+  - Body: list the conflicting directives and the overlapping paths.
+  - Stop. Await human resolution.
+
+### Step 4 — Move to IN_PROGRESS
+Move the directive file:
+  FROM: `PROGRAM_CONTROL/DIRECTIVES/QUEUE/[ID].md`
+  TO:   `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/[ID].md`
+Commit: `CHORE: Move [ID] QUEUE → IN_PROGRESS`
+Push to a new branch: `copilot/[id-lowercase]`
+
+### Step 5 — Execute
+Read the directive file completely before writing any code.
+Execute exactly as written. No synthesis. No creative deviation.
+DROID MODE applies.
+
+### Step 6 — File report-back
+Create: `PROGRAM_CONTROL/REPORT_BACK/[ID]-REPORT-BACK.md`
+Include: branch, HEAD commit hash, files changed (git diff --stat),
+commands run with outputs, all invariants confirmed or flagged,
+npx tsc --noEmit result, result: SUCCESS or HARD_STOP.
+
+### Step 7 — Update REQUIREMENTS_MASTER
+Open `docs/REQUIREMENTS_MASTER.md`.
+Find the row matching this directive's ID.
+Update the `Status` field from `QUEUED` → `DONE`.
+If the directive was a RETIRED item removal: update the relevant
+requirement row Status to `RETIRED — removed`.
+
+### Step 8 — Move to DONE
+Move the directive file:
+  FROM: `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/[ID].md`
+  TO:   `PROGRAM_CONTROL/DIRECTIVES/DONE/[ID].md`
+Commit all changes (report-back + REQUIREMENTS_MASTER update +
+directive move) in one commit:
+  `CHORE: [ID] complete — report-back filed, directive moved to DONE`
+
+### Step 9 — Open PR
+Open PR targeting `main`.
+Title: `[PREFIX]: [ID] — [short description]`
+Body: paste the report-back content.
+Labels: `copilot-task`, `ready-for-review`
+FIZ-scoped directives: add label `fiz-review-required`
+
+### HARD_STOP conditions
+Stop immediately and open a blocking issue if:
+  - Directive file is missing required fields (Agent/Parallel-safe/Touches)
+  - A GovernanceConfig constant referenced in the directive does not exist
+    and the directive does not explicitly say to add it
+  - A Prisma model referenced does not exist in schema.prisma
+  - npx tsc --noEmit produces NEW errors (pre-existing baseline errors
+    are acceptable — verify with git stash baseline)
+  - Any FIZ-scoped change lacks REASON/IMPACT/CORRELATION_ID in commit
+
+### What Copilot must NEVER do autonomously
+  - Modify another agent's completed work without explicit human instruction
+  - Clear a GOV gate (clearance artifacts are CEO-signed only)
+  - Merge its own PR (auto-merge handles this via CI)
+  - Create directives (directive authoring is Claude Chat's role)
+  - Make CEO-level decisions when a CLARIFY tag is present in a directive
 
 ---
 
