@@ -138,6 +138,13 @@ export const NATS_TOPICS = {
   BIJOU_SESSION_OPENED:              'bijou.session.opened',
   BIJOU_SESSION_CLOSED:              'bijou.session.closed',
   BIJOU_SESSION_CANCELLED:           'bijou.session.cancelled',
+
+  // ── Bijou Admission (BJ-003) ──────────────────────────────────────────────
+  BIJOU_ADMISSION_OFFERED:           'bijou.admission.offered',
+  BIJOU_ADMISSION_ADMITTED:          'bijou.admission.admitted',
+  BIJOU_ADMISSION_STANDBY:           'bijou.admission.standby',
+  BIJOU_ADMISSION_EJECTED:           'bijou.admission.ejected',
+  BIJOU_ADMISSION_ABANDONED:         'bijou.admission.abandoned',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];

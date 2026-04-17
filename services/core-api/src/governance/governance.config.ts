@@ -91,13 +91,16 @@ export const GovernanceConfig = {
     LAST_BOOKING_MINUTE: 30,
   },
 
-  // ── BIJOU Scheduler (BJ-002) ──────────────────────────────────────────────
-  // Canonical bijou scheduling constants. Values locked 2026-04-17.
+  // ── BIJOU Scheduler (BJ-002) + Admission (BJ-003) ────────────────────────
+  // Canonical bijou scheduling + admission constants. Values locked 2026-04-17.
   // Revisions require BIJOU: commit.
   BIJOU: {
     MAX_CAPACITY: 24,
     SESSION_DURATION_MINUTES: 60,
     SCHEDULE_SLOT_MINUTES: 15,
     MAX_SESSIONS_PER_HOUR: 2,
+    // BJ-003: Admission window + camera grace.
+    ADMIT_ACCEPT_WINDOW_SECONDS: 10,
+    CAMERA_GRACE_SECONDS: 30,
   },
 } as const;
