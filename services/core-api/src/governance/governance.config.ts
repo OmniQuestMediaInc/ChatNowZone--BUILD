@@ -91,8 +91,8 @@ export const GovernanceConfig = {
     LAST_BOOKING_MINUTE: 30,
   },
 
-  // ── BIJOU Scheduler (BJ-002) + Admission (BJ-003) ────────────────────────
-  // Canonical bijou scheduling + admission constants. Values locked 2026-04-17.
+  // ── BIJOU Scheduler (BJ-002) + Admission (BJ-003) + Dwell (BJ-004) ───────
+  // Canonical bijou scheduling + admission + dwell constants.
   // Revisions require BIJOU: commit.
   BIJOU: {
     MAX_CAPACITY: 24,
@@ -102,5 +102,9 @@ export const GovernanceConfig = {
     // BJ-003: Admission window + camera grace.
     ADMIT_ACCEPT_WINDOW_SECONDS: 10,
     CAMERA_GRACE_SECONDS: 30,
+    // BJ-004: Dwell-credit algorithm. Creator/platform split 65/35.
+    DWELL_CREDIT_INTERVAL_SECONDS: 60,
+    DWELL_CREDIT_PER_INTERVAL: 5,
+    BIJOU_CREATOR_SPLIT: 0.65,
   },
 } as const;
