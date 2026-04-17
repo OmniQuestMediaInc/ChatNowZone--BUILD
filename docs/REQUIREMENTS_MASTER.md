@@ -34,11 +34,11 @@
 
 | ID | Requirement | Tag | Status | Directive | FIZ |
 |----|-------------|-----|--------|-----------|-----|
-| TOK-001 | Remove ShowZoneTokens (SZT) from schema, wallet service, conversion engine, UI, allotment job. Migrate any SZT balance records to CZT equivalent. | RETIRED | NEEDS_DIRECTIVE | — | YES |
-| TOK-002 | Remove Venue Scarcity Token logic (SKU, pricing catalogue, inventory-gating, wallet references) | RETIRED | NEEDS_DIRECTIVE | — | NO |
-| TOK-003 | Remove Wristband/Physical Token from bundle ladder, wallet, payout engine, UI | RETIRED | NEEDS_DIRECTIVE | — | NO |
-| TOK-004 | Remove Standard-to-ShowToken conversion engine and conversion UI | RETIRED | NEEDS_DIRECTIVE | — | NO |
-| TOK-005 | Rework dual-balance wallet UI to single CZT balance display only | RETIRED | NEEDS_DIRECTIVE | — | NO |
+| TOK-001 | Remove ShowZoneTokens (SZT) from schema, wallet service, conversion engine, UI, allotment job. Migrate any SZT balance records to CZT equivalent. | RETIRED | QUEUED | TOK-RETIRE-001 | YES |
+| TOK-002 | Remove Venue Scarcity Token logic (SKU, pricing catalogue, inventory-gating, wallet references) | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
+| TOK-003 | Remove Wristband/Physical Token from bundle ladder, wallet, payout engine, UI | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
+| TOK-004 | Remove Standard-to-ShowToken conversion engine and conversion UI | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
+| TOK-005 | Rework dual-balance wallet UI to single CZT balance display only | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
 | TOK-006 | Token origin tagging (PURCHASED / GIFTED) on CZT only. Critical for refund calc and ASC 606 breakage. | CHANGED | DONE | TOK-AUDIT-001 | YES |
 | TOK-007 | Premium environment pricing: replace SZT-gating with CZT quantity threshold checks per venue | CHANGED | NEEDS_DIRECTIVE | — | NO |
 | TOK-008 | Bundle ladder: rearchitect to CZT-only single-currency ladder. Remove all SZT entries. CZT quantities CEO-confirmed before build. | CHANGED | CLARIFY | — | YES |
@@ -53,11 +53,11 @@
 
 | ID | Requirement | Tag | Status | Directive | FIZ |
 |----|-------------|-----|--------|-----------|-----|
-| PAY-001 | RATE_COLD: heat 0-33 = $0.075/CZT. Immutable constant in payout engine. | NET-NEW | DONE | PAY-RATES-001 | YES |
-| PAY-002 | RATE_WARM: heat 34-60 = $0.080/CZT | NET-NEW | DONE | PAY-RATES-001 | YES |
-| PAY-003 | RATE_HOT: heat 61-85 = $0.085/CZT | NET-NEW | DONE | PAY-RATES-001 | YES |
-| PAY-004 | RATE_INFERNO: heat 86-100 = $0.090/CZT | NET-NEW | DONE | PAY-RATES-001 | YES |
-| PAY-005 | RATE_DIAMOND_FLOOR: $0.080 minimum on 10,000+ CZT bulk. Higher rate applies if heat warrants. | NET-NEW | DONE | PAY-RATES-001 | YES |
+| PAY-001 | RATE_COLD: heat 0-33 = $0.075/CZT. Immutable constant in payout engine. | NET-NEW | QUEUED | PAY-RATES-001 | YES |
+| PAY-002 | RATE_WARM: heat 34-60 = $0.080/CZT | NET-NEW | QUEUED | PAY-RATES-001 | YES |
+| PAY-003 | RATE_HOT: heat 61-85 = $0.085/CZT | NET-NEW | QUEUED | PAY-RATES-001 | YES |
+| PAY-004 | RATE_INFERNO: heat 86-100 = $0.090/CZT | NET-NEW | QUEUED | PAY-RATES-001 | YES |
+| PAY-005 | RATE_DIAMOND_FLOOR: $0.080 minimum on 10,000+ CZT bulk. Higher rate applies if heat warrants. | NET-NEW | QUEUED | PAY-RATES-001 | YES |
 | PAY-006 | Purchase-moment lock: Room-Heat multiplier captured at tx_initiated. Rate stored immutably on transaction record. Cannot be recalculated at delivery. | NET-NEW | NEEDS_DIRECTIVE | — | YES |
 | PAY-007 | Human-action only guardrail: block clipboard paste on all tip/CZT-spend UI. Keyboard and touch only. | NET-NEW | NEEDS_DIRECTIVE | — | NO |
 | PAY-008 | Audio modulation check: rate escalation above RATE_COLD requires active audio signal. Silent room cannot accumulate heat above Cold. Enforce in OBS kernel. | NET-NEW | NEEDS_DIRECTIVE | — | NO |
