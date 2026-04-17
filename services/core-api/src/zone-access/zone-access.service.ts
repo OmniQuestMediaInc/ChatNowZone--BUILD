@@ -1,4 +1,5 @@
 // FIZ: MEMB-001 — ZoneAccessService
+// FIZ: MEMB-002 — wired to MembershipService.getActiveTier() for durable tier resolution.
 // Server-side zone access enforcement. Resolves membership tier + ShowZonePass
 // and checks against ZONE_MAP in GovernanceConfig.
 import { Injectable, Logger, ForbiddenException } from '@nestjs/common';
@@ -6,12 +7,12 @@ import { PrismaService } from '../prisma.service';
 import {
   ZONE_MAP,
   SHOW_ZONE_PASS_OVERRIDE_ZONES,
-  ZONE_ACCESS_TIERS,
   ZoneAccessTier,
   ZoneAccessZone,
 } from '../config/governance.config';
 import { NATS_TOPICS } from '../../../nats/topics.registry';
 import { NatsService } from '../nats/nats.service';
+import { MembershipService } from '../membership/membership.service';
 
 export interface ZoneAccessDecision {
   result: 'GRANTED' | 'DENIED';
@@ -30,6 +31,7 @@ export class ZoneAccessService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly natsService: NatsService,
+    private readonly membershipService: MembershipService,
   ) {}
 
   /**
@@ -47,8 +49,7 @@ export class ZoneAccessService {
   ): Promise<ZoneAccessDecision> {
     const ruleAppliedId = `MEMB-001_ZONE_ACCESS_v1`;
 
-    // Step 1: Resolve membership tier
-    // Stub: returns DAY_PASS. MEMB-002 will wire MembershipService.getActiveTier()
+    // Step 1: Resolve membership tier (MEMB-002: MembershipService.getActiveTier)
     const resolvedTier: ZoneAccessTier = await this.resolveUserTier(userId);
 
     // Step 2: Check for active ShowZonePass for this zone
@@ -114,12 +115,12 @@ export class ZoneAccessService {
 
   /**
    * Resolve user's current membership tier.
-   * Stub implementation returns DAY_PASS for all users.
-   * MEMB-002 will replace this with MembershipService.getActiveTier().
+   * MEMB-002: delegates to MembershipService.getActiveTier() which returns
+   * DAY_PASS when the user has no ACTIVE subscription.
    */
-  async resolveUserTier(_userId: string): Promise<ZoneAccessTier> {
-    // TODO: MEMB-002 — wire to MembershipService.getActiveTier()
-    return ZONE_ACCESS_TIERS[0]; // DAY_PASS
+  async resolveUserTier(userId: string): Promise<ZoneAccessTier> {
+    const tier = await this.membershipService.getActiveTier(userId);
+    return tier as ZoneAccessTier;
   }
 
   /**

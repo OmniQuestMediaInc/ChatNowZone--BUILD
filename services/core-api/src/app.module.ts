@@ -19,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
 import { ShowZoneModule } from '../../showzone/src/showzone.module';
 import { SchedulingModule } from './scheduling/scheduling.module';
 import { ZoneAccessModule } from './zone-access/zone-access.module';
+import { MembershipModule } from './membership/membership.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ZoneAccessModule } from './zone-access/zone-access.module';
     AuthModule,
     ShowZoneModule,
     SchedulingModule,
+    MembershipModule,
     ZoneAccessModule,
   ],
 })
