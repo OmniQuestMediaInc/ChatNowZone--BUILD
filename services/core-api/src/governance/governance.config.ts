@@ -90,4 +90,14 @@ export const GovernanceConfig = {
     LAST_BOOKING_HOUR: 22,       // 10:30 PM last call
     LAST_BOOKING_MINUTE: 30,
   },
+
+  // ── BIJOU Scheduler (BJ-002) ──────────────────────────────────────────────
+  // Canonical bijou scheduling constants. Values locked 2026-04-17.
+  // Revisions require BIJOU: commit.
+  BIJOU: {
+    MAX_CAPACITY: 24,
+    SESSION_DURATION_MINUTES: 60,
+    SCHEDULE_SLOT_MINUTES: 15,
+    MAX_SESSIONS_PER_HOUR: 2,
+  },
 } as const;
