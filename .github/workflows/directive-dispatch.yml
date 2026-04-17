@@ -33,9 +33,10 @@ jobs:
     steps:
       - name: Parse agent from issue body
         id: parse
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          BODY="${{ github.event.issue.body }}"
-          AGENT=$(echo "$BODY" | grep -oP '(?<=\*\*Agent:\*\* ).*' | head -1 | tr -d '[:space:]')
+          AGENT=$(echo "$ISSUE_BODY" | grep -oP '(?<=\*\*Agent:\*\* ).*' | head -1 | tr -d '[:space:]')
           echo "CHECK: Detected agent = ${AGENT}"
           echo "agent=${AGENT}" >> "$GITHUB_OUTPUT"
 
