@@ -53,11 +53,11 @@
 
 | ID | Requirement | Tag | Status | Directive | FIZ |
 |----|-------------|-----|--------|-----------|-----|
-| PAY-001 | RATE_COLD: heat 0-33 = $0.075/CZT. Immutable constant in payout engine. | NET-NEW | NEEDS_DIRECTIVE | — | YES |
-| PAY-002 | RATE_WARM: heat 34-60 = $0.080/CZT | NET-NEW | NEEDS_DIRECTIVE | — | YES |
-| PAY-003 | RATE_HOT: heat 61-85 = $0.085/CZT | NET-NEW | NEEDS_DIRECTIVE | — | YES |
-| PAY-004 | RATE_INFERNO: heat 86-100 = $0.090/CZT | NET-NEW | NEEDS_DIRECTIVE | — | YES |
-| PAY-005 | RATE_DIAMOND_FLOOR: $0.080 minimum on 10,000+ CZT bulk. Higher rate applies if heat warrants. | NET-NEW | NEEDS_DIRECTIVE | — | YES |
+| PAY-001 | RATE_COLD: heat 0-33 = $0.075/CZT. Immutable constant in payout engine. | NET-NEW | DONE | PAY-RATES-001 | YES |
+| PAY-002 | RATE_WARM: heat 34-60 = $0.080/CZT | NET-NEW | DONE | PAY-RATES-001 | YES |
+| PAY-003 | RATE_HOT: heat 61-85 = $0.085/CZT | NET-NEW | DONE | PAY-RATES-001 | YES |
+| PAY-004 | RATE_INFERNO: heat 86-100 = $0.090/CZT | NET-NEW | DONE | PAY-RATES-001 | YES |
+| PAY-005 | RATE_DIAMOND_FLOOR: $0.080 minimum on 10,000+ CZT bulk. Higher rate applies if heat warrants. | NET-NEW | DONE | PAY-RATES-001 | YES |
 | PAY-006 | Purchase-moment lock: Room-Heat multiplier captured at tx_initiated. Rate stored immutably on transaction record. Cannot be recalculated at delivery. | NET-NEW | NEEDS_DIRECTIVE | — | YES |
 | PAY-007 | Human-action only guardrail: block clipboard paste on all tip/CZT-spend UI. Keyboard and touch only. | NET-NEW | NEEDS_DIRECTIVE | — | NO |
 | PAY-008 | Audio modulation check: rate escalation above RATE_COLD requires active audio signal. Silent room cannot accumulate heat above Cold. Enforce in OBS kernel. | NET-NEW | NEEDS_DIRECTIVE | — | NO |
