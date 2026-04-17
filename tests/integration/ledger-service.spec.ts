@@ -12,6 +12,7 @@ import {
   TokenOrigin,
   WalletBucket,
 } from '../../services/core-api/src/finance/ledger.service';
+import { TokenOrigin } from '../../services/core-api/src/finance/types/ledger.types';
 import { GovernanceConfigService } from '../../services/core-api/src/config/governance.config';
 import {
   loadWallets,
@@ -207,6 +208,9 @@ describe('LedgerService — recordEntry', () => {
         userId: tx.customer_id,
         amount: BigInt(tx.gross_tokens),
         tokenType: TokenType.REGULAR,
+        // Seed-data replay: positive credits representing user-purchased token
+        // replays for scenario validation. Treated as PURCHASED. (Flagged in
+        // TOK-006-FOLLOWUP report-back as context-inferred.)
         tokenOrigin: TokenOrigin.PURCHASED,
         referenceId: tx.idempotency_key,
         reasonCode: 'TIP',

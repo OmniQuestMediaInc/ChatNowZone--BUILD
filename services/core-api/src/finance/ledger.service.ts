@@ -53,6 +53,9 @@ export class LedgerService {
    * Source: ChatNowZone_Global_Pricing_Spec_v1_1
    * WO-032: amount MUST be a BigInt; fractional tokens are prohibited.
    *         rule_applied_id defaults to GENERAL_GOVERNANCE_v10 when omitted.
+   * TOK-006-FOLLOWUP: tokenOrigin is required on every ledger write — no ledger
+   *         entry may omit it. PURCHASED for user top-ups/purchases, GIFTED for
+   *         platform grants, promotions, and transfers.
    */
   async recordEntry(data: {
     userId: string;
@@ -92,12 +95,13 @@ export class LedgerService {
       user_id: data.userId,
       amount: data.amount.toString(), // BigInt compatibility
       token_type: data.tokenType,
-      token_origin: data.tokenOrigin,
+      token_origin: data.tokenOrigin, // TOK-006-FOLLOWUP: persisted on every write
       reference_id: data.referenceId,
       reason_code: data.reasonCode,
       metadata: {
         ...data.metadata,
         rule_applied_id: ruleAppliedId,
+        token_origin: data.tokenOrigin,
         payout_rate_applied: this.resolvePayoutRate(
           data.heatScore ?? 0,
           data.diamondFloorActive ?? false,
