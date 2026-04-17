@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `536fe7f214a8a5295c97855fc281244fe80269a5`
-**Generated:** 2026-04-17T01:56:43Z
+**Branch:** `claude/update-claude-directive-protocol-elNzg`
+**Commit:** `8ac3209d2861059d08bd172b60e7de57a54baa93`
+**Generated:** 2026-04-17T01:58:50Z
 
 ## All Files
 
