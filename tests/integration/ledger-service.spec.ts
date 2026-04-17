@@ -9,6 +9,7 @@
 import {
   LedgerService,
   TokenType,
+  TokenOrigin,
   WalletBucket,
 } from '../../services/core-api/src/finance/ledger.service';
 import { TokenOrigin } from '../../services/core-api/src/finance/types/ledger.types';

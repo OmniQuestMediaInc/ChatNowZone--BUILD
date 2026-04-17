@@ -8,6 +8,8 @@ import { GovernanceConfig } from '../governance/governance.config';
 import { TipTransaction } from './ledger.types';
 import { TokenOrigin } from './types/ledger.types';
 
+export { TokenOrigin };
+
 /**
  * WO-003 / WO-032: Deterministic Ledger Service
  * Implementation of OQMI Doctrine: Append-Only, Deterministic, Idempotent.
@@ -171,6 +173,17 @@ export class LedgerService {
   }
 
   /**
+   * Maps a WalletBucket to the appropriate TokenOrigin.
+   * PURCHASED bucket → PURCHASED (user bought tokens with real money).
+   * PROMOTIONAL_BONUS / MEMBERSHIP_ALLOCATION → GIFTED (platform grant or allocation).
+   */
+  private bucketToOrigin(bucket: WalletBucket): TokenOrigin {
+    return bucket === WalletBucket.PURCHASED
+      ? TokenOrigin.PURCHASED
+      : TokenOrigin.GIFTED;
+  }
+
+  /**
    * FIZ-003: Three-Bucket Wallet — deterministic spend-order debit.
    * Spend order: PROMOTIONAL_BONUS (1) → MEMBERSHIP_ALLOCATION (2) → PURCHASED (3).
    * This order is system-enforced and cannot be user-selected.
@@ -204,17 +217,11 @@ export class LedgerService {
       const debitAmount = remaining < bucketBalance ? remaining : bucketBalance;
       remaining -= debitAmount;
 
-      // TOK-006-FOLLOWUP: bucket → TokenOrigin mapping is deterministic.
-      // PURCHASED bucket holds user-bought tokens; PROMOTIONAL_BONUS and
-      // MEMBERSHIP_ALLOCATION hold platform-granted tokens.
-      const tokenOrigin =
-        bucket === WalletBucket.PURCHASED ? TokenOrigin.PURCHASED : TokenOrigin.GIFTED;
-
       const entry = await this.recordEntry({
         userId: data.userId,
         amount: -debitAmount,
         tokenType: data.tokenType,
-        tokenOrigin,
+        tokenOrigin: this.bucketToOrigin(bucket),
         referenceId: `${data.referenceId}:${bucket}`,
         reasonCode: data.reasonCode,
         ruleAppliedId: data.ruleAppliedId ?? 'THREE_BUCKET_DEBIT_v1',
