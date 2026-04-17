@@ -34,10 +34,10 @@
 
 | ID | Requirement | Tag | Status | Directive | FIZ |
 |----|-------------|-----|--------|-----------|-----|
-| TOK-001 | Remove ShowZoneTokens (SZT) from schema, wallet service, conversion engine, UI, allotment job. Migrate any SZT balance records to CZT equivalent. | RETIRED | QUEUED | TOK-RETIRE-001 | YES |
-| TOK-002 | Remove Venue Scarcity Token logic (SKU, pricing catalogue, inventory-gating, wallet references) | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
-| TOK-003 | Remove Wristband/Physical Token from bundle ladder, wallet, payout engine, UI | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
-| TOK-004 | Remove Standard-to-ShowToken conversion engine and conversion UI | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
+| TOK-001 | Remove ShowZoneTokens (SZT) from schema, wallet service, conversion engine, UI, allotment job. Migrate any SZT balance records to CZT equivalent. | RETIRED | DONE | TOK-RETIRE-001 | YES |
+| TOK-002 | Remove Venue Scarcity Token logic (SKU, pricing catalogue, inventory-gating, wallet references) | RETIRED | DONE | TOK-RETIRE-001 | NO |
+| TOK-003 | Remove Wristband/Physical Token from bundle ladder, wallet, payout engine, UI | RETIRED | DONE | TOK-RETIRE-001 | NO |
+| TOK-004 | Remove Standard-to-ShowToken conversion engine and conversion UI | RETIRED | DONE | TOK-RETIRE-001 | NO |
 | TOK-005 | Rework dual-balance wallet UI to single CZT balance display only | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
 | TOK-006 | Token origin tagging (PURCHASED / GIFTED) on CZT only. Critical for refund calc and ASC 606 breakage. | CHANGED | DONE | TOK-AUDIT-001 | YES |
 | TOK-007 | Premium environment pricing: replace SZT-gating with CZT quantity threshold checks per venue | CHANGED | NEEDS_DIRECTIVE | — | NO |
@@ -65,7 +65,7 @@
 | PAY-010 | 100% tip pass-through: VERIFY platform_deduction = 0 on all tip transactions after CZT migration. Add test coverage. | VERIFY | VERIFY | — | YES |
 | PAY-011 | Tip transaction record: add heat_score_at_tip (int) and payout_rate_applied (decimal) fields. | CHANGED | NEEDS_DIRECTIVE | — | YES |
 | PAY-012 | Creator rate display: show live rate range ($0.075-$0.090), current Room-Heat tier, and active rate. Not a static number. | CHANGED | NEEDS_DIRECTIVE | — | NO |
-| PAY-013 | Remove founding creator static rate assignment at registration. Superseded by Pixel Legacy + Tease rate. | SUPERSEDED | NEEDS_DIRECTIVE | — | YES |
+| PAY-013 | Remove founding creator static rate assignment at registration. Superseded by Pixel Legacy + Tease rate. | SUPERSEDED | DONE | TOK-RETIRE-001 | YES |
 
 ---
 
