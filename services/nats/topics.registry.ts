@@ -121,6 +121,9 @@ export const NATS_TOPICS = {
   SCHEDULE_COVERAGE_GAP_DETECTED:  'gz.schedule.coverage.gap_detected',
   SCHEDULE_STAT_HOLIDAY_ALERT:     'gz.schedule.stat_holiday.alert',
   SCHEDULE_REMINDER_BLOCK_CUTOFF:  'gz.schedule.reminder.block_cutoff',
+
+  // ── Zone Access (MEMB-001) ─────────────────────────────────────────────────
+  ZONE_ACCESS_DENIED:              'zone.access.denied',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];

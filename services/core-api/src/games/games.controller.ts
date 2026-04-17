@@ -1,8 +1,9 @@
 // services/core-api/src/games/games.controller.ts
 // BIJOU: GM-002 — Games controller enforcing debit-before-reveal invariant
 // Doctrine: token debit via LedgerService MUST precede outcome resolution.
-import { Controller, Post, Body, HttpCode, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Logger, UseGuards } from '@nestjs/common';
 import { GameEngineService, GameType } from './game-engine.service';
+import { ZoneAccessGuard, ZoneGate } from '../zone-access/zone-access.guard';
 
 export interface InitiatePlayRequest {
   user_id: string;
@@ -27,6 +28,8 @@ export interface PlayResponse {
 }
 
 @Controller('games')
+@UseGuards(ZoneAccessGuard)
+@ZoneGate('BIJOU')
 export class GamesController {
   private readonly logger = new Logger(GamesController.name);
 

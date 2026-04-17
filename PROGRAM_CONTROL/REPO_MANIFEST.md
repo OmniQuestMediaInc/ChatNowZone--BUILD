@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `70b30c93cfa149a2761ed9236ab5d471abb5933a`
-**Generated:** 2026-04-17T05:40:39Z
+**Branch:** `copilot/review-program-control-directives`
+**Commit:** `5002a08f23badcdfb977c0f2c6528c60ce5d0226`
+**Generated:** 2026-04-17T05:58:26Z
 
 ## All Files
 
@@ -125,6 +125,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/LEGAL-HOLD-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION-EXEC.md`
 - `PROGRAM_CONTROL/REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION.md`
+- `PROGRAM_CONTROL/REPORT_BACK/MEMB-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MOD-001-INCIDENT-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-001-FABRIC-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-DFSP001-TOPICS-REPORT-BACK.md`
@@ -299,6 +300,9 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/scheduling/zonebot.service.ts`
 - `services/core-api/src/studio/studio-report.controller.ts`
 - `services/core-api/src/studio/studio-report.service.ts`
+- `services/core-api/src/zone-access/zone-access.guard.ts`
+- `services/core-api/src/zone-access/zone-access.module.ts`
+- `services/core-api/src/zone-access/zone-access.service.ts`
 - `services/core-api/tsconfig.json`
 - `services/nats/topics.registry.d.ts`
 - `services/nats/topics.registry.js`

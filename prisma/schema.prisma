@@ -843,3 +843,27 @@ model WebhookIdempotencyLog {
 
   @@map("webhook_idempotency_log")
 }
+
+// ─── Zone Access — MEMB-001: ShowZonePass for zone-gate overrides ────────────
+
+enum ZoneAccessZone {
+  CHAT_ZONE
+  SHOW_THEATRE
+  BIJOU
+  PRIVATE_CALL
+  DIAMOND_CONCIERGE
+}
+
+model ShowZonePass {
+  id              String         @id @default(uuid())
+  user_id         String         @db.Uuid
+  zone            ZoneAccessZone
+  valid_from      DateTime       @db.Timestamptz
+  valid_until     DateTime       @db.Timestamptz
+  organization_id String         @db.VarChar(100)
+  tenant_id       String         @db.VarChar(100)
+  created_at      DateTime       @default(now()) @db.Timestamptz
+
+  @@index([user_id, zone])
+  @@map("show_zone_passes")
+}

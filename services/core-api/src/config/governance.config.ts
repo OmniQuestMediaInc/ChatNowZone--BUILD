@@ -338,6 +338,25 @@ export const FAN_CLUB = {
   // Fan club fee applies PLATFORM_GLOBAL.MARKETPLACE_FEE_PCT (18%) — no separate constant.
 } as const;
 
+// ─── ZONE MAP (MEMB-001 — Zone Access Enforcement) ───────────────────────────
+// Defines which membership tiers may access which zones.
+// ShowZonePass overrides tier gate for SHOW_THEATRE and BIJOU only.
+export const ZONE_MAP = {
+  CHAT_ZONE:         ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
+  SHOW_THEATRE:      ['ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
+  BIJOU:             ['OMNIPASS_PLUS', 'DIAMOND'] as const,
+  PRIVATE_CALL:      ['OMNIPASS_PLUS', 'DIAMOND'] as const,
+  DIAMOND_CONCIERGE: ['DIAMOND'] as const,
+} as const;
+
+// Zones where a ShowZonePass can override tier-based denial
+export const SHOW_ZONE_PASS_OVERRIDE_ZONES = ['SHOW_THEATRE', 'BIJOU'] as const;
+
+// Canonical membership tiers for zone access (ordered lowest → highest)
+export const ZONE_ACCESS_TIERS = ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const;
+export type ZoneAccessTier = typeof ZONE_ACCESS_TIERS[number];
+export type ZoneAccessZone = keyof typeof ZONE_MAP;
+
 // ─── CREATOR SAAS (CEO-DECISIONS-2026-04-12-B) ────────────────────────────────
 export const CREATOR_SAAS = {
   TIERS_ACTIVE: false,            // Master kill switch — admin toggles on
