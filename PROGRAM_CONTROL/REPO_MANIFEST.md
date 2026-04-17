@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/membership-schema-foundation-X64KM`
-**Commit:** `7221f861f00b73c65a648ae8e39d983cbf94ce8e`
-**Generated:** 2026-04-17T16:53:57Z
+**Branch:** `main`
+**Commit:** `89acb32b4b89438f0e0445074dd55ff934fbbb40`
+**Generated:** 2026-04-17T16:55:55Z
 
 ## All Files
 
