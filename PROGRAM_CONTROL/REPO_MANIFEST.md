@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `3c5d2fce3226d5d13ca795626cf97b859cc4a107`
-**Generated:** 2026-04-17T05:06:47Z
+**Commit:** `1936222d87c4a8a322bd98761769c251ac82eb0e`
+**Generated:** 2026-04-17T05:28:11Z
 
 ## All Files
 
@@ -64,6 +64,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-RETIRE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/THREAD11-DIRECTIVE-SERIES-001.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-09.md`
