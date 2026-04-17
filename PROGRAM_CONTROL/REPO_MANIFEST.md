@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `9270f940f1d865485027b97852f4b475e2bba220`
-**Generated:** 2026-04-17T00:57:10Z
+**Branch:** `copilot/choreimplement-directive-dispatch`
+**Commit:** `125465fdf6ef06c386a551261bd68c3b2333c426`
+**Generated:** 2026-04-17T00:59:52Z
 
 ## All Files
 
