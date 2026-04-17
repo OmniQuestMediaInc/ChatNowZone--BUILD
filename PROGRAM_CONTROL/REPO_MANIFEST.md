@@ -58,6 +58,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/MOD-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/NATS-DFSP001-TOPICS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/PV-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-AUDIT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CHORE-PIPELINE-002.md`
@@ -134,6 +135,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/REVIEW-REPAIR-MERGE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/REWARDS-API-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/SHOWZONE-001-ROOM-SESSION-SERVICE.md`
+- `PROGRAM_CONTROL/REPORT_BACK/TOK-AUDIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/VISION-MONITOR-INIT.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-019-020-021-ISSUE-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-019-020-021-ISSUES.md`
@@ -186,6 +188,7 @@ Auto-generated on every push. Do not edit manually.
 - `package.json`
 - `prisma/migrations/20260409000000_legal_hold_db_migration/migration.sql`
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
+- `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `safety/security-guardrails.service.ts`

@@ -39,7 +39,7 @@
 | TOK-003 | Remove Wristband/Physical Token from bundle ladder, wallet, payout engine, UI | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
 | TOK-004 | Remove Standard-to-ShowToken conversion engine and conversion UI | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
 | TOK-005 | Rework dual-balance wallet UI to single CZT balance display only | RETIRED | QUEUED | TOK-RETIRE-001 | NO |
-| TOK-006 | Token origin tagging (PURCHASED / GIFTED) on CZT only. Critical for refund calc and ASC 606 breakage. | CHANGED | NEEDS_DIRECTIVE | — | YES |
+| TOK-006 | Token origin tagging (PURCHASED / GIFTED) on CZT only. Critical for refund calc and ASC 606 breakage. | CHANGED | DONE | TOK-AUDIT-001 | YES |
 | TOK-007 | Premium environment pricing: replace SZT-gating with CZT quantity threshold checks per venue | CHANGED | NEEDS_DIRECTIVE | — | NO |
 | TOK-008 | Bundle ladder: rearchitect to CZT-only single-currency ladder. Remove all SZT entries. CZT quantities CEO-confirmed before build. | CHANGED | CLARIFY | — | YES |
 | TOK-009 | Diamond floor guarantee: 10,000+ CZT bulk purchase floors creator payout at RATE_WARM ($0.080) regardless of heat. Store diamond_floor_active bool on purchase record. | NET-NEW | NEEDS_DIRECTIVE | — | YES |
