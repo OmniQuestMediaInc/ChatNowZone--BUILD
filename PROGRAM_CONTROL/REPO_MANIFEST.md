@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `d205a9afe9ba48dbbee359153a8137dc308c939f`
-**Generated:** 2026-04-17T11:36:09Z
+**Branch:** `claude/scrub-retired-membership-tier-values`
+**Commit:** `00300f00881667bbece4d0f47061196a4e39f62a`
+**Generated:** 2026-04-17T13:11:52Z
 
 ## All Files
 
@@ -142,6 +142,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-WEBHOOK-HARDENING.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PV-001-DFSP-FOUNDATION.md`
+- `PROGRAM_CONTROL/REPORT_BACK/RETIRED-TIER-SCAN-REPORT.md`
 - `PROGRAM_CONTROL/REPORT_BACK/REVIEW-REPAIR-MERGE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/REWARDS-API-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/SHOWZONE-001-ROOM-SESSION-SERVICE.md`
