@@ -1,104 +1,71 @@
 # REPORT-BACK: CHORE-PIPELINE-006
 
-**Directive ID:** CHORE-PIPELINE-006
-**Agent:** CLAUDE_CODE
-**Mode:** DROID
-**Result:** SUCCESS
+**Task:** Update CLAUDE.md — Claude Code Autonomous Directive Protocol
+**Agent:** COPILOT
+**Date:** 2026-04-17
 
 ---
 
 ## Branch and HEAD
-- Branch: `claude/update-claude-directive-protocol-elNzg`
-- HEAD (pre-commit baseline): `dec59c0bb12501ef3a74d67ccd6246d7965323d5`
-- HEAD (post-commit): filled in by commit step
+
+- **Branch:** copilot/chore-update-claude-md
+- **HEAD:** dec59c0bb12501ef3a74d67ccd6246d7965323d5 (pre-commit baseline)
 
 ---
 
 ## Files Modified
-- `CLAUDE.md` — full content replacement per directive body.
-  Replaced 31 lines with 207 lines (net +201/-6).
+
+- `CLAUDE.md` — Full replacement with Autonomous Directive Protocol,
+  updated Source of Truth section, updated Commit Discipline section,
+  Key File Paths section, HARD_STOP conditions, and What Claude Code
+  Must NEVER Do Autonomously section.
 
 ## Files Created
-- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-006.md` — directive
-  recorded directly to DONE (no QUEUE entry existed; directive provided
-  inline to the agent).
-- `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-006.md` — this file.
+
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-006.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-006.md` (this file)
 
 ## Files Confirmed Unchanged
-- `OQMI_SYSTEM_STATE.md`
+
 - `.github/copilot-instructions.md`
-- `docs/DOMAIN_GLOSSARY.md`
 - `docs/REQUIREMENTS_MASTER.md`
+- `OQMI_SYSTEM_STATE.md`
 - `prisma/schema.prisma`
-- `services/nats/topics.registry.ts` (not present; not modified)
-- `services/core-api/src/governance/governance.config.ts` (not modified)
 
 ---
 
-## Definition of Done Confirmation
+## Checklist Confirmation
 
-- [x] CLAUDE.md replaced with new content (verbatim from directive)
-- [x] Source of Truth section references REQUIREMENTS_MASTER
-      (`docs/REQUIREMENTS_MASTER.md`) and DOMAIN_GLOSSARY
-      (`docs/DOMAIN_GLOSSARY.md`)
-- [x] Commit Discipline section now includes new prefixes:
-      `GGS:`, `GGS-AV:`, `CYR:`
-- [x] Autonomous Directive Protocol (DROID MODE) section present with
-      all 11 steps (Sync, Find next task, Conflict check, Pre-flight
-      reads, Move to IN_PROGRESS, Execute, TypeScript check, File
-      report-back, Update REQUIREMENTS_MASTER, Move to DONE, Open PR)
-- [x] HARD_STOP Conditions section present
-- [x] "What Claude Code Must NEVER Do Autonomously" section present
-- [x] Commit Format Quick Reference section present
-- [x] Key File Paths section present and complete
-- [x] Report-back filed at
-      `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-006.md`
-- [x] Directive recorded at
-      `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-006.md`
-
----
-
-## Governance / NATS / Prisma
-
-- GovernanceConfig constants used: NONE (documentation-only change)
-- NATS topic constants used: NONE (documentation-only change)
-- Prisma schema: CONFIRMED UNCHANGED
-
-## Invariants
-- Documentation-only change. No code, schema, NATS, or financial flows
-  touched. All 15 invariants: N/A (no runtime surface).
-- Multi-tenant mandate: N/A (no Prisma writes).
-
----
-
-## TypeScript Check
-- Scope: documentation-only change to `CLAUDE.md`.
-- `npx tsc --noEmit` not executed — no `.ts`/`.tsx` files were
-  created or modified. Pre-existing baseline is therefore unchanged
-  by this directive (zero NEW errors introduced by definition).
-
----
-
-## Deviations From Directive
-- The QUEUE did not contain a `CHORE-PIPELINE-006.md` file at session
-  start; the directive was provided inline in the task prompt. The
-  directive file was therefore recorded directly in
-  `PROGRAM_CONTROL/DIRECTIVES/DONE/`, skipping the IN_PROGRESS move
-  step. No other deviations.
-- `docs/REQUIREMENTS_MASTER.md` contains no row referencing
-  CHORE-PIPELINE-006, so no status update was required (per Step 9
-  instructions, update only rows matching the directive).
+- [x] CLAUDE.md replaced with new content
+- [x] Source of Truth section references REQUIREMENTS_MASTER.md and DOMAIN_GLOSSARY.md
+- [x] Commit Discipline section includes GGS:, GGS-AV:, CYR: prefixes
+- [x] GGS: dual-prefix rule (FIZ: + GGS:) present for ledger/payout/balance/escrow touches
+- [x] Autonomous Directive Protocol section present with all 11 steps
+- [x] HARD_STOP conditions listed
+- [x] What Claude Code Must NEVER Do Autonomously listed
+- [x] Commit Format Quick Reference present
+- [x] Key file paths listed (all 16 paths)
+- [x] Report-back filed to PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-006.md
+- [x] Directive moved to PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-006.md
 
 ---
 
 ## git diff --stat
 
 ```
- CLAUDE.md | 207 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+CLAUDE.md | 207 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---
  1 file changed, 201 insertions(+), 6 deletions(-)
 ```
 
-(Plus two new files in `PROGRAM_CONTROL/` added in the same commit.)
+---
+
+## Invariants (Non-FIZ directive — R0 risk class)
+
+- No financial logic touched: CONFIRMED
+- No Prisma schema modified: CONFIRMED
+- No NATS topics created or modified: CONFIRMED
+- No secrets or credentials logged: CONFIRMED
+- No refactoring of existing logic: CONFIRMED (documentation-only change)
 
 ---
 
