@@ -9,6 +9,7 @@
 import {
   LedgerService,
   TokenType,
+  TokenOrigin,
   WalletBucket,
 } from '../../services/core-api/src/finance/ledger.service';
 import { GovernanceConfigService } from '../../services/core-api/src/config/governance.config';
@@ -134,6 +135,7 @@ describe('LedgerService — recordEntry', () => {
       userId: 'cu_001',
       amount: 100n,
       tokenType: TokenType.REGULAR,
+      tokenOrigin: TokenOrigin.PURCHASED,
       referenceId: 'ref_001',
       reasonCode: 'TOPUP',
     });
@@ -150,6 +152,7 @@ describe('LedgerService — recordEntry', () => {
         userId: 'cu_001',
         amount: 100 as any,
         tokenType: TokenType.REGULAR,
+        tokenOrigin: TokenOrigin.PURCHASED,
         referenceId: 'ref_002',
         reasonCode: 'TOPUP',
       }),
@@ -163,6 +166,7 @@ describe('LedgerService — recordEntry', () => {
       userId: 'cu_001',
       amount: 50n,
       tokenType: TokenType.REGULAR,
+      tokenOrigin: TokenOrigin.PURCHASED,
       referenceId: 'ref_idem',
       reasonCode: 'TOPUP',
     });
@@ -170,6 +174,7 @@ describe('LedgerService — recordEntry', () => {
       userId: 'cu_001',
       amount: 50n,
       tokenType: TokenType.REGULAR,
+      tokenOrigin: TokenOrigin.PURCHASED,
       referenceId: 'ref_idem',
       reasonCode: 'TOPUP',
     });
@@ -183,6 +188,7 @@ describe('LedgerService — recordEntry', () => {
       userId: 'cu_002',
       amount: 10n,
       tokenType: TokenType.REGULAR,
+      tokenOrigin: TokenOrigin.PURCHASED,
       referenceId: 'ref_noRule',
       reasonCode: 'TOPUP',
     });
@@ -201,6 +207,7 @@ describe('LedgerService — recordEntry', () => {
         userId: tx.customer_id,
         amount: BigInt(tx.gross_tokens),
         tokenType: TokenType.REGULAR,
+        tokenOrigin: TokenOrigin.PURCHASED,
         referenceId: tx.idempotency_key,
         reasonCode: 'TIP',
         metadata: { transaction_id: tx.transaction_id },
@@ -222,9 +229,9 @@ describe('LedgerService — getBalance', () => {
   it('returns sum of all entries for a user + token type', async () => {
     const store: LedgerRow[] = [];
     const svc = makeService(store);
-    await svc.recordEntry({ userId: 'cu_010', amount: 200n, tokenType: TokenType.REGULAR, referenceId: 'r1', reasonCode: 'TOPUP' });
-    await svc.recordEntry({ userId: 'cu_010', amount: 50n, tokenType: TokenType.REGULAR, referenceId: 'r2', reasonCode: 'TOPUP' });
-    await svc.recordEntry({ userId: 'cu_010', amount: -30n, tokenType: TokenType.REGULAR, referenceId: 'r3', reasonCode: 'SPEND' });
+    await svc.recordEntry({ userId: 'cu_010', amount: 200n, tokenType: TokenType.REGULAR, tokenOrigin: TokenOrigin.PURCHASED, referenceId: 'r1', reasonCode: 'TOPUP' });
+    await svc.recordEntry({ userId: 'cu_010', amount: 50n, tokenType: TokenType.REGULAR, tokenOrigin: TokenOrigin.PURCHASED, referenceId: 'r2', reasonCode: 'TOPUP' });
+    await svc.recordEntry({ userId: 'cu_010', amount: -30n, tokenType: TokenType.REGULAR, tokenOrigin: TokenOrigin.PURCHASED, referenceId: 'r3', reasonCode: 'SPEND' });
     const bal = await svc.getBalance('cu_010', TokenType.REGULAR);
     expect(bal).toBe(220n);
   });
@@ -232,8 +239,8 @@ describe('LedgerService — getBalance', () => {
   it('isolates balances by token type', async () => {
     const store: LedgerRow[] = [];
     const svc = makeService(store);
-    await svc.recordEntry({ userId: 'cu_010', amount: 100n, tokenType: TokenType.REGULAR, referenceId: 'reg1', reasonCode: 'TOPUP' });
-    await svc.recordEntry({ userId: 'cu_010', amount: 500n, tokenType: TokenType.BIJOU, referenceId: 'bij1', reasonCode: 'TOPUP' });
+    await svc.recordEntry({ userId: 'cu_010', amount: 100n, tokenType: TokenType.REGULAR, tokenOrigin: TokenOrigin.PURCHASED, referenceId: 'reg1', reasonCode: 'TOPUP' });
+    await svc.recordEntry({ userId: 'cu_010', amount: 500n, tokenType: TokenType.BIJOU, tokenOrigin: TokenOrigin.PURCHASED, referenceId: 'bij1', reasonCode: 'TOPUP' });
     const regBal = await svc.getBalance('cu_010', TokenType.REGULAR);
     const bijBal = await svc.getBalance('cu_010', TokenType.BIJOU);
     expect(regBal).toBe(100n);
@@ -439,6 +446,7 @@ describe('LedgerService — WalletBucket spend order', () => {
         userId: customerId,
         amount: grossTokens,
         tokenType: TokenType.REGULAR,
+        tokenOrigin: TokenOrigin.PURCHASED,
         referenceId: `topup:${scenario.scenario_id}`,
         reasonCode: 'TOPUP',
         metadata: { wallet_bucket: WalletBucket.PURCHASED },

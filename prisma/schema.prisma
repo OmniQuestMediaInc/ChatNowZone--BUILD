@@ -517,7 +517,7 @@ model TokenBalance {
   compliance_review_id String?
   organization_id     String
   tenant_id           String
-  token_origin        String?  @default("PURCHASED")
+  token_origin        String   @default("PURCHASED")
 
   @@map("token_balances")
 }

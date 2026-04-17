@@ -6,6 +6,9 @@ import Decimal from 'decimal.js';
 import { GovernanceConfigService } from '../config/governance.config';
 import { GovernanceConfig } from '../governance/governance.config';
 import { TipTransaction } from './ledger.types';
+import { TokenOrigin } from './types/ledger.types';
+
+export { TokenOrigin };
 
 /**
  * WO-003 / WO-032: Deterministic Ledger Service
@@ -55,6 +58,7 @@ export class LedgerService {
     userId: string;
     amount: bigint;
     tokenType: TokenType;
+    tokenOrigin: TokenOrigin;
     referenceId: string;
     reasonCode: string;
     ruleAppliedId?: string;
@@ -88,6 +92,7 @@ export class LedgerService {
       user_id: data.userId,
       amount: data.amount.toString(), // BigInt compatibility
       token_type: data.tokenType,
+      token_origin: data.tokenOrigin,
       reference_id: data.referenceId,
       reason_code: data.reasonCode,
       metadata: {
@@ -164,6 +169,17 @@ export class LedgerService {
   }
 
   /**
+   * Maps a WalletBucket to the appropriate TokenOrigin.
+   * PURCHASED bucket → PURCHASED (user bought tokens with real money).
+   * PROMOTIONAL_BONUS / MEMBERSHIP_ALLOCATION → GIFTED (platform grant or allocation).
+   */
+  private bucketToOrigin(bucket: WalletBucket): TokenOrigin {
+    return bucket === WalletBucket.PURCHASED
+      ? TokenOrigin.PURCHASED
+      : TokenOrigin.GIFTED;
+  }
+
+  /**
    * FIZ-003: Three-Bucket Wallet — deterministic spend-order debit.
    * Spend order: PROMOTIONAL_BONUS (1) → MEMBERSHIP_ALLOCATION (2) → PURCHASED (3).
    * This order is system-enforced and cannot be user-selected.
@@ -201,6 +217,7 @@ export class LedgerService {
         userId: data.userId,
         amount: -debitAmount,
         tokenType: data.tokenType,
+        tokenOrigin: this.bucketToOrigin(bucket),
         referenceId: `${data.referenceId}:${bucket}`,
         reasonCode: data.reasonCode,
         ruleAppliedId: data.ruleAppliedId ?? 'THREE_BUCKET_DEBIT_v1',
