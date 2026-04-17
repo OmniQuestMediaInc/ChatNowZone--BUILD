@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `06b11c2966a440041e372e4aa36a9fe2ce435cf6`
-**Generated:** 2026-04-17T08:16:28Z
+**Branch:** `copilot/fix-duplicate-enum-and-model-definitions`
+**Commit:** `0a4fbf4d7dd418fcdf1afe159a865908533a98b5`
+**Generated:** 2026-04-17T09:20:43Z
 
 ## All Files
 
