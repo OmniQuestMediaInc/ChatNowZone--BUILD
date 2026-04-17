@@ -81,4 +81,13 @@ export const GovernanceConfig = {
   HEAT_BAND_WARM_MAX: 60,     // 34–60 = Warm
   HEAT_BAND_HOT_MAX: 85,      // 61–85 = Hot
                               // 86–100 = Inferno
+
+  // ── DFSP Concierge (CONCIERGE-CONFIG-001) ─────────────────────────────────
+  // Operating hours evaluated in guest billing-address timezone.
+  DFSP_CONCIERGE: {
+    OPEN_HOUR: 11,               // 11:00 AM guest billing-address TZ
+    CLOSE_HOUR: 23,              // 11:00 PM guest billing-address TZ
+    LAST_BOOKING_HOUR: 22,       // 10:30 PM last call
+    LAST_BOOKING_MINUTE: 30,
+  },
 } as const;
