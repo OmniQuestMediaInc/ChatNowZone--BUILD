@@ -102,6 +102,9 @@ export const NATS_TOPICS = {
   DFSP_VOICE_SAMPLE_DISPOSED:         'dfsp.voice_sample.disposed',
   DFSP_VOICE_SAMPLE_LIMIT_REACHED:    'dfsp.voice_sample.limit_reached',
 
+  // ── DFSP Concierge (CONCIERGE-CONFIG-001) ─────────────────────────────────
+  DFSP_CONCIERGE_APPOINTMENT_BOOKED:  'dfsp.concierge.appointment.booked',
+
   // ── GZ Scheduling Module ──────────────────────────────────────────────────
   SCHEDULE_PERIOD_CREATED:         'gz.schedule.period.created',
   SCHEDULE_PERIOD_B_LOCKED:        'gz.schedule.period.b_locked',
