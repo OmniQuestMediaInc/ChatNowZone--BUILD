@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `copilot/docs-add-membership-lifecycle-policy`
-**Commit:** `39f87f12c38670f898b8e0b1c314fcc9585fae7c`
-**Generated:** 2026-04-17T14:13:51Z
+**Commit:** `db8556c2ff8b99c2282c710a6a1e0224125f34ba`
+**Generated:** 2026-04-17T14:25:32Z
 
 ## All Files
 
