@@ -44,6 +44,7 @@ import { MembershipModule } from './membership/membership.module';
     AuthModule,
     ShowZoneModule,
     SchedulingModule,
+    MembershipModule,
     ZoneAccessModule,
     MembershipModule,
   ],

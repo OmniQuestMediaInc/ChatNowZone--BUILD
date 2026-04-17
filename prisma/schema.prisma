@@ -912,3 +912,50 @@ model ShowZonePass {
   @@index([user_id, zone])
   @@map("show_zone_passes")
 }
+
+// ─── Membership — MEMB-002: MembershipSubscription ───────────────────────────
+
+enum MembershipTier {
+  DAY_PASS
+  ANNUAL
+  OMNIPASS_PLUS
+  DIAMOND
+}
+
+enum MembershipStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  GRACE
+}
+
+enum MembershipBillingInterval {
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUAL
+  ANNUAL
+}
+
+model MembershipSubscription {
+  id                   String                    @id @default(uuid())
+  user_id              String                    @db.Uuid
+  tier                 MembershipTier
+  status               MembershipStatus
+  billing_interval     MembershipBillingInterval
+  commitment_months    Int
+  bonus_months         Int                       @default(0)
+  current_period_start DateTime                  @db.Timestamptz
+  current_period_end   DateTime                  @db.Timestamptz
+  cancelled_at         DateTime?                 @db.Timestamptz
+  // active_user_marker: nullable shadow field set to user_id when status=ACTIVE,
+  // null otherwise. Provides DB-level "one ACTIVE subscription per user" guarantee
+  // via unique constraint. MembershipService maintains the marker on every state change.
+  active_user_marker   String?                   @unique @db.Uuid
+  organization_id      String                    @db.VarChar(100)
+  tenant_id            String                    @db.VarChar(100)
+  created_at           DateTime                  @default(now()) @db.Timestamptz
+  updated_at           DateTime                  @updatedAt @db.Timestamptz
+
+  @@index([user_id, status])
+  @@map("membership_subscriptions")
+}
