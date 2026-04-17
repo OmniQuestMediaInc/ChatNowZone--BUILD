@@ -844,13 +844,172 @@ model WebhookIdempotencyLog {
   @@map("webhook_idempotency_log")
 }
 
+// ─── User (minimal model for MEMB-001 relations) ─────────────────────────────
+// Stub model to support membership relations. Full user profile fields deferred.
+
+model User {
+  id                    String          @id @default(uuid())
+  organization_id       String          @db.VarChar(100)
+  tenant_id             String          @db.VarChar(100)
+  created_at            DateTime        @default(now()) @db.Timestamptz
+  updated_at            DateTime        @updatedAt @db.Timestamptz
+
+  membership            Membership?
+  card_on_file          CardOnFile?
+
+  @@map("users")
+}
+
 // ─── Membership Subscriptions — MEMB-002 ─────────────────────────────────────
 
 enum MembershipTier {
-  DAY_PASS
-  ANNUAL
-  OMNIPASS_PLUS
-  DIAMOND
+  GUEST
+  VIP
+  VIP_SILVER
+  VIP_GOLD
+  VIP_PLATINUM
+  VIP_DIAMOND
+}
+
+enum AccountStatus {
+  ACTIVE
+  GUEST_LOCKED           // policy §3.1 — 31 days elapsed, no upgrade
+  SUSPENDED              // policy §3.2, §3.3 — age-verification failure
+  CARD_FROZEN            // policy §5 — card-on-file incomplete
+}
+
+enum TransitionTrigger {
+  GATE_1_GUEST_GRANTED           // policy §2 Gate 1
+  GATE_2_VIP_GRANTED             // policy §2 Gate 2
+  GATE_3_PAID_TIER_PURCHASED     // policy §2 Gate 3
+  PAID_TIER_RENEWED              // policy §3.3
+  PAID_TIER_LAPSED_TO_VIP        // policy §3.3
+  GUEST_EXPIRED_TO_LOCKED        // policy §3.1 — 31 days elapsed
+  GUEST_PURGED                   // policy §3.1 — 366 days post-lock
+  GUEST_REACTIVATED              // policy §3.1
+  VIP_AGE_VERIFY_SUSPENDED       // policy §3.2
+  PAID_AGE_VERIFY_SUSPENDED      // policy §3.3
+  SUSPENSION_LIFTED              // reactivation after age-verify success
+  CARD_FROZEN                    // policy §5
+  CARD_FREEZE_LIFTED             // policy §5
+}
+
+enum AgeVerificationMethod {
+  UNSPECIFIED           // placeholder — concrete methods defined in future AV-001 directive
+}
+
+enum AgeVerificationResult {
+  PASS
+  FAIL
+  PENDING
+}
+
+enum AgeVerificationTrigger {
+  ACCOUNT_CREATION              // policy §4.1
+  GUEST_TO_VIP_UPGRADE          // policy §4.2
+  VIP_THIRTY_DAY_CADENCE        // policy §4.3
+  PAID_TIER_PURCHASE            // policy §4.4
+  GUEST_REACTIVATION            // policy §4.5
+  POST_SUSPENSION_REACTIVATION  // policy §4.6
+}
+
+// ─── MEMB-001: Membership Schema Foundation ──────────────────────────────────
+// Policy source: docs/MEMBERSHIP_LIFECYCLE_POLICY.md v1.0
+
+model Membership {
+  id                    String          @id @default(cuid())
+  user_id               String          @unique
+  tier                  MembershipTier
+  account_status        AccountStatus   @default(ACTIVE)
+  product_variant       String?         // e.g. "SILVER_BULLET" for §7.3 variant; null for standard tier
+  paid_block_started_at DateTime?       // null for GUEST and VIP; non-null for paid tiers
+  paid_block_expires_at DateTime?       // null for GUEST and VIP; set to paid_block_started_at + 91 days for paid tiers
+  guest_expires_at      DateTime?       // non-null for GUEST only; 31 days from creation/reactivation
+  guest_purge_at        DateTime?       // non-null when GUEST is locked; 366 days post-lock
+  created_at            DateTime        @default(now())
+  updated_at            DateTime        @updatedAt
+  organization_id       String
+  tenant_id             String
+
+  user                  User            @relation(fields: [user_id], references: [id])
+  transitions           MembershipTierTransition[]
+  age_verifications     AgeVerification[]
+
+  @@index([tier])
+  @@index([account_status])
+  @@index([organization_id, tenant_id])
+  @@index([guest_expires_at])          // for scheduler queries (policy §3.1)
+  @@index([paid_block_expires_at])     // for scheduler queries (policy §3.3)
+  @@map("memberships")
+}
+
+model MembershipTierTransition {
+  id                    String                @id @default(cuid())
+  membership_id         String
+  user_id               String                // denormalized for audit queries
+  previous_tier         MembershipTier?       // null for initial GUEST grant (Gate 1)
+  new_tier              MembershipTier
+  previous_status       AccountStatus?
+  new_status            AccountStatus
+  trigger_type          TransitionTrigger
+  actor_id              String?               // null for system-triggered transitions (e.g. scheduler)
+  rule_applied_id       String                // mandatory per global invariant
+  occurred_at           DateTime              @default(now())
+  organization_id       String
+  tenant_id             String
+
+  membership            Membership            @relation(fields: [membership_id], references: [id])
+
+  @@index([membership_id, occurred_at])
+  @@index([user_id, occurred_at])
+  @@index([trigger_type])
+  @@index([organization_id, tenant_id])
+  @@map("membership_tier_transitions")
+}
+
+model AgeVerification {
+  id                    String                  @id @default(cuid())
+  membership_id         String
+  user_id               String                  // denormalized for audit queries
+  method                AgeVerificationMethod
+  result                AgeVerificationResult
+  triggering_event      AgeVerificationTrigger
+  rule_applied_id       String                  // mandatory per global invariant
+  occurred_at           DateTime                @default(now())
+  organization_id       String
+  tenant_id             String
+
+  membership            Membership              @relation(fields: [membership_id], references: [id])
+
+  @@index([membership_id, occurred_at])
+  @@index([user_id, occurred_at])
+  @@index([triggering_event])
+  @@index([organization_id, tenant_id])
+  @@map("age_verifications")
+}
+
+model CardOnFile {
+  id                       String      @id @default(cuid())
+  user_id                  String      @unique
+  cardholder_name          String?
+  billing_address          String?     // single-field address; structured breakdown TBD in future directive if needed
+  phone_number             String?
+  email                    String?
+  card_expiration_month    Int?        // 1–12
+  card_expiration_year     Int?        // 4-digit year
+  card_cvv_hash            String?     // SHA-256 hash only — never store raw CVV
+  card_token               String?     // payment processor token (e.g. Stripe Payment Method ID)
+  is_complete              Boolean     @default(false)  // computed: all 6 fields non-null
+  created_at               DateTime    @default(now())
+  updated_at               DateTime    @updatedAt
+  organization_id          String
+  tenant_id                String
+
+  user                     User        @relation(fields: [user_id], references: [id])
+
+  @@index([is_complete])
+  @@index([organization_id, tenant_id])
+  @@map("cards_on_file")
 }
 
 enum SubscriptionStatus {

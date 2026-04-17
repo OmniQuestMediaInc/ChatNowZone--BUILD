@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `9c6c5ec7886088e0c2afb0d0a8eda567e22906dc`
-**Generated:** 2026-04-17T15:05:08Z
+**Branch:** `claude/fiz-memb-001-membership-schema-foundation`
+**Commit:** `61dfef522fe0e69856548926a0d6e5366d90f6dc`
+**Generated:** 2026-04-17T15:50:06Z
 
 ## All Files
 
@@ -129,6 +129,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/LEGAL-HOLD-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION-EXEC.md`
 - `PROGRAM_CONTROL/REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION.md`
+- `PROGRAM_CONTROL/REPORT_BACK/MEMB-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MEMB-003-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MEMBERSHIP_LIFECYCLE_POLICY-v1.0-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MOD-001-INCIDENT-SERVICE.md`
@@ -210,6 +211,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
+- `prisma/seed.ts`
 - `safety/security-guardrails.service.ts`
 - `scripts/seed-scheduling.ts`
 - `scripts/verify-gov-gate.sh`
