@@ -182,6 +182,8 @@ export class MembershipService {
       data: {
         status: SubscriptionStatus.CANCELLED,
         cancelled_at: now,
+        organization_id: organizationId,
+        tenant_id: tenantId,
       },
     });
 
@@ -240,7 +242,11 @@ export class MembershipService {
     const now = new Date();
     await this.prisma.membershipSubscription.update({
       where: { id: subscriptionId },
-      data: { status: SubscriptionStatus.EXPIRED },
+      data: {
+        status: SubscriptionStatus.EXPIRED,
+        organization_id: organizationId,
+        tenant_id: tenantId,
+      },
     });
 
     this.logger.log('MembershipService.expireSubscription: expired — user downgrades to DAY_PASS', {
