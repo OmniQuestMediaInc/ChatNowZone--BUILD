@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/fiz-memb-001-membership-schema-foundation`
-**Commit:** `61dfef522fe0e69856548926a0d6e5366d90f6dc`
-**Generated:** 2026-04-17T15:50:06Z
+**Branch:** `main`
+**Commit:** `fc1dc38d10cd3e4359dcfb78046f8813be8b4d1f`
+**Generated:** 2026-04-17T15:50:23Z
 
 ## All Files
 
