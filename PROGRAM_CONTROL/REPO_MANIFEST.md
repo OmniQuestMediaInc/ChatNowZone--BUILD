@@ -16,6 +16,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/required-files.txt`
 - `.github/workflows/auto-merge.yml`
 - `.github/workflows/ci.yml`
+- `.github/workflows/directive-dispatch.yml`
 - `.github/workflows/directive-intake.yml`
 - `.github/workflows/notify.yml`
 - `.github/workflows/populate-issues.yml`
@@ -41,6 +42,8 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-NOTE-2026-04-10.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-003.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-TS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/DFSP-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GEO-001.md`
@@ -71,6 +74,8 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-GOV-GATE-CLEARANCE-2026-04-11.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-001.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-003.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-TS-CLEANUP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CLEAN-SWEEP-2026-04-13.md`
 - `PROGRAM_CONTROL/REPORT_BACK/DFSP-001-BLOCKED.md`
@@ -150,6 +155,7 @@ Auto-generated on every push. Do not edit manually.
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
+- `docs/DOMAIN_GLOSSARY.md`
 - `docs/ROADMAP_MANIFEST.md`
 - `docs/compliance/evidence_templates/NCII_TAKEDOWN_LOG.md`
 - `docs/doctrine/.gitkeep`
