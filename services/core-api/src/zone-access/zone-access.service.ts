@@ -92,7 +92,8 @@ export class ZoneAccessService {
         zone,
         reason_code: decision.reason_code,
         rule_applied_id: decision.rule_applied_id,
-        timestamp: new Date().toLocaleString('en-CA', { timeZone: 'America/Toronto' }),
+        timestamp: new Date().toISOString(),
+        timezone: 'America/Toronto',
         organization_id: organizationId,
         tenant_id: tenantId,
       });

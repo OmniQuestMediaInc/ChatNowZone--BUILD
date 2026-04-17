@@ -43,13 +43,23 @@ export class ZoneAccessGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
+    // Multi-tenant: extract user, organization, and tenant from request
     const userId: string = request.user?.id ?? request.user?.user_id ?? request.headers?.['x-user-id'];
-    const organizationId: string = request.headers?.['x-organization-id'] ?? 'default';
-    const tenantId: string = request.headers?.['x-tenant-id'] ?? 'default';
+    const organizationId: string | undefined = request.headers?.['x-organization-id'];
+    const tenantId: string | undefined = request.headers?.['x-tenant-id'];
 
     if (!userId) {
       this.logger.warn('ZoneAccessGuard: no user_id found on request', {
         zone,
+        rule_applied_id: 'MEMB-001_ZONE_ACCESS_v1',
+      });
+      return false;
+    }
+
+    if (!organizationId || !tenantId) {
+      this.logger.warn('ZoneAccessGuard: missing organization_id or tenant_id', {
+        zone,
+        user_id: userId,
         rule_applied_id: 'MEMB-001_ZONE_ACCESS_v1',
       });
       return false;
