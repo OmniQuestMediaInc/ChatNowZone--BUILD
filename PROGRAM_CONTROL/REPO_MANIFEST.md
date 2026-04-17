@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/chore-pipeline-003-build-dispatch-workflow`
-**Commit:** `45e37d94fc956b8478c2071cb5482dbeeb804688`
-**Generated:** 2026-04-17T00:36:38Z
+**Branch:** `main`
+**Commit:** `9270f940f1d865485027b97852f4b475e2bba220`
+**Generated:** 2026-04-17T00:57:10Z
 
 ## All Files
 
@@ -43,6 +43,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-003.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-TS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/DFSP-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GEO-001.md`
@@ -74,6 +75,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-003.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-TS-CLEANUP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CLEAN-SWEEP-2026-04-13.md`
 - `PROGRAM_CONTROL/REPORT_BACK/DFSP-001-BLOCKED.md`
@@ -153,6 +155,7 @@ Auto-generated on every push. Do not edit manually.
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
+- `docs/DOMAIN_GLOSSARY.md`
 - `docs/ROADMAP_MANIFEST.md`
 - `docs/compliance/evidence_templates/NCII_TAKEDOWN_LOG.md`
 - `docs/doctrine/.gitkeep`
