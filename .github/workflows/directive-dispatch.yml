@@ -1,0 +1,268 @@
+name: Directive Dispatch — Auto-Route, Lifecycle, Conflict Detection
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened, closed]
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - 'PROGRAM_CONTROL/DIRECTIVES/QUEUE/**.md'
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+
+  # ---------------------------------------------------------------------------
+  # Job 1 — assign-to-agent
+  # Fires when a new issue is opened (directive-intake.yml creates it).
+  # Routes COPILOT directives to @copilot, CLAUDE_CODE directives to label.
+  # ---------------------------------------------------------------------------
+  assign-to-agent:
+    name: Assign directive issue to correct agent
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+
+    steps:
+      - name: Parse agent field and dispatch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          AGENT=$(echo "$ISSUE_BODY" | grep -oP '(?<=\*\*Agent:\*\* ).*' | head -1 | xargs)
+          echo "✅ Detected Agent: ${AGENT}"
+
+          if [ "$AGENT" = "COPILOT" ]; then
+            echo "✅ Assigning issue #${ISSUE_NUMBER} to @copilot"
+            gh issue edit "$ISSUE_NUMBER" --add-assignee "app/copilot" \
+              && echo "✅ Assigned to app/copilot" \
+              || echo "⚠️  Could not assign to app/copilot — skipping"
+          elif [ "$AGENT" = "CLAUDE_CODE" ]; then
+            echo "✅ Adding claude-code-task label to issue #${ISSUE_NUMBER}"
+            gh issue edit "$ISSUE_NUMBER" --add-label "claude-code-task" \
+              && echo "✅ Label claude-code-task added" \
+              || echo "⚠️  Could not add label claude-code-task — skipping"
+            gh issue comment "$ISSUE_NUMBER" \
+              --body "This directive is scoped for Claude Code (DROID MODE). Paste the directive content to Claude Code to execute." \
+              && echo "✅ Comment posted for CLAUDE_CODE directive" \
+              || echo "⚠️  Could not post comment — skipping"
+          else
+            echo "⚠️  Unknown or missing Agent field (got: '${AGENT}') — skipping assignment"
+          fi
+
+          echo "✅ Adding dispatched label to issue #${ISSUE_NUMBER}"
+          gh issue edit "$ISSUE_NUMBER" --add-label "dispatched" \
+            && echo "✅ Label dispatched added" \
+            || echo "⚠️  Could not add label dispatched — skipping"
+
+  # ---------------------------------------------------------------------------
+  # Job 2 — conflict-detection
+  # Fires on push to main when QUEUE .md files change.
+  # Detects directives sharing the same Touches paths and opens conflict issues.
+  # ---------------------------------------------------------------------------
+  conflict-detection:
+    name: Detect file-path conflicts between queued directives
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Scan Touches fields for conflicts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, re, subprocess, sys
+          from collections import defaultdict
+
+          dirs = [
+              "PROGRAM_CONTROL/DIRECTIVES/QUEUE",
+              "PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS",
+          ]
+
+          path_to_ids = defaultdict(list)
+
+          for d in dirs:
+              if not os.path.isdir(d):
+                  continue
+              for fname in os.listdir(d):
+                  if not fname.endswith(".md") or fname == ".gitkeep":
+                      continue
+                  directive_id = fname[:-3]
+                  filepath = os.path.join(d, fname)
+                  with open(filepath, "r", errors="replace") as f:
+                      content = f.read()
+                  # Match "**Touches:** path1, path2, path3" (inline or multi-line)
+                  match = re.search(r"\*\*Touches:\*\*\s*(.+)", content)
+                  if not match:
+                      continue
+                  touches_raw = match.group(1).strip()
+                  # Split on comma or whitespace-separated entries
+                  touches = [t.strip() for t in re.split(r"[,\s]+", touches_raw) if t.strip()]
+                  for t in touches:
+                      path_to_ids[t].append(directive_id)
+
+          conflict_found = False
+          for fpath, ids in path_to_ids.items():
+              if len(ids) < 2:
+                  continue
+              conflict_found = True
+              for i in range(len(ids)):
+                  for j in range(i + 1, len(ids)):
+                      id_a, id_b = ids[i], ids[j]
+                      title = f"⚠️ CONFLICT: {id_a} × {id_b} — {fpath}"
+                      body = (
+                          f"Directives **{id_a}** and **{id_b}** both touch `{fpath}`. "
+                          f"Resolve sequencing before either executes.\n\n"
+                          f"- [{id_a}](PROGRAM_CONTROL/DIRECTIVES/QUEUE/{id_a}.md)\n"
+                          f"- [{id_b}](PROGRAM_CONTROL/DIRECTIVES/QUEUE/{id_b}.md)"
+                      )
+                      print(f"⚠️  Conflict detected: {id_a} × {id_b} on {fpath}")
+                      result = subprocess.run(
+                          [
+                              "gh", "issue", "create",
+                              "--title", title,
+                              "--body", body,
+                              "--label", "conflict",
+                              "--label", "needs-conflict-review",
+                          ],
+                          capture_output=True, text=True
+                      )
+                      if result.returncode == 0:
+                          print(f"✅ Conflict issue created: {title}")
+                      else:
+                          print(f"⚠️  Could not create conflict issue: {result.stderr.strip()}")
+
+          if not conflict_found:
+              print("✅ No file-path conflicts detected.")
+          PYEOF
+
+  # ---------------------------------------------------------------------------
+  # Job 3 — lifecycle-pr-opened
+  # Fires when a PR targeting main is opened.
+  # Moves directive from QUEUE → IN_PROGRESS and commits to the PR branch.
+  # ---------------------------------------------------------------------------
+  lifecycle-pr-opened:
+    name: Move directive QUEUE → IN_PROGRESS on PR open
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract directive ID and move file
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Title format: "[PREFIX]: [DIRECTIVE-ID] — [description]"
+          # Directive ID is the token immediately after the first ": "
+          DIRECTIVE_ID=$(echo "$PR_TITLE" | sed -E 's/^[^:]+:[[:space:]]+([^[:space:]—–-]+).*/\1/' | xargs)
+          echo "✅ Extracted directive ID: '${DIRECTIVE_ID}'"
+
+          if [ -z "$DIRECTIVE_ID" ]; then
+            echo "⚠️  Could not parse directive ID from PR title — skipping"
+            exit 0
+          fi
+
+          QUEUE_FILE="PROGRAM_CONTROL/DIRECTIVES/QUEUE/${DIRECTIVE_ID}.md"
+          IN_PROGRESS_FILE="PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/${DIRECTIVE_ID}.md"
+
+          if [ ! -f "$QUEUE_FILE" ]; then
+            echo "⚠️  ${QUEUE_FILE} not found in QUEUE — skipping silently"
+            exit 0
+          fi
+
+          echo "✅ Moving ${QUEUE_FILE} → ${IN_PROGRESS_FILE}"
+          mv "$QUEUE_FILE" "$IN_PROGRESS_FILE"
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$QUEUE_FILE" "$IN_PROGRESS_FILE"
+          git commit -m "CHORE: ${DIRECTIVE_ID} QUEUE → IN_PROGRESS (PR #${PR_NUMBER} opened)"
+          git push origin HEAD:"${{ github.event.pull_request.head.ref }}" \
+            && echo "✅ Pushed lifecycle commit to PR branch" \
+            || echo "❌ Push failed — check branch protection rules"
+
+  # ---------------------------------------------------------------------------
+  # Job 4 — lifecycle-pr-merged
+  # Fires when a PR targeting main is closed AND merged.
+  # Moves directive from IN_PROGRESS → DONE, pushes to main, closes issue.
+  # ---------------------------------------------------------------------------
+  lifecycle-pr-merged:
+    name: Move directive IN_PROGRESS → DONE on PR merge
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract directive ID, move file, close issue
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DIRECTIVE_ID=$(echo "$PR_TITLE" | sed -E 's/^[^:]+:[[:space:]]+([^[:space:]—–-]+).*/\1/' | xargs)
+          echo "✅ Extracted directive ID: '${DIRECTIVE_ID}'"
+
+          if [ -z "$DIRECTIVE_ID" ]; then
+            echo "⚠️  Could not parse directive ID from PR title — skipping"
+            exit 0
+          fi
+
+          IN_PROGRESS_FILE="PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/${DIRECTIVE_ID}.md"
+          DONE_FILE="PROGRAM_CONTROL/DIRECTIVES/DONE/${DIRECTIVE_ID}.md"
+
+          if [ ! -f "$IN_PROGRESS_FILE" ]; then
+            echo "⚠️  ${IN_PROGRESS_FILE} not found in IN_PROGRESS — skipping silently"
+          else
+            echo "✅ Moving ${IN_PROGRESS_FILE} → ${DONE_FILE}"
+            mv "$IN_PROGRESS_FILE" "$DONE_FILE"
+
+            git config user.name  "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add "$IN_PROGRESS_FILE" "$DONE_FILE"
+            git commit -m "CHORE: ${DIRECTIVE_ID} IN_PROGRESS → DONE (PR #${PR_NUMBER} merged)"
+            git push origin main \
+              && echo "✅ Pushed lifecycle commit to main" \
+              || echo "❌ Push to main failed — check branch protection rules"
+          fi
+
+          # Close the corresponding GitHub Issue
+          ISSUE_NUMBER=$(gh issue list \
+            --search "DIRECTIVE: ${DIRECTIVE_ID} in:title" \
+            --state open \
+            --json number \
+            --jq '.[0].number' 2>/dev/null || true)
+
+          if [ -n "$ISSUE_NUMBER" ] && [ "$ISSUE_NUMBER" != "null" ]; then
+            gh issue close "$ISSUE_NUMBER" \
+              --comment "Directive complete. PR #${PR_NUMBER} merged." \
+              && echo "✅ Closed issue #${ISSUE_NUMBER} for ${DIRECTIVE_ID}" \
+              || echo "⚠️  Could not close issue #${ISSUE_NUMBER} — skipping"
+          else
+            echo "⚠️  No open issue found for DIRECTIVE: ${DIRECTIVE_ID} — skipping close"
+          fi
