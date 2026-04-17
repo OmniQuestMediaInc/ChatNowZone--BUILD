@@ -148,6 +148,13 @@ export const NATS_TOPICS = {
 
   // ── Bijou Dwell Credit (BJ-004) ───────────────────────────────────────────
   BIJOU_DWELL_CREDITED:              'bijou.dwell.credited',
+
+  // ── OBS Bridge + Chat Aggregator + Persona Engine (OBS-001) ──────────────
+  OBS_STREAM_STARTED:                'obs.stream.started',
+  OBS_STREAM_ENDED:                  'obs.stream.ended',
+  OBS_STREAM_KEY_ROTATED:            'obs.stream.key.rotated',
+  CHAT_MESSAGE_INGESTED:             'chat.message.ingested',
+  PERSONA_RESPONSE_QUEUED:           'persona.response.queued',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];
