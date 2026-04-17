@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `bcae3caef634cb22ee7704775c12d42fe5d0db59`
-**Generated:** 2026-04-17T01:20:13Z
+**Branch:** `copilot/chore-create-requirements-master`
+**Commit:** `f5af2e1b1104e1218eed438ae1501b4567289c21`
+**Generated:** 2026-04-17T01:21:23Z
 
 ## All Files
 
@@ -44,6 +44,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-002.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-003.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-004.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-TS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/DFSP-001.md`
@@ -77,6 +78,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-002.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-003.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-004.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-TS-CLEANUP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CLEAN-SWEEP-2026-04-13.md`
@@ -158,6 +160,7 @@ Auto-generated on every push. Do not edit manually.
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
 - `docs/DOMAIN_GLOSSARY.md`
+- `docs/REQUIREMENTS_MASTER.md`
 - `docs/ROADMAP_MANIFEST.md`
 - `docs/compliance/evidence_templates/NCII_TAKEDOWN_LOG.md`
 - `docs/doctrine/.gitkeep`

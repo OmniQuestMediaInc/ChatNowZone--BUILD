@@ -18,4 +18,5 @@ services/core-api/src/safety/safety.module.ts
 services/core-api/src/growth/referral-reward.service.ts
 services/core-api/src/growth/guarded-notification.service.ts
 services/core-api/src/growth/growth.module.ts
+docs/REQUIREMENTS_MASTER.md
 docs/DOMAIN_GLOSSARY.md
