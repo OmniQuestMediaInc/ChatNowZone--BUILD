@@ -206,6 +206,14 @@ export const MEMBERSHIP = {
     SEMI_ANNUAL: { commitment_months: 6,  bonus_months: 2 },
     ANNUAL:      { commitment_months: 12, bonus_months: 3 },
   },
+  // MEMB-003: Monthly CZT stipend per membership tier.
+  // Revisable via GOV: commit only. Values in CZT units.
+  STIPEND_CZT: {
+    DAY_PASS:      0,
+    ANNUAL:        100,
+    OMNIPASS_PLUS: 250,
+    DIAMOND:       500,
+  },
 } as const;
 
 // ─── TOKEN EXTENSION ──────────────────────────────────────────────────────────

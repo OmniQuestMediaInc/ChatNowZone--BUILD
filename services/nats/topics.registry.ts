@@ -129,6 +129,9 @@ export const NATS_TOPICS = {
   MEMBERSHIP_SUBSCRIPTION_CREATED:   'membership.subscription.created',
   MEMBERSHIP_SUBSCRIPTION_CANCELLED: 'membership.subscription.cancelled',
   MEMBERSHIP_SUBSCRIPTION_EXPIRED:   'membership.subscription.expired',
+
+  // ── Membership Stipend (MEMB-003) ─────────────────────────────────────────
+  MEMBERSHIP_STIPEND_DISTRIBUTED:    'membership.stipend.distributed',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];
