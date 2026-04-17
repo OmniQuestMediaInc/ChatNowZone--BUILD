@@ -53,9 +53,12 @@ jobs:
             ID=$(basename "$FILE" .md)
             TITLE="DIRECTIVE: ${ID}"
             echo "Opening issue for ${ID} (${FILE})"
+            SEPARATOR="---"
+            PR_INSTRUCTION=$(printf '\n\n%s\n**Copilot agent instruction:** When your work is complete, create a\npull request targeting main.\nTitle format: [PREFIX]: [DIRECTIVE-ID] — [short description]\nLabels: copilot-task, ready-for-review\nIf this directive is FIZ-scoped (FIZ: YES in header), also add\nlabel fiz-review-required.' "$SEPARATOR")
+
             gh issue create \
               --title "$TITLE" \
-              --body-file "$FILE" \
+              --body "$(cat "$FILE")$PR_INSTRUCTION" \
               --label "copilot-task" \
             && echo "✅ Issue created for ${ID}" \
             || echo "⚠️  Issue creation failed or already exists for ${ID} — skipping"

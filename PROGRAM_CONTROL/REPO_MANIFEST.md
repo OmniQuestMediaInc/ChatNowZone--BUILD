@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `9270f940f1d865485027b97852f4b475e2bba220`
-**Generated:** 2026-04-17T00:57:10Z
+**Branch:** `copilot/choreimplement-directive-dispatch`
+**Commit:** `125465fdf6ef06c386a551261bd68c3b2333c426`
+**Generated:** 2026-04-17T00:59:52Z
 
 ## All Files
 
@@ -16,6 +16,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/required-files.txt`
 - `.github/workflows/auto-merge.yml`
 - `.github/workflows/ci.yml`
+- `.github/workflows/directive-dispatch.yml`
 - `.github/workflows/directive-intake.yml`
 - `.github/workflows/notify.yml`
 - `.github/workflows/populate-issues.yml`
@@ -41,6 +42,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-NOTE-2026-04-10.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-003.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-TS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/DFSP-001.md`
@@ -72,6 +74,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-GOV-GATE-CLEARANCE-2026-04-11.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-001.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-003.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-TS-CLEANUP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CLEAN-SWEEP-2026-04-13.md`
