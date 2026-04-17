@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `copilot/chore-requeue-pipeline-directives`
-**Commit:** `21ef4ad8ec7ce3a2fc3a899f6fd1bfbf070e8ab2`
-**Generated:** 2026-04-17T01:27:46Z
+**Commit:** `6ab222062d0f11b34fed2dbe5b2d33d4496a0d81`
+**Generated:** 2026-04-17T01:27:57Z
 
 ## All Files
 
@@ -60,6 +60,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CHORE-PIPELINE-002.md`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CHORE-PIPELINE-004.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-09.md`
