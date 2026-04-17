@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `fc1dc38d10cd3e4359dcfb78046f8813be8b4d1f`
-**Generated:** 2026-04-17T15:50:23Z
+**Branch:** `claude/membership-schema-foundation-X64KM`
+**Commit:** `7221f861f00b73c65a648ae8e39d983cbf94ce8e`
+**Generated:** 2026-04-17T16:53:57Z
 
 ## All Files
 
@@ -129,6 +129,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/LEGAL-HOLD-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION-EXEC.md`
 - `PROGRAM_CONTROL/REPORT_BACK/M5-VOICE-SAMPLE-COLLECTION.md`
+- `PROGRAM_CONTROL/REPORT_BACK/MEMB-001-GAP-FILL-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MEMB-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MEMB-003-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MEMBERSHIP_LIFECYCLE_POLICY-v1.0-REPORT-BACK.md`
@@ -211,6 +212,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
+- `prisma/seed.test.ts`
 - `prisma/seed.ts`
 - `safety/security-guardrails.service.ts`
 - `scripts/seed-scheduling.ts`
