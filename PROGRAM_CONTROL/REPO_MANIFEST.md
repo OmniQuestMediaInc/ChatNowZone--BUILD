@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `b8cea3dc948e2972425a33c09091c66e45f5214a`
-**Generated:** 2026-04-17T06:03:20Z
+**Branch:** `copilot/setup-copilot-pull-request-functionality`
+**Commit:** `a08f39ddcebe8b82af6fcd2f35fe29f83ce0a88b`
+**Generated:** 2026-04-17T06:17:53Z
 
 ## All Files
 
@@ -16,6 +16,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/required-files.txt`
 - `.github/workflows/auto-merge.yml`
 - `.github/workflows/ci.yml`
+- `.github/workflows/copilot-setup-steps.yml`
 - `.github/workflows/directive-dispatch.yml`
 - `.github/workflows/directive-intake.yml`
 - `.github/workflows/notify.yml`
