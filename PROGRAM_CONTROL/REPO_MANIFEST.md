@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `6109ba5873e76fb2f714f80a994438ddc4f1ea35`
-**Generated:** 2026-04-17T01:47:16Z
+**Branch:** `claude/tok-audit-001-rate7k`
+**Commit:** `3930ade902de993b963980092f94984b4e620b31`
+**Generated:** 2026-04-17T01:58:39Z
 
 ## All Files
 
@@ -58,6 +58,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/MOD-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/NATS-DFSP001-TOPICS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/PV-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-AUDIT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CHORE-PIPELINE-002.md`
@@ -131,6 +132,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/REVIEW-REPAIR-MERGE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/REWARDS-API-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/SHOWZONE-001-ROOM-SESSION-SERVICE.md`
+- `PROGRAM_CONTROL/REPORT_BACK/TOK-AUDIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/VISION-MONITOR-INIT.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-019-020-021-ISSUE-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-019-020-021-ISSUES.md`
@@ -183,6 +185,7 @@ Auto-generated on every push. Do not edit manually.
 - `package.json`
 - `prisma/migrations/20260409000000_legal_hold_db_migration/migration.sql`
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
+- `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `safety/security-guardrails.service.ts`
