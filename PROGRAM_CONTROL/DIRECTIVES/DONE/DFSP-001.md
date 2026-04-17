@@ -5,6 +5,9 @@
 **Gate:** PROC-001 ✅ on main `0aa416c` PR#190 |
           GOV-FINTRAC + GOV-AGCO — CEO-AUTHORIZED-STAGED-2026-04-11 ✅
 **Status:** QUEUED — gates cleared, ready for execution
+**Agent:** CLAUDE_CODE
+**Parallel-safe:** NO
+**Touches:** services/core-api/src/dfsp/platform-otp.service.ts, services/core-api/src/dfsp/account-recovery-hold.service.ts, services/core-api/src/dfsp/dfsp.module.ts, services/core-api/src/governance/governance.config.ts
 **Mode:** DROID
 **FIZ:** YES — four-line commit format required
 **Type:** FIZ — scoped financial infrastructure
