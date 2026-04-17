@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `577a131b0f83651b69506bac8d83b3938ec36f3e`
-**Generated:** 2026-04-17T11:32:36Z
+**Commit:** `d205a9afe9ba48dbbee359153a8137dc308c939f`
+**Generated:** 2026-04-17T11:36:09Z
 
 ## All Files
 
@@ -175,6 +175,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
+- `PROGRAM_CONTROL/Thread 12 Handoff`
 - `README.md`
 - `Sovereign_Kernel.md.pdf`
 - `docker-compose.yml`
