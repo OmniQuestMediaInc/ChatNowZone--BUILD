@@ -913,3 +913,28 @@ model ShowZonePass {
   @@map("show_zone_passes")
 }
 
+// ─── Bijou Scheduler — BJ-002 ────────────────────────────────────────────────
+
+enum BijouSessionStatus {
+  SCHEDULED
+  OPEN
+  CLOSED
+  CANCELLED
+}
+
+model BijouSession {
+  id                String             @id @default(uuid())
+  creator_id        String             @db.Uuid
+  scheduled_start   DateTime           @db.Timestamptz
+  scheduled_end     DateTime           @db.Timestamptz
+  capacity          Int                @default(24)
+  status            BijouSessionStatus @default(SCHEDULED)
+  organization_id   String             @db.VarChar(100)
+  tenant_id         String             @db.VarChar(100)
+  created_at        DateTime           @default(now()) @db.Timestamptz
+  updated_at        DateTime           @updatedAt @db.Timestamptz
+
+  @@index([status, scheduled_start])
+  @@index([creator_id, scheduled_start])
+  @@map("bijou_sessions")
+}

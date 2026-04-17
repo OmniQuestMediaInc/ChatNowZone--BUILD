@@ -132,6 +132,12 @@ export const NATS_TOPICS = {
 
   // ── Membership Stipend (MEMB-003) ─────────────────────────────────────────
   MEMBERSHIP_STIPEND_DISTRIBUTED:    'membership.stipend.distributed',
+
+  // ── Bijou Scheduler (BJ-002) ──────────────────────────────────────────────
+  BIJOU_SESSION_SCHEDULED:           'bijou.session.scheduled',
+  BIJOU_SESSION_OPENED:              'bijou.session.opened',
+  BIJOU_SESSION_CLOSED:              'bijou.session.closed',
+  BIJOU_SESSION_CANCELLED:           'bijou.session.cancelled',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];

@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `39e8b574f93a40437ff974c607a87091bd229707`
-**Generated:** 2026-04-17T10:33:26Z
+**Branch:** `bijou/bj-002`
+**Commit:** `f9bc8caaf5697d9628a427f015e97c6879e9d3b7`
+**Generated:** 2026-04-17T10:35:38Z
 
 ## All Files
 
@@ -81,6 +81,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/BACKLOG-INIT.md`
 - `PROGRAM_CONTROL/REPORT_BACK/BIJOU-001-PASS-PRICING-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/BIJOU-002-SESSION-SERVICE.md`
+- `PROGRAM_CONTROL/REPORT_BACK/BJ-002-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-GOV-GATE-CLEARANCE-2026-04-11.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-INFRA-BCRYPT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-001.md`
@@ -207,6 +208,7 @@ Auto-generated on every push. Do not edit manually.
 - `scripts/verify-vault-delivery.ts`
 - `services/assets/DigitalVaultService.ts`
 - `services/assets/WatermarkUtility.ts`
+- `services/bijou/src/bijou-scheduler.service.ts`
 - `services/bijou/src/bijou-session.service.d.ts`
 - `services/bijou/src/bijou-session.service.js`
 - `services/bijou/src/bijou-session.service.js.map`
