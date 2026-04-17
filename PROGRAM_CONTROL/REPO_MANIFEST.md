@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `03e840fd91bf05698dd25adad861cd8707ff0342`
-**Generated:** 2026-04-15T21:21:58Z
+**Branch:** `copilot/chore-add-routing-fields`
+**Commit:** `ed018e4b059a836e3de436b3887a9491a0c7d4c8`
+**Generated:** 2026-04-17T00:00:42Z
 
 ## All Files
 
@@ -40,6 +40,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-002.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-NOTE-2026-04-10.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-INFRA-BCRYPT-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-TS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/DFSP-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GEO-001.md`
@@ -69,6 +70,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/BIJOU-002-SESSION-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-GOV-GATE-CLEARANCE-2026-04-11.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-INFRA-BCRYPT-001.md`
+- `PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CHORE-TS-CLEANUP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/CLEAN-SWEEP-2026-04-13.md`
 - `PROGRAM_CONTROL/REPORT_BACK/DFSP-001-BLOCKED.md`
@@ -147,6 +149,7 @@ Auto-generated on every push. Do not edit manually.
 - `Sovereign_Kernel.md.pdf`
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
+- `docs/DIRECTIVE_TEMPLATE.md`
 - `docs/ROADMAP_MANIFEST.md`
 - `docs/compliance/evidence_templates/NCII_TAKEDOWN_LOG.md`
 - `docs/doctrine/.gitkeep`
