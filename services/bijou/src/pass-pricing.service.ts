@@ -37,7 +37,7 @@ export class PassPricingService {
   computePassPrice(input: PassPriceInput): PassPriceResult {
     const config = input.venue === 'BIJOU' ? BIJOU_PRICING : SHOWZONE_PRICING;
 
-    const base = (config as typeof BIJOU_PRICING).ADMISSION_ST_TOKENS_BASE ?? (SHOWZONE_PRICING as typeof SHOWZONE_PRICING).PASS_BASE_ST_TOKENS;
+    const base = (config as typeof BIJOU_PRICING).ADMISSION_CZT_TOKENS_BASE ?? (SHOWZONE_PRICING as typeof SHOWZONE_PRICING).PASS_BASE_CZT_TOKENS;
     const day_multiplier = config.DAY_MULTIPLIERS[input.day_of_week];
     const time_multiplier = this.resolveTimeMultiplier(input.show_start_hour_toronto, input.venue);
     const creator_tier_multiplier = input.venue === 'SHOWZONE'
@@ -52,8 +52,8 @@ export class PassPricingService {
     // Geo multiplier is display-layer only — does not change creator payout calculation
     const final_tokens_raw = base * composite;
     const final_tokens = Math.round(final_tokens_raw / 10) * 10;
-    const st_price_usd = (config as typeof BIJOU_PRICING).ST_PRICE_USD ?? SHOWZONE_PRICING.ST_PRICE_USD;
-    const final_usd_estimate = final_tokens * st_price_usd;
+    const czt_price_usd = (config as typeof BIJOU_PRICING).CZT_PRICE_USD ?? SHOWZONE_PRICING.CZT_PRICE_USD;
+    const final_usd_estimate = final_tokens * czt_price_usd;
 
     return {
       base_tokens: base,

@@ -7,8 +7,6 @@
  */
 export class GovernanceConfigService {
   public readonly TIMEZONE = 'America/Toronto';
-  public readonly PAYOUT_RATE_SHOWTHEATER = 0.08;
-  public readonly PAYOUT_RATE_REGULAR = 0.065;
 
   // ── PROC-001: Webhook Hardening ───────────────────────────────────────────
   /** Maximum allowed drift (seconds) between webhook timestamp and server clock. */
@@ -69,26 +67,12 @@ export const DIAMOND_TIER = {
   },
 } as const;
 
-// ─── SHOWTOKEN EXCHANGE COSTS (ShowZone → Regular) ───────────────────────────
-export const SHOWTOKEN_EXCHANGE = {
-  VIP_COST_PCT:      0.05,   // 5%   — VIP: highest friction
-  SILVER_COST_PCT:   0.04,   // 4%   — SILVER
-  GOLD_COST_PCT:     0.025,  // 2.5% — GOLD
-  PLATINUM_COST_PCT: 0.025,  // 2.5% — PLATINUM
-  DIAMOND_COST_PCT:  0.00,   // 0%   — DIAMOND: fee-free earned perk
-  DIAMOND_FLOOR_RATE: 0.065,             // Break-even rate for Diamond conversion
-  SETTLEMENT_DAYS_MIN: 3,
-  SETTLEMENT_DAYS_MAX: 5,
-  // ShowToken guest price must be AT LEAST this multiple above regular token price
-  SHOWTOKEN_PRICE_FLOOR_MULTIPLIER: 1.28,
-} as const;
-
 // ─── SHOWZONE THEATRE PRICING ─────────────────────────────────────────────────
 export const SHOWZONE_PRICING = {
-  PASS_BASE_ST_TOKENS:       100,        // Base pass price in ShowTokens
+  PASS_BASE_CZT_TOKENS:      100,        // Base pass price in CZT
   MIN_SEATS_TO_GO_LIVE:      20,         // Auto-cancel if fewer seats sold at T-1hr
-  PAYOUT_RATE_PER_ST:        0.08,       // Creator payout per ShowToken
-  ST_PRICE_USD:              0.13,       // ShowToken USD price (for display/estimates)
+  PAYOUT_RATE_PER_CZT:       0.08,       // Creator payout per CZT
+  CZT_PRICE_USD:             0.13,       // CZT USD price (for display/estimates)
   PHASE2_CAPACITY_PCT:       0.25,       // Phase 2 Uber Private = 25% of Phase 1 count
   PHASE2_PRICE_MULTIPLIERS: {
     TIER_1: 1.30,                        // +30% over Phase 1 pass
@@ -127,11 +111,11 @@ export const SHOWZONE_PRICING = {
 
 // ─── BIJOU PLAY.ZONE PRICING ──────────────────────────────────────────────────
 export const BIJOU_PRICING = {
-  ADMISSION_ST_TOKENS_BASE:  240,        // Base admission in ShowTokens
+  ADMISSION_CZT_TOKENS_BASE: 240,        // Base admission in CZT
   CREATOR_SPLIT_PCT:         0.85,       // 85% to performing creator
   OQMI_SPLIT_PCT:            0.15,       // 15% to OmniQuest Media Inc.
-  PAYOUT_RATE_PER_ST:        0.09,       // Creator payout per ShowToken (Bijou rate)
-  ST_PRICE_USD:              0.13,       // ShowToken USD price
+  PAYOUT_RATE_PER_CZT:       0.09,       // Creator payout per CZT (Bijou rate)
+  CZT_PRICE_USD:             0.13,       // CZT USD price
   MIN_SEATS_TO_GO_LIVE:      8,          // Auto-cancel threshold at T-1hr
   MAX_PARTICIPANTS:          24,         // Hard SFU cap (VIPs only; host is +1)
   WRISTBAND_DURATION_HOURS:  72,         // Same as ShowZone wristband

@@ -2,7 +2,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import Decimal from 'decimal.js';
 import { GovernanceConfigService } from '../config/governance.config';
+import { GovernanceConfig } from '../governance/governance.config';
 import { TipTransaction } from './ledger.types';
 
 /**
@@ -11,10 +13,14 @@ import { TipTransaction } from './ledger.types';
  * WO-032 additions: BigInt-only amounts; mandatory rule_applied_id.
  */
 
+/**
+ * TokenType — CZT is the only platform currency.
+ * ShowZoneTokens (SZT), SHOW_THEATER, and BIJOU token types are retired
+ * per Tech Debt Delta 2026-04-16 TOK-001 through TOK-004.
+ * All transactions use CZT regardless of venue.
+ */
 export enum TokenType {
-  REGULAR = 'REGULAR',
-  SHOW_THEATER = 'SHOW_THEATER',
-  BIJOU = 'BIJOU',
+  CZT = 'CZT',
 }
 
 export enum WalletBucket {
@@ -52,6 +58,8 @@ export class LedgerService {
     referenceId: string;
     reasonCode: string;
     ruleAppliedId?: string;
+    heatScore?: number;
+    diamondFloorActive?: boolean;
     metadata?: Record<string, unknown>;
   }): Promise<unknown> {
     // WO-032: Reject any non-BigInt amount to prevent fractional token entries.
@@ -85,9 +93,10 @@ export class LedgerService {
       metadata: {
         ...data.metadata,
         rule_applied_id: ruleAppliedId,
-        payout_rate_applied: data.tokenType === TokenType.SHOW_THEATER 
-          ? this.config.PAYOUT_RATE_SHOWTHEATER 
-          : this.config.PAYOUT_RATE_REGULAR,
+        payout_rate_applied: this.resolvePayoutRate(
+          data.heatScore ?? 0,
+          data.diamondFloorActive ?? false,
+        ),
         governance_timezone: this.config.TIMEZONE,
       },
     });
@@ -260,5 +269,35 @@ export class LedgerService {
       tokenAmount: tx.tokenAmount,
       correlationId: tx.correlationId,
     });
+  }
+
+  /**
+   * Resolves payout rate from Room-Heat score per FairPay/FairPlay.
+   * Tech Debt Delta 2026-04-16 PAY-001 through PAY-005.
+   * Rate is captured at tx_initiated and stored immutably.
+   */
+  private resolvePayoutRate(
+    heatScore: number,
+    diamondFloorActive: boolean,
+  ): Decimal {
+    let rate: Decimal;
+
+    if (heatScore >= GovernanceConfig.HEAT_BAND_HOT_MAX + 1) {
+      rate = GovernanceConfig.RATE_INFERNO;
+    } else if (heatScore >= GovernanceConfig.HEAT_BAND_WARM_MAX + 1) {
+      rate = GovernanceConfig.RATE_HOT;
+    } else if (heatScore >= GovernanceConfig.HEAT_BAND_COLD_MAX + 1) {
+      rate = GovernanceConfig.RATE_WARM;
+    } else {
+      rate = GovernanceConfig.RATE_COLD;
+    }
+
+    // Diamond floor guarantee: 10,000+ CZT bulk floors at RATE_WARM minimum.
+    // Higher rate applies if heat warrants it.
+    if (diamondFloorActive && rate.lessThan(GovernanceConfig.RATE_DIAMOND_FLOOR)) {
+      rate = GovernanceConfig.RATE_DIAMOND_FLOOR;
+    }
+
+    return rate;
   }
 }

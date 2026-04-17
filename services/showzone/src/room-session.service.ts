@@ -181,7 +181,7 @@ export class RoomSessionService {
       creator_pool_st: creatorPool,
       platform_pool_st: platformPool,
       phase2_gross_st: phase2Gross,
-      payout_rate_usd: SHOWZONE_PRICING.PAYOUT_RATE_PER_ST,
+      payout_rate_usd: SHOWZONE_PRICING.PAYOUT_RATE_PER_CZT,
       rule_applied_id: this.RULE_ID,
     };
   }
