@@ -9,7 +9,7 @@
 ## HEAD
 
 ```
-$(git rev-parse HEAD)
+cf5a647cbc7b72e7b6d0c4ad65efaee877d8052a
 ```
 
 ---
@@ -17,12 +17,10 @@ $(git rev-parse HEAD)
 ## Files Changed
 
 ```
-git diff --stat HEAD (before new files committed)
-.github/workflows/directive-intake.yml | 5 ++++-  1 file changed, 4 insertions(+), 1 deletion(-)
-
-New file: .github/workflows/directive-dispatch.yml (308 lines)
-New file: PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-003.md (this file)
-New file: PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-003.md
+.github/workflows/directive-dispatch.yml  (created — 310 lines)
+.github/workflows/directive-intake.yml    (patched — PR instruction block added)
+PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-003.md (this file)
+PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-003.md
 ```
 
 ---
