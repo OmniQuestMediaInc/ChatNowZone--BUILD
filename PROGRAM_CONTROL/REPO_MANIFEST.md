@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `0d02e7c9268f5f8ad4fcd9150c42796df84a849f`
-**Generated:** 2026-04-17T04:10:01Z
+**Branch:** `copilot/chore-bootstrap-program-control-pipeline`
+**Commit:** `b6c558ee74f6865d1b3395836025f941e70c5780`
+**Generated:** 2026-04-17T04:10:34Z
 
 ## All Files
 
@@ -25,6 +25,7 @@ Auto-generated on every push. Do not edit manually.
 - `.prettierrc`
 - `CLAUDE.md`
 - `OQMI_SYSTEM_STATE.md`
+- `PROGRAM_CONTROL/BACKLOGS/.gitkeep`
 - `PROGRAM_CONTROL/BACKLOGS/CLAUDE_CODE_BACKLOG_v7.md`
 - `PROGRAM_CONTROL/BACKLOGS/LEGACY/CLAUDE_CODE_BACKLOG_v1_LEGACY.md`
 - `PROGRAM_CONTROL/BACKLOGS/LEGACY/CLAUDE_CODE_BACKLOG_v2_LEGACY.md`
@@ -170,6 +171,7 @@ Auto-generated on every push. Do not edit manually.
 - `docs/DOMAIN_GLOSSARY.md`
 - `docs/REQUIREMENTS_MASTER.md`
 - `docs/ROADMAP_MANIFEST.md`
+- `docs/RRR_CEO_DECISIONS_FINAL_2026-04-17.md`
 - `docs/compliance/evidence_templates/NCII_TAKEDOWN_LOG.md`
 - `docs/doctrine/.gitkeep`
 - `docs/doctrine/COPILOT_GUARDRAILS.md`
