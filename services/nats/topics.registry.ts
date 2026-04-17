@@ -145,6 +145,9 @@ export const NATS_TOPICS = {
   BIJOU_ADMISSION_STANDBY:           'bijou.admission.standby',
   BIJOU_ADMISSION_EJECTED:           'bijou.admission.ejected',
   BIJOU_ADMISSION_ABANDONED:         'bijou.admission.abandoned',
+
+  // ── Bijou Dwell Credit (BJ-004) ───────────────────────────────────────────
+  BIJOU_DWELL_CREDITED:              'bijou.dwell.credited',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];

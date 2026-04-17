@@ -965,3 +965,40 @@ model BijouAdmission {
   @@index([session_id, created_at])
   @@map("bijou_admissions")
 }
+
+// ─── Bijou Dwell Credit — BJ-004 ─────────────────────────────────────────────
+// Append-only. No UPDATE or DELETE permitted.
+
+model DwellLog {
+  id              String   @id @default(uuid())
+  admission_id    String   @db.Uuid
+  session_id      String   @db.Uuid
+  user_id         String   @db.Uuid
+  dwell_seconds   Int
+  czt_credited    Int
+  payout_czt      Int
+  platform_czt    Int
+  organization_id String   @db.VarChar(100)
+  tenant_id       String   @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@unique([admission_id, session_id])
+  @@index([session_id])
+  @@index([user_id])
+  @@map("bijou_dwell_logs")
+}
+
+model CreatorDwellAccrual {
+  id              String   @id @default(uuid())
+  creator_id      String   @db.Uuid
+  session_id      String   @db.Uuid
+  payout_czt      Int
+  settled         Boolean  @default(false)
+  organization_id String   @db.VarChar(100)
+  tenant_id       String   @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@index([creator_id, settled])
+  @@index([session_id])
+  @@map("bijou_creator_dwell_accruals")
+}
