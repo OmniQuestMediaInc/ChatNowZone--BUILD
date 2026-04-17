@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `copilot/add-directives-tok-audit-pay-rates-retire`
-**Commit:** `7676226da07195c04ee917d289bddbf5aadd2865`
-**Generated:** 2026-04-17T01:55:58Z
+**Commit:** `ae8d34f3a721b64b409fb7c6a3d54c6e5e47adb9`
+**Generated:** 2026-04-17T01:56:53Z
 
 ## All Files
 
@@ -64,6 +64,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CHORE-PIPELINE-004.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/PAY-RATES-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/TOK-AUDIT-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/TOK-RETIRE-001.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-09.md`
