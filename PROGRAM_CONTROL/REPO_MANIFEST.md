@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `5bc26f754a74eb75579dbe83d09f25a67837e8b4`
-**Generated:** 2026-04-17T14:15:26Z
+**Branch:** `copilot/docs-add-membership-lifecycle-policy`
+**Commit:** `db8556c2ff8b99c2282c710a6a1e0224125f34ba`
+**Generated:** 2026-04-17T14:25:32Z
 
 ## All Files
 
@@ -132,6 +132,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/MEMB-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MEMB-002-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MEMB-003-REPORT-BACK.md`
+- `PROGRAM_CONTROL/REPORT_BACK/MEMBERSHIP_LIFECYCLE_POLICY-v1.0-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/MOD-001-INCIDENT-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-001-FABRIC-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-DFSP001-TOPICS-REPORT-BACK.md`
@@ -184,6 +185,7 @@ Auto-generated on every push. Do not edit manually.
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
 - `docs/DOMAIN_GLOSSARY.md`
+- `docs/MEMBERSHIP_LIFECYCLE_POLICY.md`
 - `docs/REQUIREMENTS_MASTER.md`
 - `docs/ROADMAP_MANIFEST.md`
 - `docs/RRR_CEO_DECISIONS_FINAL_2026-04-17.md`
