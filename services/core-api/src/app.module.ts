@@ -46,6 +46,7 @@ import { MembershipModule } from './membership/membership.module';
     SchedulingModule,
     MembershipModule,
     ZoneAccessModule,
+    MembershipModule,
   ],
 })
 export class AppModule implements NestModule {

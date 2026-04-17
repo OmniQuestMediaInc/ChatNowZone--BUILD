@@ -125,7 +125,7 @@ export const NATS_TOPICS = {
   // ── Zone Access (MEMB-001) ─────────────────────────────────────────────────
   ZONE_ACCESS_DENIED:              'zone.access.denied',
 
-  // ── Membership (MEMB-002) ──────────────────────────────────────────────────
+  // ── Membership Subscriptions (MEMB-002) ───────────────────────────────────
   MEMBERSHIP_SUBSCRIPTION_CREATED:   'membership.subscription.created',
   MEMBERSHIP_SUBSCRIPTION_CANCELLED: 'membership.subscription.cancelled',
   MEMBERSHIP_SUBSCRIPTION_EXPIRED:   'membership.subscription.expired',

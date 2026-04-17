@@ -1,7 +1,7 @@
-// FIZ: MEMB-001 — ZoneAccessService
-// FIZ: MEMB-002 — wired to MembershipService.getActiveTier() for durable tier resolution.
+// FIZ: MEMB-001 / MEMB-002 — ZoneAccessService
 // Server-side zone access enforcement. Resolves membership tier + ShowZonePass
 // and checks against ZONE_MAP in GovernanceConfig.
+// MEMB-002: resolveUserTier now delegates to MembershipService.getActiveTier().
 import { Injectable, Logger, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import {
@@ -36,7 +36,7 @@ export class ZoneAccessService {
 
   /**
    * Evaluate zone access for a user.
-   * 1. Resolve the user's current membership tier (stub: DAY_PASS until MEMB-002 wires MembershipService)
+   * 1. Resolve the user's current membership tier via MembershipService
    * 2. Check for active ShowZonePass records for the requested zone
    * 3. Compare against ZONE_MAP
    * 4. Return GRANTED or DENIED with full audit payload
@@ -49,7 +49,7 @@ export class ZoneAccessService {
   ): Promise<ZoneAccessDecision> {
     const ruleAppliedId = `MEMB-001_ZONE_ACCESS_v1`;
 
-    // Step 1: Resolve membership tier (MEMB-002: MembershipService.getActiveTier)
+    // Step 1: Resolve membership tier via MembershipService (MEMB-002)
     const resolvedTier: ZoneAccessTier = await this.resolveUserTier(userId);
 
     // Step 2: Check for active ShowZonePass for this zone
@@ -114,13 +114,11 @@ export class ZoneAccessService {
   }
 
   /**
-   * Resolve user's current membership tier.
-   * MEMB-002: delegates to MembershipService.getActiveTier() which returns
-   * DAY_PASS when the user has no ACTIVE subscription.
+   * Resolve user's current membership tier via MembershipService (MEMB-002).
+   * Returns DAY_PASS if no active subscription exists.
    */
   async resolveUserTier(userId: string): Promise<ZoneAccessTier> {
-    const tier = await this.membershipService.getActiveTier(userId);
-    return tier as ZoneAccessTier;
+    return this.membershipService.getActiveTier(userId);
   }
 
   /**
