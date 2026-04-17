@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `copilot/add-directives-tok-audit-pay-rates-retire`
-**Commit:** `3bd71a21bbe3d49712b5f18093a7c7ef9dc39d60`
-**Generated:** 2026-04-17T02:02:05Z
+**Commit:** `cb81da9ce714069ecbe6028c714693f52071859f`
+**Generated:** 2026-04-17T02:02:57Z
 
 ## All Files
 
