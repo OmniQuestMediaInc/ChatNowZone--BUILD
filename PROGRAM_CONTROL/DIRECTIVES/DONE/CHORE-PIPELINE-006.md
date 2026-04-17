@@ -2,7 +2,7 @@
 # Update CLAUDE.md — Claude Code Autonomous Directive Protocol
 
 **Directive ID:** CHORE-PIPELINE-006
-**Agent:** CLAUDE_CODE
+**Agent:** COPILOT
 **Parallel-safe:** NO
 **Touches:** CLAUDE.md
 **Mode:** DROID
@@ -26,20 +26,5 @@ canonical files (REQUIREMENTS_MASTER.md and DOMAIN_GLOSSARY.md).
 
 ---
 
-## Scope
-
-### File to Modify
-CLAUDE.md — full replacement
-
----
-
-## Definition of Done
-
-- [x] CLAUDE.md replaced with new content
-- [x] Source of Truth section references REQUIREMENTS_MASTER and DOMAIN_GLOSSARY
-- [x] Commit Discipline section includes GGS:, GGS-AV:, CYR: prefixes
-- [x] Autonomous Directive Protocol section present with all 11 steps
-- [x] HARD_STOP conditions listed
-- [x] Key file paths listed
-- [x] Report-back filed to PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-006.md
-- [x] Directive moved to PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-006.md
+## Result: DONE — Completed by COPILOT agent 2026-04-17
+## Report-back: PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-006.md

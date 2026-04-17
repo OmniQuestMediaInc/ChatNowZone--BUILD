@@ -146,8 +146,8 @@ Commit message format (FIZ-scoped):
   FIZ: [ID] — [description]
   REASON: [why]
   IMPACT: [what changed]
-  CORRELATION_ID: [ID]-[date]
-  GATE: [clearance reference]
+  CORRELATION_ID: [uuid or ID-date]
+  GATE: [GOV gate clearance reference or N/A]
 
 ### Step 11 — Open PR
 Open a PR targeting main.
