@@ -17,7 +17,7 @@ cf5a647cbc7b72e7b6d0c4ad65efaee877d8052a
 ## Files Changed
 
 ```
-.github/workflows/directive-dispatch.yml  (created — 310 lines)
+.github/workflows/directive-dispatch.yml  (created — 309 lines)
 .github/workflows/directive-intake.yml    (patched — PR instruction block added)
 PROGRAM_CONTROL/REPORT_BACK/CHORE-PIPELINE-003.md (this file)
 PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-003.md
