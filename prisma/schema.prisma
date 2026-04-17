@@ -1002,3 +1002,21 @@ model CreatorDwellAccrual {
   @@index([session_id])
   @@map("bijou_creator_dwell_accruals")
 }
+
+// ─── Creator — OBS-001 foundation fields ─────────────────────────────────────
+// Minimal Creator model carrying OBS stream key hash and persona CREATOR_AUTO
+// flag. Canonical identity / profile fields are deferred to a future directive.
+
+model Creator {
+  id              String   @id @default(uuid())
+  // OBS-001: stream key stored as SHA-256 hash — never plaintext.
+  stream_key_hash String?  @unique @db.VarChar(64)
+  // OBS-001: CREATOR_AUTO flag gates persona auto-responses. Default false.
+  creator_auto    Boolean  @default(false)
+  organization_id String   @db.VarChar(100)
+  tenant_id       String   @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+  updated_at      DateTime @updatedAt @db.Timestamptz
+
+  @@map("creators")
+}

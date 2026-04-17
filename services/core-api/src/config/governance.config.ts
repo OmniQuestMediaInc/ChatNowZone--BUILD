@@ -382,3 +382,14 @@ export const CREATOR_SAAS = {
   ANNUAL_DISCOUNT_PCT: null,      // TBD — pending CEO confirmation
   // Build and ship. INACTIVE at launch. Admin-side activation only.
 } as const;
+
+// ─── OBS (OBS-001 — OBS Bridge + Chat Aggregator + Persona Engine) ───────────
+// Canonical constants for the OBS bridge layer and persona engine.
+// Revisions require OBS: commit.
+export const OBS = {
+  CHAT_JITTER_MIN_MS: 150,
+  CHAT_JITTER_MAX_MS: 450,
+  // Bill 149 (Ontario) disclosure prefix for AI-generated creator responses.
+  // Applied to every CREATOR_AUTO=true persona output before publish.
+  BILL_149_DISCLOSURE_PREFIX: 'This message was generated with AI assistance. ',
+} as const;

@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `0d0265102ed28a09080b064d36e397045844ff0d`
-**Generated:** 2026-04-17T11:06:05Z
+**Branch:** `obs/obs-001`
+**Commit:** `c9fb69e576877620323b83196d2f3ec7aff28f5d`
+**Generated:** 2026-04-17T11:07:47Z
 
 ## All Files
 
@@ -61,11 +61,11 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/NATS-DFSP001-TOPICS.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/PAY-RATES-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/PV-001.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/THREAD11-COPILOT-INTAKE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-AUDIT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-RETIRE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
-- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/THREAD11-COPILOT-INTAKE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/THREAD11-DIRECTIVE-SERIES-001.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
@@ -136,6 +136,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/MOD-001-INCIDENT-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-001-FABRIC-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-DFSP001-TOPICS-REPORT-BACK.md`
+- `PROGRAM_CONTROL/REPORT_BACK/OBS-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-002-SUPPRESSION-DB-MIGRATION.md`
@@ -321,6 +322,10 @@ Auto-generated on every push. Do not edit manually.
 - `services/nats/topics.registry.js`
 - `services/nats/topics.registry.js.map`
 - `services/nats/topics.registry.ts`
+- `services/obs-bridge/src/chat-aggregator.service.ts`
+- `services/obs-bridge/src/obs-bridge.module.ts`
+- `services/obs-bridge/src/obs-bridge.service.ts`
+- `services/obs-bridge/src/persona-engine.service.ts`
 - `services/rewards-api/src/engine/points-calculator.logic.ts`
 - `services/rewards-api/src/white-label/partner-config.schema.ts`
 - `services/risk-engine/src/region-signal.service.ts`
