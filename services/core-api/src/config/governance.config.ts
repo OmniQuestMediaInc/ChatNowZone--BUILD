@@ -200,6 +200,12 @@ export const MEMBERSHIP = {
     { paid_months: 6,  bonus_months: 2, loyalty_multiplier: 1.2 },
     { paid_months: 12, bonus_months: 3, loyalty_multiplier: 1.5 },
   ],
+  // MEMB-002: ADR-003 bonus month matrix for subscription billing intervals.
+  DURATION_BONUS: {
+    QUARTERLY:   { commitment_months: 3,  bonus_months: 1 },
+    SEMI_ANNUAL: { commitment_months: 6,  bonus_months: 2 },
+    ANNUAL:      { commitment_months: 12, bonus_months: 3 },
+  },
 } as const;
 
 // ─── TOKEN EXTENSION ──────────────────────────────────────────────────────────

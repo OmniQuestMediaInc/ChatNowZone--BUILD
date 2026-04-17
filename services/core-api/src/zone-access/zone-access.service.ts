@@ -1,17 +1,18 @@
-// FIZ: MEMB-001 — ZoneAccessService
+// FIZ: MEMB-001 / MEMB-002 — ZoneAccessService
 // Server-side zone access enforcement. Resolves membership tier + ShowZonePass
 // and checks against ZONE_MAP in GovernanceConfig.
+// MEMB-002: resolveUserTier now delegates to MembershipService.getActiveTier().
 import { Injectable, Logger, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import {
   ZONE_MAP,
   SHOW_ZONE_PASS_OVERRIDE_ZONES,
-  ZONE_ACCESS_TIERS,
   ZoneAccessTier,
   ZoneAccessZone,
 } from '../config/governance.config';
 import { NATS_TOPICS } from '../../../nats/topics.registry';
 import { NatsService } from '../nats/nats.service';
+import { MembershipService } from '../membership/membership.service';
 
 export interface ZoneAccessDecision {
   result: 'GRANTED' | 'DENIED';
@@ -30,11 +31,12 @@ export class ZoneAccessService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly natsService: NatsService,
+    private readonly membershipService: MembershipService,
   ) {}
 
   /**
    * Evaluate zone access for a user.
-   * 1. Resolve the user's current membership tier (stub: DAY_PASS until MEMB-002 wires MembershipService)
+   * 1. Resolve the user's current membership tier via MembershipService
    * 2. Check for active ShowZonePass records for the requested zone
    * 3. Compare against ZONE_MAP
    * 4. Return GRANTED or DENIED with full audit payload
@@ -47,8 +49,7 @@ export class ZoneAccessService {
   ): Promise<ZoneAccessDecision> {
     const ruleAppliedId = `MEMB-001_ZONE_ACCESS_v1`;
 
-    // Step 1: Resolve membership tier
-    // Stub: returns DAY_PASS. MEMB-002 will wire MembershipService.getActiveTier()
+    // Step 1: Resolve membership tier via MembershipService (MEMB-002)
     const resolvedTier: ZoneAccessTier = await this.resolveUserTier(userId);
 
     // Step 2: Check for active ShowZonePass for this zone
@@ -113,13 +114,11 @@ export class ZoneAccessService {
   }
 
   /**
-   * Resolve user's current membership tier.
-   * Stub implementation returns DAY_PASS for all users.
-   * MEMB-002 will replace this with MembershipService.getActiveTier().
+   * Resolve user's current membership tier via MembershipService (MEMB-002).
+   * Returns DAY_PASS if no active subscription exists.
    */
-  async resolveUserTier(_userId: string): Promise<ZoneAccessTier> {
-    // TODO: MEMB-002 — wire to MembershipService.getActiveTier()
-    return ZONE_ACCESS_TIERS[0]; // DAY_PASS
+  async resolveUserTier(userId: string): Promise<ZoneAccessTier> {
+    return this.membershipService.getActiveTier(userId);
   }
 
   /**

@@ -844,6 +844,51 @@ model WebhookIdempotencyLog {
   @@map("webhook_idempotency_log")
 }
 
+// ─── Membership Subscriptions — MEMB-002 ─────────────────────────────────────
+
+enum MembershipTier {
+  DAY_PASS
+  ANNUAL
+  OMNIPASS_PLUS
+  DIAMOND
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  GRACE
+}
+
+enum BillingInterval {
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUAL
+  ANNUAL
+}
+
+model MembershipSubscription {
+  id                    String             @id @default(uuid())
+  user_id               String             @db.Uuid
+  tier                  MembershipTier
+  status                SubscriptionStatus @default(ACTIVE)
+  billing_interval      BillingInterval
+  commitment_months     Int
+  bonus_months          Int                @default(0)
+  current_period_start  DateTime           @db.Timestamptz
+  current_period_end    DateTime           @db.Timestamptz
+  cancelled_at          DateTime?          @db.Timestamptz
+  organization_id       String             @db.VarChar(100)
+  tenant_id             String             @db.VarChar(100)
+  created_at            DateTime           @default(now()) @db.Timestamptz
+  updated_at            DateTime           @updatedAt @db.Timestamptz
+
+  // Application-level invariant: one ACTIVE subscription per user.
+  // Enforced in MembershipService.createSubscription before insert.
+  @@index([user_id, status])
+  @@map("membership_subscriptions")
+}
+
 // ─── Zone Access — MEMB-001: ShowZonePass for zone-gate overrides ────────────
 
 enum ZoneAccessZone {
