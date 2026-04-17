@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `b30c90de5b3433e8668f8cfc34243216466c6fbb`
-**Generated:** 2026-04-17T04:11:18Z
+**Branch:** `claude/concierge-config-001-SeN4Z`
+**Commit:** `f2420b4c79fce1628cf6bcc1523a6ac4fec85b94`
+**Generated:** 2026-04-17T04:19:03Z
 
 ## All Files
 
