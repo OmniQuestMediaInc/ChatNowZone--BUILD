@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `89acb32b4b89438f0e0445074dd55ff934fbbb40`
-**Generated:** 2026-04-17T16:55:55Z
+**Branch:** `claude/audit-membership-queue-rJwlw`
+**Commit:** `c1a778b91d76419efc429d02ba4eea73095a4d8c`
+**Generated:** 2026-04-18T23:29:49Z
 
 ## All Files
 
@@ -149,6 +149,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/SHOWZONE-001-ROOM-SESSION-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD 13 HANDOFF`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD-12-CLEANUP-REPORT-BACK.md`
+- `PROGRAM_CONTROL/REPORT_BACK/THREAD14-SCHEMA-INTEGRITY-AUDIT.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-006-FOLLOWUP-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-AUDIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-RETIRE-001.md`
