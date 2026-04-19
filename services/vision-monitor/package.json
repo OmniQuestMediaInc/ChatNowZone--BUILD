@@ -4,7 +4,7 @@
   "description": "Vision monitoring services",
   "main": "index.js",
   "peerDependencies": {
-    "@tensorflow/tfjs-node": "^3.0.0"
+    "@tensorflow/tfjs-node": "^4.22.0"
   },
   "dependencies": {},
   "devDependencies": {},
