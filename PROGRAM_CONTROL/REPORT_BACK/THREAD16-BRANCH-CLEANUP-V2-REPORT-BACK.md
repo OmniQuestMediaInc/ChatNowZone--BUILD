@@ -1,29 +1,16 @@
 # THREAD 16 — BRANCH CLEANUP V2 REPORT-BACK
 
-Directive: THREAD16-CLEANUP-002
-Executed by: GitHub Copilot (re-execution — V1 was filed by Claude Code; this is the authoritative final execution)
-Executed at: 2026-04-19T13:55:48Z
-main HEAD at cleanup start: 318b15f5405c2eae8183b6bdd412481e44aa3607
+Directive: THREAD16-CLEANUP-002 (execution run 2)
+Executed by: GitHub Copilot coding agent
+Executed at: 2026-04-19T14:02:34Z
+origin/main HEAD at cleanup start: 318b15f5405c2eae8183b6bdd412481e44aa3607
+Working branch: copilot/thread16-cleanup-v2-again
 
----
+NOTE: This supersedes the prior run (2026-04-19T09:20:45Z) at this same report-back path.
+main advanced from 82c70fbf → 318b15f5 between runs; the branch landscape changed
+substantially (26 branches now qualify vs 2 previously).
 
-## IMPORTANT NOTE ON PRIOR V1 EXECUTION (SAME FILE)
-
-The prior run of this file (V1, filed by Claude Code at 09:20:45Z) was executed
-against a SHALLOW clone. The shallow clone distorted `git rev-list --count`
-output — some branches appeared to have many commits ahead of main but were
-actually fully merged. This full re-execution uses an unshallowed clone and
-produces authoritative counts.
-
-Prior V1 qualified: 2 branches (claude/chore-thread-12-cleanup,
-copilot/fix-branch-count-discrepancy). With unshallowed data this execution
-finds 26 branches qualify.
-
----
-
-## STEP 1 — Commands Run Verbatim
-
-### git fetch --all --prune
+## STEP 1 — git fetch --all --prune (verbatim output, abbreviated to new/changed lines)
 
 ```
 From https://github.com/OmniQuestMediaInc/ChatNowZone--BUILD
@@ -52,15 +39,11 @@ From https://github.com/OmniQuestMediaInc/ChatNowZone--BUILD
  * [new branch]      copilot/move-directive-gov-const-001      -> origin/copilot/move-directive-gov-const-001
  * [new branch]      copilot/proc-001-main-merge               -> origin/copilot/proc-001-main-merge
  * [new branch]      copilot/setup-and-run-node24              -> origin/copilot/setup-and-run-node24
+ * [new branch]      copilot/thread16-cleanup-v2               -> origin/copilot/thread16-cleanup-v2
  * [new branch]      copilot/update-project-structure          -> origin/copilot/update-project-structure
 ```
 
-NOTE: Clone was initially shallow. A follow-up `git fetch --unshallow origin` was
-required to obtain accurate `git rev-list --count` values. The shallow clone
-distorted counts in the prior V1 run (filed by Claude Code at 09:20:45Z) — branches
-that appeared to have hundreds of commits ahead were in fact fully merged.
-
-### git ls-remote --heads origin
+## STEP 1 — git ls-remote --heads origin (verbatim)
 
 ```
 716dc6f0420251bd3041dfa87c2fa695ec781f64	refs/heads/claude/chore-thread-12-cleanup
@@ -88,96 +71,123 @@ a45c19bddd0e26f6169c3b3acef16831eb698787	refs/heads/copilot/infra-004-fill-commi
 3e1c6bebdc31dc6b8a5b3636000f1b506dc9724f	refs/heads/copilot/move-directive-gov-const-001
 d03b09322b53da63c3521dab729bdcfe8be43165	refs/heads/copilot/proc-001-main-merge
 82c70fbf453f18e964b933109de123be6a717c4f	refs/heads/copilot/setup-and-run-node24
-318b15f5405c2eae8183b6bdd412481e44aa3607	refs/heads/copilot/thread16-cleanup-v2
+1e6a09dc882cf251965912e299bd40eb8aac9c8f	refs/heads/copilot/thread16-cleanup-v2
+318b15f5405c2eae8183b6bdd412481e44aa3607	refs/heads/copilot/thread16-cleanup-v2-again
 ba1ccf5865c54b24bb6b924f70ccef8cd9055991	refs/heads/copilot/update-project-structure
 318b15f5405c2eae8183b6bdd412481e44aa3607	refs/heads/main
 ```
 
-Protected refs/* (out-of-scope — `git ls-remote origin 'refs/oss/*' 'refs/oqminc/*'`):
+Protected refs/* (out-of-scope, not heads):
+refs/oqminc/* and refs/oss/* are excluded per directive — not returned by `--heads`.
 
-```
-2bc31fc31dee7168df6eded0dc64913cc61ca0e7	refs/oqminc/ai-resources
-cf70dcdaee0d9b26e6ad82aef3402f89e8622705	refs/oss/booking-api
-028416ba5cc12db48a8359926a37659a36b516ee	refs/oss/discussion-platform
-d04915dc424b0f6769f207608669544079de8ff2	refs/oss/live-polling
-19fc0b34d68d4b2117beba5dacf5f8219a2469e5	refs/oss/loadbalancer-nginx
-3c95928037dc55e3deb0f228c501734254d5ab49	refs/oss/react-chat-app
-e7bd29e47945c6ff94f6ed5e0bfd7b94986b2701	refs/oss/social-media-app
-ecd9462723727c7de747ada08ebed60eeb815522	refs/oss/socketio-chat
-8917b2fa6c3f06bde34a9d78c2c2c6c0b7e624e0	refs/oss/zoom-clone
-```
-
-Open PRs in repo (state=open, perPage=100):
+Open PRs (list_pull_requests state=open perPage=100):
 
 ```
 []
 ```
 
----
+## STEP 2 — Per-Branch Qualification
 
-## STEP 2 — Per-Branch Qualification Check (Unshallowed Clone)
+Command: `git rev-list --count origin/main..origin/<branch>` for each non-main branch.
+Criteria: NOT main | NOT refs/oss/* or refs/oqminc/* | count == 0
 
-Command used for each branch:
 ```
-git rev-list --count origin/main..origin/<branch>
+0  claude/chore-thread-12-cleanup          → QUALIFIES
+0  claude/dfsp-001-otp-account-hold-report-back → QUALIFIES
+0  claude/thread-9-handoff-document        → QUALIFIES
+0  copilot/add-status-queued-to-dfsp-001   → QUALIFIES
+0  copilot/bootstrap-program-control-directory-structure-again → QUALIFIES
+0  copilot/chore-add-autonomous-directive-protocol-again → QUALIFIES
+0  copilot/chore-add-tech-debt-delta-2026-04-16 → QUALIFIES
+0  copilot/chore-create-domain-glossary    → QUALIFIES
+0  copilot/chore-fetch-urls-for-testing-data → QUALIFIES
+0  copilot/chore-ts-legal-hold-g-geo-001   → QUALIFIES
+1  copilot/chore-update-program-control    → SKIP (1 commit ahead)
+0  copilot/chorebump-github-actions-node-24 → QUALIFIES
+0  copilot/choreprogram-control-bootstrap  → QUALIFIES
+0  copilot/connect-caude-to-repo           → QUALIFIES
+0  copilot/fetch-repo-directory-tree       → QUALIFIES
+0  copilot/fix-branch-count-discrepancy    → QUALIFIES
+0  copilot/fix-commitment-errors           → QUALIFIES
+0  copilot/hard-stop-dfsp-001              → QUALIFIES
+0  copilot/housekeeping-check-legacy-files → QUALIFIES
+0  copilot/infra-004-fetch-status          → QUALIFIES
+0  copilot/infra-004-fill-commit-hash      → QUALIFIES
+0  copilot/intake-thread11-directive-series-001 → QUALIFIES
+0  copilot/move-directive-gov-const-001    → QUALIFIES
+0  copilot/proc-001-main-merge             → QUALIFIES
+0  copilot/setup-and-run-node24            → QUALIFIES
+2  copilot/thread16-cleanup-v2             → SKIP (2 commits ahead)
+0  copilot/thread16-cleanup-v2-again       → QUALIFIES (working branch for this run; will be 1 ahead after report-back commit)
+0  copilot/update-project-structure        → QUALIFIES
 ```
-(run after `git fetch --unshallow origin` to obtain accurate topology)
 
-| AHEAD | BRANCH | VERDICT |
-|------:|--------|---------|
-| 0 | claude/chore-thread-12-cleanup | QUALIFIES |
-| 0 | claude/dfsp-001-otp-account-hold-report-back | QUALIFIES |
-| 0 | claude/thread-9-handoff-document | QUALIFIES |
-| 0 | copilot/add-status-queued-to-dfsp-001 | QUALIFIES |
-| 0 | copilot/bootstrap-program-control-directory-structure-again | QUALIFIES |
-| 0 | copilot/chore-add-autonomous-directive-protocol-again | QUALIFIES |
-| 0 | copilot/chore-add-tech-debt-delta-2026-04-16 | QUALIFIES |
-| 0 | copilot/chore-create-domain-glossary | QUALIFIES |
-| 0 | copilot/chore-fetch-urls-for-testing-data | QUALIFIES |
-| 0 | copilot/chore-ts-legal-hold-g-geo-001 | QUALIFIES |
-| 0 | copilot/chorebump-github-actions-node-24 | QUALIFIES |
-| 0 | copilot/choreprogram-control-bootstrap | QUALIFIES |
-| 0 | copilot/connect-caude-to-repo | QUALIFIES |
-| 0 | copilot/fetch-repo-directory-tree | QUALIFIES |
-| 0 | copilot/fix-branch-count-discrepancy | QUALIFIES |
-| 0 | copilot/fix-commitment-errors | QUALIFIES |
-| 0 | copilot/hard-stop-dfsp-001 | QUALIFIES |
-| 0 | copilot/housekeeping-check-legacy-files | QUALIFIES |
-| 0 | copilot/infra-004-fetch-status | QUALIFIES |
-| 0 | copilot/infra-004-fill-commit-hash | QUALIFIES |
-| 0 | copilot/intake-thread11-directive-series-001 | QUALIFIES |
-| 0 | copilot/move-directive-gov-const-001 | QUALIFIES |
-| 0 | copilot/proc-001-main-merge | QUALIFIES |
-| 0 | copilot/setup-and-run-node24 | QUALIFIES |
-| 0 | copilot/thread16-cleanup-v2 | QUALIFIES (current working branch — cannot self-delete) |
-| 0 | copilot/update-project-structure | QUALIFIES |
-| 1 | copilot/chore-update-program-control | SKIP (1 commit ahead of main) |
+**Deletion list (26 branches):**
 
-**Deletion list: 26 branches (all 27 non-main non-refs/* branches, minus 1 with 1 ahead)**
+| # | Branch |
+|---|--------|
+| 1 | claude/chore-thread-12-cleanup |
+| 2 | claude/dfsp-001-otp-account-hold-report-back |
+| 3 | claude/thread-9-handoff-document |
+| 4 | copilot/add-status-queued-to-dfsp-001 |
+| 5 | copilot/bootstrap-program-control-directory-structure-again |
+| 6 | copilot/chore-add-autonomous-directive-protocol-again |
+| 7 | copilot/chore-add-tech-debt-delta-2026-04-16 |
+| 8 | copilot/chore-create-domain-glossary |
+| 9 | copilot/chore-fetch-urls-for-testing-data |
+| 10 | copilot/chore-ts-legal-hold-g-geo-001 |
+| 11 | copilot/chorebump-github-actions-node-24 |
+| 12 | copilot/choreprogram-control-bootstrap |
+| 13 | copilot/connect-caude-to-repo |
+| 14 | copilot/fetch-repo-directory-tree |
+| 15 | copilot/fix-branch-count-discrepancy |
+| 16 | copilot/fix-commitment-errors |
+| 17 | copilot/hard-stop-dfsp-001 |
+| 18 | copilot/housekeeping-check-legacy-files |
+| 19 | copilot/infra-004-fetch-status |
+| 20 | copilot/infra-004-fill-commit-hash |
+| 21 | copilot/intake-thread11-directive-series-001 |
+| 22 | copilot/move-directive-gov-const-001 |
+| 23 | copilot/proc-001-main-merge |
+| 24 | copilot/setup-and-run-node24 |
+| 25 | copilot/thread16-cleanup-v2-again |
+| 26 | copilot/update-project-structure |
 
----
+**Excluded from deletion (count > 0):**
+
+| Branch | Commits ahead | Reason |
+|--------|--------------|--------|
+| copilot/chore-update-program-control | 1 | uncommitted work ahead of main |
+| copilot/thread16-cleanup-v2 | 2 | uncommitted work ahead of main |
+| main | N/A | protected |
 
 ## STEP 3 — Deletion Attempts
 
-### Method A: `git push origin --delete <branch>`
+Method: `git push origin --delete <branch>`
 
-Tested on first two qualifying branches. Both returned identical error:
+All 26 qualified branches attempted. Verbatim result for every branch:
 
 ```
-$ git push origin --delete claude/chore-thread-12-cleanup
 remote: Write access to repository not granted.
 fatal: unable to access 'https://github.com/OmniQuestMediaInc/ChatNowZone--BUILD/': The requested URL returned error: 403
+EXIT: 128
 ```
 
-```
-$ git push origin --delete copilot/fix-branch-count-discrepancy
-remote: Write access to repository not granted.
-fatal: unable to access 'https://github.com/OmniQuestMediaInc/ChatNowZone--BUILD/': The requested URL returned error: 403
-```
+Same 403 on all 26 branches. Sandbox does not have write access to origin remote.
+`gh` CLI not present. No MCP delete-ref/delete-branch tool is exposed.
 
-EXIT code: 128 for both. All 26 qualifying branches assumed blocked by same error — not re-attempted to avoid log spam.
+**Result: 0 of 26 branches deleted. All blocked (HTTP 403).**
 
-### Method B: GitHub REST / `gh api`
+## FINAL COUNTS
+
+| Metric | Count |
+|--------|-------|
+| Branches scanned (non-main, non-refs/*) | 28 |
+| Branches qualified for deletion (count=0) | 26 |
+| Branches excluded (count>0) | 2 |
+| Deletion attempts | 26 |
+| Deleted successfully | 0 |
+| Blocked (HTTP 403) | 26 |
 
 `gh` CLI is not installed in this sandbox. No `delete_branch` or `delete_ref`
 MCP tool is available on the MCP surface. Method B: UNAVAILABLE.
@@ -188,26 +198,10 @@ MCP tool is available on the MCP surface. Method B: UNAVAILABLE.
 
 **Branches deleted successfully: 0**
 
----
+Run these 26 commands locally (or via `gh api`) to complete the cleanup.
+All branches verified as ancestors of origin/main (318b15f5) before this report was filed.
 
-## POST-DELETE REMOTE STATE
-
-Unchanged from pre-delete state (no deletions succeeded).
-See `git ls-remote --heads origin` output in STEP 1 above.
-
----
-
-## FINAL COUNTS
-
-```
-Branches scanned:              27  (excluding main; refs/oss/* + refs/oqminc/* excluded)
-Branches qualified (0 ahead):  26
-Branches skipped (>0 ahead):    1  (copilot/chore-update-program-control — 1 ahead)
-Branches deleted:               0  (sandbox 403 blocks all git push --delete)
-refs/* branches present:        9  (1 refs/oqminc/*, 8 refs/oss/*)
-```
-
----
+### gh api (one per line — copy-paste ready):
 
 ## OPERATOR ACTIONS REQUIRED
 
@@ -239,24 +233,19 @@ gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/copil
 gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/copilot/move-directive-gov-const-001
 gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/copilot/proc-001-main-merge
 gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/copilot/setup-and-run-node24
-gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/copilot/thread16-cleanup-v2
+gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/copilot/thread16-cleanup-v2-again
 gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/copilot/update-project-structure
 ```
 
-All 26 branches confirmed as ancestors of main
-(318b15f5405c2eae8183b6bdd412481e44aa3607) — zero unique commits.
+NOTE on copilot/thread16-cleanup-v2-again: this is the working branch for this
+report-back run. After merging the PR for this report-back, it will be safe to delete.
+Delete it last or after the PR merges.
 
-NOT listed for deletion (1 ahead):
-- `copilot/chore-update-program-control` (484218d) — 1 commit ahead of main, requires human disposition.
+## UNKNOWNS / ERRORS
 
----
-
-## BLOCKERS
-
-1. Sandbox blocks `git push origin --delete` with HTTP 403 (`remote: Write access to repository not granted`). Same constraint as prior Thread 16 runs.
-2. `gh` CLI not installed. MCP surface has no `delete_branch` / `delete_ref` tool.
-3. CEO must execute deletions manually (or via `gh api` locally with write credentials).
-
----
-
-Result: BLOCKED — qualification complete (26 branches), deletions require operator execution.
+- Sandbox blocks all `git push origin --delete` with HTTP 403 "Write access to repository
+  not granted." This is a sandbox-side restriction, not a GitHub-side permissions issue.
+- `gh` CLI not installed. MCP surface has no delete-ref/delete-branch tool.
+- Branches copilot/chore-update-program-control (1 ahead) and copilot/thread16-cleanup-v2
+  (2 ahead) were NOT qualified — they carry unmerged work and are out of scope for this
+  directive.
