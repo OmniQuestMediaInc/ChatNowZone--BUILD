@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `00d3e2d3ed593270fd2923f46389faaf3eca62e7`
-**Generated:** 2026-04-19T13:43:42Z
+**Commit:** `7edac1504c6ae4148e17797447424be321303a8a`
+**Generated:** 2026-04-19T13:44:30Z
 
 ## All Files
 
@@ -16,7 +16,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/copilot-instructions.md`
 - `.github/refs-branch-policy.md`
 - `.github/required-files.txt`
-- `.github/workflows/CodeQL Code Scanning`
+- `.github/workflows/CodeQL Code Scanning.yml`
 - `.github/workflows/auto-merge.yml`
 - `.github/workflows/ci.yml`
 - `.github/workflows/codeql.yml`
