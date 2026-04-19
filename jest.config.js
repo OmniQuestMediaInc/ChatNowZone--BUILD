@@ -11,7 +11,7 @@ const config = {
     'ts-jest': {
       tsconfig: {
         module: 'commonjs',
-        target: 'ES2021',
+        target: 'ES2022',
         experimentalDecorators: true,
         emitDecoratorMetadata: true,
         esModuleInterop: true,
