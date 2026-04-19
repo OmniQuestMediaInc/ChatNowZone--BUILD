@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.next/
+LEGACY_CONFIGS/
+yarn.lock
+*.lock
+prisma/migrations/
