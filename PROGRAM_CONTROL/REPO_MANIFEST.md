@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `4aa534e80cc8b12c356dbffa5aa426d1ae46dab9`
-**Generated:** 2026-04-19T06:34:22Z
+**Commit:** `e70d4ef8145d3f1ebd880179ca978066e57bb0f3`
+**Generated:** 2026-04-19T07:03:51Z
 
 ## All Files
 
@@ -74,6 +74,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/HANDOFF-2026-04-09.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-10.md`
 - `PROGRAM_CONTROL/HANDOFFS/THREAD-12-HANDOFF.md`
+- `PROGRAM_CONTROL/OPERATING_RULES.md`
 - `PROGRAM_CONTROL/README.md`
 - `PROGRAM_CONTROL/REPORT_BACK/.gitkeep`
 - `PROGRAM_CONTROL/REPORT_BACK/ADD-CLEARANCE-CONFIRMATION.md`
