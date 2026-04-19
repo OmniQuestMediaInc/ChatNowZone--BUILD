@@ -39,3 +39,7 @@ jobs:
 
       - name: Generate Prisma client
         run: yarn prisma:generate
+
+      - name: TypeScript type-check
+        run: yarn typecheck
+        continue-on-error: true
