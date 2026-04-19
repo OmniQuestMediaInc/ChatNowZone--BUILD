@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/document-retired-tiers-oaUIv`
-**Commit:** `75a53ff1cb3bfe50a7b441281b35c4f568763d29`
-**Generated:** 2026-04-18T23:50:07Z
+**Branch:** `main`
+**Commit:** `2a9a62f0779414f801daf948623ed4ef1d522fed`
+**Generated:** 2026-04-18T23:51:29Z
 
 ## All Files
 
@@ -13,6 +13,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/CODEOWNERS`
 - `.github/ISSUE_TEMPLATE/directive.yml`
 - `.github/copilot-instructions.md`
+- `.github/refs-branch-policy.md`
 - `.github/required-files.txt`
 - `.github/workflows/auto-merge.yml`
 - `.github/workflows/ci.yml`
@@ -21,6 +22,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/workflows/directive-intake.yml`
 - `.github/workflows/notify.yml`
 - `.github/workflows/populate-issues.yml`
+- `.github/workflows/protect-ref-branches.yml`
 - `.github/workflows/repo-manifest.yml`
 - `.gitignore`
 - `.prettierrc`
@@ -184,6 +186,8 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/Thread 12 Handoff`
 - `PROGRAM_CONTROL/Thread 13 cleanup`
 - `README.md`
+- `REFERENCE_LIBRARY/00_THREAD_BOOTSTRAP.md`
+- `REFERENCE_LIBRARY/01_CANONICAL_LOCKS.md`
 - `Sovereign_Kernel.md.pdf`
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
