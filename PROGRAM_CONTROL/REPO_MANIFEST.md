@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `fbc3ba6cb522af428299377c3c41304fde0d3d5b`
-**Generated:** 2026-04-19T06:01:22Z
+**Branch:** `copilot/chore-harvest-oss-reference-branches`
+**Commit:** `d188c5f5adceaa0d2719509ef130a29ba846cd8c`
+**Generated:** 2026-04-19T06:18:02Z
 
 ## All Files
 
@@ -20,6 +20,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/workflows/copilot-setup-steps.yml`
 - `.github/workflows/directive-dispatch.yml`
 - `.github/workflows/directive-intake.yml`
+- `.github/workflows/harvest-oss-refs.yml`
 - `.github/workflows/notify.yml`
 - `.github/workflows/populate-issues.yml`
 - `.github/workflows/protect-ref-branches.yml`
@@ -154,6 +155,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD 13 HANDOFF`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD-12-CLEANUP-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD14-SCHEMA-INTEGRITY-AUDIT.md`
+- `PROGRAM_CONTROL/REPORT_BACK/THREAD15-OSS-HARVEST-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD15-REFLIB-INIT-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-006-FOLLOWUP-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-AUDIT-001.md`
@@ -196,6 +198,17 @@ Auto-generated on every push. Do not edit manually.
 - `REFERENCE_LIBRARY/04_AI_REFERENCE_INDEX.md`
 - `REFERENCE_LIBRARY/05_OSS_REPO_REGISTRY.md`
 - `REFERENCE_LIBRARY/06_PROJECT_DECISIONS.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/PUSH_ALL_REFS.sh`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/README.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oqminc-ai-resources/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-booking-api/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-discussion-platform/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-live-polling/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-loadbalancer-nginx/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-react-chat-app/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-social-media-app/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-socketio-chat/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-zoom-clone/REFS_MANIFEST.md`
 - `REFERENCE_LIBRARY/TEMPLATES/OQMInc_REFERENCE_LIBRARY_MASTER_TEMPLATE.md`
 - `REFERENCE_LIBRARY/TEMPLATES/README.md`
 - `Sovereign_Kernel.md.pdf`
