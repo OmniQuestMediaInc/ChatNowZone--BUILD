@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `2a9a62f0779414f801daf948623ed4ef1d522fed`
-**Generated:** 2026-04-18T23:51:29Z
+**Branch:** `claude/document-retired-tiers-oaUIv`
+**Commit:** `82043e20e06d3b032c55950c98f1ee699bdc99d2`
+**Generated:** 2026-04-19T00:28:06Z
 
 ## All Files
 
