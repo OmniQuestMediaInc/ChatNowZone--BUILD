@@ -18,7 +18,7 @@ Branch: chore/reference-library-drive-update
 ## New Drive Folder Confirmed
 Name: BUILDD CONTROL - CNZ
 ID: 1zB0MZjj92wovoBuhi0TkelZ_t0oNSCHO
-Old root (retired): 19UWfvkVzAvOf8PVO9JqlLWbdR7UHA5bo
+Old root (retired): 1zB0MZjj92wovoBuhi0TkelZ_t0oNSCHO <!-- BUILDD CONTROL - CNZ (updated 2026-04-18, Thread 14) -->
 
 ## PR Details
 PR number: [NUMBER]
