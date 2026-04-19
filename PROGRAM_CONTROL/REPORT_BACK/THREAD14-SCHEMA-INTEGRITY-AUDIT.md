@@ -1,292 +1,212 @@
-# THREAD 14 — SCHEMA INTEGRITY + QUEUE STATE AUDIT
-
-**Directive:** AUDIT — MembershipTier Schema Integrity + QUEUE State Verification
-**Authority:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
-**Date:** 2026-04-18
-**Agent:** CLAUDE_CODE
-**Mode:** READ-ONLY (no schema, queue, or PR mutations)
-**Branch:** claude/audit-membership-queue-rJwlw
-**origin/main HEAD:** e420458 (CHORE: update REPO_MANIFEST [skip ci])
-
----
-
-## STEP 1 — Schema State
-
-Source: `git show origin/main:prisma/schema.prisma` (1,181 lines).
-
-**a. MembershipTier enum exists?** ✅ YES — declared at line 865 of prisma/schema.prisma on origin/main.
-
-**b. Exact values (line 865–872):**
-
-```prisma
-enum MembershipTier {
-  GUEST
-  VIP
-  VIP_SILVER
-  VIP_GOLD
-  VIP_PLATINUM
-  VIP_DIAMOND
-}
-```
-
-Match to canonical set: ✅ **EXACT MATCH.** Six values, in canonical order, no extras, no retired tokens.
-Retired values present? ❌ NONE. DAY_PASS, ANNUAL (as tier), OMNIPASS_PLUS, standalone DIAMOND — all absent from the enum body.
-
-**c. Enum absence check:** N/A — enum is present.
-
-**d. Required models present on origin/main:**
-
-| Model | Line | Present | Notes |
-|---|---|---|---|
-| `User` (stub) | 850 | ✅ | id, organization_id, tenant_id, created_at, updated_at; relations to Membership and CardOnFile |
-| `Membership` | 919 | ✅ | tier, account_status, product_variant, paid_block_started_at/expires_at, guest_expires_at, guest_purge_at, org+tenant, indexes on tier/status/guest_expires_at/paid_block_expires_at |
-| `MembershipTierTransition` | 946 | ✅ | previous_tier (nullable), new_tier, previous_status, new_status, trigger_type, actor_id, rule_applied_id, occurred_at |
-| `AgeVerification` | 970 | ✅ | method, result, triggering_event, rule_applied_id, occurred_at |
-| `CardOnFile` | 991 | ✅ | cardholder_name, billing_address, phone_number, email, card_expiration_{month,year}, card_cvv_hash, card_token, is_complete |
-| `MembershipSubscription` | 1029 | ✅ | tier, status, billing_interval, commitment_months, bonus_months, period bounds, org+tenant |
-
-**e. CardOnFile SHA-256 CVV hashing:** ✅ Present — line 1000 `card_cvv_hash String?  // SHA-256 hash only — never store raw CVV`. Field holds hash only; no raw-CVV column.
-
-**f. Append-only nature of MembershipTierTransition and AgeVerification:**
-
-- Neither model has an `@updatedAt` column (only `occurred_at` with `@default(now())`) — application-level append-only contract is preserved.
-- Neither model has `onDelete: Cascade` on its relations — relation to `Membership` is default (no cascade clause), consistent with append-only ledger semantics.
-- File header (line 15) declares the convention: "Append-only: no update/delete permitted (enforced by DB triggers)."
-- **Caveat:** DB-level enforcement triggers for these two specific tables are NOT introduced by schema.prisma itself — they are expected to be installed via SQL migration (consistent with `infra/postgres/init-ledger.sql` convention). Migration is out of scope for MEMB-001 by the directive's own text.
+# Schema Integrity Audit — Post PR#254/#255
+Date: 2026-04-19
+Thread: 15
+Auditor: Claude Code (Droid)
+Directive ID: THREAD14-SCHEMA-INTEGRITY-AUDIT
+Correlation ID: THREAD14-SCHEMA-INTEGRITY-AUDIT
+Repo HEAD at audit: `95c5584` (origin/main — `CHORE: update REPO_MANIFEST [skip ci]`)
+Note: supersedes the prior read-only audit in commit `c1a778b` (2026-04-18);
+      same directive path per Thread 15 re-run.
 
 ---
 
-## STEP 2 — PR #265 State
+## 1. Schema File Findings
 
-- **State:** `closed`, `merged: true`
-- **Merged at:** 2026-04-17T15:50:15Z by `OmniQuestMediaInc`
-- **Base SHA:** 716dc6f
-- **Head SHA (branch tip):** c7c50cd (branch `claude/fiz-memb-001-membership-schema-foundation`)
-- **Merge commit on main:** fc1dc38 ("Merge pull request #265 …")
-- **Follow-up merged:** PR #266 (gap-fill) at merge commit 89acb32, HEAD commit 7221f86 — shipped `prisma/seed.test.ts` + corrected `prisma/seed.ts` per MEMB-001 §6.b–§6.d.
-- **Reflected in main HEAD?** ✅ YES. Both #265 and #266 are ancestors of origin/main (e420458).
+File: `prisma/schema.prisma` — PRESENT (45,283 bytes, 1 file)
 
-The task brief's premise — *"PR #265 OPEN and not yet merged"* — is **factually incorrect at time of audit**. PR #265 merged 2026-04-17 15:50 UTC; PR #266 (gap-fill) merged shortly thereafter.
+**Does the `MembershipTier` enum exist?** → **PRESENT** (canonical, not partial).
+
+Declaration at `prisma/schema.prisma:865-872`:
+
+```
+865  enum MembershipTier {
+866    GUEST
+867    VIP
+868    VIP_SILVER
+869    VIP_GOLD
+870    VIP_PLATINUM
+871    VIP_DIAMOND
+872  }
+```
+
+Exactly the six canonical values mandated by `docs/MEMBERSHIP_LIFECYCLE_POLICY.md v1.0` §1.1. Retired values (`DAY_PASS`, `ANNUAL`-as-tier, `OMNIPASS_PLUS`, standalone `DIAMOND`) are NOT present.
+
+**Models with fields typed as `MembershipTier`:**
+
+| Line | Model | Field | Type Declaration |
+|-----:|-------|-------|------------------|
+| 922 | `Membership` | `tier` | `MembershipTier` |
+| 950 | `MembershipTierTransition` | `previous_tier` | `MembershipTier?` (nullable) |
+| 951 | `MembershipTierTransition` | `new_tier` | `MembershipTier` |
+| 1032 | `MembershipSubscription` | `tier` | `MembershipTier` |
+
+**Models previously typed to `MembershipTier` that now reference a different enum or `String`:**
+**NONE.** Grep across `prisma/schema.prisma` for `MembershipTier` returns exactly the one enum declaration and four field usages above. No `String // TODO: assign correct domain enum` artefacts from PR #254/#255 remain.
+
+**`@@index` and `@@unique` constraints mentioning tier fields:**
+- `@@index([tier])` on `Membership` at line 938 — 1 occurrence.
+- No `@@unique` constraint mentions any tier field.
+- `@@index([user_id, status])` on `MembershipSubscription` at 1047 — no tier reference.
+
+Total: **1 `@@index` on a `MembershipTier`-typed field; 0 `@@unique`.**
 
 ---
 
-## STEP 3 — PR #254 / #255 Diff Analysis
+## 2. PR History — merge state
 
-### Pre-PR-254 state (76fd094:prisma/schema.prisma, 961 lines)
+| PR | Title | State | Merged At (UTC) | Merge Commit SHA | Head SHA | Files |
+|---:|-------|-------|------------------|------------------|----------|------:|
+| #254 | `[WIP] Remove MembershipTier enum and update field types` | closed / merged | 2026-04-17T09:34:15Z | `2d81e8cb349b9409c30a13720542d6f219f9d2ad` | `17864eb` | 1 commit |
+| #255 | `[WIP] Remove MembershipTier enum and all its usage from Prisma schema` | closed / merged | 2026-04-17T09:42:59Z | `996dba0e67c500b88d450d68af014850bc18cea7` | `9ba7907` | 1 commit |
+| #265 | `FIZ: MEMB-001 — Membership schema foundation` | closed / merged | 2026-04-17T15:50:15Z | `fc1dc38d10cd3e4359dcfb78046f8813be8b4d1f` | `c7c50cd` | 4 files (+375 / −7) |
+| RRR-P1-006 | platform name canonicalization — **NOT FOUND** | — | — | — | — |
 
-The schema contained **TWO duplicate `MembershipTier` enum declarations**, both with **RETIRED** values:
+`mcp__github__search_pull_requests` query `RRR-P1-006 repo:OmniQuestMediaInc/ChatNowZone--BUILD` returned `total_count: 0`. No PR for RRR-P1-006 exists at audit time.
 
-Block A — line 849 (under header "// ─── Membership Subscriptions — MEMB-002 ──"):
-```prisma
-enum MembershipTier {
-  DAY_PASS
-  ANNUAL
-  OMNIPASS_PLUS
-  DIAMOND
-}
-```
-
-Block B — line 918 (under header "// ─── Membership — MEMB-002: MembershipSubscription ──"):
-```prisma
-enum MembershipTier {
-  DAY_PASS
-  ANNUAL
-  OMNIPASS_PLUS
-  DIAMOND
-}
-```
-accompanied by a duplicate `MembershipSubscription` model at line 939.
-
-Neither duplicate matched the canonical 6-value set. The file would not compile as-is due to the duplicate enum declaration (Prisma rejects duplicate type names).
-
-### PR #254 (merge 2d81e8c) — what actually changed
-
-Diff against base 76fd094 (`git diff 76fd094 2d81e8c -- prisma/schema.prisma`):
-
-```
-prisma/schema.prisma | 46 --
-```
-
-- **Removed:** Block B (the second duplicate enum + duplicate `MembershipSubscription` + `MembershipStatus` + `MembershipBillingInterval`). 46-line deletion, zero insertions.
-- **Retained:** Block A (still holding retired values).
-- Branch head commit `17864eb` is the Copilot "Initial plan" commit — schema edit occurred in the merge itself (fast-forward of a collapsed Copilot change).
-
-**Nature:** **DUPLICATE REMOVAL.** The removed block was a literal duplicate of the already-broken Block A. The canonical 6-value enum did NOT exist in the repo at this point, so PR #254 could not have wiped it.
-
-### PR #255 (merge 996dba0) — what actually changed
-
-Diff against 2d81e8c (`git diff 2d81e8c 996dba0 --stat`):
-
-```
-PROGRAM_CONTROL/REPO_MANIFEST.md | 6 +++---
-```
-
-- **Prisma schema:** UNCHANGED. PR #255 is a no-op on prisma/schema.prisma.
-- Branch head commit `9ba7907` is another Copilot "Initial plan" placeholder.
-- Only REPO_MANIFEST.md was modified (3 lines in, 3 lines out).
-
-**Nature:** **NO-OP on schema.** PR title is misleading — nothing tier-related was removed.
-
-### After #254/#255, before PR #265
-
-Schema still contained the single retired-values `MembershipTier` enum (Block A). Still broken, but no longer duplicated.
-
-### PR #265 (merge fc1dc38) — MEMB-001 schema foundation
-
-- **Replaced** the retired-values `MembershipTier` enum with the canonical 6 values.
-- **Added** `Membership`, `MembershipTierTransition`, `AgeVerification`, `CardOnFile`, plus supporting enums (`AccountStatus`, `TransitionTrigger`, `AgeVerificationMethod`, `AgeVerificationResult`, `AgeVerificationTrigger`) and `User` stub.
-- **Stats:** +375 / −7, 4 files changed.
-
-### PR #266 (merge 89acb32) — MEMB-001 seed/guardrail gap-fill
-
-- **Added** `prisma/seed.test.ts` negative-space guardrail.
-- **Rewrote** `prisma/seed.ts` to seed all 6 tier enum values (one user per tier) with correct per-tier trigger mapping.
-
-### Verdict for Step 3
-
-- PRs #254/#255 wiped **DUPLICATE / STALE** enum content, not the canonical definition. The canonical 6-value enum did not exist in the repo until PR #265 landed 11 minutes later.
-- Current main state: **MEMB-001 is FULLY LANDED.**
+**Temporal ordering note:** PR #265 (MEMB-001 canonical schema foundation) merged ~6 hours AFTER PR #254/#255. #265 supersedes and over-writes the `[WIP]` removal both prior PRs performed. The schema now on `main` reflects PR #265, not #254/#255.
 
 ---
 
-## STEP 4 — seed.ts State
+## 3. Seed Files
 
-Source: `git show origin/main:prisma/seed.ts` (109 lines).
+| File | Present? | Refs `MembershipTier` enum values? | Breaks without enum? |
+|------|:--------:|:----------------------------------:|:--------------------:|
+| `prisma/seed.ts` | YES | YES (imports `MembershipTier` from `@prisma/client`, line 11; uses all 6 canonical tier literals in `TIER_FIXTURES` lines 19–54) | YES — would not compile if enum removed |
+| `prisma/seed.test.ts` | YES | YES (negative-space guardrail — asserts enum-block contents match `CANONICAL_TIERS` exactly and that retired `DAY_PASS`/`ANNUAL`/`OMNIPASS_PLUS`/`DIAMOND` never reappear) | YES — explicit assertion that enum `MembershipTier` exists and has the six canonical values |
 
-**a. Seeds exactly 6 users (one per tier)?** ✅ YES. `TIER_FIXTURES` is a 6-element `ReadonlyArray` with distinct `userId` values `0…0011` through `0…0016`, one entry per canonical tier (GUEST, VIP, VIP_SILVER, VIP_GOLD, VIP_PLATINUM, VIP_DIAMOND). Each fixture drives one `user.upsert`, one `membership.upsert`, and one `membershipTierTransition.create`.
+`seed.test.ts` exists (3087 bytes). Thread 14 CI-wiring concern is satisfied: the guardrail file is committed to main.
 
-**b. trigger_types correctly mapped per tier?** ✅ YES:
-
-| Tier | trigger_type | Policy alignment |
-|---|---|---|
-| GUEST | `GATE_1_GUEST_GRANTED` | policy §2 Gate 1 |
-| VIP | `GATE_2_VIP_GRANTED` | policy §2 Gate 2 |
-| VIP_SILVER | `GATE_3_PAID_TIER_PURCHASED` | policy §2 Gate 3 |
-| VIP_GOLD | `GATE_3_PAID_TIER_PURCHASED` | policy §2 Gate 3 |
-| VIP_PLATINUM | `GATE_3_PAID_TIER_PURCHASED` | policy §2 Gate 3 |
-| VIP_DIAMOND | `GATE_3_PAID_TIER_PURCHASED` | policy §2 Gate 3 |
-
-**c. Retired tier values present?** ❌ NONE. No DAY_PASS, ANNUAL (as tier), OMNIPASS_PLUS, or standalone DIAMOND in the file.
-
-Import line: `import { PrismaClient, MembershipTier, TransitionTrigger } from '@prisma/client';` — types sourced from generated Prisma client; no retired-value string literals leak into TypeScript either.
-
-Multi-tenant mandate: ✅ every write includes `organization_id: TEST_ORG_ID` and `tenant_id: TEST_TENANT_ID`.
+Tier string literals in `seed.ts` (`'GUEST'`, `'VIP'`, `'VIP_SILVER'`, `'VIP_GOLD'`, `'VIP_PLATINUM'`, `'VIP_DIAMOND'`) match the canonical enum exactly — no drift.
 
 ---
 
-## STEP 5 — seed.test.ts State
+## 4. Directive Queue State
 
-**a. File exists?** ✅ YES — `prisma/seed.test.ts` (~95 lines) present on origin/main, landed via PR #266.
-
-**b. Negative-space guardrail present?** ✅ YES. The test:
-1. Asserts `MembershipTier` enum body contains **exactly** `[GUEST, VIP, VIP_SILVER, VIP_GOLD, VIP_PLATINUM, VIP_DIAMOND]` (set-equal, order-independent via `.sort()`).
-2. Iterates `RETIRED_TIERS = ['DAY_PASS','ANNUAL','OMNIPASS_PLUS','DIAMOND']` and asserts none appear as tokens.
-3. Explicit positive check that `VIP_DIAMOND` is present (prevents regex-scoping bug from silently dropping it).
-4. Scopes regex to the `enum MembershipTier { ... }` block so `BillingInterval.ANNUAL` and `VIP_DIAMOND` are not misflagged.
-
-**c. Standalone run via `npx ts-node prisma/seed.test.ts`:**
-
-Environment note: Prior to running the test, `node_modules` was absent. I ran `yarn install --frozen-lockfile` (idempotent, no lockfile change) to restore deps — no tracked files modified. Then:
+`PROGRAM_CONTROL/DIRECTIVES/QUEUE/` directory listing:
 
 ```
-$ npx ts-node prisma/seed.test.ts
-MEMB-001 negative-space guardrail PASSED — MembershipTier = [GUEST, VIP, VIP_SILVER, VIP_GOLD, VIP_PLATINUM, VIP_DIAMOND]
-$ echo $?
-0
+total 8
+drwxr-xr-x 2 root root 4096 Apr 18 23:19 .
+drwxr-xr-x 5 root root 4096 Apr 18 23:19 ..
+-rw-r--r-- 1 root root    0 Apr 18 23:19 .gitkeep
 ```
 
-Result: ✅ **PASS** — exit code 0.
+- `.gitkeep` only. Queue is **EMPTY** (no active directives).
+- `THREAD11-COPILOT-INTAKE.md` — **NOT FOUND** in `QUEUE/`.
+- `THREAD11-DIRECTIVE-SERIES-001.md` — **NOT FOUND** in `QUEUE/`.
+
+Last commit touching the queue directory:
+`0b0b6038519ff881c993857fc1295caa3e53f0ad` on 2026-04-17T11:26:30+00:00 —
+`CHORE: Remove duplicate directive file from QUEUE`.
+
+Queue decontamination from Thread 12→13 is complete. No files beyond `.gitkeep` to report.
 
 ---
 
-## STEP 6 — QUEUE State
+## 5. Requirements Master
 
-**a. Current contents of `PROGRAM_CONTROL/DIRECTIVES/QUEUE/`:**
+File: `docs/REQUIREMENTS_MASTER.md` — **PRESENT** (23,246 bytes).
+
+- **Last commit:** `06b11c2966a440041e372e4aa36a9fe2ce435cf6` on 2026-04-17T04:16:21-04:00 (`Merge pull request #251 from OmniQuestMediaInc/copilot/begin-task-from-thread11-directive`).
+- **CCZ / FC / OPS / DISC series authorized?** → **NO.** Grep for `CCZ-|^FC-|^OPS-|^DISC-` returned zero matches. Also **no RRR-P1-006 row** present. Per directive expectation (CEO will authorize in Thread 15), this is correct.
+- **MEMB series listed?** → **NO.** Grep for `MEMB-` returned zero matches in `REQUIREMENTS_MASTER.md`. MEMB-001 through MEMB-005 are NOT documented in the master index despite MEMB-001 having merged via PR #265. This is a documentation-drift flag, not a schema issue.
+
+---
+
+## 6. Governance Config
+
+Per directive the audit path is `services/core-api/src/governance/governance.config.ts` (DFSP governance). This file does NOT contain the constants the directive lists. Those constants live at the platform path `services/core-api/src/config/governance.config.ts`. Both paths are reported for completeness.
+
+### 6.a `services/core-api/src/governance/governance.config.ts` (DFSP — directive-specified path)
+
+File present (5926 bytes).
+
+| Constant | Present? | Notes |
+|----------|:--------:|-------|
+| `MEMBERSHIP.TIERS` | **NO** | file contains no `MEMBERSHIP` key |
+| `SHOWTOKEN_EXCHANGE` block with VIP/SILVER/GOLD/PLATINUM/DIAMOND keys | **NO** | no `SHOWTOKEN_EXCHANGE` symbol |
+| `TOKEN_EXTENSION` block | **NO** | no `TOKEN_EXTENSION` symbol |
+| `DIAMOND_TIER.VOLUME_TIERS` | **NO** | no `DIAMOND_TIER` symbol |
+
+DFSP governance currently holds only: integrity-hold parameters, purchase-window hours, risk scoring, diamond-token threshold, OTP settings, account-recovery hold, contract-offer expiry, voice-sample limits, PROC-001 webhook constants, Room-Heat payout rates (PAY-001..PAY-005), heat-band boundaries, DFSP_CONCIERGE block, BIJOU block. **Nothing tier-related.**
+
+### 6.b `services/core-api/src/config/governance.config.ts` (platform)
+
+File present (21,438 bytes).
+
+| Constant | Present? | Current Value / Location |
+|----------|:--------:|--------------------------|
+| `MEMBERSHIP` export (module-level `const`) | **YES** | line 182 |
+| `MEMBERSHIP.TIERS` | **YES** | line 187: `['VIP', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'] as const` |
+| `SHOWTOKEN_EXCHANGE` with VIP/SILVER/GOLD/PLATINUM/DIAMOND keys | **NO** — no `SHOWTOKEN_EXCHANGE` symbol in the file |
+| `TOKEN_EXTENSION` block | **YES** | line 220 (Options A/B/C schema, not per-tier keys) |
+| `DIAMOND_TIER.VOLUME_TIERS` | **YES** | line 56 — 3-tier array `[10000–27499 @ 0.095, 30000–57499 @ 0.088, 60000–∞ @ 0.082]` |
+| `MEMBERSHIP.STIPEND_CZT` | **YES** | line 211: keys are `DAY_PASS / ANNUAL / OMNIPASS_PLUS / DIAMOND` — **retired-terminology drift** |
+| `MEMBERSHIP.DURATION_BONUS` | **YES** | line 204 — `QUARTERLY / SEMI_ANNUAL / ANNUAL` |
+
+**Drift flags (do not block MEMB-series schema-layer work):**
+1. `MEMBERSHIP.TIERS` array uses legacy labels `['VIP','SILVER','GOLD','PLATINUM','DIAMOND']` — missing `GUEST` and not in `VIP_SILVER`/`VIP_GOLD`/`VIP_PLATINUM`/`VIP_DIAMOND` canonical form.
+2. `MEMBERSHIP.STIPEND_CZT` map keys are the retired tier names `DAY_PASS`, `ANNUAL`, `OMNIPASS_PLUS`, `DIAMOND` — this map no longer maps onto the `MembershipTier` Prisma enum and breaks the invariant documented in `seed.test.ts`.
+
+---
+
+## 7. Typecheck Sanity
+
+Command: `npx tsc --noEmit` (repo root, single run, no baseline stash).
+
+- **Exit code:** `1`
+- **Total error count:** `1`
+- **Full output (verbatim, 2 lines):**
 
 ```
-PROGRAM_CONTROL/DIRECTIVES/QUEUE/
-└── .gitkeep
+tsconfig.json(12,5): error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 ```
 
-Excluding `.gitkeep`: **zero files**. QUEUE is empty on both local working tree and `origin/main` (confirmed via `git ls-tree -r origin/main -- PROGRAM_CONTROL/DIRECTIVES/QUEUE/`).
-
-**b. Per-file classification:** N/A — QUEUE is empty.
-
-**c. THREAD11-COPILOT-INTAKE.md / THREAD11-DIRECTIVE-SERIES-001.md status:**
-
-| File | Expected action per Thread 12 handoff | Actual current location |
-|---|---|---|
-| THREAD11-COPILOT-INTAKE.md | "CONTAMINATED — must be removed from QUEUE" (handoff line 105, 117, 161) | Moved to `PROGRAM_CONTROL/DIRECTIVES/DONE/THREAD11-COPILOT-INTAKE.md` (preserved as archival record, not executed) |
-| THREAD11-DIRECTIVE-SERIES-001.md | "DUPLICATE — remove" (handoff line 106, 118, 164) | **Not present anywhere in PROGRAM_CONTROL/** — deleted entirely |
-
-Cross-reference: `find PROGRAM_CONTROL -name "THREAD11*"` returns only `PROGRAM_CONTROL/DIRECTIVES/DONE/THREAD11-COPILOT-INTAKE.md`. The Thread 12→13 cleanup (PRs #260/#262/#264) successfully removed both contaminated/duplicate files from QUEUE; one was archived to DONE, the other was fully deleted. **Cleanup is complete per handoff intent.**
-
-IN_PROGRESS/: empty (0 files).
+- **Errors mentioning `MembershipTier` / `tier` / `membership_tier`:** **NONE.** Grep against the full tsc output matched zero lines.
+- The sole error is a pre-existing `tsconfig.json` deprecation notice unrelated to schema state or PR #254/#255/#265. Per CLAUDE.md `## Step 7 — TypeScript check`, pre-existing errors on the baseline are acceptable.
 
 ---
 
-## STEP 7 — Stale Document Scan
+## 8. VERDICT
 
-Scanned files for tokens: `DAY_PASS`, `ANNUAL` (bare), `OMNIPASS_PLUS`, standalone `DIAMOND`, `XXXChatNow`, `xxxchatnow.com`.
+### **CLEAN — MEMB-series safe to resume.**
 
-### docs/MEMBERSHIP_LIFECYCLE_POLICY.md
+PR #265 (MEMB-001) merged ~6 hours after PR #254/#255 and fully restored the canonical `MembershipTier` enum plus all dependent models (`Membership`, `MembershipTierTransition`, `AgeVerification`, `CardOnFile`, `MembershipSubscription`). The `[WIP] Remove MembershipTier enum` work in #254/#255 is not observable on `main` — it has been overwritten by the canonical foundation. `prisma/seed.ts` and `prisma/seed.test.ts` both align with the canonical six-value enum and guardrail against the retired values returning. Queue is empty; no conflicting directives in flight. Zero MembershipTier-related typecheck errors.
 
-| Line | Token | Context | Assessment |
-|---|---|---|---|
-| 30 | `DAY_PASS` | "`DAY_PASS` — concept fully retired" | ✅ Properly labeled as retired in §1.1 |
-| 31 | `ANNUAL` | "`ANNUAL` — never a tier; may appear elsewhere only as a billing-interval label" | ✅ Properly labeled |
-| 32 | `OMNIPASS_PLUS` | "`OMNIPASS_PLUS` — is a **product**, not a tier" | ✅ Properly labeled |
-| 33 | Standalone `DIAMOND` | "Standalone `DIAMOND` — canonical form is `VIP_DIAMOND`" | ✅ Properly labeled |
-| 212 | `DIAMOND` | `VIP_SILVER / GOLD / PLATINUM / DIAMOND` in a benefits table | ⚠️ **MINOR** — shorthand for `VIP_DIAMOND` in prose table; ambiguous with retired standalone `DIAMOND`. Recommend rewriting as `VIP_DIAMOND` for strictness. Not a schema-level violation. |
+### Non-blocking advisories (documentation / governance drift — NOT schema integrity)
 
-### docs/DOMAIN_GLOSSARY.md — ⚠️ **CONTAMINATED**
+These do not block MEMB-002 and do not require halting MEMB-series schema or service work, but should be scheduled as separate remediation directives at CEO discretion.
 
-| Line | Content | Issue |
-|---|---|---|
-| 101 | `RETIRED: Day Pass \| Retired concept — remove all references \| RETIRED: day_pass` | ✅ Properly labeled retired |
-| 102 | `Annual \| Annual subscription tier \| ANNUAL` | ❌ Conflicts with policy §1.1: "ANNUAL — never a tier". Should be retagged `RETIRED:` or moved to BillingInterval section. |
-| 103 | `OmniPass+ \| Premium subscription tier \| OmniPassPlus, omni_pass_plus` | ❌ Conflicts with policy §1.1: `OMNIPASS_PLUS` is a product, not a tier. Should be retagged. |
-| 104 | `Diamond \| Highest membership tier \| DIAMOND, diamond` | ❌ Conflicts with policy §1.1: canonical form is `VIP_DIAMOND`; standalone `DIAMOND` retired. |
+1. **`MEMBERSHIP.TIERS` platform governance drift.**
+   `services/core-api/src/config/governance.config.ts:187` holds `['VIP','SILVER','GOLD','PLATINUM','DIAMOND']`. Canonical Prisma enum is `GUEST | VIP | VIP_SILVER | VIP_GOLD | VIP_PLATINUM | VIP_DIAMOND`. Recommended remediation: **CHORE-GOV-MEMBERSHIP-TIERS-CANONICAL** — realign platform `MEMBERSHIP.TIERS` to the enum, add a compile-time type guard importing the Prisma enum.
+2. **`MEMBERSHIP.STIPEND_CZT` retired-tier keys.**
+   `services/core-api/src/config/governance.config.ts:211-216` keys are `DAY_PASS / ANNUAL / OMNIPASS_PLUS / DIAMOND` — all retired per policy §1.1. Recommended remediation: **FIZ: STIPEND-CZT-TIER-REALIGN** — re-key stipend map onto canonical `MembershipTier` values; MEMB-003 consumer (`stipend-distribution.job.ts:140`) currently reads `STIPEND_CZT[tier]` where `tier` is a `MembershipTier` enum value, so the map currently fails lookup at runtime for canonical tiers.
+3. **`REQUIREMENTS_MASTER.md` missing MEMB-series rows.**
+   MEMB-001 is DONE (PR #265) but not indexed in the master. MEMB-002..005 queued in upcoming thread work have no entries. Recommended remediation: **CHORE-REQ-MASTER-MEMB-ROWS** — append a Section 13 (Membership Lifecycle) to `docs/REQUIREMENTS_MASTER.md` with the five MEMB-series IDs.
+4. **No RRR-P1-006 PR on record.**
+   Directive RRR-P1-006 (platform name canonicalization) has no PR in `OmniQuestMediaInc/ChatNowZone--BUILD`. If CEO expected this merged, investigate whether it landed under a different branch-naming convention before authorizing downstream Thread-15 work that depends on it.
 
-Three rows in the `## MEMBERSHIP AND ACCESS` section still present retired tier tokens as though they were active tiers. This is stale-documentation drift and should be remediated in a follow-up CHORE directive.
+### Go / No-Go for Thread 15 MEMB-series
 
-### docs/REQUIREMENTS_MASTER.md
-
-- No hits for any of the seven tokens. ✅ CLEAN.
-
-### docs/RRR_CEO_DECISIONS_FINAL_2026-04-17.md
-
-| Line | Context | Assessment |
-|---|---|---|
-| 13 | `archive/xxxchatnow-seed/: remove` | ✅ Path reference, scheduled-for-removal instruction |
-| 16 | "XXXChatNow.com was the prior platform name. All references must be updated to ChatNow.Zone." | ✅ Historical note in a rename-policy document |
-
-Both hits are intentional references to the rename operation, not residual brand contamination.
-
-### PROGRAM_CONTROL/DIRECTIVES/QUEUE/*.md
-
-QUEUE directory is empty — nothing to scan.
+- MEMB-002, MEMB-003, MEMB-004, MEMB-005 **schema layer → GO.** The Prisma enum, models, indexes, seeds, and guardrail are intact and match the canonical spec.
+- MEMB-003 **service-code layer → conditional on advisory (2) above.** `stipend-distribution.job.ts` will null-out stipends for every canonical tier at runtime until `STIPEND_CZT` keys are re-aligned. Recommend remediating advisory (2) before MEMB-003 service work lands.
 
 ---
 
-## VERDICT
+## Reference — Audit Artefacts
 
-- **MEMB-001 landing status:** **FULLY LANDED.** PR #265 merged 2026-04-17 (schema §1–§5) + PR #266 merged same day (seed/guardrail §6). All six canonical tier values present in enum; all five required models (Membership, MembershipTierTransition, AgeVerification, CardOnFile, User stub) present; seed.ts produces 6-of-6 tier coverage with correct trigger mapping; seed.test.ts guardrail executes and PASSES.
-- **Schema integrity:** **CLEAN.** PRs #254/#255 removed a duplicate stale enum block and a REPO_MANIFEST tweak respectively — they did NOT wipe the canonical enum (which did not yet exist at that time). Current `origin/main` enum equals the canonical 6. No retired tokens anywhere in prisma/schema.prisma, prisma/seed.ts, or prisma/seed.test.ts. QUEUE cleanup from Thread 12→13 is complete.
-- **Recommended next action:** File a CHORE directive to remediate `docs/DOMAIN_GLOSSARY.md` lines 102–104 (retag retired `Annual`/`OmniPass+`/`Diamond` rows to match `MEMBERSHIP_LIFECYCLE_POLICY.md` §1.1) and optionally tighten `MEMBERSHIP_LIFECYCLE_POLICY.md` line 212 to use `VIP_DIAMOND` instead of shorthand `DIAMOND`.
+- `prisma/schema.prisma` enum block: lines 865–872
+- `prisma/schema.prisma` MembershipTier field usages: lines 922, 950, 951, 1032
+- `prisma/schema.prisma` tier index: line 938 (`@@index([tier])` on `Membership`)
+- `prisma/seed.ts`: 119 lines, imports `MembershipTier` line 11
+- `prisma/seed.test.ts`: 95 lines, canonical-set assertion lines 63–67; retired-set assertion lines 70–79
+- Platform governance `MEMBERSHIP` block: lines 181–217
+- Platform governance `TOKEN_EXTENSION` block: lines 220–234
+- Platform governance `DIAMOND_TIER.VOLUME_TIERS`: lines 56–60
+- DFSP governance (`services/core-api/src/governance/governance.config.ts`): 110 lines, no MEMBERSHIP/SHOWTOKEN/TOKEN_EXTENSION/DIAMOND_TIER symbols
+- `docs/REQUIREMENTS_MASTER.md` last mutation: `06b11c2` on 2026-04-17
 
 ---
 
-## Audit Provenance
-
-| Check | Method | Source |
-|---|---|---|
-| Schema content | `git show origin/main:prisma/schema.prisma` | commit e420458 |
-| PR #265 state | GitHub MCP `pull_request_read` | live API |
-| PR #254 diff | `git diff 76fd094 2d81e8c -- prisma/schema.prisma` | local git |
-| PR #255 diff | `git diff 2d81e8c 996dba0 --stat` | local git |
-| seed.test.ts run | `npx ts-node prisma/seed.test.ts` after `yarn install --frozen-lockfile` | exit 0 |
-| QUEUE listing | `git ls-tree -r origin/main -- PROGRAM_CONTROL/DIRECTIVES/QUEUE/` + local `ls` | both empty except .gitkeep |
-| Document scan | Grep across listed docs | read-only |
-
-No schema, queue, PR, or migration mutations performed during this audit.
+**End of audit. No code changes. No migration run. No seed run. No PR opened.**
