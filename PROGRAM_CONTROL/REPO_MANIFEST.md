@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/chore-create-9-reference-branches`
-**Commit:** `e75efed6e264636a4f4ade96dc314f9ece1b77ae`
-**Generated:** 2026-04-19T06:28:43Z
+**Branch:** `copilot/chore-harvest-oss-reference-branches`
+**Commit:** `875d32edac7ad46a65c249d572b06162273de7f1`
+**Generated:** 2026-04-19T06:20:29Z
 
 ## All Files
 
@@ -198,6 +198,17 @@ Auto-generated on every push. Do not edit manually.
 - `REFERENCE_LIBRARY/04_AI_REFERENCE_INDEX.md`
 - `REFERENCE_LIBRARY/05_OSS_REPO_REGISTRY.md`
 - `REFERENCE_LIBRARY/06_PROJECT_DECISIONS.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/PUSH_ALL_REFS.sh`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/README.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oqminc-ai-resources/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-booking-api/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-discussion-platform/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-live-polling/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-loadbalancer-nginx/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-react-chat-app/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-social-media-app/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-socketio-chat/REFS_MANIFEST.md`
+- `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-zoom-clone/REFS_MANIFEST.md`
 - `REFERENCE_LIBRARY/TEMPLATES/OQMInc_REFERENCE_LIBRARY_MASTER_TEMPLATE.md`
 - `REFERENCE_LIBRARY/TEMPLATES/README.md`
 - `Sovereign_Kernel.md.pdf`
