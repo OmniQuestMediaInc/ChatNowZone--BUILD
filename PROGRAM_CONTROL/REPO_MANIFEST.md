@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `8abee0f921e40514ce228b14810ccc71497a202a`
-**Generated:** 2026-04-19T05:55:42Z
+**Branch:** `copilot/create-reference-library-directory`
+**Commit:** `029363b29120872c93596273d2f492b045d79d01`
+**Generated:** 2026-04-19T06:00:59Z
 
 ## All Files
 
@@ -192,6 +192,9 @@ Auto-generated on every push. Do not edit manually.
 - `REFERENCE_LIBRARY/00_THREAD_BOOTSTRAP.md`
 - `REFERENCE_LIBRARY/01_CANONICAL_LOCKS.md`
 - `REFERENCE_LIBRARY/02_DOMAIN_TAXONOMY.md`
+- `REFERENCE_LIBRARY/03_FEATURE_BRIEFS.md`
+- `REFERENCE_LIBRARY/04_AI_REFERENCE_INDEX.md`
+- `REFERENCE_LIBRARY/05_OSS_REPO_REGISTRY.md`
 - `REFERENCE_LIBRARY/06_PROJECT_DECISIONS.md`
 - `REFERENCE_LIBRARY/TEMPLATES/OQMInc_REFERENCE_LIBRARY_MASTER_TEMPLATE.md`
 - `REFERENCE_LIBRARY/TEMPLATES/README.md`
