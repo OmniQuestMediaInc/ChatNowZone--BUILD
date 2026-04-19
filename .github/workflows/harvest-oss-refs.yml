@@ -2,7 +2,7 @@ name: Harvest OSS Reference Branches (THREAD15)
 # Authority: Kevin B. Hartley, CEO — OmniQuest Media Inc.
 # Directive: THREAD15-OSS-HARVEST
 # Purpose: Create and push 9 orphan OSS reference branches to origin.
-#          Runs once when triggered. Skips branches that already exist.
+#          Runs once. Skips branches that already exist.
 
 on:
   push:
@@ -27,155 +27,112 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
 
-      - name: Harvest all 9 OSS reference branches
+      - name: Write harvest helper script
         run: |
+          cat > /tmp/harvest.sh << 'ENDSCRIPT'
+          #!/bin/bash
           set -e
 
-          harvest_branch() {
-            local BRANCH="$1"
-            local SRC_URL="$2"
-            local SRC_DIR="$3"
-            local DIRECTIVES="$4"
-            local NOTES="$5"
+          BRANCH="$1"
+          SRC_URL="$2"
+          SRC_DIR="$3"
+          DIRECTIVES="$4"
+          NOTES="$5"
+          REPO_ROOT="$(pwd)"
 
-            # Skip if branch already exists in remote
-            if git ls-remote --exit-code origin "$BRANCH" 2>/dev/null; then
-              echo "SKIP: $BRANCH already exists in remote"
-              return 0
-            fi
+          if git ls-remote --exit-code origin "$BRANCH" 2>/dev/null; then
+            echo "SKIP: $BRANCH already exists"
+            exit 0
+          fi
 
-            echo "=== Harvesting: $BRANCH ==="
+          echo "Harvesting: $BRANCH"
+          git clone --depth=1 "$SRC_URL" "$SRC_DIR"
+          SRC_SHA=$(git -C "$SRC_DIR" log --format='%H' -1)
+          SRC_DATE=$(git -C "$SRC_DIR" log --format='%ci' -1)
+          SRC_REPO=$(echo "$SRC_URL" | sed 's|https://github.com/||')
+          HARVESTED=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-            # Clone source repo
-            git clone --depth=1 "$SRC_URL" "$SRC_DIR"
-            SRC_SHA=$(git -C "$SRC_DIR" log --format='%H' -1)
-            SRC_DATE=$(git -C "$SRC_DIR" log --format='%ci' -1)
-            SRC_REPO=$(echo "$SRC_URL" | sed 's|https://github.com/||')
+          git checkout --orphan "$BRANCH"
+          git rm -rf . --quiet 2>/dev/null || true
+          git clean -ffdx --quiet 2>/dev/null || true
 
-            # Create orphan branch
-            git checkout --orphan "$BRANCH"
-            git rm -rf . --quiet 2>/dev/null || true
-            git clean -ffdx --quiet 2>/dev/null || true
+          rsync -a --exclude='.git' "$SRC_DIR/" .
 
-            # Copy source content (no .git dir)
-            rsync -a --exclude='.git' "$SRC_DIR/" .
+          python3 - "$BRANCH" "$SRC_REPO" "$SRC_SHA" "$SRC_DATE" "$HARVESTED" "$DIRECTIVES" "$NOTES" << 'PYEOF'
+          import sys
+          branch, src_repo, src_sha, src_date, harvested, directives, notes = sys.argv[1:]
+          content = "\n".join([
+            "# REFS_MANIFEST -- " + branch,
+            "Authority: Kevin B. Hartley, CEO -- OmniQuest Media Inc.",
+            "Harvested: " + harvested,
+            "Directive: THREAD15-OSS-HARVEST",
+            "",
+            "## Source",
+            "",
+            "- **Repository:** " + src_repo,
+            "- **Branch:** main",
+            "- **HEAD at harvest:** " + src_sha,
+            "- **Commit date:** " + src_date,
+            "",
+            "## Purpose",
+            "",
+            "Read-only reference branch. OSS snapshot for CNZ directive use only.",
+            "",
+            "**Primary Directive Series:** " + directives,
+            "",
+            notes,
+            "",
+            "## Access Rules (INVARIANT)",
+            "",
+            "- This branch NEVER merges to main.",
+            "- This branch is NEVER deleted.",
+            "- Its content is NEVER imported into CNZ source files.",
+            "- Read-only: `git show " + branch + ":{filepath}`",
+            "",
+            "See: .github/refs-branch-policy.md",
+            "",
+            "*END REFS_MANIFEST*",
+          ])
+          with open("REFS_MANIFEST.md", "w") as f:
+            f.write(content)
+          PYEOF
 
-            # Write REFS_MANIFEST.md
-            cat > REFS_MANIFEST.md << MANIFEST
-# REFS_MANIFEST — ${BRANCH}
-Authority: Kevin B. Hartley, CEO — OmniQuest Media Inc.
-Harvested: $(date -u +%Y-%m-%dT%H:%M:%SZ)
-Directive: THREAD15-OSS-HARVEST
+          git add -A
+          git commit -m "CHORE: Harvest ${SRC_REPO} => ${BRANCH} [Thread15]"
+          git push origin "$BRANCH"
+          echo "Done: $BRANCH"
+          git checkout copilot/chore-create-9-reference-branches
+          ENDSCRIPT
+          chmod +x /tmp/harvest.sh
 
----
+      - name: Harvest refs/oss/booking-api
+        run: bash /tmp/harvest.sh "refs/oss/booking-api" "https://github.com/CelaDaniel/Full-Stack-Booking-Management-API" "/tmp/src1" "CCZ-004, DISC-001/004, OPS-006" "Full-stack booking management API with Prisma, TypeScript, and Vercel."
 
-## Source
+      - name: Harvest refs/oss/socketio-chat
+        run: bash /tmp/harvest.sh "refs/oss/socketio-chat" "https://github.com/CelaDaniel/nodejs-socketio-chat-application" "/tmp/src2" "OBS-001/002, CCZ-001, OPS-003" "Node.js + Socket.IO real-time chat application."
 
-- **Repository:** ${SRC_REPO}
-- **Branch:** main
-- **HEAD at harvest:** ${SRC_SHA}
-- **Commit date:** ${SRC_DATE}
+      - name: Harvest refs/oss/react-chat-app
+        run: bash /tmp/harvest.sh "refs/oss/react-chat-app" "https://github.com/CelaDaniel/React-Chat-App" "/tmp/src3" "CCZ-001/002, OBS-001" "React Chat App with real-time messaging."
 
----
+      - name: Harvest refs/oss/discussion-platform
+        run: bash /tmp/harvest.sh "refs/oss/discussion-platform" "https://github.com/CelaDaniel/next_discussion_platform" "/tmp/src4" "FC-001-006, OPS-004" "Next.js discussion platform with communities, posts, and comments."
 
-## Purpose
+      - name: Harvest refs/oss/live-polling
+        run: bash /tmp/harvest.sh "refs/oss/live-polling" "https://github.com/CelaDaniel/react-polling" "/tmp/src5" "OBS Room-Heat Engine broadcast" "React live polling for real-time audience interaction."
 
-This is a read-only reference branch. It contains a snapshot of the
-upstream OSS repository for use by CNZ directives and agents as a
-reference source only.
+      - name: Harvest refs/oss/zoom-clone
+        run: bash /tmp/harvest.sh "refs/oss/zoom-clone" "https://github.com/CelaDaniel/zoom-clone" "/tmp/src6" "OBS ShowZone Theatre UI, DISC" "WebRTC-based Zoom clone with video conferencing and screen sharing."
 
-**Primary Directive Series:** ${DIRECTIVES}
+      - name: Harvest refs/oss/loadbalancer-nginx
+        run: bash /tmp/harvest.sh "refs/oss/loadbalancer-nginx" "https://github.com/CelaDaniel/loadbalancer-nginx-docker-nodejs" "/tmp/src7" "Bijou SFU infra, OPS deployment" "Nginx load balancer with Docker and Node.js for scalable deployments."
 
-${NOTES}
+      - name: Harvest refs/oss/social-media-app
+        run: bash /tmp/harvest.sh "refs/oss/social-media-app" "https://github.com/CelaDaniel/Social-media-react-app" "/tmp/src8" "FC-003, CCZ-003, OPS-006 notifications" "Full-stack social media React app with posts, likes, and notifications."
 
----
+      - name: Harvest refs/oqminc/ai-resources
+        run: bash /tmp/harvest.sh "refs/oqminc/ai-resources" "https://github.com/CelaDaniel/free-ai-resources-x" "/tmp/src9" "OBS-005, HZ, NN-001/002, DFSP" "Curated AI/ML resources index. See REFERENCE_LIBRARY/04_AI_REFERENCE_INDEX.md."
 
-## Access Rules (INVARIANT)
-
-- This branch NEVER merges to main.
-- This branch is NEVER deleted.
-- Its content is NEVER imported into CNZ source files.
-- Read-only reference: \`git show ${BRANCH}:{filepath}\`
-
-See: .github/refs-branch-policy.md
-
----
-
-*END REFS_MANIFEST*
-MANIFEST
-
-            git add -A
-            git commit -m "CHORE: Harvest ${SRC_REPO} → ${BRANCH} [Thread15]"
-            git push origin "$BRANCH"
-            echo "=== Done: $BRANCH ==="
-
-            # Return to PR branch for next iteration
-            git checkout copilot/chore-create-9-reference-branches
-          }
-
-          # Harvest all 9 repos
-          harvest_branch \
-            "refs/oss/booking-api" \
-            "https://github.com/CelaDaniel/Full-Stack-Booking-Management-API" \
-            "/tmp/src-booking-api" \
-            "CCZ-004, DISC-001/004, OPS-006" \
-            "Full-stack booking management API with Prisma, TypeScript, and Vercel."
-
-          harvest_branch \
-            "refs/oss/socketio-chat" \
-            "https://github.com/CelaDaniel/nodejs-socketio-chat-application" \
-            "/tmp/src-socketio-chat" \
-            "OBS-001/002, CCZ-001, OPS-003" \
-            "Node.js + Socket.IO real-time chat application."
-
-          harvest_branch \
-            "refs/oss/react-chat-app" \
-            "https://github.com/CelaDaniel/React-Chat-App" \
-            "/tmp/src-react-chat-app" \
-            "CCZ-001/002, OBS-001" \
-            "React Chat App with real-time messaging."
-
-          harvest_branch \
-            "refs/oss/discussion-platform" \
-            "https://github.com/CelaDaniel/next_discussion_platform" \
-            "/tmp/src-discussion-platform" \
-            "FC-001-006, OPS-004" \
-            "Next.js discussion platform with communities, posts, and comments."
-
-          harvest_branch \
-            "refs/oss/live-polling" \
-            "https://github.com/CelaDaniel/react-polling" \
-            "/tmp/src-live-polling" \
-            "OBS Room-Heat Engine broadcast" \
-            "React live polling application for real-time audience interaction."
-
-          harvest_branch \
-            "refs/oss/zoom-clone" \
-            "https://github.com/CelaDaniel/zoom-clone" \
-            "/tmp/src-zoom-clone" \
-            "OBS ShowZone Theatre UI, DISC" \
-            "WebRTC-based Zoom clone with video conferencing and screen sharing."
-
-          harvest_branch \
-            "refs/oss/loadbalancer-nginx" \
-            "https://github.com/CelaDaniel/loadbalancer-nginx-docker-nodejs" \
-            "/tmp/src-lb-nginx" \
-            "Bijou SFU infra, OPS deployment" \
-            "Nginx load balancer with Docker and Node.js for scalable deployments."
-
-          harvest_branch \
-            "refs/oss/social-media-app" \
-            "https://github.com/CelaDaniel/Social-media-react-app" \
-            "/tmp/src-social-media-app" \
-            "FC-003, CCZ-003, OPS-006 notifications" \
-            "Full-stack social media React app with posts, likes, and real-time notifications."
-
-          harvest_branch \
-            "refs/oqminc/ai-resources" \
-            "https://github.com/CelaDaniel/free-ai-resources-x" \
-            "/tmp/src-ai-resources" \
-            "OBS-005, HZ, NN-001/002, DFSP" \
-            "Curated AI/ML resources index. See REFERENCE_LIBRARY/04_AI_REFERENCE_INDEX.md for usage."
-
-          echo "=== All harvests complete ==="
+      - name: Verify all 9 branches in remote
+        run: |
+          echo "Remote refs:"
           git ls-remote origin 'refs/oss/*' 'refs/oqminc/*'
