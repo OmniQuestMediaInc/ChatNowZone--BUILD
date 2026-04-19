@@ -2,13 +2,14 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `11091a1df6b1ae5ec6fc5fb70e24256e9873f5c6`
-**Generated:** 2026-04-19T13:00:08Z
+**Branch:** `copilot/archive-legacy-configs-and-add-starter-configs`
+**Commit:** `865abfcb3b8570ff82d84e9bb72bb2578dd13b26`
+**Generated:** 2026-04-19T13:05:57Z
 
 ## All Files
 
 - `.devcontainer/devcontainer.json`
+- `.editorconfig`
 - `.eslintrc.js`
 - `.github/CODEOWNERS`
 - `.github/ISSUE_TEMPLATE/directive.yml`
@@ -27,8 +28,15 @@ Auto-generated on every push. Do not edit manually.
 - `.github/workflows/protect-ref-branches.yml`
 - `.github/workflows/repo-manifest.yml`
 - `.gitignore`
+- `.markdownlintignore`
+- `.prettierignore`
 - `.prettierrc`
 - `CLAUDE.md`
+- `LEGACY_CONFIGS/.eslintrc.js`
+- `LEGACY_CONFIGS/.gitignore`
+- `LEGACY_CONFIGS/.prettierrc`
+- `LEGACY_CONFIGS/package.json`
+- `LEGACY_CONFIGS/tsconfig.json`
 - `OQMI_SYSTEM_STATE.md`
 - `PROGRAM_CONTROL/BACKLOGS/.gitkeep`
 - `PROGRAM_CONTROL/BACKLOGS/CLAUDE_CODE_BACKLOG_v7.md`
@@ -239,6 +247,7 @@ Auto-generated on every push. Do not edit manually.
 - `finance/token-extension.service.ts`
 - `governance/pre-ship-audit.service.ts`
 - `infra/postgres/init-ledger.sql`
+- `jest.config.js`
 - `package.json`
 - `prisma/migrations/20260409000000_legal_hold_db_migration/migration.sql`
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
