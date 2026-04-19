@@ -2,7 +2,7 @@
 **Authority:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
 **Source:** Tech Debt Delta 2026-04-16 + OQMI Coding Doctrine v2.0
 **Repo:** OmniQuestMediaInc/ChatNowZone--BUILD
-**Last updated:** 2026-04-16
+**Last updated:** 2026-04-18
 
 This file is the canonical naming authority for all code, comments,
 documentation, and database identifiers in the ChatNow.Zone codebase.
@@ -96,12 +96,54 @@ HOW TO USE:
 
 ## MEMBERSHIP AND ACCESS
 
+Source of truth: `docs/MEMBERSHIP_LIFECYCLE_POLICY.md` v1.0 (CEO-approved
+2026-04-17). On any conflict, the policy wins; this glossary follows.
+
+### Canonical `MembershipTier` enum (locked — exactly six values)
+
+| Rank | Term | Code identifier | Paid? | Notes |
+|------|------|-----------------|-------|-------|
+| 0 | Guest | `GUEST` | No | 31-day expiry; locks then purges per policy §3.1 |
+| 1 | VIP | `VIP` | No | Permanent once earned; 30-day age re-verify cadence (§3.2) |
+| 2 | VIP Silver | `VIP_SILVER` | Yes | 90+1 day paid block; age re-verify on each new purchase |
+| 3 | VIP Gold | `VIP_GOLD` | Yes | 90+1 day paid block; age re-verify on each new purchase |
+| 4 | VIP Platinum | `VIP_PLATINUM` | Yes | 90+1 day paid block; age re-verify on each new purchase |
+| 5 | VIP Diamond | `VIP_DIAMOND` | Yes | 90+1 day paid block; binds Diamond Concierge per locked rules |
+
+### Retired tier values — must NOT appear as `MembershipTier` in schema, code, config, or new docs
+
+| Retired token | Status | Replacement / disposition |
+|---------------|--------|---------------------------|
+| `DAY_PASS` | RETIRED — concept fully retired | Use `GUEST` for the no-subscription fallback |
+| `ANNUAL` (as tier) | RETIRED — never a tier | May appear ONLY as a `BillingInterval` enum value or billing-cycle label; never on `MembershipTier` |
+| `OMNIPASS_PLUS` | RETIRED — never a tier | OmniPass+ is a **product** (Entitlement / Pass / Product domain), not a tier — see Products below |
+| Standalone `DIAMOND` | RETIRED — invalid form | Canonical form is `VIP_DIAMOND` |
+
+Existing-code policy: any RETIRED token discovered in active source, config,
+or active docs must be flagged in the agent's report-back. Historical
+report-backs and `PROGRAM_CONTROL/DIRECTIVES/DONE/*` artifacts are archival
+and are not rewritten.
+
+Append-only guard: `prisma/seed.test.ts` is the canary that fails CI if any
+of `DAY_PASS`, `ANNUAL`-as-tier, `OMNIPASS_PLUS`, or standalone `DIAMOND`
+ever reappear in the `MembershipTier` enum.
+
+### Products (NOT `MembershipTier` values)
+
+These are products in the Entitlement / Pass / Product domain. They are
+distinct from tiers and must never be added to the `MembershipTier` enum.
+
+| Product | Code identifier | Notes |
+|---------|-----------------|-------|
+| OmniPass | OmniPass | Product — separate from tier |
+| OmniPass+ | OmniPassPlus, omni_pass_plus | Product — replaces the retired `OMNIPASS_PLUS` tier usage |
+| ShowZonePass | ShowZonePass | Product — venue access pass |
+| SilverBullet | SILVER_BULLET (`product_variant`) | 30-day on-ramp variant of `VIP_SILVER`; carried as `product_variant`, NOT a tier value |
+
+### Other access concepts
+
 | Term | Definition | Code identifier |
 |------|------------|-----------------|
-| RETIRED: Day Pass | Retired concept — remove all references | RETIRED: day_pass |
-| Annual | Annual subscription tier | ANNUAL |
-| OmniPass+ | Premium subscription tier | OmniPassPlus, omni_pass_plus |
-| Diamond | Highest membership tier | DIAMOND, diamond |
 | Guest Welcome Credit | $100 CZT credit on $250 first-month spend (inactive at launch) | WELCOME_CREDIT, welcome_credit_active |
 
 ---
