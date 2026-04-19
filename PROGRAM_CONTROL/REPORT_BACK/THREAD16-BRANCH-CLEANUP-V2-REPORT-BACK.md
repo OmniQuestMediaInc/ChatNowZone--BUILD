@@ -189,14 +189,26 @@ Same 403 on all 26 branches. Sandbox does not have write access to origin remote
 | Deleted successfully | 0 |
 | Blocked (HTTP 403) | 26 |
 
-## OPERATOR ACTIONS REQUIRED
+`gh` CLI is not installed in this sandbox. No `delete_branch` or `delete_ref`
+MCP tool is available on the MCP surface. Method B: UNAVAILABLE.
+
+| Branch | Method A | Method B | Final |
+|---|---|---|---|
+| 26 qualifying branches | BLOCKED — HTTP 403 | UNAVAILABLE (no gh / no MCP delete-ref) | BLOCKED |
+
+**Branches deleted successfully: 0**
 
 Run these 26 commands locally (or via `gh api`) to complete the cleanup.
 All branches verified as ancestors of origin/main (318b15f5) before this report was filed.
 
 ### gh api (one per line — copy-paste ready):
 
-```
+## OPERATOR ACTIONS REQUIRED
+
+Copy-paste-ready `gh` API calls to delete all 26 qualifying branches
+(run from a shell with GitHub credentials that have write access):
+
+```bash
 gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/claude/chore-thread-12-cleanup
 gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/claude/dfsp-001-otp-account-hold-report-back
 gh api -X DELETE repos/OmniQuestMediaInc/ChatNowZone--BUILD/git/refs/heads/claude/thread-9-handoff-document
