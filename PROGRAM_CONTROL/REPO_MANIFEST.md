@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/audit-schema-integrity-EUzfq`
-**Commit:** `dab32c14d4afe5da61430592bf8e5d0beed460d6`
-**Generated:** 2026-04-19T06:05:40Z
+**Branch:** `copilot/chore-create-9-reference-branches`
+**Commit:** `e75efed6e264636a4f4ade96dc314f9ece1b77ae`
+**Generated:** 2026-04-19T06:28:43Z
 
 ## All Files
 
@@ -20,6 +20,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/workflows/copilot-setup-steps.yml`
 - `.github/workflows/directive-dispatch.yml`
 - `.github/workflows/directive-intake.yml`
+- `.github/workflows/harvest-oss-refs.yml`
 - `.github/workflows/notify.yml`
 - `.github/workflows/populate-issues.yml`
 - `.github/workflows/protect-ref-branches.yml`
@@ -154,6 +155,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD 13 HANDOFF`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD-12-CLEANUP-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD14-SCHEMA-INTEGRITY-AUDIT.md`
+- `PROGRAM_CONTROL/REPORT_BACK/THREAD15-OSS-HARVEST-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD15-REFLIB-INIT-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-006-FOLLOWUP-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-AUDIT-001.md`
