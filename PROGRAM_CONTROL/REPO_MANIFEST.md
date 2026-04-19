@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `3ae4bd3a511185881414fa9528f513224085bd6b`
-**Generated:** 2026-04-19T11:31:35Z
+**Branch:** `copilot/enable-code-scanning-feature`
+**Commit:** `865db4898d84ea4dee053914970f68701708a417`
+**Generated:** 2026-04-19T12:49:06Z
 
 ## All Files
 
@@ -17,6 +17,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/required-files.txt`
 - `.github/workflows/auto-merge.yml`
 - `.github/workflows/ci.yml`
+- `.github/workflows/codeql.yml`
 - `.github/workflows/copilot-setup-steps.yml`
 - `.github/workflows/directive-dispatch.yml`
 - `.github/workflows/directive-intake.yml`
