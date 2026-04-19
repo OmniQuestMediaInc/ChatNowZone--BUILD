@@ -1,0 +1,40 @@
+@import "../node_modules/bootstrap/less/bootstrap.less";
+
+@greyedout: #adadad;
+
+@grid-gutter-width: 30px;
+
+.disconnected {
+  background-color: @state-danger-text;
+}
+
+.connected {
+  background-color: @state-success-text;
+}
+
+.ping {
+  background-color: @state-danger-bg;
+  color: @state-danger-text;
+}
+
+div#target {
+  .container;
+}
+
+label, button {
+  margin-top: 5px;
+}
+
+button {
+  .btn;
+  .btn-sm;
+  .btn-primary;
+  float: left;
+}
+
+input {
+  .form-control;
+}
+
+
+

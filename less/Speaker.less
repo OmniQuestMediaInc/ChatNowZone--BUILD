@@ -1,0 +1,82 @@
+@import "global.less";
+
+#Speaker {
+
+  table {
+    .table;
+    .table-striped;
+    .make-xs-column(12);
+
+    tbody, thead {
+
+      tr {
+        .make-row();
+        td, th {
+          &:first-child {
+            .make-xs-column(1);
+          }
+
+          &:nth-child(2) {
+            .make-xs-column(5)
+          }
+
+          &:last-child {
+            .make-xs-column(6);
+            font-size: 1em;
+            color: @greyedout;
+          }
+        }
+
+        td {
+          font-size: 1.7em;
+        }
+
+      }
+
+    }
+
+  }
+
+  #questions {
+
+    .make-row();
+
+    >div {
+      color: @state-success-text;
+      .make-xs-column(12);
+      .make-sm-column(6);
+      .make-md-column(3);
+    }
+
+    >div {
+
+      >span {
+        padding: .5em;
+        margin: .5em;
+        border: solid 2px ;
+        display: block;
+        cursor: pointer;
+
+        &:hover {
+          background-color: @state-success-text;
+          color: @state-success-bg;
+        }
+
+        &.selected {
+          color: @state-success-text;
+          background-color: @state-success-bg;
+
+          &:hover {
+            background-color: @state-warning-bg;
+            color: @state-warning-text;
+          }
+
+        }
+
+      }
+    }
+
+  }
+
+}
+
