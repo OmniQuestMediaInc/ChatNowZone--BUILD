@@ -34,18 +34,53 @@ Everything else lives here and in the sibling REFERENCE_LIBRARY files.
 
 ## 2. REFERENCE LIBRARY INDEX
 
-All files live in `REFERENCE_LIBRARY/` on main.
-Read via GitHub contents API or `git show main:REFERENCE_LIBRARY/{file}`.
+All structural files in `REFERENCE_LIBRARY/` on main.
+Read via: `git show main:REFERENCE_LIBRARY/{filename}`
+Or via GitHub contents API:
+`https://api.github.com/repos/OmniQuestMediaInc/ChatNowZone--BUILD/contents/REFERENCE_LIBRARY/{filename}`
 
 | File | Contents |
 |------|----------|
 | 00_THREAD_BOOTSTRAP.md | This document — always read first |
 | 01_CANONICAL_LOCKS.md | All CEO-locked invariants, tier rules, expiry |
-| 02_DOMAIN_TAXONOMY.md | All directive series, status, blocked-on map |
+| 02_DOMAIN_TAXONOMY.md | All directive series, status, agent routing |
 | 03_FEATURE_BRIEFS.md | FC, OPS, DISC, CCZ surface specifications |
 | 04_AI_REFERENCE_INDEX.md | AI resources mapped to directives |
-| 05_OSS_REPO_REGISTRY.md | All 9 reference repos + branch access commands |
-| 06_PLATFORM_COMMS_PHIL.md | Creator Care Zone + comms philosophy |
+| 05_OSS_REPO_REGISTRY.md | All 9 reference repos + branch access |
+| 06_PROJECT_DECISIONS.md | Architecture decisions log |
+| TEMPLATES/ | Reusable directive and workflow templates |
+
+## 2B. BUILDD CONTROL — GOOGLE DRIVE
+
+Primary Drive folder for all CNZ control documents:
+**BUILDD CONTROL - CNZ**
+Folder ID: `1zB0MZjj92wovoBuhi0TkelZ_t0oNSCHO`
+URL: https://drive.google.com/drive/folders/1zB0MZjj92wovoBuhi0TkelZ_t0oNSCHO
+
+What lives in Drive (not repo):
+- Thread handoff documents (Google Docs — required for Claude Code delivery)
+- QUEUE, IN_PROGRESS, DONE, BACKLOGS directive folders
+- INTEL reports and OQMInc business documents
+- OQMInc Templates folder (master templates)
+
+What lives in REFERENCE_LIBRARY/ (not Drive):
+- Canonical locks, taxonomy, feature briefs, AI index
+- OSS repo registry, decisions log, thread bootstrap
+
+Subfolder IDs (to be confirmed and populated at Thread 15 open):
+| Subfolder | ID |
+|-----------|-----|
+| QUEUE | [CONFIRM AT THREAD 15] |
+| IN_PROGRESS | [CONFIRM AT THREAD 15] |
+| DONE | [CONFIRM AT THREAD 15] |
+| BACKLOGS | [CONFIRM AT THREAD 15] |
+| HANDOFFS | [CONFIRM AT THREAD 15] |
+| REPORT_BACK | [CONFIRM AT THREAD 15] |
+| OQMInc Templates | [CONFIRM AT THREAD 15] |
+
+CRITICAL — Directive delivery to Claude Code:
+Directives sent via Drive MUST be Google Docs (Zapier convert=true).
+Plain text files return 403. Hard constraint — never plain text.
 
 ---
 
