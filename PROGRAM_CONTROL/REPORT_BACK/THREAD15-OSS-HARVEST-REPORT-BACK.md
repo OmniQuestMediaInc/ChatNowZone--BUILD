@@ -21,17 +21,17 @@ Main branch is untouched. All harvest work is in orphan branches.
 
 ## Branches Created (Orphan — no parent, never merges to main)
 
-| Branch | HEAD Commit SHA | Source Repo |
+| Branch | Remote HEAD SHA | Source Repo |
 |--------|----------------|-------------|
-| refs/oss/booking-api | 19123ef82c2ecd857af8872bc6f353b43fb94348 | CelaDaniel/Full-Stack-Booking-Management-API |
-| refs/oss/socketio-chat | 9a413f1ed37f9251a1bcfa190a39543a253fea8d | CelaDaniel/nodejs-socketio-chat-application |
-| refs/oss/react-chat-app | 37016a230858dd267a8587989f5073939034c594 | CelaDaniel/React-Chat-App |
-| refs/oss/discussion-platform | a1b6b4730f2b3e3668ffacb67768cab1338e7396 | CelaDaniel/next_discussion_platform |
-| refs/oss/live-polling | c591c09b11d03352d9373cb36e2311dcac4a00a9 | CelaDaniel/react-polling |
-| refs/oss/zoom-clone | 4cf14759de2fd18c786d021266cb0dbb8f38f54c | CelaDaniel/zoom-clone |
-| refs/oss/loadbalancer-nginx | 015924b86280f92cac8bae590489c7ff5f3119a3 | CelaDaniel/loadbalancer-nginx-docker-nodejs |
-| refs/oss/social-media-app | 96aab8bcc7da31b3c331e12a1ebcd316761d6892 | CelaDaniel/Social-media-react-app |
-| refs/oqminc/ai-resources | 2725b07ac1a5454e50efd6d1c25c20e59a2db084 | CelaDaniel/free-ai-resources-x |
+| refs/oss/booking-api | cf70dcdaee0d9b26e6ad82aef3402f89e8622705 | CelaDaniel/Full-Stack-Booking-Management-API |
+| refs/oss/socketio-chat | ecd9462723727c7de747ada08ebed60eeb815522 | CelaDaniel/nodejs-socketio-chat-application |
+| refs/oss/react-chat-app | 3c95928037dc55e3deb0f228c501734254d5ab49 | CelaDaniel/React-Chat-App |
+| refs/oss/discussion-platform | 028416ba5cc12db48a8359926a37659a36b516ee | CelaDaniel/next_discussion_platform |
+| refs/oss/live-polling | d04915dc424b0f6769f207608669544079de8ff2 | CelaDaniel/react-polling |
+| refs/oss/zoom-clone | 8917b2fa6c3f06bde34a9d78c2c2c6c0b7e624e0 | CelaDaniel/zoom-clone |
+| refs/oss/loadbalancer-nginx | 19fc0b34d68d4b2117beba5dacf5f8219a2469e5 | CelaDaniel/loadbalancer-nginx-docker-nodejs |
+| refs/oss/social-media-app | e7bd29e47945c6ff94f6ed5e0bfd7b94986b2701 | CelaDaniel/Social-media-react-app |
+| refs/oqminc/ai-resources | 2bc31fc31dee7168df6eded0dc64913cc61ca0e7 | CelaDaniel/free-ai-resources-x |
 
 ---
 
@@ -139,6 +139,25 @@ REFERENCE_LIBRARY/05_OSS_REPO_REGISTRY.md already shows all 9 branches as
 
 **SUCCESS**
 
-All 9 orphan reference branches created with OSS content + REFS_MANIFEST.md.
-Branches pushed to origin via configured push refspecs.
+All 9 orphan reference branches created and pushed to remote origin.
+Branches are in the `refs/oss/*` and `refs/oqminc/*` namespaces (custom git refs,
+not branches under `refs/heads/`). Accessible via `git show refs/oss/{name}:{file}`.
+CI workflow `harvest-oss-refs.yml` is idempotent (skips existing branches).
 Main branch untouched.
+
+## Remote Verification
+
+```
+$ git ls-remote origin 'refs/oss/*' 'refs/oqminc/*'
+2bc31fc31dee7168df6eded0dc64913cc61ca0e7	refs/oqminc/ai-resources
+cf70dcdaee0d9b26e6ad82aef3402f89e8622705	refs/oss/booking-api
+028416ba5cc12db48a8359926a37659a36b516ee	refs/oss/discussion-platform
+d04915dc424b0f6769f207608669544079de8ff2	refs/oss/live-polling
+19fc0b34d68d4b2117beba5dacf5f8219a2469e5	refs/oss/loadbalancer-nginx
+3c95928037dc55e3deb0f228c501734254d5ab49	refs/oss/react-chat-app
+e7bd29e47945c6ff94f6ed5e0bfd7b94986b2701	refs/oss/social-media-app
+ecd9462723727c7de747ada08ebed60eeb815522	refs/oss/socketio-chat
+8917b2fa6c3f06bde34a9d78c2c2c6c0b7e624e0	refs/oss/zoom-clone
+```
+
+CI Workflow run: https://github.com/OmniQuestMediaInc/ChatNowZone--BUILD/actions/runs/24622753139
