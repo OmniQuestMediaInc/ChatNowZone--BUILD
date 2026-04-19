@@ -56,7 +56,7 @@ jobs:
           git rm -rf . --quiet 2>/dev/null || true
           git clean -ffdx --quiet 2>/dev/null || true
 
-          rsync -a --exclude='.git' "$SRC_DIR/" .
+          rsync -a --exclude='.git' --exclude='.github/workflows' "$SRC_DIR/" .
 
           python3 - "$BRANCH" "$SRC_REPO" "$SRC_SHA" "$SRC_DATE" "$HARVESTED" "$DIRECTIVES" "$NOTES" << 'PYEOF'
           import sys
