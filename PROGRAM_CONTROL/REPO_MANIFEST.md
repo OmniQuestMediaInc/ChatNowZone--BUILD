@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/thread16-cleanup-v2-again`
-**Commit:** `408d13b69bfb0d92c9edaa851835e2f1d92a9bfe`
-**Generated:** 2026-04-19T14:07:44Z
+**Branch:** `claude/chore-actions-node24-DyNYJ`
+**Commit:** `b10d048e9cc24a0164411323e7e9a5c0c25911a6`
+**Generated:** 2026-04-21T03:04:51Z
 
 ## All Files
 
@@ -16,7 +16,6 @@ Auto-generated on every push. Do not edit manually.
 - `.github/copilot-instructions.md`
 - `.github/refs-branch-policy.md`
 - `.github/required-files.txt`
-- `.github/workflows/CodeQL Code Scanning.yml`
 - `.github/workflows/auto-merge.yml`
 - `.github/workflows/ci.yml`
 - `.github/workflows/codeql.yml`
@@ -51,6 +50,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md`
 - `PROGRAM_CONTROL/CLEARANCES/README.md`
 - `PROGRAM_CONTROL/CLEARANCES/TEMPLATE.md`
+- `PROGRAM_CONTROL/DIRECTIVES/BLOCKED/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-002.md`
@@ -79,6 +79,8 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-RETIRE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
+- `PROGRAM_CONTROL/DIRECTIVES/README.md`
+- `PROGRAM_CONTROL/DIRECTIVES/TEMPLATE.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-09.md`
@@ -171,6 +173,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD16-BRANCH-AUDIT-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD16-BRANCH-CLEANUP-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD16-BRANCH-CLEANUP-V2-REPORT-BACK.md`
+- `PROGRAM_CONTROL/REPORT_BACK/THREAD16-DIRECTIVE-WORKFLOW-BOOTSTRAP-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-006-FOLLOWUP-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-AUDIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-RETIRE-001.md`
