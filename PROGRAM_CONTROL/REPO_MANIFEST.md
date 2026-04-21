@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `cd3b26be6ab19d53ac4a7b3744fb51f76005f51a`
-**Generated:** 2026-04-21T17:26:53Z
+**Commit:** `3d44d3e2e9a98a14ed6a7a83bd781aa08d9bcdeb`
+**Generated:** 2026-04-21T17:27:27Z
 
 ## All Files
 
@@ -68,7 +68,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/RRR-GOV-002`
-- `PROGRAM_CONTROL/OQMI_SYSTEM_STATE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/.gitkeep`
 - `PROGRAM_CONTROL/REPORT_BACK/ADD-CLEARANCE-CONFIRMATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/AUDIT-001-AUDIT-CHAIN-SERVICE.md`
