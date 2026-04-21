@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `a06014bd154a058c608e85d406c9a0bbc431bdca`
-**Generated:** 2026-04-21T10:33:34Z
+**Commit:** `fb061b8bd65a90dae894f7b9f732a32bcec8f992`
+**Generated:** 2026-04-21T10:34:29Z
 
 ## All Files
 
@@ -79,7 +79,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/README.md`
-- `PROGRAM_CONTROL/DIRECTIVES/TEMPLATE.md`
 - `PROGRAM_CONTROL/GOV-GATE-TRACKER.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-08-FINAL.md`
 - `PROGRAM_CONTROL/HANDOFF-2026-04-09.md`
