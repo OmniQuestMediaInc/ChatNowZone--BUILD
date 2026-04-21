@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `ce0711871990c222e9ef8278ff5d7690f6f7329f`
-**Generated:** 2026-04-21T12:39:53Z
+**Commit:** `0d24043797c5efd52c08b61ea29bc4c98a0d3ba7`
+**Generated:** 2026-04-21T12:40:32Z
 
 ## All Files
 
@@ -190,7 +190,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/fix-yarn-lockfile-ci.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
 - `PROGRAM_CONTROL/Thread 12 Handoff`
-- `PROGRAM_CONTROL/Thread 13 cleanup`
 - `README.md`
 - `REFERENCE_LIBRARY/00_THREAD_BOOTSTRAP.md`
 - `REFERENCE_LIBRARY/01_CANONICAL_LOCKS.md`
