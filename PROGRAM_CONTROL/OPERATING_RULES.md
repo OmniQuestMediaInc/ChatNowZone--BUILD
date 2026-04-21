@@ -26,3 +26,20 @@ THREAD 16 — OPERATING RULES (HARD-BAKED, CARRY INTO ALL FUTURE HANDOFFS)
    - Must include this block verbatim as its OPERATING RULES section.
    - Must not drift from chat format or CEO-gate rules.
    - Future Claude reads this block first before anything else.
+
+## 5. AUTONOMOUS DIRECTIVE WORKFLOW
+
+Effective Thread 16: all agent task assignments flow through
+PROGRAM_CONTROL/DIRECTIVES/ rather than chat-pasted instructions.
+
+- Directive files live in PROGRAM_CONTROL/DIRECTIVES/QUEUE/.
+- Agents auto-pickup matching directives per the protocol in
+  PROGRAM_CONTROL/DIRECTIVES/README.md.
+- CEO-gated directives require CEO action (status flip) before
+  agent pickup.
+- Report-backs continue to land in PROGRAM_CONTROL/REPORT_BACK/.
+- Handoffs at thread close must reference any directives still in
+  QUEUE/, IN_PROGRESS/, or BLOCKED/ as carry-forward items.
+
+This workflow is the governance-layer mechanism that operationalizes
+the CEO-gate policy across all autonomous agent activity.
