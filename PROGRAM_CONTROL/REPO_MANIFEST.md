@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `05e2cf949dded9a1e674d6a661b00aa10c822dd2`
-**Generated:** 2026-04-21T12:41:22Z
+**Commit:** `bca28f173b3fef0a92233b7b4544f12a28dda38e`
+**Generated:** 2026-04-21T12:41:34Z
 
 ## All Files
 
@@ -66,7 +66,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/RRR-GOV-002`
-- `PROGRAM_CONTROL/HANDOFFS/THREAD-12-HANDOFF.md`
 - `PROGRAM_CONTROL/README.md`
 - `PROGRAM_CONTROL/REPORT_BACK/.gitkeep`
 - `PROGRAM_CONTROL/REPORT_BACK/ADD-CLEARANCE-CONFIRMATION.md`
