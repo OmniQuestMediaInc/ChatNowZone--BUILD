@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `6df131d8497aab0c328d23fb56ef9334c4d8d517`
-**Generated:** 2026-04-21T12:06:12Z
+**Branch:** `claude/review-rrr-gov-002-1Dcjd`
+**Commit:** `6cf57644ffcb006f57384761846479a3ad7c87b9`
+**Generated:** 2026-04-21T12:20:20Z
 
 ## All Files
 
@@ -31,7 +31,6 @@ Auto-generated on every push. Do not edit manually.
 - `.markdownlintignore`
 - `.prettierignore`
 - `.prettierrc`
-- `CLAUDE.md`
 - `LEGACY_CONFIGS/.eslintrc.js`
 - `LEGACY_CONFIGS/.gitignore`
 - `LEGACY_CONFIGS/.prettierrc`
@@ -216,6 +215,7 @@ Auto-generated on every push. Do not edit manually.
 - `REFERENCE_LIBRARY/TEMPLATES/OQMInc_REFERENCE_LIBRARY_MASTER_TEMPLATE.md`
 - `REFERENCE_LIBRARY/TEMPLATES/README.md`
 - `Sovereign_Kernel.md.pdf`
+- `archive/governance/CLAUDE.md`
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
