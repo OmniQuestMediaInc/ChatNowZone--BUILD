@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `08f20b39e01ebc6b64994e9064d42e3ea2df8799`
-**Generated:** 2026-04-21T04:09:56Z
+**Branch:** `copilot/fix-yarn-lockfile`
+**Commit:** `303f646a9b614093167c0aac383408eb20565468`
+**Generated:** 2026-04-21T04:15:01Z
 
 ## All Files
 
@@ -204,6 +204,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001-sql-fix.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
+- `PROGRAM_CONTROL/REPORT_BACK/fix-yarn-lockfile-ci.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
 - `PROGRAM_CONTROL/Thread 12 Handoff`
 - `PROGRAM_CONTROL/Thread 13 cleanup`
