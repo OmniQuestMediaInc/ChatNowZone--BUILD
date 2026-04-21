@@ -105,10 +105,6 @@ All other (CHORE/INFRA/DOCS/GOV without CEO_GATE) → auto-merge ON when CI gree
 Idempotent bootstrap principle. If a file or folder already exists, acknowledge and skip. Never recreate.
 STATUS: queued is the only intake state. CEO_GATE controls auto-merge, not status flow.
 
-
-4. CEO DECISIONS IN FORCE (locked, do not relitigate)
-IDDecisionD1Slot machine retiredD2ChatNow.Zone canonical merchant nameD3Diamond Concierge zero earnD4Room-Heat Inferno Bonus configurable via required inferno_multiplier on EarnRateConfigD5GGS deferred — webhook-receive endpoints onlyB1inferno_multiplier required, no defaultB2Dual-tier model — merchant_tier (launch) + rrr_member_tier (future, nullable)B3Phase 1 merchants: RedRoomPleasures + Cyrano. Phase 2: ChatNow.ZoneB4Cross-merchant rate 1:1 default via MerchantPairConfigB5Tier caps placeholders: PLATINUM 50 / GOLD 35 / SILVER 20 / MEMBER 10 / GUEST 5
-
 5. CURRENT BUILD STATE (verified at charter open, 2026-04-21)
 Note: This section is the ONLY live build-state record. The stale section in CLAUDE.md is superseded by this charter and CLAUDE.md is archived under Task A-001.
 5.1 Merged on main (verified per Phase 1 assessment)
@@ -139,512 +135,843 @@ CI guard against hardcoded-balance regression
 CI guard against missing tenant_id scope
 LedgerService invariant tests (double-entry sum, sequence gap detection)
 
-5.3 Carry-forward concerns
+# REPO-VS-PLAN TECHNICAL DEFICIT — ChatNow.Zone
 
-8 pre-existing test failures (triaged in Wave B cleanup, Task B-CLEAN)
-Package-manager contradiction (resolved in Task A-002, npm wins)
+**Document:** `docs/ASSESSMENTS/REPO_VS_PLAN_TECHNICAL_DEFICIT_v1.md`
+**Repo:** `OmniQuestMediaInc/ChatNowZone--BUILD`
+**Authority:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
+**Authored:** 2026-04-21 (Thread 18)
+**Frame:** Forward gap analysis — plan = net-new technical requirements layered onto build
+**Downstream consumer:** Claude Code (queue generator → `OQMI_SYSTEM_STATE.md` §5 OUTSTANDING)
+**Governing document:** `OQMI_GOVERNANCE.md` (root)
+**Sources reconciled:** Canonical Corpus v10 (Feb 2026), OQMI doctrine (rescoped per Thread 18), Business Plan v2.8 (Apr 2026), repo top-level structure (verified 2026-04-21)
+
+---
 
+## 0. EXECUTIVE FRAME
 
-6. ACTIVE TASK STREAM
-Conventions:
+### 0.1 What this document is
 
-Tasks are claimed first-come-first-served once their Depends-on: are all DONE.
-Agent: is a hint, not a lock. Either agent may execute either tasks.
-CEO_GATE: YES tasks merge only via CEO manual click.
-FIZ: YES tasks require human review, no auto-merge.
-On merge: amend Status: here AND write DONE/RRR-GOV-002-<id>-DONE.md.
+A row-by-row gap analysis of the ChatNow.Zone build against the v2.8 business plan and the v10 Canonical Corpus. Each row identifies a system, feature, or capability described in the plan or Corpus, locates it (or its absence) in the repo, and produces a queue-ready directive for Claude Code.
 
+### 0.2 What this document is NOT
 
-WAVE A — Governance & Foundation Hygiene
-Goal: clean the governance surface, resolve known contradictions, install the gate tracker. No src/ code changes in this wave.
+- Not a reconciliation between divergent projects (the plan and build represent the same project).
+- Not a critique of the plan or the build.
+- Not a CEO-decision document by default. Most rows are agent-actionable. Rows requiring CEO input are explicitly flagged `CEO-CLARIFY`.
 
-Task A-001 — Archive CLAUDE.md
+### 0.3 Reading the rows
+
+Every row uses this shape:
 
-Status: DONE
-Agent: either
-Type: GOV
-CEO_GATE: YES
-FIZ: NO
-Depends-on: (none — first task)
-Scope:
+```
+ROW ID:        [stable identifier, e.g., R-001]
+PLAN/CORPUS REF: [§ reference to v2.8 plan or v10 Corpus]
+NAME:          [system or capability name as used in source]
+REPO STATE:    [YES / PARTIAL / NO / UNKNOWN]
+REPO PATH:     [if YES or PARTIAL]
+GAP TYPE:      [BUILD-NEW / EXTEND / REFACTOR / RENAME / VERIFY / CEO-CLARIFY / RETIRE]
+PRIORITY:      [P0 / P1 / P2 / P3]
+SCOPE:         [S / M / L / XL]
+DEPENDS ON:    [other ROW IDs, or "none"]
+DIRECTIVE:     [single concrete instruction for Claude Code queue]
+NOTES:         [optional context]
+```
 
-Move CLAUDE.md → archive/governance/CLAUDE_2026-04-21.md
-Create archive/ and archive/governance/ if absent (idempotent)
-Add archive/README.md declaring archive read-only invariant
-Update .github/copilot-instructions.md to remove all references to CLAUDE.md and replace with reference to this charter at PROGRAM_CONTROL/DIRECTIVES/QUEUE/RRR-GOV-002.md
+### 0.4 Status enums
 
+| Enum | Meaning |
+|---|---|
+| `YES` | Repo has it, matches plan/Corpus description |
+| `PARTIAL` | Repo has scaffolding or partial implementation |
+| `NO` | Repo does not have it |
+| `UNKNOWN` | Cannot be determined without verification pre-reads (§1.3) |
 
-Out of scope: any other doc changes, any src/ changes
-Acceptance:
+### 0.5 Gap type enums
 
-git ls-files CLAUDE.md → empty
-git ls-files archive/governance/CLAUDE_2026-04-21.md → present
-grep -r "CLAUDE.md" .github/ → no results
-grep -r "RRR-GOV-002" .github/copilot-instructions.md → at least one match
-
-
-Commit format: GOV: archive CLAUDE.md, redirect agents to RRR-GOV-002 — RRR-GOV-002-A001
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-A001-report.md
-Merge SHA: 954dec932c3ba95f6ca05d0dc1cc2a5ce8a7dba5
-DONE record: RRR-GOV-002-A001-DONE.md
-
-
-Task A-002 — Resolve package-manager contradiction (npm)
-
-Status: DONE
-Agent: either
-Type: CHORE
-CEO_GATE: NO
-FIZ: NO
-Depends-on: A-001
-Scope:
-
-Remove "packageManager": "yarn@4.9.1" from package.json
-Remove engines.yarn field from package.json
-Verify engines.node and engines.npm (if present) remain
-Run npm install to confirm lockfile compatibility
-
-
-Out of scope: changing any dependency versions, touching CI workflows (already npm-correct per Phase 1)
-Acceptance:
-
-jq '.packageManager' package.json → null
-jq '.engines.yarn' package.json → null
-npm install runs clean, no lockfile changes beyond timestamp
-
-
-Commit format: CHORE: remove vestigial yarn fields, lock to npm — RRR-GOV-002-A002
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-A002-report.md
-Merge SHA: a408653418e04831d72596bf5b3cc1cc12c704cf
-DONE record: RRR-GOV-002-A002-DONE.md
-
-
-Task A-003 — Create GOV-GATE-TRACKER.md
-
-Status: DONE
-Agent: copilot
-Type: GOV
-CEO_GATE: NO
-FIZ: NO
-Depends-on: A-001
-Scope:
-
-Create PROGRAM_CONTROL/GOV-GATE-TRACKER.md
-Schema: one row per CEO_GATE: YES directive, columns: Directive ID | Status | PR # | Opened | Merged | Notes
-Pre-populate with: RRR-GOV-002 (this charter) and RRR-GOV-002-A001
-Header section explains the tracker's role: single pane for CEO to see every PR awaiting manual merge
-
-
-Out of scope: historical backfill of pre-charter CEO_GATE merges
-Acceptance:
-
-File exists, parseable as Markdown table
-Both seed rows present
-
-
-Commit format: GOV: install GOV-GATE-TRACKER for CEO_GATE visibility — RRR-GOV-002-A003
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-A003-report.md
-Merge SHA: e71ef5bec742674628c003d70d9f31e9fc29f8f7
-DONE record: RRR-GOV-002-A003-DONE.md
-
-
-Task A-004 — Refresh REQUIREMENTS_MASTER.md stale statuses
-
-Status: DONE
-Agent: claude-code
-Type: GOV
-CEO_GATE: NO
-FIZ: NO
-Depends-on: A-001
-Scope:
-
-Open docs/REQUIREMENTS_MASTER.md
-For each row referencing PointLot, the five Config models, RRR-P1-006, RRR-P1-007: update Status column to MERGED with PR/commit reference per Phase 1 assessment §7 item 4
-Add a Last verified: footer with date and source (Phase 1 assessment)
-
-
-Out of scope: rewriting requirements text; restructuring the doc; adding new requirement rows
-Acceptance:
-
-grep -E "Missing|IN_PROGRESS" docs/REQUIREMENTS_MASTER.md for the listed items → no matches
-Footer present
-
-
-Commit format: GOV: refresh REQUIREMENTS_MASTER stale P1 statuses — RRR-GOV-002-A004
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-A004-report.md
-Merge SHA: d9bd6de517351fc2984c26918e676a6fd8bd618b
-DONE record: RRR-GOV-002-A004-DONE.md
-
-
-Task A-005 — Harden auto-merge.yml against FIZ and CEO_GATE labels
-
-Status: QUEUED
-Agent: copilot
-Type: INFRA
-CEO_GATE: YES
-FIZ: NO
-Depends-on: A-003
-Scope:
-
-Audit .github/workflows/auto-merge.yml
-Add explicit skip conditions for PRs labeled fiz or ceo-gate
-Document the label-driven gating in the workflow's top-of-file comment
-Add a workflow-dispatch test path that does a dry-run on a sample PR
-
-
-Out of scope: adding new label-driven workflows beyond the skip
-Acceptance:
-
-Workflow file contains explicit if: clauses excluding both labels
-Sample dry-run on a labeled PR confirms skip
-
-
-Commit format: INFRA: auto-merge skips fiz and ceo-gate labels — RRR-GOV-002-A005
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-A005-report.md
-
-
-Task A-CLEAN — Wave A cleanup
-
-Status: QUEUED
-Agent: either
-Type: CHORE
-CEO_GATE: NO
-FIZ: NO
-Depends-on: A-001, A-002, A-003, A-004, A-005
-Scope:
-
-Run npm run lint — fix any new violations introduced in Wave A
-Verify all five Wave A report-backs exist and are non-empty
-Update §5 of this charter (Current Build State) to reflect Wave A merges
-Update GOV-GATE-TRACKER for any A-tasks that hit CEO_GATE: YES
-Confirm grep -ri "CLAUDE.md" docs/ .github/ PROGRAM_CONTROL/ → only matches in archive/ or RRR-GOV-002.md itself
-
-
-Out of scope: opening Wave B work
-Acceptance: all checks above pass; report-back filed
-Commit format: CHORE: Wave A cleanup and charter sync — RRR-GOV-002-A-CLEAN
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-A-CLEAN-report.md
-
-
-WAVE B — Identity, Tenancy, Configuration Wiring
-Goal: install the missing identity/tenancy data layer, then wire the existing service layer to the five Config models. This wave is FIZ-adjacent; several tasks carry FIZ: YES because they touch the financial code paths.
-
-Task B-001 — Tenant + Merchant models
-
-Status: QUEUED
-Agent: claude-code
-Type: DB
-CEO_GATE: NO
-FIZ: NO
-Depends-on: A-CLEAN
-Scope:
-
-Create src/db/models/Tenant.ts and src/db/models/Merchant.ts
-Tenant fields: _id, slug, name, created_at, status (active/suspended)
-Merchant fields: _id, tenant_id (ref Tenant), slug, name, merchant_tier (B2 — PLATINUM|GOLD|SILVER|MEMBER|GUEST), phase (1 or 2 per B3), status
-Indexes: Tenant unique on slug; Merchant unique on (tenant_id, slug)
-Mongoose schemas with TypeScript strict types
-Unit tests covering create / unique constraint / index lookup
-
-
-Out of scope: any controller, service, or seed work
-Acceptance:
-
-Models compile under tsc --noEmit
-Tests pass with new tests added
-80% coverage on new files
-
-
-Commit format: DB: Tenant + Merchant models with phase and tier — RRR-GOV-002-B001
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B001-report.md
-
-
-Task B-002 — LoyaltyAccount + IdentityLink models
-
-Status: QUEUED
-Agent: claude-code
-Type: DB
-CEO_GATE: NO
-FIZ: NO
-Depends-on: B-001
-Scope:
-
-src/db/models/LoyaltyAccount.ts: _id, tenant_id, external_user_id, rrr_member_tier (nullable per B2), created_at, status
-src/db/models/IdentityLink.ts: _id, loyalty_account_id, merchant_id, external_account_ref, created_at, status
-Indexes: LoyaltyAccount unique on (tenant_id, external_user_id); IdentityLink unique on (merchant_id, external_account_ref)
-Unit tests
-
-
-Out of scope: Wallet linkage refactor (separate task in Wave C)
-Acceptance: as B-001
-Commit format: DB: LoyaltyAccount + IdentityLink models — RRR-GOV-002-B002
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B002-report.md
-
-
-Task B-003 — MerchantPairConfig model (B4)
-
-Status: QUEUED
-Agent: copilot
-Type: DB
-CEO_GATE: NO
-FIZ: NO
-Depends-on: B-001
-Scope:
-
-src/db/models/MerchantPairConfig.ts: _id, tenant_id, from_merchant_id, to_merchant_id, exchange_rate (Decimal128 or string-backed numeric — match existing Config model convention), effective_from, effective_to (nullable), created_at
-Default rate 1:1 seeded only via explicit operator action, never auto-created
-Unique partial index on (tenant_id, from_merchant_id, to_merchant_id, effective_from) where effective_to IS NULL
-Unit tests covering insert, range overlap rejection, and 1:1 default lookup
-
-
-Out of scope: the cross-merchant exchange service that consumes this
-Acceptance: as B-001
-Commit format: DB: MerchantPairConfig with effective-dating — RRR-GOV-002-B003
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B003-report.md
-
-
-Task B-004 — CI guard: no hardcoded balances
-
-Status: QUEUED
-Agent: copilot
-Type: TEST
-CEO_GATE: NO
-FIZ: YES
-Depends-on: A-CLEAN
-Scope:
-
-Add a Jest test or a standalone CI script under scripts/ci/ that greps src/ for the patterns:
-
-previousBalance\s*=\s*\d
-balance\s*=\s*\d{2,}
-any literal numeric balance assignment outside __tests__/ and *.spec.ts
-
-
-Fail the CI job on any match with a clear error message naming the file:line
-Wire into .github/workflows/ci.yml as a required step
-
-
-Out of scope: fixing existing violations (none expected per Phase 1 §E1 read; if any surface, file follow-up FIZ task)
-Acceptance:
-
-Guard fires on a deliberately-introduced bad fixture (test the test)
-CI green on current main
-
-
-Commit format: Per FIZ format §3.1.6 (4-line)
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B004-report.md
-
-
-Task B-005 — CI guard: tenant_id scope on queries
-
-Status: QUEUED
-Agent: copilot
-Type: TEST
-CEO_GATE: NO
-FIZ: NO
-Depends-on: B-001
-Scope:
-
-Add a Jest test or AST-based script under scripts/ci/ that finds every Model.find(, Model.findOne(, Model.updateOne(, Model.updateMany(, Model.deleteOne( call in src/services/, src/wallets/, src/ledger/
-Fail if the filter object does not include tenant_id as a key
-Allowlist file scripts/ci/tenant-scope-allowlist.txt for justified exceptions (e.g. system-admin queries) — entries must include a comment
-
-
-Out of scope: fixing existing violations (will surface as follow-up tasks)
-Acceptance:
-
-Script runs in CI; allowlist mechanism documented
-Initial run produces a baseline list of current violations, attached to the report-back as a follow-up backlog
-
-
-Commit format: TEST: CI guard for tenant_id query scope — RRR-GOV-002-B005
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B005-report.md
-
-
-Task B-006 — Extend IdempotencyService coverage
-
-Status: QUEUED
-Agent: claude-code
-Type: FIZ
-CEO_GATE: YES
-FIZ: YES
-Depends-on: A-CLEAN
-Scope:
-
-Extend the existing IdempotencyService usage from credit/deduct (RRR-P0-002) to: redemption flow, expiration job, escrow hold, escrow release
-Each call site must accept and persist idempotency_key
-Duplicate keys return prior result with same correlation_id
-New tests: replay each flow with same key, assert single ledger entry
-
-
-Out of scope: refactoring IdempotencyService internals; adding TTL policy
-Acceptance:
-
-All four flows covered by replay tests
-Coverage on touched files ≥ 80%
-
-
-Commit format: Per FIZ 4-line format
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B006-report.md
-
-
-Task B-007 — Reconciliation job
-
-Status: QUEUED
-Agent: claude-code
-Type: FIZ
-CEO_GATE: YES
-FIZ: YES
-Depends-on: B-006
-Scope:
-
-New service src/services/ReconciliationService.ts
-For each Wallet: assert Wallet.balance == sum(active PointLot.remaining) AND Wallet.balance == sum(LedgerEntry.delta)
-Job entry point: scriptable via npm run reconcile -- --tenant <id>
-Admin endpoint POST /admin/reconcile (auth-gated; auth itself is Wave C, so endpoint shipped behind a feature flag here)
-On mismatch: emit RECON_MISMATCH event with wallet id, expected, actual, delta — never auto-correct
-
-
-Out of scope: automatic correction; alerting integration
-Acceptance:
-
-Reconciliation passes on a clean seeded fixture
-Reconciliation fails loudly on a deliberately-corrupted fixture
-
-
-Commit format: Per FIZ 4-line format
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B007-report.md
-
-
-Task B-008 — LedgerService invariant tests
-
-Status: QUEUED
-Agent: copilot
-Type: TEST
-CEO_GATE: NO
-FIZ: YES
-Depends-on: A-CLEAN
-Scope:
-
-New test file src/ledger/__tests__/ledger.invariants.spec.ts
-Assertions:
-
-LedgerService exposes no update or delete method (reflection check)
-Sequence numbers are monotonic per correlation_id chain
-Sum of deltas per wallet matches Wallet.balance projection
-Every entry has non-null correlation_id and reason_code
-
-
-All assertions must pass on current main
-
-
-Out of scope: modifying LedgerService
-Acceptance: new test file green, no LedgerService changes
-Commit format: TEST: LedgerService invariant suite — RRR-GOV-002-B008
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B008-report.md
-
-
-Task B-CLEAN — Wave B cleanup
-
-Status: QUEUED
-Agent: either
-Type: CHORE
-CEO_GATE: NO
-FIZ: NO
-Depends-on: B-001, B-002, B-003, B-004, B-005, B-006, B-007, B-008
-Scope:
-
-Lint pass + dead-code sweep
-Triage the 8 pre-existing test failures: per-failure status of fixed | still-failing-rationale | new-task-filed
-Update charter §5 with Wave B merges
-GOV-GATE-TRACKER updated for B-006, B-007 (and any other CEO_GATE B-tasks)
-Confirm npm test pass count increased or held steady (no regression)
-
-
-Out of scope: opening Wave C work
-Acceptance: triage doc filed, no lint regressions, charter §5 current
-Commit format: CHORE: Wave B cleanup, test triage, charter sync — RRR-GOV-002-B-CLEAN
-Report-back: PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-B-CLEAN-report.md
-
-
-WAVE C — and beyond
-Wave C scope is intentionally not fully drafted at charter open. It will be appended to this charter (in-place amendment) after Wave B closes, scoped against the actual state of the repo at that point. Provisional Wave C themes, in priority order:
-
-Service ↔ Config wiring (PointAccrual ↔ EarnRateConfig; PointRedemption ↔ TierCapConfig + SpendOrderConfig; PointExpiration ↔ SpendOrderConfig)
-Auth / authz / tenant-isolation middleware (replaces the Wave B feature flag on the reconcile endpoint)
-Webhook receive (D5 GGS-ready) + emit infrastructure
-Cross-merchant exchange service (consumes B-003 MerchantPairConfig)
-Tier evaluation service
-Settlement service
-Fraud signal service
-WAVE C cleanup
-
-CEO authorization required to expand Wave C inline. Until then, agents do not claim Wave C work.
-
-7. KNOWN DEBT NOT YET TASKED
-The following items from the Thread 2 tech debt assessment are acknowledged but not yet scheduled. They will be folded into Wave C or later:
-
-WalletService optimistic-lock posture (currently flagged partial; needs audit + retry-policy doc)
-Webhook signature verification utility
-Observability: structured logger choice (pino vs winston) and instrumentation
-OpenAPI spec freshness check in CI
-Admin surfaces (rate adjust UI, recon dashboard)
-Reservation flow end-to-end test
-Activity-feed rate-limit hardening
-
-If priorities shift, the CEO promotes any of these into the active stream via charter amendment.
-
-8. WHAT'S OUT OF SCOPE FOR THIS CHARTER
-
-Authoring or modifying any directive outside RRR-GOV-002-* task IDs
-Touching src/ outside the scope explicitly named per task
-Creating new PROGRAM_CONTROL/DIRECTIVES/QUEUE/ files (this charter is the active queue; new standalone directives bypass it and break the model)
-Reintroducing CLAUDE.md, slot machine, XXXChatNow.com, or any decision marked retired in §4
-Auto-correcting reconciliation mismatches
-Building any settlement / payout path without explicit CEO directive
-
-
-9. AMENDMENT RULES
-The charter is amended (not rewritten) when:
-
-A task closes — Status: line updated, merge SHA appended, DONE backref added.
-A new wave opens — appended below the prior wave, CEO sign-off required.
-An invariant changes — CEO authorship required, prior version preserved in §10 changelog with date and rationale.
-ARCHITECT MODE proposes restructuring — CEO sign-off before merge.
-
-Any agent or chat instance that attempts to amend this charter without following these rules HARD_STOPs.
-
-10. CHANGELOG
-DateChangeAuthorRationale2026-04-21Charter opened. Supersedes CLAUDE.md (archived). Absorbs Phase 2 §2/§5A/§5E content. Phase 2 Q2/Q4/Q5 ruled redundant by CEO. Stream model: single list, agent hint, FCFS. Cleanup cadence: per-Wave. Package manager: npm (Q3 resolved).Architecture Coordinator (Claude Chat T3), per CEO directionConsolidate governance + work into one source of truth; eliminate document drift; preserve directive-lifecycle automation that already works
-
-11. DONE-RECORD TEMPLATE
-When a task in §6 merges, the executing agent (or the operator) writes a file at PROGRAM_CONTROL/DIRECTIVES/DONE/RRR-GOV-002-<task-id>-DONE.md using this template:
-# RRR-GOV-002-<task-id> — DONE
-**Charter:** RRR-GOV-002 (persistent, see PROGRAM_CONTROL/DIRECTIVES/QUEUE/RRR-GOV-002.md)
-**Task ID:** RRR-GOV-002-<task-id>
-**Title:** <task title from charter>
-**Merged:** YYYY-MM-DD
-**Merge commit:** <SHA>
-**PR:** #<num>
-**Agent executed:** copilot | claude-code
-**Agent hint matched:** yes | no (override rationale: …)
-**CEO_GATE:** YES | NO  — merged manually by CEO: yes | n/a
-**FIZ:** YES | NO
-## What shipped
-<3–6 sentences, concrete>
-## Acceptance verified
-- [ ] <each acceptance bullet from charter, ticked>
-## Follow-ups filed
-- <links to any new tasks queued as a result, or "none">
-## Report-back
-PROGRAM_CONTROL/REPORT_BACK/RRR-GOV-002-<task-id>-report.md
-The agent then amends §6 of the charter:
-
-Status: QUEUED → Status: DONE
-Append **Merge SHA:** <sha> and **DONE record:** RRR-GOV-002-<id>-DONE.md
-
-
-12. CHARTER RATIFICATION
-This charter takes effect when merged to main via the CEO_GATE: YES PR opened on branch claude/adapt-governance-pattern-J9D4I.
-PR title: GOV: install RRR-GOV-002 charter, retire CLAUDE.md — RRR-GOV-002 Auto-merge: NO (CEO_GATE: YES) Reviewer: Kevin B. Hartley (CEO) On merge: Wave A opens; agents may begin claiming A-001.
-— End of charter —
+| Enum | What Claude Code does |
+|---|---|
+| `BUILD-NEW` | Create the service or feature from scratch per spec |
+| `EXTEND` | Add capability to existing service |
+| `REFACTOR` | Restructure existing service to match canonical naming or architecture |
+| `RENAME` | Rename file/service/identifier; update references |
+| `VERIFY` | Confirm a claim against ground truth (read prisma, read services/, etc.) |
+| `CEO-CLARIFY` | Cannot proceed without CEO decision; surface as escalation |
+| `RETIRE` | Remove from repo; no longer canonical |
+
+### 0.6 Priority enums
+
+| Enum | Meaning |
+|---|---|
+| `P0` | Launch-blocking; must be done before 1 Oct 2026 hard launch |
+| `P1` | Required for full v2.8 plan delivery; not strictly launch-blocking |
+| `P2` | Quality/governance hardening; can ship without |
+| `P3` | Nice-to-have, future roadmap |
+
+### 0.7 Scope enums
+
+| Enum | Estimate |
+|---|---|
+| `S` | < 1 day |
+| `M` | 1–3 days |
+| `L` | 3–10 days |
+| `XL` | > 10 days; should be decomposed before queueing |
+
+---
+
+## 1. PRE-CONDITIONS
+
+### 1.1 Source reconciliation summary
+
+After reading the Canonical Corpus v10, three things became clear that simplify Thread 17's framing:
+
+1. **The Corpus and the v2.8 plan agree on architecture more than Thread 17 estimated.** The Corpus describes Three-Bucket Wallet (Promotional Bonus → Membership Allocation → Purchased Tokens), append-only ledger, processor abstraction, and advisory-only AI in the same terms the plan uses (where the plan uses them at all). Where Thread 17 saw vocabulary mismatch, much of it dissolves once the Corpus is read.
+2. **The Corpus is silent on most plan-named IP assets.** RedBook, GateGuard Sentinel, Cyrano, MyCrew.Zone, CreatorControl.Zone, Diamond Concierge, Welfare Guardian Score, Room-Heat Engine, NOWPayouts, JuryPulse — none appear in the Corpus. They are net-new requirements introduced by the v2.8 plan.
+3. **The Corpus is the operational/compliance spine. The plan is the commercial/feature spec.** They are not competing; they are layered. The Corpus says HOW the platform must behave under any feature; the plan says WHICH features. The build implements a subset of both.
+
+This reframes the headline finding: the deficit is not "plan and build are different projects." The deficit is **"the build delivers the Corpus's L0 ship-gate spine but has not yet built the plan's commercial IP layer."**
+
+### 1.2 Repo's eight services map to Corpus L0, not to plan IP
+
+The eight services in the previous OQMI doctrine §8 priority order map cleanly to Corpus L0 ship-gate requirements:
+
+| Repo service | Corpus L0 requirement |
+|---|---|
+| Three-Bucket Wallet | Ch.1 §4, Ch.7 §5 |
+| Risk Engine | Ch.1 §10, Ch.3 §6, Ch.7 §11 |
+| NATS Fabric | Ch.7 §3 (event-driven architecture) |
+| OBS Broadcast Kernel | Ch.7 §3 (event emission), plan-extension |
+| HeartZone IoT Loop | Plan-extension; Corpus silent |
+| Bijou.Zone Theatre | Plan-extension; Corpus silent on theatre architecture specifically |
+| Sovereign CaC | Ch.3 §3, §4, Ch.6 §4 (compliance gates) |
+| UI / Black-Glass Interface | Ch.6 §3 (visual identity) |
+
+Plan IP (RedBook, GateGuard Sentinel, Cyrano, etc.) sits in a layer above this spine. The deficit doc enumerates that layer.
+
+### 1.3 Verification pre-reads required
+
+Before Claude Code executes any row in this document, the following ground-truth reads must be completed. Until they are, rows marked `VERIFY` may shift state.
+
+| Pre-read | Why | Affects rows |
+|---|---|---|
+| `services/*` directory listing (full) | Confirm which services exist and which are stubs | All `REPO STATE: PARTIAL` and `UNKNOWN` rows |
+| `prisma/schema.prisma` | Ground truth for data model claims | All wallet, ledger, audit, identity, compliance rows |
+| `.github/copilot-instructions.md` | Confirm agent rules of engagement currently in repo | All ops rows |
+| `docs/DOMAIN_GLOSSARY.md` | Naming authority; may resolve `CEO-CLARIFY` rows | All naming/scope rows |
+| `governance/*` directory listing | Confirm Sovereign CaC scope | Compliance rows |
+| `safety/*` directory listing | Confirm RedBook scaffolding (if any) | RedBook row |
+| `finance/*` directory listing | Confirm FIZ-scoped contents | Financial rows |
+
+These pre-reads should land as the first Claude Code queue item: `Q-000-PRE-READ-AUDIT`.
+
+### 1.4 Retired source
+
+`Sovereign_Kernel.md.pdf` (repo root) is retired per CEO direction 2026-04-21. It is NOT a source for this document. To be archived or deleted in a follow-on cleanup PR.
+
+---
+
+## PART 0 — PLAN-INTERNAL CONTRADICTIONS
+
+These are issues inside the v2.8 plan independent of repo state. Each is a queueable plan-edit directive, not a code task. Filed here so they enter the queue alongside code work and can be addressed before the next investor pass.
+
+```
+ROW ID:        R-P0-001
+PLAN REF:      §B.4.5 vs §B.4.7 Pillar 4, Glossary
+NAME:          Token architecture contradiction (CZT vs SZT)
+GAP TYPE:      CEO-CLARIFY
+PRIORITY:      P1
+SCOPE:         S
+DEPENDS ON:    none
+DIRECTIVE:     Plan §B.4.5 declares CZT the only token type; §B.4.7 lists SZT as a revenue pillar. Corpus v10 Ch.1 §3 affirms single-token economy. Either rename SZT line in §B.4.7 to a CZT-equivalent revenue stream, or amend the architecture statement to permit named token classes. CEO must choose.
+NOTES:         v2.8 changelog claims fix in v2.4 but contradiction persists.
+```
+
+```
+ROW ID:        R-P0-002
+PLAN REF:      §B.4.6
+NAME:          Membership tier mismatch (SilverBullet vs canonical lock)
+GAP TYPE:      CEO-CLARIFY
+PRIORITY:      P1
+SCOPE:         S
+DEPENDS ON:    none
+DIRECTIVE:     Plan §B.4.6 lists SilverBullet as a tier. Canonical lock (per Thread 16 §6) treats SilverBullet as a 30-day on-ramp variant of VIP_SILVER. Either align plan §B.4.6 to canonical enum (GUEST, VIP, VIP_SILVER, VIP_GOLD, VIP_PLATINUM, VIP_DIAMOND), or amend the canonical lock to make SilverBullet a tier.
+```
+
+```
+ROW ID:        R-P0-003
+PLAN REF:      Part I Roadmap, Q4 FY2026
+NAME:          Navigator Ltd. residual reference
+GAP TYPE:      RETIRE
+PRIORITY:      P0
+SCOPE:         S
+DEPENDS ON:    none
+DIRECTIVE:     Delete the line "Navigator Ltd. GateGuard Sentinel™ co-development conversation initiated" from Part I Roadmap Q4 FY2026. Per OQMI_GOVERNANCE.md §12 invariant, no Navigator/Jaime Watt references in any OmniQuest Media Inc. material.
+```
+
+```
+ROW ID:        R-P0-004
+PLAN REF:      §B.5.8
+NAME:          GateGuard volume warning boxes still present in plan
+GAP TYPE:      EXTEND
+PRIORITY:      P1
+SCOPE:         M
+DEPENDS ON:    none
+DIRECTIVE:     §B.5.8 contains "CPA review recommended before investor distribution" and volume correction notice. Recalculate margin model at correct ~$10.5M Y2 volume; remove warning boxes once recalculation is documented and CFO/CPA-equivalent has signed.
+```
+
+```
+ROW ID:        R-P0-005
+PLAN REF:      Executive Summary, A.3
+NAME:          JuryPulse™ introduced but unstructured
+GAP TYPE:      BUILD-NEW (documentation)
+PRIORITY:      P2
+SCOPE:         M
+DEPENDS ON:    none
+DIRECTIVE:     Add Part J or appendix to v2.8 plan defining JuryPulse™ structure, mechanism, and how it functions as the "twelfth lens" output. Alternatively, pull JuryPulse references from v2.8 if the system is not ready for plan inclusion.
+```
+
+```
+ROW ID:        R-P0-006
+PLAN REF:      §B.5.9 changelog
+NAME:          NOWPayments / NOWPayouts naming inconsistency
+GAP TYPE:      RENAME
+PRIORITY:      P2
+SCOPE:         S
+DEPENDS ON:    none
+DIRECTIVE:     Amend v2.8 changelog entry "B.5.9 NOWPayments™ added" to "B.5.9 NOWPayouts™ (nowpayments.com integration) added". The internal OQMInc™ layer is NOWPayouts™; nowpayments.com is the external vendor. There is no NOWPayments™ trademark.
+```
+
+```
+ROW ID:        R-P0-007
+PLAN REF:      §B.5.1, §B.5.3
+NAME:          Uncited / overclaimed technical assertions
+GAP TYPE:      EXTEND
+PRIORITY:      P1
+SCOPE:         M
+DEPENDS ON:    none
+DIRECTIVE:     Cite or qualify each of: zk-SNARK production claim (§B.5.3 F4), federation-as-production claim (§B.5.3 F2), 72–85% precision/recall claim (§B.5.3 F1, currently uncited), 200ms latency budget (§B.5.1/§B.5.3, unanalyzed), HeartPleasure heart-rate-as-Room-Heat-input (§B.7.1, no engineering pathway). Required before next investor pass.
+```
+
+```
+ROW ID:        R-P0-008
+PLAN REF:      §B.4.3 vs §B.4.4
+NAME:          Day 91 Parity vs Pixel Legacy differentiation
+GAP TYPE:      EXTEND
+PRIORITY:      P3
+SCOPE:         S
+DEPENDS ON:    none
+DIRECTIVE:     Make the differentiation explicit: Day 91 Parity grants full 7.5–9¢ range to all Days 1–90 sign-ups; Pixel Legacy gives the first 3,000 a 90-day temporal head start plus the Signing Bonus. Add one paragraph to §B.4.4 clarifying.
+```
+
+---
+
+## PART 1 — PLAN IP ASSETS (NET-NEW LAYER)
+
+The plan describes ten Stack assets. Each is enumerated below as a build target. None of these is in the eight-service L0 priority order; they are the layer above.
+
+### R-001 RedBook
+
+```
+ROW ID:        R-001
+PLAN REF:      v2.8 Stack asset 1; Corpus Ch.3 (compliance/incident architecture)
+NAME:          RedBook
+REPO STATE:    UNKNOWN (verify against safety/* listing)
+REPO PATH:     candidate: safety/
+GAP TYPE:      BUILD-NEW (likely) / VERIFY (first)
+PRIORITY:      P0
+SCOPE:         L
+DEPENDS ON:    Q-000-PRE-READ-AUDIT
+DIRECTIVE:     Step 1: VERIFY — list contents of safety/ and report whether RedBook scaffolding exists. Step 2 (if absent): BUILD-NEW per Corpus Ch.3 §5–7 incident architecture: incident object, severity classification (SEV1/2/3), state machine (RECEIVED→VERIFIED→ACTIONED→CLOSED), evidence preservation, hash registry for re-upload prevention. Plan extends with RedBook-specific naming/UX.
+NOTES:         RedBook is plan vocabulary for Corpus-defined incident/safety system. May map directly to safety/ once verified.
+```
+
+### R-002 Risk Assessment Toolkit
+
+```
+ROW ID:        R-002
+PLAN REF:      v2.8 Stack asset 2
+NAME:          Risk Assessment Toolkit
+REPO STATE:    PARTIAL (Risk Engine exists in priority order)
+REPO PATH:     services/risk/ (assumed; verify)
+GAP TYPE:      EXTEND / VERIFY
+PRIORITY:      P0
+SCOPE:         M
+DEPENDS ON:    Q-000-PRE-READ-AUDIT
+DIRECTIVE:     Step 1: VERIFY — confirm services/risk/ exists and inventory current capabilities. Step 2: extend to cover the full Risk Assessment Toolkit per plan: VAMP threshold hardening (0.75% per Corpus Ch.7 §11), 3DS2 enforcement, dispute lifecycle, chargeback isolation. Confirm whether Welfare Guardian Score (R-008) is intended as a sub-component of Risk Engine or independent.
+```
+
+### R-003 CreatorControl.Zone™
+
+```
+ROW ID:        R-003
+PLAN REF:      v2.8 Stack asset 3
+NAME:          CreatorControl.Zone™
+REPO STATE:    NO (not in priority order; absent from Corpus)
+REPO PATH:     candidate: services/creator-control/
+GAP TYPE:      CEO-CLARIFY (scope) → BUILD-NEW
+PRIORITY:      P1
+SCOPE:         L
+DEPENDS ON:    R-CLARIFY-001 (see Part 4)
+DIRECTIVE:     CEO-CLARIFY first: define CreatorControl.Zone™ scope. Plan describes the Park but Corpus is silent on its services. Proposed default scope (subject to CEO override): creator-facing dashboard for rate card management, schedule control, payout visibility, promotional opt-in. Once scope defined, BUILD-NEW.
+NOTES:         May overlap with My Zone Manager™ (Corpus Ch.4 §6, Ch.6 §10). Clarify which is canonical.
+```
+
+### R-004 MyCrew.Zone™
+
+```
+ROW ID:        R-004
+PLAN REF:      v2.8 Stack asset 4
+NAME:          MyCrew.Zone™
+REPO STATE:    NO (not in priority order; absent from Corpus)
+REPO PATH:     candidate: services/mycrew/
+GAP TYPE:      CEO-CLARIFY (scope) → BUILD-NEW
+PRIORITY:      P1
+SCOPE:         L
+DEPENDS ON:    R-CLARIFY-002, Twenty CRM integration state
+DIRECTIVE:     CEO-CLARIFY first: is MyCrew.Zone™ a custom service or is it the Twenty CRM integration with platform-specific objects? If integration: define which Twenty CRM objects/schemas are required and BUILD-NEW as integration layer. If custom: full BUILD-NEW required.
+```
+
+### R-005 Room-Heat Engine
+
+```
+ROW ID:        R-005
+PLAN REF:      v2.8 Stack asset 5; §B.7.1
+NAME:          Room-Heat Engine
+REPO STATE:    UNKNOWN — possible subsumption under HeartZone or Bijou
+REPO PATH:     unknown
+GAP TYPE:      CEO-CLARIFY → BUILD-NEW or EXTEND
+PRIORITY:      P1
+SCOPE:         M
+DEPENDS ON:    R-CLARIFY-003
+DIRECTIVE:     CEO-CLARIFY first: is Room-Heat Engine a standalone service, or a feature of HeartZone IoT Loop, or a feature of Bijou.Zone Theatre? Plan §B.7.1 implies heart-rate input feeds Room-Heat. If standalone: BUILD-NEW. If feature: EXTEND the parent service.
+NOTES:         Tied to plan §B.5.3 F1 (72–85% precision/recall claim) which is also flagged R-P0-007.
+```
+
+### R-006 FairPay/FairPlay™ Engine
+
+```
+ROW ID:        R-006
+PLAN REF:      v2.8 Stack asset 6
+NAME:          FairPay/FairPlay™ Engine
+REPO STATE:    UNKNOWN — likely subsumed under Three-Bucket Wallet
+REPO PATH:     candidate: services/wallet/ (existing) or services/payouts/
+GAP TYPE:      CEO-CLARIFY → EXTEND
+PRIORITY:      P0
+SCOPE:         M
+DEPENDS ON:    R-CLARIFY-004, prisma read
+DIRECTIVE:     CEO-CLARIFY first: confirm payout rate logic (native streamer vs OBS relay tier; loyalty bonus framing) lives inside the Three-Bucket Wallet service or is a separate FairPay engine. Per CEO memory: tiered payout structure with native > OBS rates. Then EXTEND the chosen service to implement the rate engine, audit the rate decisions, and ensure detection integrity for native vs OBS classification.
+NOTES:         CEO has flagged detection mechanism reliability as the most significant execution risk. Address explicitly in implementation.
+```
+
+### R-007 Compliance Stack
+
+```
+ROW ID:        R-007
+PLAN REF:      v2.8 Stack asset 7
+NAME:          Compliance Stack
+REPO STATE:    PARTIAL (Sovereign CaC in priority order; governance/ exists)
+REPO PATH:     governance/, services/compliance/ (verify)
+GAP TYPE:      EXTEND / VERIFY
+PRIORITY:      P0
+SCOPE:         L
+DEPENDS ON:    Q-000-PRE-READ-AUDIT
+DIRECTIVE:     Step 1: VERIFY — list governance/ contents. Step 2: extend Sovereign CaC to cover full Corpus Ch.3 jurisdictional matrix (US 2257/2257A, DMCA, FinCEN, PIPEDA, GDPR, DSA, PCI-DSS, NCII frameworks). Per Corpus Ch.3 §11: rules must be configurable, documented, versioned, never hard-coded invisibly.
+```
+
+### R-008 DFSP™ (Welfare Guardian Score-adjacent)
+
+```
+ROW ID:        R-008
+PLAN REF:      v2.8 Stack asset 8
+NAME:          DFSP™ (Deterministic Fair-Spend Protocol or similar — confirm)
+REPO STATE:    UNKNOWN
+REPO PATH:     unknown
+GAP TYPE:      CEO-CLARIFY → BUILD-NEW
+PRIORITY:      P1
+SCOPE:         L
+DEPENDS ON:    R-CLARIFY-005
+DIRECTIVE:     CEO-CLARIFY first: define the DFSP™ acronym and scope. Plan lists it as Stack asset 8; Corpus is silent. Confirm whether it relates to Welfare Guardian Score, to spend-pacing controls, or to a separate construct. Then BUILD-NEW per defined scope.
+```
+
+### R-009 Human Contact Zone
+
+```
+ROW ID:        R-009
+PLAN REF:      v2.8 Stack asset 9
+NAME:          Human Contact Zone
+REPO STATE:    UNKNOWN — possible HZ commit-scope ambiguity
+REPO PATH:     unknown
+GAP TYPE:      CEO-CLARIFY → BUILD-NEW
+PRIORITY:      P1
+SCOPE:         L
+DEPENDS ON:    R-CLARIFY-006
+DIRECTIVE:     CEO-CLARIFY first: HZ commit prefix in OQMI_SYSTEM_STATE referred to HeartZone IoT Loop. Confirm Human Contact Zone is a separate operational layer (human moderator/concierge/support) vs HeartZone (IoT/biometric). Likely separate. Define services and scope, then BUILD-NEW.
+```
+
+### R-010 GateGuard Sentinel™
+
+```
+ROW ID:        R-010
+PLAN REF:      v2.8 Stack asset 10
+NAME:          GateGuard Sentinel™ (full system, not just AV)
+REPO STATE:    PARTIAL (Sovereign CaC handles age gating only)
+REPO PATH:     governance/, services/age-verification/ (verify)
+GAP TYPE:      EXTEND
+PRIORITY:      P0
+SCOPE:         L
+DEPENDS ON:    R-007, Q-000-PRE-READ-AUDIT
+DIRECTIVE:     Sovereign CaC implements the age-gating subset (Corpus Ch.3 §3). Extend to cover the full plan-described GateGuard Sentinel six features: pre-processor risk evaluation, identity assurance per Corpus Ch.3 §4 (two-ID rule, liveness, vault segregation, "18+ at recorded_at"), publish gate enforcement, hash-based re-upload prevention (Ch.3 §5.3), takedown SLA, and integration with RedBook (R-001).
+NOTES:         GateGuard prototype v0.4 build was incomplete per Thread 16 §3.5; recommended regenerate cleanly under new directive workflow.
+```
+
+---
+
+## PART 2 — PLAN IP NOT IN STACK ASSETS LIST
+
+These appear in the plan but are not in the ten-asset Stack list. Listed here for completeness.
+
+### R-011 Cyrano™
+
+```
+ROW ID:        R-011
+PLAN REF:      v2.8 (any of 4 layers)
+NAME:          Cyrano™
+REPO STATE:    NO (NATS Fabric exists in priority order; plan mentions NATS as Cyrano's signal source)
+REPO PATH:     unknown
+GAP TYPE:      CEO-CLARIFY → BUILD-NEW
+PRIORITY:      P1
+SCOPE:         XL (decompose by layer)
+DEPENDS ON:    R-CLARIFY-007, NATS Fabric in production
+DIRECTIVE:     CEO-CLARIFY first: define which of Cyrano's 4 layers are in 1 Oct 2026 launch scope vs deferred. Then BUILD-NEW each in-scope layer atop NATS Fabric. XL — decompose into per-layer rows before queueing.
+```
+
+### R-012 Diamond Concierge
+
+```
+ROW ID:        R-012
+PLAN REF:      v2.8; Diamond_VIP_Protocol_Operations_Manual.docx (project knowledge)
+NAME:          Diamond Concierge
+REPO STATE:    NO
+REPO PATH:     candidate: services/concierge/
+GAP TYPE:      BUILD-NEW
+PRIORITY:      P1
+SCOPE:         L
+DEPENDS ON:    Diamond tier in canonical enum (R-P0-002 resolved)
+DIRECTIVE:     BUILD-NEW per project-knowledge Diamond_VIP_Protocol_Operations_Manual.docx. Service handles VIP_DIAMOND tier concierge workflows. Read manual before implementation.
+```
+
+### R-013 Welfare Guardian Score (WGS)
+
+```
+ROW ID:        R-013
+PLAN REF:      v2.8
+NAME:          Welfare Guardian Score
+REPO STATE:    NO
+REPO PATH:     unknown
+GAP TYPE:      CEO-CLARIFY → BUILD-NEW or subsume under R-002
+PRIORITY:      P1
+SCOPE:         M
+DEPENDS ON:    R-002, R-CLARIFY-008
+DIRECTIVE:     CEO-CLARIFY first: subsume into Risk Engine (R-002) or build standalone? Per Corpus Ch.4 §6.3, HSV (Health Signal Variable) is non-gating and non-punitive. WGS likely follows same pattern. Implement as advisory, never as enforcement.
+```
+
+### R-014 NOWPayouts™
+
+```
+ROW ID:        R-014
+PLAN REF:      §B.5.9 (post R-P0-006 amendment)
+NAME:          NOWPayouts™ (nowpayments.com integration layer)
+REPO STATE:    NO
+REPO PATH:     candidate: services/payouts/, services/integrations/nowpayments/
+GAP TYPE:      BUILD-NEW
+PRIORITY:      P0
+SCOPE:         L
+DEPENDS ON:    R-006, R-P0-006
+DIRECTIVE:     BUILD-NEW integration layer to nowpayments.com per Corpus Ch.7 §11 webhook verification (signature validation, idempotency key, replay prevention, raw payload hash logging). FIZ-scoped commits required.
+```
+
+### R-015 RedRoomRewards™
+
+```
+ROW ID:        R-015
+PLAN REF:      v2.8
+NAME:          RedRoomRewards™
+REPO STATE:    NO
+REPO PATH:     unknown
+GAP TYPE:      CEO-CLARIFY (location)
+PRIORITY:      P2
+SCOPE:         UNKNOWN
+DEPENDS ON:    R-CLARIFY-009
+DIRECTIVE:     CEO-CLARIFY first: is RedRoomRewards™ a separate repo (like RedRoomPleasures™ on WordPress) or inside ChatNowZone--BUILD? If separate, this row retires from this deficit doc. If inside, define scope and BUILD-NEW.
+```
+
+### R-016 RedRoomPleasures™
+
+```
+ROW ID:        R-016
+PLAN REF:      v2.8
+NAME:          RedRoomPleasures™
+REPO STATE:    OUT OF SCOPE (separate WordPress property)
+GAP TYPE:      RETIRE (from this doc)
+PRIORITY:      n/a
+SCOPE:         n/a
+DEPENDS ON:    none
+DIRECTIVE:     No action in ChatNowZone--BUILD. Confirmed separate WordPress property per plan. Documented here for completeness only.
+```
+
+### R-017 JuryPulse™
+
+```
+ROW ID:        R-017
+PLAN REF:      v2.8 Executive Summary, A.3
+NAME:          JuryPulse™
+REPO STATE:    NO
+REPO PATH:     unknown
+GAP TYPE:      CEO-CLARIFY (per R-P0-005)
+PRIORITY:      P3
+SCOPE:         UNKNOWN
+DEPENDS ON:    R-P0-005 resolved
+DIRECTIVE:     Blocked on R-P0-005. Once plan defines JuryPulse™ structure, return to this row and convert to BUILD-NEW or RETIRE.
+```
+
+---
+
+## PART 3 — REPO SERVICES VERIFIED AGAINST CORPUS + PLAN
+
+The eight services in the previous priority order. Each verified for Corpus alignment and plan-extension requirements.
+
+### R-101 Three-Bucket Wallet
+
+```
+ROW ID:        R-101
+CORPUS REF:    Ch.1 §4, Ch.7 §5
+PLAN REF:      §B.4.5 (CZT lifecycle)
+NAME:          Three-Bucket Wallet
+REPO STATE:    PARTIAL (declared in priority order; verify completion against Corpus)
+REPO PATH:     services/wallet/ (assumed)
+GAP TYPE:      VERIFY → likely EXTEND
+PRIORITY:      P0
+SCOPE:         M
+DEPENDS ON:    Q-000-PRE-READ-AUDIT, prisma read
+DIRECTIVE:     VERIFY: confirm three buckets are Promotional Bonus / Membership Allocation / Purchased Tokens (Corpus Ch.1 §4) and spend order is enforced 1→2→3. Confirm idempotent purchase endpoints, processor confirmation gating, no fractional tokens, ledger immutability per Corpus Ch.1 §5. EXTEND as needed to close any gaps. FIZ-scoped commits.
+NOTES:         Corpus and plan agree on bucket architecture. Vocabulary alignment: "Three-Bucket Wallet" (doctrine name) = "CZT lifecycle" (plan language).
+```
+
+### R-102 Risk Engine
+
+```
+ROW ID:        R-102
+See R-002 (extend to full Risk Assessment Toolkit scope)
+```
+
+### R-103 NATS Fabric
+
+```
+ROW ID:        R-103
+CORPUS REF:    Ch.7 §3 (event-driven architecture)
+PLAN REF:      Cyrano signal source (R-011)
+NAME:          NATS Fabric
+REPO STATE:    PARTIAL (declared in priority order)
+REPO PATH:     unknown — verify
+GAP TYPE:      VERIFY → EXTEND if needed
+PRIORITY:      P0
+SCOPE:         M
+DEPENDS ON:    Q-000-PRE-READ-AUDIT
+DIRECTIVE:     VERIFY: confirm NATS deployment and that all chat and haptic events route via NATS (no REST polling, per OQMI_GOVERNANCE.md §12). Confirm event schema includes mandatory fields per Corpus Ch.7 §3.1.
+```
+
+### R-104 OBS Broadcast Kernel
+
+```
+ROW ID:        R-104
+CORPUS REF:    Ch.7 §3 (event emission); Corpus silent on broadcast specifics
+PLAN REF:      v2.8 (multi-stream relay, One-Button Private)
+NAME:          OBS Broadcast Kernel
+REPO STATE:    PARTIAL (declared in priority order)
+REPO PATH:     services/broadcast/ or services/obs/ (verify)
+GAP TYPE:      VERIFY → EXTEND
+PRIORITY:      P0
+SCOPE:         L
+DEPENDS ON:    Q-000-PRE-READ-AUDIT, R-006 (FairPay native vs OBS detection integrity)
+DIRECTIVE:     VERIFY current state. EXTEND to cover multi-stream relay, One-Button Private feature, and the native vs OBS relay detection mechanism that R-006 depends on. Detection integrity is the highest-risk element per CEO memory.
+```
+
+### R-105 HeartZone IoT Loop
+
+```
+ROW ID:        R-105
+CORPUS REF:    Corpus silent
+PLAN REF:      v2.8 §B.7.1 (HeartPleasureExperiences™ — relationship UNCLARIFIED)
+NAME:          HeartZone IoT Loop
+REPO STATE:    PARTIAL (declared in priority order)
+REPO PATH:     services/heartzone/ (verify)
+GAP TYPE:      CEO-CLARIFY → VERIFY → EXTEND
+PRIORITY:      P1
+SCOPE:         L
+DEPENDS ON:    R-CLARIFY-010
+DIRECTIVE:     CEO-CLARIFY first: relationship between HeartZone IoT Loop (repo) and HeartPleasureExperiences™ (plan). Are they the same system? Different scopes? Rename of one to other? DO NOT ASSUME mapping. Once clarified, VERIFY current state (Web Bluetooth, GATT 0x180D, haptic webhooks per prior doctrine), EXTEND to plan-described capability.
+```
+
+### R-106 Bijou.Zone Theatre
+
+```
+ROW ID:        R-106
+CORPUS REF:    Corpus silent on theatre architecture specifically
+PLAN REF:      theBijou.Zone™ AND VIPShowZone Theatre (two distinct Parks)
+NAME:          Bijou.Zone Theatre
+REPO STATE:    PARTIAL (declared in priority order)
+REPO PATH:     services/bijou/ (verify)
+GAP TYPE:      CEO-CLARIFY → VERIFY → EXTEND
+PRIORITY:      P1
+SCOPE:         L
+DEPENDS ON:    R-CLARIFY-011
+DIRECTIVE:     CEO-CLARIFY first: Bijou.Zone Theatre (repo) — does it serve theBijou.Zone™ only, VIPShowZone Theatre only, or both Parks? Plan describes both as distinct. Once clarified, VERIFY (LiveKit/Mediasoup SFU, Dwell-Credit algorithm), EXTEND to cover whichever Park(s) are in scope.
+```
+
+### R-107 Sovereign CaC
+
+```
+ROW ID:        R-107
+See R-007 (extend to full Compliance Stack) and R-010 (extend to full GateGuard Sentinel)
+```
+
+### R-108 UI / Black-Glass Interface
+
+```
+ROW ID:        R-108
+CORPUS REF:    Ch.6 §3 (visual identity: #1F011D background, official PNG logo, Balgan Expanded reference, Montserrat body)
+PLAN REF:      Plan does not name "Black-Glass"
+NAME:          UI / Black-Glass Interface
+REPO STATE:    PARTIAL (declared in priority order; ui/types/ exists; no apps/)
+REPO PATH:     ui/types/, plus unknown frontend location
+GAP TYPE:      CEO-CLARIFY (frontend repo location) → VERIFY → BUILD/EXTEND
+PRIORITY:      P0
+SCOPE:         XL (decompose)
+DEPENDS ON:    R-CLARIFY-012
+DIRECTIVE:     CEO-CLARIFY first: frontend repo location. Repo has services/ but no apps/. Is there a separate frontend repo, or does Black-Glass Interface live in ui/ subfolder, or is ui/types/ the only frontend artifact today? Once clarified, VERIFY against Corpus Ch.6 visual identity standards, then BUILD or EXTEND to deliver per Corpus Ch.6 surface governance (compliance gates, RBAC enforcement, no dark patterns, kill switch UI, consent workflow UI, age gate UI, wallet integrity UI).
+NOTES:         XL — must be decomposed before queueing.
+```
+
+---
+
+## PART 4 — VOCABULARY RECONCILIATION & CEO-CLARIFY ROWS
+
+CEO-decision rows. Each is a single question with constrained options. Surface to CEO before the dependent build rows execute.
+
+```
+ROW ID:        R-CLARIFY-001
+QUESTION:      CreatorControl.Zone™ scope vs My Zone Manager™
+CONTEXT:       Corpus Ch.4 §6 / Ch.6 §10 defines My Zone Manager™ as the creator dashboard. Plan §[Stack 3] names CreatorControl.Zone™ as a Stack asset. Are these the same thing under different names, OR is CreatorControl.Zone™ a broader Park containing My Zone Manager™ as one component?
+OPTIONS:       (a) Same system; canonical name is My Zone Manager™ inside CreatorControl.Zone™ Park
+               (b) Different systems; build both
+               (c) CreatorControl.Zone™ supersedes; retire My Zone Manager™ name
+DOWNSTREAM:    R-003
+```
+
+```
+ROW ID:        R-CLARIFY-002
+QUESTION:      MyCrew.Zone™ — custom service or Twenty CRM integration
+OPTIONS:       (a) Twenty CRM integration with platform objects
+               (b) Custom service independent of Twenty CRM
+               (c) Hybrid (Twenty CRM as backbone, custom UI/workflows)
+DOWNSTREAM:    R-004
+```
+
+```
+ROW ID:        R-CLARIFY-003
+QUESTION:      Room-Heat Engine — standalone or feature
+OPTIONS:       (a) Standalone service
+               (b) Feature of HeartZone IoT Loop
+               (c) Feature of Bijou.Zone Theatre
+               (d) Feature shared across multiple services
+DOWNSTREAM:    R-005, R-105, R-106
+```
+
+```
+ROW ID:        R-CLARIFY-004
+QUESTION:      FairPay/FairPlay™ Engine — inside Wallet or separate
+OPTIONS:       (a) Inside Three-Bucket Wallet (R-101)
+               (b) Separate service that consumes Wallet
+               (c) Separate service that Wallet consumes
+DOWNSTREAM:    R-006
+```
+
+```
+ROW ID:        R-CLARIFY-005
+QUESTION:      DFSP™ — define acronym and scope
+OPTIONS:       (a) Deterministic Fair-Spend Protocol
+               (b) Other (CEO defines)
+               Sub-question: relationship to Welfare Guardian Score (R-013)?
+DOWNSTREAM:    R-008
+```
+
+```
+ROW ID:        R-CLARIFY-006
+QUESTION:      Human Contact Zone vs HeartZone — confirm separate
+OPTIONS:       (a) Confirmed separate; HZ commit prefix = HeartZone IoT Loop only
+               (b) Same system; consolidate
+               (c) HZ commit prefix should be split (e.g., HZIO for HeartZone, HCZ for Human Contact Zone)
+DOWNSTREAM:    R-009, OQMI_SYSTEM_STATE.md commit prefixes section
+```
+
+```
+ROW ID:        R-CLARIFY-007
+QUESTION:      Cyrano™ — which of 4 layers in launch scope
+OPTIONS:       (a) All 4 by 1 Oct 2026
+               (b) Specific subset (CEO names which)
+               (c) Defer all 4 post-launch
+DOWNSTREAM:    R-011
+```
+
+```
+ROW ID:        R-CLARIFY-008
+QUESTION:      Welfare Guardian Score — subsume into Risk Engine or standalone
+OPTIONS:       (a) Subsume into Risk Engine (R-002)
+               (b) Standalone advisory service
+DOWNSTREAM:    R-013
+```
+
+```
+ROW ID:        R-CLARIFY-009
+QUESTION:      RedRoomRewards™ — separate repo or inside this one
+OPTIONS:       (a) Separate repo (CEO names location)
+               (b) Inside ChatNowZone--BUILD (CEO defines scope)
+DOWNSTREAM:    R-015
+```
+
+```
+ROW ID:        R-CLARIFY-010
+QUESTION:      HeartZone IoT Loop ↔ HeartPleasureExperiences™
+CONTEXT:       Repo doctrine names HeartZone IoT Loop. Plan §B.7.1 names HeartPleasureExperiences™. Thread 17 §7.13 explicitly noted this relationship is UNCLARIFIED and not to be assumed. Surface as direct CEO question.
+OPTIONS:       (a) Same system; canonical name is HeartZone (rename plan)
+               (b) Same system; canonical name is HeartPleasureExperiences (rename repo)
+               (c) Different scopes (CEO defines each)
+DOWNSTREAM:    R-105
+```
+
+```
+ROW ID:        R-CLARIFY-011
+QUESTION:      Bijou.Zone Theatre — serves which Park(s)
+OPTIONS:       (a) Both theBijou.Zone™ and VIPShowZone Theatre
+               (b) theBijou.Zone™ only (VIPShowZone deferred or separate service)
+               (c) VIPShowZone Theatre only (theBijou.Zone™ deferred or separate service)
+DOWNSTREAM:    R-106
+```
+
+```
+ROW ID:        R-CLARIFY-012
+QUESTION:      Frontend repo / app location
+CONTEXT:       Repo has services/ but no apps/. ui/types/ exists. Where does Black-Glass Interface live?
+OPTIONS:       (a) Separate frontend repo (CEO names URL)
+               (b) Add apps/ directory in ChatNowZone--BUILD
+               (c) Existing ui/ subfolder is the answer; build everything there
+DOWNSTREAM:    R-108
+```
+
+---
+
+## PART 5 — RECOMMENDED RECONCILIATION PATH (CLAUDE CODE QUEUE GENERATION)
+
+Claude Code consumes this section to generate the repo Queue. Recommended consumption rules:
+
+### 5.1 Queue ordering
+
+Generate queue in this order:
+
+1. **Q-000-PRE-READ-AUDIT** — single bundle covering all §1.3 verification reads. Must complete before any other queue item executes.
+2. **All `R-CLARIFY-*` rows** — surface as CEO-escalation queue items. These do not block agent execution of unrelated rows but DO block their downstream rows.
+3. **All `R-P0-*` rows** (plan-internal contradictions) — these are documentation amendments, not code. Queue separately as plan-edit tasks.
+4. **All `R-1xx` rows with REPO STATE: PARTIAL** — verify-then-extend the existing services. These are P0 and feed Corpus L0 ship-gate completeness.
+5. **All `R-0xx` Stack-asset rows with GAP TYPE: BUILD-NEW that have no clarify dependency** — net-new layer atop the verified spine.
+6. **CEO-CLARIFY-blocked rows** — execute as their R-CLARIFY-* parent resolves.
+
+### 5.2 Queue item shape
+
+Each queue item should be a single `OQMI_SYSTEM_STATE.md` §5 OUTSTANDING row in this format:
+
+```
+| Priority | Item                                | Source            | Scope | Blocker                | Notes |
+|----------|-------------------------------------|-------------------|-------|------------------------|-------|
+| [P0–P3]  | [DIRECTIVE field, condensed]        | Deficit row R-XXX | [S/M/L/XL] | [DEPENDS ON list]  | [NOTES field] |
+```
+
+### 5.3 XL decomposition
+
+Rows marked XL (R-011, R-108) must NOT be queued as single items. Claude Code decomposes into per-layer or per-feature M/L items, each as its own queue row, before adding to OUTSTANDING.
+
+### 5.4 P0 launch-blocking set
+
+The minimum set required for 1 Oct 2026 hard launch, per Corpus L0 ship-gate doctrine:
+
+- R-101 (Three-Bucket Wallet — verify + close gaps)
+- R-102 / R-002 (Risk Engine to full Risk Assessment Toolkit)
+- R-103 (NATS Fabric verified)
+- R-104 (OBS Broadcast Kernel — multi-stream + native/OBS detection)
+- R-006 / R-014 (FairPay logic + NOWPayouts)
+- R-001 (RedBook — likely EXTEND of safety/)
+- R-007 / R-107 (Compliance Stack extension)
+- R-010 (GateGuard Sentinel full)
+- R-108 (Black-Glass Interface — decomposed)
+- R-P0-003 (Navigator residual deletion)
+
+P1 rows are required for full v2.8 plan delivery but not strictly launch-blocking. CEO may choose to defer specific P1 rows beyond 1 Oct 2026 to focus P0 set.
+
+### 5.5 Risk register from this analysis
+
+| Risk | Source | Mitigation |
+|---|---|---|
+| Native vs OBS detection mechanism integrity | R-006, R-104 | Build with auditable detection trail; CEO has flagged as highest execution risk |
+| GateGuard prototype regeneration | R-010, Thread 16 §3.5 | Fresh build under new directive workflow per Thread 16 recommendation |
+| Twenty CRM integration scope ambiguity | R-004 | Resolve R-CLARIFY-002 before any MyCrew.Zone work |
+| Frontend repo location unknown | R-108 | Resolve R-CLARIFY-012 before UI work scaling |
+| HeartZone naming ambiguity | R-105 | Resolve R-CLARIFY-010 before any biometric/IoT extension |
+
+---
+
+## PART 6 — CLEANUP CARRIED FROM THREAD 17 §4
+
+These cleanup audit items remain valid and should land as a single Copilot directive (`THREAD18-COPILOT-CLEANUP-001-repo-orientation-audit`) before deficit row execution begins. Per OQMI_GOVERNANCE.md §1, this is CEO-assigned and Copilot proceeds without further confirmation.
+
+| Audit item | Description | Output |
+|---|---|---|
+| 4.1 | DIRECTIVES/ status (README, TEMPLATE) | Confirm 404; recommend bootstrap path or chat-pasted directive workflow |
+| 4.2 | Cross-reference §8 priority order vs services/* | Inventory + flag stubs |
+| 4.3 | RETIRED — Sovereign_Kernel.md.pdf no longer extracted; archive instead | Move to archive/ or delete |
+| 4.4 | apps/ absence — frontend repo location | Resolves R-CLARIFY-012 |
+| 4.5 | Ghost Alpha simulations definition | Document scope |
+| 4.6 | copilot/chore-update-program-control branch diff | Read, recommend merge or close |
+| 4.7 | KIMI reference in OQMI_SYSTEM_STATE §7 | Already removed in rescoped template; confirm any other KIMI references repo-wide are gone |
+| 4.8 | Repo visibility | Document; recommend revert to private |
+| 4.9 | RRR_CEO_DECISIONS_FINAL_2026-04-17.md | Locate, dump, cross-check |
+| 4.10 | Stale branch verification (26 candidates) | Report only, no deletion |
+
+---
+
+## PART 7 — DOCUMENT META
+
+```
+Authority:        Kevin B. Hartley, CEO — OmniQuest Media Inc.
+Authored:         2026-04-21 (Thread 18)
+Frame:            Forward gap analysis (plan = net-new on build)
+Sources:          Canonical Corpus v10 (Feb 2026), v2.8 Business Plan (Apr 2026),
+                  rescoped OQMI doctrine, repo top-level structure (verified)
+Governing doc:    OQMI_GOVERNANCE.md (root)
+Downstream:       Claude Code queue generator → OQMI_SYSTEM_STATE.md §5 OUTSTANDING
+Landing path:     docs/ASSESSMENTS/REPO_VS_PLAN_TECHNICAL_DEFICIT_v1.md
+PR auto-merge:    Yes (this doc is not in OQMI_GOVERNANCE.md §2.2 Human-Review Categories)
+Amendment:        Open follow-up PR; increment version; reference superseded row IDs
+```
+
+**Open verification debt at time of authoring (resolved by Q-000-PRE-READ-AUDIT):**
+
+- `services/*` directory contents not yet enumerated
+- `prisma/schema.prisma` not yet read
+- `.github/copilot-instructions.md` not yet read
+- `docs/DOMAIN_GLOSSARY.md` not yet read
+- `governance/*`, `safety/*`, `finance/*` directory contents not yet enumerated
+
+Rows whose state assertion depends on the above are tagged with VERIFY in their GAP TYPE. After Q-000 completes, this document should be amended with confirmed states and a v1.1 release.
+
+---
+
+## END OF DOCUMENT
