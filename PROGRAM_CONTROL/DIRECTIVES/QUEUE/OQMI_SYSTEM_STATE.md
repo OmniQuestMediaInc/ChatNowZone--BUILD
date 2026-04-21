@@ -1,0 +1,167 @@
+# OQMI SYSTEM STATE
+
+**Document:** OQMI_SYSTEM_STATE.md
+**Repo:** [REPO NAME — fill in per repo]
+**Version:** v1.0
+**Last Updated:** [YYYY-MM-DD — update on every meaningful change]
+**Owner:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
+**Governing Document:** `OQMI_GOVERNANCE.md` (this repo, root)
+
+---
+
+## 0. PURPOSE
+
+This document is the living tech-debt and accomplishment tracker for this repository. It answers, at any point in time, three questions:
+
+1. **DONE** — What has been built and is in production or merged to `main`?
+2. **WIP** — What is actively in progress, on which branch, by which agent?
+3. **OUTSTANDING** — What remains to be built, in what priority order, with what blockers?
+
+It is NOT a doctrine document. Doctrine lives in `OQMI_GOVERNANCE.md` (generic, repo-portable) and, where applicable, in this repo's product Canonical Corpus.
+
+This document is rescoped from prior versions which carried doctrine inline. Doctrine has been moved to `OQMI_GOVERNANCE.md`. This file now tracks state only.
+
+This document is repo-specific in content and repo-portable in shape. Drop the structure into any OmniQuest Media Inc. repo and populate.
+
+---
+
+## 1. REPO ORIENTATION
+
+| Field | Value |
+|---|---|
+| Repo name | [e.g., ChatNowZone--BUILD] |
+| Repo URL | [GitHub URL] |
+| Default branch | `main` |
+| Package manager | [Yarn / npm / pnpm — must match `README.md`] |
+| Primary languages | [e.g., TypeScript 84%, PLpgSQL 16%] |
+| Active build epic | [e.g., CNZ-CORE-002, or "none — maintenance"] |
+| Hard launch deadline | [Date or "n/a"] |
+| Visibility | [public / private] |
+
+---
+
+## 2. SERVICE INVENTORY
+
+List every service, app, or top-level module in the repo with its current state. Update on add/remove/rename.
+
+| Service / Module | Path | Status | Owner Agent | Notes |
+|---|---|---|---|---|
+| [e.g., three-bucket-wallet] | `services/wallet/` | DONE | claude-code | Idempotent, ledger-tested |
+| [e.g., risk-engine] | `services/risk/` | WIP | copilot | Branch: `feature/vamp-hardening` |
+| [e.g., heartzone-iot-loop] | `services/heartzone/` | OUTSTANDING | unassigned | Blocked on hardware spec |
+
+Status values: `DONE`, `WIP`, `OUTSTANDING`, `STUB`, `RETIRED`, `BLOCKED`
+
+---
+
+## 3. DONE — Shipped to `main`
+
+Reverse-chronological list of completed work. Each entry one row. Pruning policy: items older than 90 days may be archived to `OQMI_SYSTEM_STATE_ARCHIVE.md` to keep this file scannable.
+
+| Date | Item | PR / Commit | Agent | Notes |
+|---|---|---|---|---|
+| YYYY-MM-DD | [e.g., Three-Bucket Wallet ledger schema landed] | #PR-123 | claude-code | All idempotency tests passing |
+| YYYY-MM-DD | [e.g., Twenty CRM integration scaffolded] | #PR-118 | copilot | Auth flow pending §4 |
+
+---
+
+## 4. WIP — In Progress
+
+Active work. Update when started, when blocked, and when completed (move to §3). One row per branch.
+
+| Branch | Item | Started | Agent | Blocker | Next Action |
+|---|---|---|---|---|---|
+| `feature/[name]` | [What is being built] | YYYY-MM-DD | [agent] | [none / description] | [next concrete step] |
+
+If a WIP item has been static for >7 days without a blocker, that itself is a flag — surface in §6.
+
+---
+
+## 5. OUTSTANDING — Backlog
+
+Prioritized list of work not yet started. Top of the list is the next thing to work on. CEO sets priority order; agents do not reorder without instruction.
+
+| Priority | Item | Source | Estimated Scope | Blocker | Notes |
+|---|---|---|---|---|---|
+| 1 | [Highest priority outstanding work] | [e.g., Deficit doc row R-12] | [S/M/L/XL] | [none / what's needed first] | |
+| 2 | [Next item] | [Source] | | | |
+| 3 | [...] | | | | |
+
+Source values:
+- `Deficit doc row [ID]` — derived from technical deficit document
+- `Canonical Corpus §[N]` — derived from product Canonical Corpus requirement
+- `Business plan §[N]` — derived from business plan technical requirement
+- `Bug` — defect found in shipped code
+- `CEO directive YYYY-MM-DD` — direct CEO instruction
+- `Tech debt` — internal cleanup not driven by external requirement
+
+Scope values: `S` (<1 day), `M` (1–3 days), `L` (3–10 days), `XL` (>10 days, should be decomposed)
+
+---
+
+## 6. BLOCKERS & FLAGS
+
+Active blockers, stalled work, and items requiring CEO attention. Each entry should resolve to either a CEO decision, an external action, or a re-assignment.
+
+| Date Flagged | Item | Type | Owner | What's Needed |
+|---|---|---|---|---|
+| YYYY-MM-DD | [e.g., HeartZone scope unclear vs HeartPleasureExperiences] | CEO clarification | claude-in-chat | Naming and scope decision |
+| YYYY-MM-DD | [e.g., Vendor X integration broken] | External dependency | copilot | Vendor support response |
+
+Type values: `CEO clarification`, `External dependency`, `Tooling`, `Credential`, `Architecture decision`, `Other`
+
+---
+
+## 7. RETIRED ITEMS
+
+Things that were in this repo, have been removed, and should not be reintroduced. Recorded so future agents do not accidentally rebuild retired work.
+
+| Date Retired | Item | Reason |
+|---|---|---|
+| YYYY-MM-DD | [e.g., Work Order (WO-XXXX) protocol] | Friction without auditability gain; replaced by scoped commit discipline |
+| YYYY-MM-DD | [e.g., KIMI peer agent integration] | Agent retired from workflow |
+
+---
+
+## 8. PROVENANCE NOTES
+
+Anything an incoming agent needs to know that doesn't fit elsewhere: terminology that has shifted, files that look authoritative but aren't, branches that look active but are dead, peculiarities of this repo's history.
+
+- [e.g., `Sovereign_Kernel.md.pdf` in repo root is RETIRED. Do not treat as authoritative. Pending archive.]
+- [e.g., Branch `copilot/chore-old-branch` is 1 commit ahead of main but stale; review before deletion.]
+- [e.g., This repo's commit prefixes are declared in `README.md` — consult before committing.]
+
+---
+
+## 9. THIS DOCUMENT'S OWN STATE
+
+| Field | Value |
+|---|---|
+| Last full review | YYYY-MM-DD |
+| Reviewed by | [agent or CEO] |
+| Stale-flag threshold | 30 days since last update triggers automatic flag |
+
+If this document has not been updated in 30 days but the repo has commits in that window, the document is out of date and the next agent to touch the repo should reconcile it before doing other work.
+
+---
+
+## 10. UPDATE PROTOCOL
+
+Any agent that completes, starts, blocks, retires, or reprioritizes work in this repo MUST update this document in the same PR as the work itself. Updating this file is not Human-Review Category — it auto-merges with the work it documents.
+
+Format discipline:
+
+- Add new rows; do not delete historical ones except via §3 archive policy or §7 retirement
+- Use ISO dates (YYYY-MM-DD)
+- Use the status enums declared in §2 and source enums declared in §5
+- One item per row; if an item has multiple sub-items, decompose into multiple rows or link out to an issue tracker
+
+Failure to update this document on relevant PRs is a §4.4 violation under `OQMI_GOVERNANCE.md`.
+
+---
+
+## 11. END OF DOCUMENT
+
+This document tracks the state of [REPO NAME]. It does not declare doctrine. For doctrine, see `OQMI_GOVERNANCE.md` (this repo, root). For product-specific operational and compliance doctrine where applicable, see this repo's program charter (e.g., `PROGRAM_CONTROL/DIRECTIVES/QUEUE/RRR-GOV-002` for ChatNowZone--BUILD).
+
+**Authority:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
