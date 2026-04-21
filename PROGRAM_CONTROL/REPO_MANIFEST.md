@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `c2c36ae25c0b2cb8bdaa5c03b819089bcbb27292`
-**Generated:** 2026-04-21T04:16:29Z
+**Commit:** `a06014bd154a058c608e85d406c9a0bbc431bdca`
+**Generated:** 2026-04-21T10:33:34Z
 
 ## All Files
 
@@ -50,7 +50,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/CLEARANCES/CEO-AUTHORIZED-STAGED-2026-04-11.md`
 - `PROGRAM_CONTROL/CLEARANCES/README.md`
 - `PROGRAM_CONTROL/CLEARANCES/TEMPLATE.md`
-- `PROGRAM_CONTROL/DIRECTIVES/BLOCKED/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-002.md`
