@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `49417e492e6971e842f686ba13f0bb68a28fb906`
-**Generated:** 2026-04-21T12:41:12Z
+**Commit:** `05e2cf949dded9a1e674d6a661b00aa10c822dd2`
+**Generated:** 2026-04-21T12:41:22Z
 
 ## All Files
 
@@ -66,7 +66,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/RRR-GOV-002`
-- `PROGRAM_CONTROL/HANDOFF-2026-04-10.md`
 - `PROGRAM_CONTROL/HANDOFFS/THREAD-12-HANDOFF.md`
 - `PROGRAM_CONTROL/README.md`
 - `PROGRAM_CONTROL/REPORT_BACK/.gitkeep`
