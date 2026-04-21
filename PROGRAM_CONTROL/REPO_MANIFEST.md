@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `08f20b39e01ebc6b64994e9064d42e3ea2df8799`
-**Generated:** 2026-04-21T04:09:56Z
+**Commit:** `57b68628b3e703c2e3cc65850be6844b7a18c865`
+**Generated:** 2026-04-21T04:15:56Z
 
 ## All Files
 
@@ -204,6 +204,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001-sql-fix.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-INIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
+- `PROGRAM_CONTROL/REPORT_BACK/fix-yarn-lockfile-ci.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
 - `PROGRAM_CONTROL/Thread 12 Handoff`
 - `PROGRAM_CONTROL/Thread 13 cleanup`
