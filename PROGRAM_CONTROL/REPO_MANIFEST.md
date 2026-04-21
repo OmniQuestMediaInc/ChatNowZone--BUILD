@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `bca28f173b3fef0a92233b7b4544f12a28dda38e`
-**Generated:** 2026-04-21T12:41:34Z
+**Commit:** `4a8fe2bc23504bd5b7bdc5a414d0839c3a5f67fd`
+**Generated:** 2026-04-21T12:42:32Z
 
 ## All Files
 
@@ -65,6 +65,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-RETIRE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/RRR-GOV-002`
 - `PROGRAM_CONTROL/README.md`
 - `PROGRAM_CONTROL/REPORT_BACK/.gitkeep`
