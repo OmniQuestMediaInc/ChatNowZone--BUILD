@@ -24,7 +24,7 @@
 // must be checked upstream before an OTP is issued.
 
 import { Injectable, Logger } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { randomInt } from 'crypto';
 import { PrismaService } from '../prisma.service';
 import { NatsService } from '../nats/nats.service';

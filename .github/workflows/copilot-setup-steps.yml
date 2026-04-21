@@ -26,10 +26,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "20"
           cache: "yarn"
@@ -39,3 +39,7 @@ jobs:
 
       - name: Generate Prisma client
         run: yarn prisma:generate
+
+      - name: TypeScript type-check
+        run: yarn typecheck
+        continue-on-error: true
