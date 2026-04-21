@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `0d24043797c5efd52c08b61ea29bc4c98a0d3ba7`
-**Generated:** 2026-04-21T12:40:32Z
+**Commit:** `28ab68614c28d35c3aa38995c709eae7ec06c382`
+**Generated:** 2026-04-21T12:40:41Z
 
 ## All Files
 
@@ -189,7 +189,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/fix-yarn-lockfile-ci.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
-- `PROGRAM_CONTROL/Thread 12 Handoff`
 - `README.md`
 - `REFERENCE_LIBRARY/00_THREAD_BOOTSTRAP.md`
 - `REFERENCE_LIBRARY/01_CANONICAL_LOCKS.md`
