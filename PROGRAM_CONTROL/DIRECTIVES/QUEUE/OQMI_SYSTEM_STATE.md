@@ -60,8 +60,8 @@ Reverse-chronological list of completed work. Each entry one row. Pruning policy
 
 | Date | Item | PR / Commit | Agent | Notes |
 |---|---|---|---|---|
-| YYYY-MM-DD | [e.g., Three-Bucket Wallet ledger schema landed] | #PR-123 | claude-code | All idempotency tests passing |
-| YYYY-MM-DD | [e.g., Twenty CRM integration scaffolded] | #PR-118 | copilot | Auth flow pending §4 |
+| 2026-04-22 | CNZ-WORK-001-A001 — Q-000-PRE-READ-AUDIT (foundational repo audit) | direct-land `<FILL-IN A001 SHA>` | claude-code | Agent-hint "copilot" overridden per charter §2; DONE record `CNZ-WORK-001-A001-DONE.md` |
+| 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `<FILL-IN A004 SHA>` | claude-code | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
 
 ---
 
@@ -71,7 +71,6 @@ Active work. Update when started, when blocked, and when completed (move to §3)
 
 | Branch | Item | Started | Agent | Blocker | Next Action |
 |---|---|---|---|---|---|
-| `feature/[name]` | [What is being built] | YYYY-MM-DD | [agent] | [none / description] | [next concrete step] |
 
 If a WIP item has been static for >7 days without a blocker, that itself is a flag — surface in §6.
 
@@ -127,6 +126,7 @@ Things that were in this repo, have been removed, and should not be reintroduced
 
 Anything an incoming agent needs to know that doesn't fit elsewhere: terminology that has shifted, files that look authoritative but aren't, branches that look active but are dead, peculiarities of this repo's history.
 
+- `/tests/seed_data/` is the authoritative source for Ghost Alpha simulations. (Preserved from root `README.md` prior to A003 deletion; landed by CNZ-WORK-001-A004 on 2026-04-22.)
 - [e.g., `Sovereign_Kernel.md.pdf` in repo root is RETIRED. Do not treat as authoritative. Pending archive.]
 - [e.g., Branch `copilot/chore-old-branch` is 1 commit ahead of main but stale; review before deletion.]
 - [e.g., This repo's commit prefixes are declared in `README.md` — consult before committing.]
