@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/audit-schema-integrity-EUzfq`
-**Commit:** `f1b583c5e83fef394ea25554fefee9433d9b4157`
-**Generated:** 2026-04-21T23:45:35Z
+**Branch:** `copilot/cnz-work-001-a004-done`
+**Commit:** `3c2e0ffb533add9bd9cd7f83276872bed2d163c8`
+**Generated:** 2026-04-22T01:03:30Z
 
 ## All Files
 
@@ -49,6 +49,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-005.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-PIPELINE-006.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/CHORE-TS.md`
+- `PROGRAM_CONTROL/DIRECTIVES/DONE/CNZ-WORK-001-A004-DONE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/DFSP-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GEO-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/GOV-CONST-001.md`
