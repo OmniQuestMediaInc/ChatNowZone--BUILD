@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/audit-schema-integrity-EUzfq`
-**Commit:** `f1b583c5e83fef394ea25554fefee9433d9b4157`
-**Generated:** 2026-04-21T23:45:35Z
+**Branch:** `copilot/edit-provenance-notes`
+**Commit:** `0ade061450085c6c66d4f39ccefcd010966cf5aa`
+**Generated:** 2026-04-22T01:00:49Z
 
 ## All Files
 
