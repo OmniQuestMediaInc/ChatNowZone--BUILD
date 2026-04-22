@@ -130,6 +130,7 @@ Anything an incoming agent needs to know that doesn't fit elsewhere: terminology
 - [e.g., `Sovereign_Kernel.md.pdf` in repo root is RETIRED. Do not treat as authoritative. Pending archive.]
 - [e.g., Branch `copilot/chore-old-branch` is 1 commit ahead of main but stale; review before deletion.]
 - [e.g., This repo's commit prefixes are declared in `README.md` — consult before committing.]
+- `/tests/seed_data/` is the authoritative source for Ghost Alpha simulations.
 
 ---
 

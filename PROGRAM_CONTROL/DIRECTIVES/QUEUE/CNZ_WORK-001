@@ -187,7 +187,7 @@ Depends-on: none
 CEO_GATE: NO
 FIZ: NO
 Source: Dependency of A003
-Status: DONE — 2026-04-22 — 
+Status: DONE
 Directive: Add a single bullet to OQMI_SYSTEM_STATE.md §8 Provenance Notes stating: "/tests/seed_data/ is the authoritative source for Ghost Alpha simulations." This preserves the only fact README.md currently carries before A003 deletes README.md. Commit prefix CHORE.
 ```
 
