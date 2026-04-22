@@ -1,12 +1,13 @@
 # OSS Lift-From Index
 
-> **Companion to** `REFERENCE_LIBRARY/05_OSS_REPO_REGISTRY.md`
+> **Companion to** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Repo-Registry.md`
 
 | Field | Value |
 |---|---|
 | **Document ID** | `REF-LIB-OSS-LIFT-01` |
 | **Authored** | 21 April 2026 |
-| **Status** | DRAFT v1 — pending CEO review |
+| **Revised** | 21 April 2026 (v1.2 — flat QUEUE/ paths) |
+| **Status** | DRAFT v1.2 — pending CEO review |
 | **Owner** | Kevin B. Hartley, CEO / Creative Director |
 | **Location** | `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Lift-From-Index.md` |
 
@@ -60,7 +61,7 @@ All nine branches at a glance. Detailed cards follow in Section 5.
 ### 4.1 🟢 CLEAR (MIT) — direct port permitted
 
 - Files **may** be copied into `main` with the original `LICENSE` preserved alongside them.
-- A NOTICE entry **must** be added to `REFERENCE_LIBRARY/06_OSS_ATTRIBUTIONS.md` (to be created by the first directive that actually ports a file).
+- A NOTICE entry **must** be added to `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Attributions.md` (to be created by the first directive that actually ports a file).
 - Any meaningful modification must be recorded in the file header per OQMI Coding Doctrine.
 - **Currently applies to:** `refs/oss/discussion-platform` and `refs/oqminc/ai-resources`.
 
@@ -233,7 +234,7 @@ Reimplementation: <NestJS / Twenty CRM / NATS / LiveKit / Tailwind>
 Attribution:      <required | not required>
 ```
 
-If `Lift mode` is `DIRECT_PORT`, the directive **must also** append the attribution line to `REFERENCE_LIBRARY/06_OSS_ATTRIBUTIONS.md` as part of its commit.
+If `Lift mode` is `DIRECT_PORT`, the directive **must also** append the attribution line to `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Attributions.md` as part of its commit.
 
 ---
 
@@ -248,7 +249,7 @@ If `Lift mode` is `DIRECT_PORT`, the directive **must also** append the attribut
 
 ## 8. Activity Log
 
-*(Empty as of v1 — no directive has yet exercised a `refs/oss/*` branch.)*
+*(Empty as of v1.2 — no directive has yet exercised a `refs/oss/*` branch.)*
 
 | Date | Directive | Branch | Files Ported | Attribution |
 |---|---|---|---|---|
@@ -258,13 +259,23 @@ If `Lift mode` is `DIRECT_PORT`, the directive **must also** append the attribut
 
 ## 9. Cross-References
 
-- `REFERENCE_LIBRARY/05_OSS_REPO_REGISTRY.md` — registry status (HARVESTED)
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Repo-Registry.md` — registry status (HARVESTED)
 - `PROGRAM_CONTROL/REPORT_BACK/THREAD15-OSS-HARVEST.md` — original harvest report-back
-- `REFERENCE_LIBRARY/06_OSS_ATTRIBUTIONS.md` — *to be created by the first directive that performs a `DIRECT_PORT`*
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Attributions.md` — *to be created by the first directive that performs a `DIRECT_PORT`*
 - `OQMI Coding Doctrine` — third-party code policy
 - `ChatNow.Zone Canonical Corpus v10` — all section references in the per-branch cards
 - `Sovereign Kernel` — architectural authority for stack decisions (NestJS, NATS, LiveKit, Black-Glass)
 
 ---
 
-*OmniQuest Media Inc. · ChatNow.Zone Build Control · `REF-LIB-OSS-LIFT-01` · v1 DRAFT · 21 April 2026*
+## Revision History
+
+| Version | Date | Change |
+|---|---|---|
+| v1 | 21 Apr 2026 | Initial draft (paths under `REFERENCE_LIBRARY/`) |
+| v1.1 | 21 Apr 2026 | CEO directive: relocate reference library under `PROGRAM_CONTROL/DIRECTIVES/REFERENCE_LIBRARY/`. Renamed numeric-prefix files to hyphen convention. |
+| v1.2 | 21 Apr 2026 | CEO directive: collapse to flat structure — all reference docs live directly in `PROGRAM_CONTROL/DIRECTIVES/QUEUE/` alongside the lift index. No `REFERENCE_LIBRARY/` subfolder. |
+
+---
+
+*OmniQuest Media Inc. · ChatNow.Zone Build Control · `REF-LIB-OSS-LIFT-01` · v1.2 DRAFT · 21 April 2026*
