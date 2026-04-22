@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `main`
-**Commit:** `295ae426571a2b45fa378a71965239f9cdbbabef`
-**Generated:** 2026-04-22T01:56:26Z
+**Commit:** `e119a4c075582aca61253c5f195cafe7e9549d83`
+**Generated:** 2026-04-22T02:03:56Z
 
 ## All Files
 
@@ -70,6 +70,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Lift-From-Index.md`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Repo-Registry.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/RRR-GOV-002`
 - `PROGRAM_CONTROL/REPORT_BACK/.gitkeep`
 - `PROGRAM_CONTROL/REPORT_BACK/ADD-CLEARANCE-CONFIRMATION.md`
