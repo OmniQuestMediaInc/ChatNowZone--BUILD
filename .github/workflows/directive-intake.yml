@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           fetch-depth: 2
 
@@ -53,8 +53,16 @@ jobs:
             ID=$(basename "$FILE" .md)
             TITLE="DIRECTIVE: ${ID}"
             echo "Opening issue for ${ID} (${FILE})"
-            SEPARATOR="---"
-            PR_INSTRUCTION=$(printf '\n\n%s\n**Copilot agent instruction:** When your work is complete, create a\npull request targeting main.\nTitle format: [PREFIX]: [DIRECTIVE-ID] — [short description]\nLabels: copilot-task, ready-for-review\nIf this directive is FIZ-scoped (FIZ: YES in header), also add\nlabel fiz-review-required.' "$SEPARATOR")
+            PR_INSTRUCTION=$(printf '%s\n' \
+              '' \
+              '' \
+              '---' \
+              '**Copilot agent instruction:** When your work is complete, create a' \
+              'pull request targeting main.' \
+              'Title format: [PREFIX]: [DIRECTIVE-ID] — [short description]' \
+              'Labels: copilot-task, ready-for-review' \
+              'If this directive is FIZ-scoped (FIZ: YES in header), also add' \
+              'label fiz-review-required.')
 
             gh issue create \
               --title "$TITLE" \
