@@ -65,7 +65,8 @@ Reference Prisma models by exact model name and field names.]
 ## Commit Format
 
 [FIZ directives:]
-```
+
+```text
 REASON: [ID] — [description]
 IMPACT: [files affected, no logic changed / affected]
 CORRELATION_ID: [ID]-[date]
@@ -73,7 +74,8 @@ GATE: [gate clearance reference]
 ```
 
 [Non-FIZ directives:]
-```
+
+```text
 [PREFIX]: [ID] — [description]
 ```
 

@@ -35,3 +35,26 @@ MD036: false
 # MD040: fenced code blocks without language — warn, not fail, since many
 #        snippets are intentionally plain-text.
 MD040: false
+
+# MD022: blanks around headings — compact-doctrine docs intentionally omit
+#        blank lines between `### step` and the first bullet.
+MD022: false
+
+# MD032: blanks around lists — same rationale as MD022.
+MD032: false
+
+# MD007: ul-indent — docs use 2-space indent for nested lists; upstream's
+#        default of 0 fights that style universally.
+MD007: false
+
+# MD025: multiple H1 — some evidence templates intentionally stack H1s
+#        (e.g. a banner H1 followed by the real title).
+MD025: false
+
+# MD058: blanks around tables — evidence templates intentionally have no
+#        surrounding blank lines.
+MD058: false
+
+# MD060: table-column-style — table alignment is hand-written in policy
+#        docs and tolerates missing-space / unaligned pipes.
+MD060: false
