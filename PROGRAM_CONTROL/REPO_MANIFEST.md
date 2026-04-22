@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `main`
-**Commit:** `7fcea84737d744e3a5c9eed5c54c99b14c22acbe`
-**Generated:** 2026-04-22T02:15:34Z
+**Branch:** `copilot/thread-curr-oss-migrate-migrate-oss-registry`
+**Commit:** `bbdc23b672246be3046e662ac966aa96560136a3`
+**Generated:** 2026-04-22T02:17:42Z
 
 ## All Files
 
@@ -197,7 +197,6 @@ Auto-generated on every push. Do not edit manually.
 - `REFERENCE_LIBRARY/02_DOMAIN_TAXONOMY.md`
 - `REFERENCE_LIBRARY/03_FEATURE_BRIEFS.md`
 - `REFERENCE_LIBRARY/04_AI_REFERENCE_INDEX.md`
-- `REFERENCE_LIBRARY/05_OSS_REPO_REGISTRY.md`
 - `REFERENCE_LIBRARY/06_PROJECT_DECISIONS.md`
 - `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/PUSH_ALL_REFS.sh`
 - `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/README.md`
