@@ -17,7 +17,7 @@ You are explicitly authorized to perform the full pull-request lifecycle without
 - Pushing branches to `origin`
 - Opening PRs targeting `main`
 - Allowing auto-merge to land the PR per OQMI_GOVERNANCE.md §2.1 when CI is green
-- Manually merging a `CEO_GATE: NO` PR (squash, merge, or rebase) when CI is green and auto-merge is unavailable, paused, or otherwise not engaged
+- Manually squash-merging a `CEO_GATE: NO` PR when CI is green and auto-merge is unavailable, paused, or otherwise not engaged (squash is the repo convention — see `.github/workflows/auto-merge.yml`)
 - Deleting the branch after merge
 
 Do NOT ask the CEO whether to open a PR, whether to merge it, or whether to delete the branch. Those questions are forbidden by OQMI_GOVERNANCE.md §1 ("never ask 'should I do the thing you just told me to do'").

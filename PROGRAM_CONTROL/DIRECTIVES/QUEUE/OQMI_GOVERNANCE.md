@@ -51,7 +51,7 @@ In cases 2 and 3, the agent escalates with a single, clear question. The agent d
 - Push those branches to `origin`
 - Open PRs targeting `main`
 - Allow auto-merge to land the PR per §2.1 when CI is green
-- Manually merge a `CEO_GATE: NO` PR (squash, merge, or rebase per repo convention) when CI is green and auto-merge is unavailable, paused, or otherwise not engaged
+- Manually squash-merge a `CEO_GATE: NO` PR when CI is green and auto-merge is unavailable, paused, or otherwise not engaged (squash is the repo convention — see `.github/workflows/auto-merge.yml`)
 - Delete the branch after merge
 
 The agent does NOT need to ask the CEO whether to open the PR, whether to merge it, or whether to delete the branch. Asking those questions is a form of "should I do the thing you just told me to do" and is forbidden by this section.
