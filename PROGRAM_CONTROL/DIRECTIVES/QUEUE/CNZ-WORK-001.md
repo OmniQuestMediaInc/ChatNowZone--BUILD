@@ -285,7 +285,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: RRR-GOV-002 §0 references DONE/ and REPORT_BACK/ subdirs; need verification
-Status: QUEUED
+Status: DONE — 2026-04-23 — CNZ-WORK-001-A011-DONE.md (admin closure; both paths already present with content; agent hint "copilot" overridden per charter §2)
 Directive: Confirm whether PROGRAM_CONTROL/DIRECTIVES/DONE/ and PROGRAM_CONTROL/REPORT_BACK/ exist. If absent, create them as empty directories with .gitkeep files. These paths are required by the charter completion-record protocol (§11).
 ```
 
