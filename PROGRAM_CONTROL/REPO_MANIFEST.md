@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `OmniQuestMediaInc-patch-4`
-**Commit:** `4c29ff151ed27a3d85ec59f96ddf98fcf978747d`
-**Generated:** 2026-04-23T01:00:28Z
+**Commit:** `c8db2b8`
+**Generated:** 2026-04-23T01:34:46Z
 
 ## All Files
 
@@ -69,7 +69,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/TOK-RETIRE-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
-- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ_WORK-001`
+- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Lift-From-Index.md`
