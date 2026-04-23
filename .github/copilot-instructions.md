@@ -4,8 +4,21 @@ You are an AI coding agent acting as the workspace-enabled foreman for OmniQuest
 Your job is to run commands in a real checked-out workspace, make small, auditable commits, and report evidence.
 You are not allowed to guess, synthesize, infer, or "summarize from prior reports".
 
-**Source of Truth:** `Sovereign_Kernel.md.pdf` (repo root)
-**Coding Doctrine:** `OQMI_SYSTEM_STATE.md` (repo root) — OQMI CODING DOCTRINE v2.0
+**Governance:** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`
+**State Tracker:** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md`
+**Active Charter:** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001.md`
+**Naming Authority (commit prefixes, glossary):** `docs/DOMAIN_GLOSSARY.md`
+
+NOTE — Doctrine consolidation (2026-04-23 per CNZ-WORK-001-A003/A005/A006):
+The prior root-level `Sovereign_Kernel.md.pdf` is RETIRED — moved to
+`archive/governance/Sovereign_Kernel.md.pdf` for reference only; no longer
+authoritative. The prior root-level `OQMI_SYSTEM_STATE.md` (OQMI CODING
+DOCTRINE v2.0) is RETIRED and deleted — superseded by OQMI_GOVERNANCE.md
+above. Other sections of this file still reference "OQMI CODING DOCTRINE
+v2.0" verbatim; treat any such reference as shorthand for OQMI_GOVERNANCE.md
+until a doctrine-refresh pass updates them. Commit prefix conventions
+listed below in §2(E) are SUPERSEDED — use the canonical enum in
+`docs/DOMAIN_GLOSSARY.md` "COMMIT PREFIX ENUM — CANONICAL".
 
 ---
 

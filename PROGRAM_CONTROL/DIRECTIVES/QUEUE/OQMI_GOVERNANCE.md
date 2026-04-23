@@ -282,3 +282,34 @@ Every commit must be:
 Commits touching financial-integrity paths require this four-line format:
 
 ```
+FIZ: <subject line describing the change>
+REASON: <why this change is required>
+IMPACT: <what financial-integrity surface is affected>
+CORRELATION_ID: <idempotency / audit correlation id>
+```
+
+### 8.1 Commit prefix enum
+
+The canonical commit prefix enum for this repository is maintained in
+`docs/DOMAIN_GLOSSARY.md` under the section **COMMIT PREFIX ENUM —
+CANONICAL**. Agents must consult that section before choosing a prefix.
+The glossary is the naming authority; it supersedes any prefix list
+found elsewhere in the repo (including prior versions of this document
+and any project-level governance documents).
+
+Selection rule: most specific applicable prefix wins. `FIZ:` overrides
+any other prefix whenever financial-integrity invariants are touched
+and requires the four-line format above.
+
+---
+
+## NOTE — DOCUMENT TRUNCATION
+
+This file was found truncated at §8 as of 2026-04-23 (CNZ-WORK-001-A012
+execution). Sections §9–§12 referenced in other documents
+(e.g. `CNZ-WORK-001.md` §9 cites `OQMI_GOVERNANCE.md §12` invariants
+quick-reference register) are not present in this file. A follow-up
+task should restore §9–§12 from authoritative source. This note is
+placed to flag the defect for the next governance-scoped editing pass;
+it does not itself constitute §9–§12.
+

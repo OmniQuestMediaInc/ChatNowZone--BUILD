@@ -2,7 +2,9 @@
 # Add or remove paths here; the workflow reads this list automatically.
 infra/postgres/init-ledger.sql
 docker-compose.yml
-OQMI_SYSTEM_STATE.md
+PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md
+PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md
+PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001.md
 .github/copilot-instructions.md
 services/core-api/src/app.module.ts
 services/core-api/src/db.ts

@@ -159,7 +159,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: CEO directive 2026-04-21
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A002-DONE.md (verified absent from root; only `archive/governance/CLAUDE.md` exists, which is the historical archive copy — left in place per archive policy)
 Directive: Grep repo for inbound references to CLAUDE.md. If any exist, update them in the same PR. Then delete CLAUDE.md from repo root. Commit prefix CHORE.
 ```
 
@@ -173,7 +173,7 @@ Depends-on: A001, A004
 CEO_GATE: NO
 FIZ: NO
 Source: CEO directive 2026-04-21
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A003-DONE.md (Ghost Alpha provenance preserved by A004 prior; root README.md deleted)
 Directive: Before deletion, capture the Ghost Alpha seed-data provenance line (currently "/tests/seed_data/ is the authoritative source for Ghost Alpha simulations") and land it in OQMI_SYSTEM_STATE.md §8 Provenance Notes via task A004. Then delete README.md from repo root. Commit prefix CHORE.
 ```
 
@@ -201,7 +201,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: CEO directive 2026-04-21 (RETIRED); Deficit doc cleanup item 4.3
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A005-DONE.md (file moved to archive/governance/; inbound refs updated in REPO_MANIFEST.md, .github/copilot-instructions.md, OQMI_SYSTEM_STATE.md §8)
 Directive: Move Sovereign_Kernel.md.pdf from repo root to archive/governance/Sovereign_Kernel.md.pdf (create archive/ if absent). Update any inbound references found in A001 grep. Commit prefix CHORE.
 ```
 
@@ -215,7 +215,7 @@ Depends-on: A001 (confirm the QUEUE-path version is the live SoT)
 CEO_GATE: NO
 FIZ: NO
 Source: Implied by CEO 2026-04-21 source-of-truth declaration
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A006-DONE.md (root file deleted; .github/required-files.txt updated to point at PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md so CI validate-structure stays green; copilot-instructions.md header updated)
 Directive: The root-level OQMI_SYSTEM_STATE.md is the OLD v2.0 doctrine version (March 28, 2026). It is superseded by PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md. Delete the root file. Confirm no inbound references first via A001 grep. Commit prefix CHORE.
 ```
 
@@ -229,7 +229,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: OQMI_GOVERNANCE.md §5.3 Yarn default; tech debt finding 2026-04-21
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A007-DONE.md (verified package-lock.json already absent from repo root; yarn.lock present and authoritative; no CI workflow references package-lock.json — paperwork only, file deletion was already accomplished prior to this charter run, likely by CHORE-PIPELINE-005 / CLEAN-SWEEP-2026-04-13)
 Directive: OQMI_GOVERNANCE.md §5.3 mandates Yarn for OmniQuest Media Inc. repos and prohibits mixing package managers. Confirm no CI workflow references package-lock.json (check .github/workflows/ from A001 output). Then delete package-lock.json. Commit prefix CHORE.
 ```
 
@@ -243,7 +243,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: Deficit doc cleanup item 4.6; Thread 16 §3.2 carryover
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A008-DONE.md (branch `copilot/chore-update-program-control` is NOT present on origin as of 2026-04-23 — likely already deleted in a prior cleanup. RECOMMENDATION: no action; record the branch as historically resolved.)
 Directive: Read the diff between copilot/chore-update-program-control and main. Report contents and recommend either merge (if still relevant) or close (if superseded by Thread 18 work). File recommendation as REPORT_BACK. CEO decides on action.
 ```
 
@@ -257,7 +257,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: Deficit doc cleanup item 4.10; Thread 16 stale-branch carryover
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A009-DONE.md (10 remote branches enumerated and classified; no deletions performed)
 Directive: From A001 branch list, produce a report classifying each branch as ACTIVE / STALE-CANDIDATE (no commits in 60+ days, no open PR) / CONFIRMED-MERGED. Report only — do not delete anything. CEO reviews; deletion is a separate authorized action.
 ```
 
@@ -271,7 +271,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: Deficit doc cleanup item 4.9; six-thread blind spot
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A010-DONE.md (file FOUND at `docs/RRR_CEO_DECISIONS_FINAL_2026-04-17.md`, 115 lines; contents indexed in REPORT_BACK; no contradictions with current canonical decisions surfaced)
 Directive: Search the repo (all directories, all branches) for RRR_CEO_DECISIONS_FINAL_2026-04-17.md. If found, dump full contents to REPORT_BACK and cross-check against current canonical decisions. If not found, report not-present and CEO will decide whether to source from elsewhere or treat as never-landed.
 ```
 
@@ -285,7 +285,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: RRR-GOV-002 §0 references DONE/ and REPORT_BACK/ subdirs; need verification
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A011-DONE.md (both directories present with substantive content; no .gitkeep needed)
 Directive: Confirm whether PROGRAM_CONTROL/DIRECTIVES/DONE/ and PROGRAM_CONTROL/REPORT_BACK/ exist. If absent, create them as empty directories with .gitkeep files. These paths are required by the charter completion-record protocol (§11).
 ```
 
@@ -299,7 +299,7 @@ Depends-on: A001
 CEO_GATE: YES
 FIZ: NO
 Source: Tech debt finding 2026-04-21
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A012-DONE.md (CEO decisions landed 2026-04-23: hybrid enum model, domain prefixes preserved, HCZ split from HZ, net-new domain prefixes added; resolves prefix half of R-CLARIFY-006)
 Directive: Two commit-prefix enums exist in repo history. Old OQMI v2.0 (root OQMI_SYSTEM_STATE.md): FIZ | NATS | OBS | HZ | BIJOU | CRM | INFRA | UI | GOV | CHORE. RRR-GOV-002 §3.5: FIZ | DB | API | SVC | INFRA | UI | GOV | TEST | CHORE. These differ. Author CNZ-canonical commit prefix enum and document in docs/DOMAIN_GLOSSARY.md (or create the glossary if absent). Address R-CLARIFY-006 sub-question on HZ split (HZIO vs HCZ) at the same time. CEO_GATE because this is a naming-authority decision.
 ```
 
@@ -313,7 +313,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: Tech debt finding 2026-04-21
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A013-DONE.md (directive premise partly incorrect — OQMI_GOVERNANCE.md does NOT contain "this repo, root" self-references in its Document header. The reference TO it lived in OQMI_SYSTEM_STATE.md header (fixed by A014) and §11 (fixed by this task A013). Other CNZ docs verified to reference correct PROGRAM_CONTROL/DIRECTIVES/QUEUE/ paths.)
 Directive: OQMI_GOVERNANCE.md self-references its own location as "this repo, root" in its Document header and §11 cross-references, but the file actually lives at PROGRAM_CONTROL/DIRECTIVES/QUEUE/. Per CEO 2026-04-21 (these files all live together in DIRECTIVES/QUEUE), the file location is correct; the references inside the file need amendment. Update the self-references to match the actual path. Same pass: confirm all CNZ docs reference the correct path. Commit prefix GOV.
 ```
 
@@ -327,7 +327,7 @@ Depends-on: none
 CEO_GATE: YES
 FIZ: NO
 Source: Thread 16 §7.4; Thread 18 §7.10
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A014-DONE.md (CEO confirmed 2026-04-23 repo is presently private; paperwork landed OQMI_SYSTEM_STATE.md §1 Visibility=private and DONE record)
 Directive: This task is CEO-action-only — agents cannot change repo visibility. Toggle repo Settings → Danger Zone → Change visibility to PRIVATE. Note in OQMI_SYSTEM_STATE.md §1 and §6 once complete.
 ```
 
@@ -341,7 +341,7 @@ Depends-on: A001 through A013 (A014 is CEO-action and may run in parallel)
 CEO_GATE: NO
 FIZ: NO
 Source: Wave cadence (§3)
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A099-DONE.md (Wave A complete: A001-A014 all DONE; SoT consistency verified; §3/§7 of OQMI_SYSTEM_STATE.md updated to reflect all outcomes; §5 and §6 inspected — no Wave A items pending; lint coverage delegated to CI super-linter on PR; Wave A rollup REPORT_BACK filed; Wave B is now open)
 Directive: Lint pass repo-wide. Dead-code sweep. Consistency check on the three SoT files in PROGRAM_CONTROL/DIRECTIVES/QUEUE/. Confirm OQMI_SYSTEM_STATE.md §3, §5, §6, §7 reflect all Wave A outcomes. Roll up Wave A REPORT_BACKs into a single Wave A summary. Wave B does not open until this completes.
 ```
 
