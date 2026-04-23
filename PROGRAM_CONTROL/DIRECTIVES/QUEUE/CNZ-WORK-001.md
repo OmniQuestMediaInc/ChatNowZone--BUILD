@@ -201,7 +201,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: CEO directive 2026-04-21 (RETIRED); Deficit doc cleanup item 4.3
-Status: QUEUED
+Status: DONE — 2026-04-23 — CNZ-WORK-001-A005-DONE.md
 Directive: Move Sovereign_Kernel.md.pdf from repo root to archive/governance/Sovereign_Kernel.md.pdf (create archive/ if absent). Update any inbound references found in A001 grep. Commit prefix CHORE.
 ```
 

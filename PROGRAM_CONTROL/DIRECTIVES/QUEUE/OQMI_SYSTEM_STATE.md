@@ -63,6 +63,7 @@ Reverse-chronological list of completed work. Each entry one row. Pruning policy
 | 2026-04-22 | CNZ-WORK-001-A001 — Q-000-PRE-READ-AUDIT (foundational repo audit) | direct-land `<FILL-IN A001 SHA>` | claude-code | Agent-hint "copilot" overridden per charter §2; DONE record `CNZ-WORK-001-A001-DONE.md` |
 | 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `<FILL-IN A004 SHA>` | claude-code | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
 | 2026-04-21 | CNZ-WORK-001-A002 — CLAUDE.md archived to `archive/governance/` | #293 `6cf5764` | claude-code | Admin closure filed 2026-04-23; DONE record `CNZ-WORK-001-A002-DONE.md` |
+| 2026-04-23 | CNZ-WORK-001-A005 — Sovereign_Kernel.md.pdf archived to `archive/governance/` | (Wave A cleanup PR) | claude-code | Updated inbound ref in `.github/copilot-instructions.md`; DONE record `CNZ-WORK-001-A005-DONE.md` |
 
 ---
 
@@ -128,7 +129,7 @@ Things that were in this repo, have been removed, and should not be reintroduced
 Anything an incoming agent needs to know that doesn't fit elsewhere: terminology that has shifted, files that look authoritative but aren't, branches that look active but are dead, peculiarities of this repo's history.
 
 - `/tests/seed_data/` is the authoritative source for Ghost Alpha simulations. (Preserved from root `README.md` prior to A003 deletion; landed by CNZ-WORK-001-A004 on 2026-04-22.)
-- [e.g., `Sovereign_Kernel.md.pdf` in repo root is RETIRED. Do not treat as authoritative. Pending archive.]
+- `Sovereign_Kernel.md.pdf` is RETIRED and has been archived to `archive/governance/Sovereign_Kernel.md.pdf` (CNZ-WORK-001-A005, 2026-04-23). Do not treat as authoritative.
 - [e.g., Branch `copilot/chore-old-branch` is 1 commit ahead of main but stale; review before deletion.]
 - [e.g., This repo's commit prefixes are declared in `README.md` — consult before committing.]
 - `/tests/seed_data/` is the authoritative source for Ghost Alpha simulations.
