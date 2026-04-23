@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/continue-cnz-work-001-EJKhg`
-**Commit:** `549a8cac2b45031522533904ad7413df08710ee1`
-**Generated:** 2026-04-23T03:27:09Z
+**Branch:** `claude/cnz-work-001-pr-authority-hardening`
+**Commit:** `92932c39670a14dcd977df519fec69157e43a766`
+**Generated:** 2026-04-23T04:15:36Z
 
 ## All Files
 
