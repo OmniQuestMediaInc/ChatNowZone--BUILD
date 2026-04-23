@@ -229,7 +229,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: OQMI_GOVERNANCE.md §5.3 Yarn default; tech debt finding 2026-04-21
-Status: QUEUED
+Status: DONE — 2026-04-23 — CNZ-WORK-001-A007-DONE.md (admin closure; invariant already satisfied — package-lock.json not present; agent hint "copilot" overridden per charter §2)
 Directive: OQMI_GOVERNANCE.md §5.3 mandates Yarn for OmniQuest Media Inc. repos and prohibits mixing package managers. Confirm no CI workflow references package-lock.json (check .github/workflows/ from A001 output). Then delete package-lock.json. Commit prefix CHORE.
 ```
 
