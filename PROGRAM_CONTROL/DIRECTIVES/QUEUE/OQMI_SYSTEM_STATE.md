@@ -1,11 +1,11 @@
 # OQMI SYSTEM STATE
 
 **Document:** OQMI_SYSTEM_STATE.md
-**Repo:** [REPO NAME — fill in per repo]
+**Repo:** OmniQuestMediaInc/ChatNowZone--BUILD
 **Version:** v1.0
-**Last Updated:** [YYYY-MM-DD — update on every meaningful change]
+**Last Updated:** 2026-04-23
 **Owner:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
-**Governing Document:** `OQMI_GOVERNANCE.md` (this repo, root)
+**Governing Document:** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`
 
 ---
 
@@ -29,14 +29,14 @@ This document is repo-specific in content and repo-portable in shape. Drop the s
 
 | Field | Value |
 |---|---|
-| Repo name | [e.g., ChatNowZone--BUILD] |
-| Repo URL | [GitHub URL] |
+| Repo name | ChatNowZone--BUILD |
+| Repo URL | https://github.com/OmniQuestMediaInc/ChatNowZone--BUILD |
 | Default branch | `main` |
-| Package manager | [Yarn / npm / pnpm — must match `README.md`] |
-| Primary languages | [e.g., TypeScript 84%, PLpgSQL 16%] |
-| Active build epic | [e.g., CNZ-CORE-002, or "none — maintenance"] |
-| Hard launch deadline | [Date or "n/a"] |
-| Visibility | [public / private] |
+| Package manager | Yarn (per OQMI_GOVERNANCE §5.3) |
+| Primary languages | [pending full repo language survey] |
+| Active build epic | CNZ-WORK-001 (active charter; hard launch 2026-04-30) |
+| Hard launch deadline | 2026-04-30 |
+| Visibility | private (confirmed by CEO 2026-04-23; CNZ-WORK-001-A014) |
 
 ---
 
@@ -62,6 +62,8 @@ Reverse-chronological list of completed work. Each entry one row. Pruning policy
 |---|---|---|---|---|
 | 2026-04-22 | CNZ-WORK-001-A001 — Q-000-PRE-READ-AUDIT (foundational repo audit) | direct-land `<FILL-IN A001 SHA>` | claude-code | Agent-hint "copilot" overridden per charter §2; DONE record `CNZ-WORK-001-A001-DONE.md` |
 | 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `<FILL-IN A004 SHA>` | claude-code | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
+| 2026-04-23 | CNZ-WORK-001-A012 — Canonical commit prefix enum + resolve R-CLARIFY-006 prefix half | PR pending (branch `claude/continue-cnz-work-001-EJKhg`) | claude-code | Enum landed in `docs/DOMAIN_GLOSSARY.md`; cross-linked from `OQMI_GOVERNANCE.md §8.1`; HZ kept as HeartZone IoT, HCZ confirmed as Guest Services bureau; DONE record `CNZ-WORK-001-A012-DONE.md` |
+| 2026-04-23 | CNZ-WORK-001-A014 — Repo visibility confirmed PRIVATE (paperwork) | PR pending (branch `claude/continue-cnz-work-001-EJKhg`) | claude-code | CEO-action task; CEO confirmed repo private 2026-04-23; agent landed §1 Visibility amendment and DONE record `CNZ-WORK-001-A014-DONE.md` |
 
 ---
 
@@ -129,7 +131,8 @@ Anything an incoming agent needs to know that doesn't fit elsewhere: terminology
 - `/tests/seed_data/` is the authoritative source for Ghost Alpha simulations. (Preserved from root `README.md` prior to A003 deletion; landed by CNZ-WORK-001-A004 on 2026-04-22.)
 - [e.g., `Sovereign_Kernel.md.pdf` in repo root is RETIRED. Do not treat as authoritative. Pending archive.]
 - [e.g., Branch `copilot/chore-old-branch` is 1 commit ahead of main but stale; review before deletion.]
-- [e.g., This repo's commit prefixes are declared in `README.md` — consult before committing.]
+- Commit prefix enum: the canonical list lives in `docs/DOMAIN_GLOSSARY.md` under "COMMIT PREFIX ENUM — CANONICAL" (landed 2026-04-23 by CNZ-WORK-001-A012). The old OQMI v2.0 enum and the RRR-GOV-002 §3.5 enum are retired — consult only the glossary.
+- `OQMI_GOVERNANCE.md` was found truncated at §8 on 2026-04-23 (§§9–§12 missing though referenced elsewhere). Flagged in A012 REPORT_BACK for a future governance-scoped restore.
 - `/tests/seed_data/` is the authoritative source for Ghost Alpha simulations.
 
 ---
@@ -138,8 +141,8 @@ Anything an incoming agent needs to know that doesn't fit elsewhere: terminology
 
 | Field | Value |
 |---|---|
-| Last full review | YYYY-MM-DD |
-| Reviewed by | [agent or CEO] |
+| Last full review | 2026-04-23 |
+| Reviewed by | claude-code (CNZ-WORK-001-A012 + A014 pass) |
 | Stale-flag threshold | 30 days since last update triggers automatic flag |
 
 If this document has not been updated in 30 days but the repo has commits in that window, the document is out of date and the next agent to touch the repo should reconcile it before doing other work.

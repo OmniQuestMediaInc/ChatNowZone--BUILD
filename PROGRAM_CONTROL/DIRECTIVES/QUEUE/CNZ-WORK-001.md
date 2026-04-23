@@ -299,7 +299,7 @@ Depends-on: A001
 CEO_GATE: YES
 FIZ: NO
 Source: Tech debt finding 2026-04-21
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A012-DONE.md (CEO decisions landed 2026-04-23: hybrid enum model, domain prefixes preserved, HCZ split from HZ, net-new domain prefixes added; resolves prefix half of R-CLARIFY-006)
 Directive: Two commit-prefix enums exist in repo history. Old OQMI v2.0 (root OQMI_SYSTEM_STATE.md): FIZ | NATS | OBS | HZ | BIJOU | CRM | INFRA | UI | GOV | CHORE. RRR-GOV-002 §3.5: FIZ | DB | API | SVC | INFRA | UI | GOV | TEST | CHORE. These differ. Author CNZ-canonical commit prefix enum and document in docs/DOMAIN_GLOSSARY.md (or create the glossary if absent). Address R-CLARIFY-006 sub-question on HZ split (HZIO vs HCZ) at the same time. CEO_GATE because this is a naming-authority decision.
 ```
 
@@ -327,7 +327,7 @@ Depends-on: none
 CEO_GATE: YES
 FIZ: NO
 Source: Thread 16 §7.4; Thread 18 §7.10
-Status: QUEUED
+Status: DONE — 2026-04-23 — PR pending — CNZ-WORK-001-A014-DONE.md (CEO confirmed 2026-04-23 repo is presently private; paperwork landed OQMI_SYSTEM_STATE.md §1 Visibility=private and DONE record)
 Directive: This task is CEO-action-only — agents cannot change repo visibility. Toggle repo Settings → Danger Zone → Change visibility to PRIVATE. Note in OQMI_SYSTEM_STATE.md §1 and §6 once complete.
 ```
 

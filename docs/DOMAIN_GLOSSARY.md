@@ -2,7 +2,7 @@
 **Authority:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
 **Source:** Tech Debt Delta 2026-04-16 + OQMI Coding Doctrine v2.0
 **Repo:** OmniQuestMediaInc/ChatNowZone--BUILD
-**Last updated:** 2026-04-18
+**Last updated:** 2026-04-23
 
 This file is the canonical naming authority for all code, comments,
 documentation, and database identifiers in the ChatNow.Zone codebase.
@@ -88,7 +88,7 @@ HOW TO USE:
 | GuestZone | Guest services and CS tooling | GuestZone, guest_zone | |
 | CreatorControl.Zone | Creator dashboard and control surface | CreatorControlZone | |
 | Diamond Concierge | Security and Fraud function with hospitality surface | DiamondConcierge, diamond_concierge | NOT Guest Services |
-| HCZ | Human Contact Zone — agent escalation pathway | HCZ, hcz | |
+| HCZ | Human Contact Zone — Guest Services / Customer Services bureau; agent escalation pathway | HCZ, hcz | Organizational bureau (human agents). Distinct from HeartZone (HZ) which is biometric IoT technology. Confirmed by CEO 2026-04-23 resolving R-CLARIFY-006. |
 | RETIRED: ShowZonePass | Retired pass SKU system | RETIRED: show_zone_pass | |
 | Wristband | Physical or account-linked access identifier | wristband | Access identifier is RETAINED; token economy layer is RETIRED |
 
@@ -193,28 +193,69 @@ distinct from tiers and must never be added to the `MembershipTier` enum.
 
 ---
 
-## COMMIT PREFIXES
+## COMMIT PREFIX ENUM — CANONICAL
+
+Authority: CEO decision 2026-04-23 (resolves CNZ-WORK-001-A012 and the
+prefix half of R-CLARIFY-006). This is the only commit prefix enum for
+OmniQuestMediaInc/ChatNowZone--BUILD. Supersedes the old OQMI v2.0
+enum and the RRR-GOV-002 §3.5 enum — both retired.
+
+Selection rule: **most specific applicable prefix wins.** Use a domain
+prefix when the commit is scoped to that domain; use a layer prefix when
+no domain is specific enough; `FIZ:`, `GOV:`, and `CHORE:` are always
+available as cross-cutting overrides. `FIZ:` overrides any other prefix
+whenever financial-integrity invariants are touched (see §FIZ below).
+
+### Cross-cutting (always available)
+
+| Prefix | Scope | Notes |
+|--------|-------|-------|
+| FIZ: | Financial Integrity Zone | Four-line format required per OQMI_GOVERNANCE.md §8. Wallet, ledger, three-bucket, NOWPayouts, payouts, escrow, commission. Dual-prefix with a domain prefix when both apply (e.g. `GGS: + FIZ:`, `PAY: + FIZ:`). |
+| GOV: | Governance, doctrine, charter, RoE | OQMI_GOVERNANCE, OQMI_SYSTEM_STATE, CNZ-WORK-001, RRR-GOV-002, policy docs |
+| CHORE: | Repo hygiene, file moves, lockfiles, dotfiles | |
+
+### Layer-scoped (use when no domain is specific enough)
 
 | Prefix | Scope |
 |--------|-------|
-| FIZ: | Financial Integrity Zone |
-| NATS: | NATS messaging fabric |
-| OBS: | OBS broadcast kernel |
-| HZ: | HeartZone / biometric |
-| BIJOU: | Bijou Theatre architecture |
-| CRM: | CRM objects / schema |
-| INFRA: | Platform infrastructure |
-| UI: | Frontend / Black-Glass |
-| GOV: | Compliance / Sovereign CaC |
-| CHORE: | Tooling, maintenance |
+| INFRA: | Docker, CI, deploy, env config, platform infrastructure |
+| DB: | Schema, migrations, seed data |
+| API: | Cross-domain REST/GraphQL surface |
+| UI: | Front-end work outside Black-Glass (admin panels, internal tools) |
+| TEST: | Test-only changes |
+
+### Domain-scoped (most-specific-wins)
+
+| Prefix | Scope |
+|--------|-------|
+| NATS: | NATS event fabric |
+| OBS: | OBS Broadcast Kernel |
+| BIJOU: | Bijou.Zone Theatre architecture |
+| CRM: | CRM objects / schema / MyCrew.Zone |
+| HZ: | HeartZone IoT Loop — biometric / Web Bluetooth (technology) |
+| HCZ: | Human Contact Zone — Guest Services / Customer Services bureau (distinct from HZ) |
 | GGS: | GateGuard Sentinel core |
 | GGS-AV: | GateGuard Sentinel AV module |
-| CYR: | Cyrano subsystem |
+| CYR: | Cyrano subsystem (L1–L4) |
 | SHOWZONE: | ShowZone room lifecycle |
+| REDBOOK: | RedBook incident / safety playbooks and scenario classifier |
+| PAY: | NOWPayouts integration layer (yields to `FIZ:` when ledger/balance touched; dual-prefix `PAY: + FIZ:` is acceptable) |
+| COMP: | Sovereign CaC / Compliance Stack / jurisdictional rule configuration |
+| BG: | Black-Glass Interface — primary front-end surface (UI: used only for non-Black-Glass surfaces) |
 
-FYI: GGS: + FIZ: dual prefix is required for GateGuard Sentinel
-commits that touch ledger, payout, balance, or escrow. Both prefixes
-must appear and FIZ: format (REASON/IMPACT/CORRELATION_ID) applies.
+### Retired prefix enums (do NOT use)
+
+- Old OQMI v2.0 enum from root `OQMI_SYSTEM_STATE.md` — superseded by this table
+- RRR-GOV-002 §3.5 enum (`SVC:`, `DB:`-as-sole, `API:`-as-sole, `TEST:` without scope) — superseded; in particular `SVC:` is retired (route to the relevant domain prefix, `INFRA:`, or `API:`)
+
+### Dual-prefix patterns
+
+Required when a commit crosses two scopes that both have commit-discipline
+implications. Order: domain prefix first, then FIZ:.
+
+- `GGS: + FIZ:` — GateGuard Sentinel commits touching ledger, payout, balance, or escrow. Both prefixes must appear; `FIZ:` four-line format (REASON/IMPACT/CORRELATION_ID) applies.
+- `PAY: + FIZ:` — NOWPayouts commits touching ledger or settlement state.
+- Other domain prefixes may likewise dual-prefix with `FIZ:` when the commit touches financial-integrity paths. `FIZ:` discipline always applies.
 
 ---
 
