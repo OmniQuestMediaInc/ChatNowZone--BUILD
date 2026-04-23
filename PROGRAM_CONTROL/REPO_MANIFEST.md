@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `OmniQuestMediaInc-patch-4`
-**Commit:** `98e1fd5d996cdfdba3394871ac80930fff03488d`
-**Generated:** 2026-04-23T01:36:13Z
+**Branch:** `OmniQuestMediaInc-patch-6`
+**Commit:** `26da9b9e54a467e6100bbdb11991282912bc0939`
+**Generated:** 2026-04-23T01:55:54Z
 
 ## All Files
 
@@ -71,7 +71,6 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-CLAUDE-CODE-KICKOFF.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-CLAUDE-CODE-STANDING-PROMPT.md`
-- `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md`
