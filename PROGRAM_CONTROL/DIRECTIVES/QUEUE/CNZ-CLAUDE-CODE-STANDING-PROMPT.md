@@ -1,8 +1,8 @@
-# CNZ-CLAUDE-CODE-KICKOFF.md
+# CNZ-CLAUDE-CODE-STANDING-PROMPT.md
 
 **Authority:** Kevin B. Hartley, CEO — OmniQuest Media Inc.
 **Repo:** `OmniQuestMediaInc/ChatNowZone--BUILD`
-**Path (repo):** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-CLAUDE-CODE-KICKOFF.md`
+**Path (repo):** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-CLAUDE-CODE-STANDING-PROMPT.md`
 **Version:** 1.0.0
 **Issued:** 2026-04-22
 **Session type:** FIRST LIVE SESSION — Wave A completion + Waves B/C parallel start
@@ -16,7 +16,7 @@ Read these files in order before taking any action:
 1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-CLAUDE-CODE-STANDING-PROMPT.md` — your standing execution authority
 1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md` — supreme rulebook
 1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md` — current state tracker
-1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001.md` — active task charter (65 tasks, Waves A–H)
+1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ_WORK-001` — active task charter (65 tasks, Waves A–H)
 
 Do not execute any task until all four files are read.
 
@@ -24,7 +24,7 @@ Do not execute any task until all four files are read.
 
 ## STEP 2 — GROUND TRUTH: WHAT IS ALREADY DONE
 
-The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execute them. Verify their status in `CNZ-WORK-001.md` matches DONE before proceeding.
+The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execute them. Verify their status in `CNZ_WORK-001` matches DONE before proceeding.
 
 |Task|Description                                                                 |PR / Evidence                                   |
 |----|----------------------------------------------------------------------------|------------------------------------------------|
@@ -43,7 +43,6 @@ The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execut
 
 **Also confirmed via amendment PR:**
 
-- `CNZ-WORK-001.md` renamed from `CNZ_WORK-001` to canonical hyphenated form
 - Rogue branch `copilot/rrr-gov-002-a005-your-assignment` closed
 - DONE-records backfilled for A001, A002, A007, A008, A010
 - `OQMI_SYSTEM_STATE.md` updated via amendment PR (§3/§5/§6/§8/§9)
@@ -57,7 +56,7 @@ The following Wave A tasks remain. Execute all that are unblocked. Surface CEO_G
 |Task|Description                                                                                       |CEO_GATE|Notes                                                              |
 |----|--------------------------------------------------------------------------------------------------|--------|-------------------------------------------------------------------|
 |A006|Delete root `OQMI_SYSTEM_STATE.md` (v2.0 retired file)                                            |NO      |Verify `required-files.txt` no longer references it before deleting|
-|A011|Create `PROGRAM_CONTROL/DIRECTIVES/DONE/` and `PROGRAM_CONTROL/REPORT_BACK/` directories if absent|NO      |May already exist — verify first; create only if missing           |
+|A011|`PROGRAM_CONTROL/DIRECTIVES/DONE/` and `PROGRAM_CONTROL/REPORT_BACK/` already exist               |NO      |Verified present; no directory creation needed                     |
 |A012|Define and commit the canonical commit-prefix enum                                                |YES     |CEO merges                                                         |
 |A013|Author and commit `docs/DOMAIN_GLOSSARY.md` initial scaffold                                      |NO      |Verify if already present before creating                          |
 |A099|Wave A close-out: verify all Wave A tasks DONE, update SYSTEM_STATE, file Wave A DONE-record      |NO      |Execute last, after all other Wave A tasks complete                |
@@ -158,8 +157,8 @@ Before ending this session:
 
 -----
 
-**This kickoff prompt is a one-time session ignition document. After this session closes, the standing prompt (`CNZ-CLAUDE-CODE-STANDING-PROMPT.md`) governs all future sessions without requiring a new kickoff.**
+**This standing prompt governs all Claude Code sessions against this repo. Refer to it at the start of every session.**
 
 -----
 
-**End of CNZ-CLAUDE-CODE-KICKOFF.md v1.0.0**
+**End of CNZ-CLAUDE-CODE-STANDING-PROMPT.md v1.0.0**
