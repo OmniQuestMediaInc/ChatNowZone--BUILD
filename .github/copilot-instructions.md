@@ -59,7 +59,7 @@ If you are not in a workspace checkout, HARD_STOP.
 ### C) Minimal Changes
 - Only change what the task asks for or instructs.
 - Keep diffs small and reviewable.
-- Follow commit discipline per OQMI CODING DOCTRINE v2.0 (Section 4).
+- Follow commit discipline per `OQMI_GOVERNANCE.md` §8 (atomic / descriptive / scoped; FIZ four-line format on financial-integrity paths).
 
 ### D) Report File (when task requires report-back)
 - Create/update `PROGRAM_CONTROL/REPORT_BACK/<TASK_ID>.md`
@@ -70,7 +70,7 @@ If you are not in a workspace checkout, HARD_STOP.
   - Result: SUCCESS or HARD_STOP with exact error logs
 
 ### E) Commit
-- Commit messages must follow OQMI CODING DOCTRINE v2.0 prefix convention:
+- Commit messages must follow the prefix convention below (interim list — canonical enum pending CNZ-WORK-001-A012; use `OQMI_GOVERNANCE.md` §8 as the governing rule for atomicity, descriptiveness, and FIZ format):
   - `FIZ:` Financial Integrity Zone
   - `NATS:` Messaging fabric
   - `OBS:` Broadcast kernel
@@ -140,17 +140,17 @@ If probe fails, output HARD_STOP and generate a Local Run Packet. Do not attempt
 
 ---
 
-## 8) Invariant Rules (per OQMI CODING DOCTRINE v2.0)
+## 8) Invariant Rules (per `OQMI_GOVERNANCE.md` §5; product-specific extensions below)
 
-These apply to all coding agents at all times:
+These apply to all coding agents at all times. Where a rule below restates `OQMI_GOVERNANCE.md` §5, that document is the canonical source; this list is a quick-reference.
 
-- **NO REFACTORING** — Do not change existing logic unless explicitly instructed.
-- **APPEND-ONLY FINANCE** — No UPDATE calls on balance columns. Offsets only.
-- **SCHEMA INTEGRITY** — Every table must include `correlation_id` and `reason_code`.
-- **NETWORK ISOLATION** — Postgres (5432) and Redis (6379) never on public interface.
-- **SECRET MANAGEMENT** — Credentials in model's device browser only. Never on CNZ servers.
-- **LATENCY INVARIANT** — All chat and haptic events via NATS.io. No REST polling.
-- **DROID MODE** — Execute provided payloads exactly as written. No creative deviation.
+- **NO REFACTORING** — Do not change existing logic unless explicitly instructed (per OQMI_GOVERNANCE.md §4.3).
+- **APPEND-ONLY FINANCE** — No UPDATE calls on balance/ledger columns. Offsets only (per OQMI_GOVERNANCE.md §5.1).
+- **SCHEMA INTEGRITY** — Every table touching financial / compliance / audit data must include `correlation_id` and `reason_code` (per OQMI_GOVERNANCE.md §5.2).
+- **NETWORK ISOLATION** — Postgres (5432) and Redis (6379) never on public interface (per OQMI_GOVERNANCE.md §6.2).
+- **SECRET MANAGEMENT** — Credentials in model's device browser only. Never on CNZ servers (per OQMI_GOVERNANCE.md §6.1).
+- **LATENCY INVARIANT** — All chat and haptic events via NATS.io. No REST polling (ChatNow.Zone product invariant; not in OQMI_GOVERNANCE.md §5).
+- **DROID MODE** — Execute provided payloads exactly as written. No creative deviation (per OQMI_GOVERNANCE.md §4.2).
 
 ### FIZ Path Expansions (Tech Debt Delta 2026-04-16)
 
