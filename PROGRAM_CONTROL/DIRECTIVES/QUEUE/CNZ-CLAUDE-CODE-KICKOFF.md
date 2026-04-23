@@ -16,7 +16,7 @@ Read these files in order before taking any action:
 1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-CLAUDE-CODE-STANDING-PROMPT.md` — your standing execution authority
 1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md` — supreme rulebook
 1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md` — current state tracker
-1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001.md` — active task charter (65 tasks, Waves A–H)
+1. `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ_WORK-001` — active task charter (65 tasks, Waves A–H)
 
 Do not execute any task until all four files are read.
 
@@ -24,7 +24,7 @@ Do not execute any task until all four files are read.
 
 ## STEP 2 — GROUND TRUTH: WHAT IS ALREADY DONE
 
-The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execute them. Verify their status in `CNZ-WORK-001.md` matches DONE before proceeding.
+The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execute them. Verify their status in `CNZ_WORK-001` matches DONE before proceeding.
 
 |Task|Description                                                                 |PR / Evidence                                   |
 |----|----------------------------------------------------------------------------|------------------------------------------------|
@@ -43,7 +43,7 @@ The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execut
 
 **Also confirmed via amendment PR:**
 
-- `CNZ-WORK-001.md` renamed from `CNZ_WORK-001` to canonical hyphenated form
+- `CNZ_WORK-001` remains the current active task charter filename; no hyphenated `CNZ-WORK-001.md` rename is reflected here
 - Rogue branch `copilot/rrr-gov-002-a005-your-assignment` closed
 - DONE-records backfilled for A001, A002, A007, A008, A010
 - `OQMI_SYSTEM_STATE.md` updated via amendment PR (§3/§5/§6/§8/§9)
