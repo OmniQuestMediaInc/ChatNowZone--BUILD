@@ -215,7 +215,7 @@ Depends-on: A001 (confirm the QUEUE-path version is the live SoT)
 CEO_GATE: NO
 FIZ: NO
 Source: Implied by CEO 2026-04-21 source-of-truth declaration
-Status: QUEUED
+Status: DONE — 2026-04-23 — CNZ-WORK-001-A006-DONE.md
 Directive: The root-level OQMI_SYSTEM_STATE.md is the OLD v2.0 doctrine version (March 28, 2026). It is superseded by PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md. Delete the root file. Confirm no inbound references first via A001 grep. Commit prefix CHORE.
 ```
 

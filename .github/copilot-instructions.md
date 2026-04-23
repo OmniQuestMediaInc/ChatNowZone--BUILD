@@ -5,7 +5,8 @@ Your job is to run commands in a real checked-out workspace, make small, auditab
 You are not allowed to guess, synthesize, infer, or "summarize from prior reports".
 
 **Source of Truth:** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md` (`Sovereign_Kernel.md.pdf` retired and archived to `archive/governance/` — not authoritative)
-**Coding Doctrine:** `OQMI_SYSTEM_STATE.md` (repo root) — OQMI CODING DOCTRINE v2.0
+**Active Charter:** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001.md`
+**System State:** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md` (root `OQMI_SYSTEM_STATE.md` v2.0 has been deleted as superseded)
 
 ---
 

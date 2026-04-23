@@ -64,6 +64,7 @@ Reverse-chronological list of completed work. Each entry one row. Pruning policy
 | 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `<FILL-IN A004 SHA>` | claude-code | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
 | 2026-04-21 | CNZ-WORK-001-A002 — CLAUDE.md archived to `archive/governance/` | #293 `6cf5764` | claude-code | Admin closure filed 2026-04-23; DONE record `CNZ-WORK-001-A002-DONE.md` |
 | 2026-04-23 | CNZ-WORK-001-A005 — Sovereign_Kernel.md.pdf archived to `archive/governance/` | (Wave A cleanup PR) | claude-code | Updated inbound ref in `.github/copilot-instructions.md`; DONE record `CNZ-WORK-001-A005-DONE.md` |
+| 2026-04-23 | CNZ-WORK-001-A006 — root `OQMI_SYSTEM_STATE.md` (v2.0 doctrine) deleted as superseded | (Wave A cleanup PR) | claude-code | Updated `.github/required-files.txt` and `.github/copilot-instructions.md` to live SoT path; DONE record `CNZ-WORK-001-A006-DONE.md` |
 
 ---
 
