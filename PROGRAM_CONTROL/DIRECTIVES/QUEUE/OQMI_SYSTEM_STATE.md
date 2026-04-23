@@ -60,8 +60,8 @@ Reverse-chronological list of completed work. Each entry one row. Pruning policy
 
 | Date | Item | PR / Commit | Agent | Notes |
 |---|---|---|---|---|
-| 2026-04-22 | CNZ-WORK-001-A001 — Q-000-PRE-READ-AUDIT (foundational repo audit) | direct-land `<FILL-IN A001 SHA>` | claude-code | Agent-hint "copilot" overridden per charter §2; DONE record `CNZ-WORK-001-A001-DONE.md` |
-| 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `<FILL-IN A004 SHA>` | claude-code | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
+| 2026-04-22 | CNZ-WORK-001-A001 — Q-000-PRE-READ-AUDIT (foundational repo audit) | direct-land *(SHA not recovered — pre-charter, predates accessible git history; backfill-needed)* | claude-code | Agent-hint "copilot" overridden per charter §2; DONE record `CNZ-WORK-001-A001-DONE.md` |
+| 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `71c526cec4c3d39cc6da2b5df9784d52956bee8e` | copilot | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
 | 2026-04-23 | CNZ-WORK-001-A012 — Canonical commit prefix enum + resolve R-CLARIFY-006 prefix half | PR pending (branch `claude/continue-cnz-work-001-EJKhg`) | claude-code | Enum landed in `docs/DOMAIN_GLOSSARY.md`; cross-linked from `OQMI_GOVERNANCE.md §8.1`; HZ kept as HeartZone IoT, HCZ confirmed as Guest Services bureau; DONE record `CNZ-WORK-001-A012-DONE.md` |
 | 2026-04-23 | CNZ-WORK-001-A014 — Repo visibility confirmed PRIVATE (paperwork) | PR pending (branch `claude/continue-cnz-work-001-EJKhg`) | claude-code | CEO-action task; CEO confirmed repo private 2026-04-23; agent landed §1 Visibility amendment and DONE record `CNZ-WORK-001-A014-DONE.md` |
 | 2026-04-23 | CNZ-WORK-001-A002 — Verify CLAUDE.md absent from repo root | PR pending | claude-code | Already absent at task start; only `archive/governance/CLAUDE.md` exists (historical archive — left in place) |
