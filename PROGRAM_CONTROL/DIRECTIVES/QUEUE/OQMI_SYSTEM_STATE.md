@@ -62,6 +62,7 @@ Reverse-chronological list of completed work. Each entry one row. Pruning policy
 |---|---|---|---|---|
 | 2026-04-22 | CNZ-WORK-001-A001 — Q-000-PRE-READ-AUDIT (foundational repo audit) | direct-land `<FILL-IN A001 SHA>` | claude-code | Agent-hint "copilot" overridden per charter §2; DONE record `CNZ-WORK-001-A001-DONE.md` |
 | 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `<FILL-IN A004 SHA>` | claude-code | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
+| 2026-04-21 | CNZ-WORK-001-A002 — CLAUDE.md archived to `archive/governance/` | #293 `6cf5764` | claude-code | Admin closure filed 2026-04-23; DONE record `CNZ-WORK-001-A002-DONE.md` |
 
 ---
 

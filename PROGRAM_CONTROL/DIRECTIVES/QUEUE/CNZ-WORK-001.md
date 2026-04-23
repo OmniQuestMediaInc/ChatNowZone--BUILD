@@ -159,7 +159,7 @@ Depends-on: A001
 CEO_GATE: NO
 FIZ: NO
 Source: CEO directive 2026-04-21
-Status: QUEUED
+Status: DONE — PR #293 — 6cf5764 — CNZ-WORK-001-A002-DONE.md
 Directive: Grep repo for inbound references to CLAUDE.md. If any exist, update them in the same PR. Then delete CLAUDE.md from repo root. Commit prefix CHORE.
 ```
 
