@@ -47,7 +47,7 @@ Do not execute any task until all four files are read.
 
 ## STEP 2 — GROUND TRUTH: WHAT IS ALREADY DONE
 
-The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execute them. Verify their status in `CNZ_WORK-001` matches DONE before proceeding.
+The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execute them. Verify their status in `CNZ-WORK-001.md` matches DONE before proceeding.
 
 |Task|Description                                                                 |PR / Evidence                                   |
 |----|----------------------------------------------------------------------------|------------------------------------------------|
@@ -66,7 +66,7 @@ The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execut
 
 **Also confirmed via amendment PR:**
 
-- `CNZ_WORK-001` remains the current active task charter filename; no hyphenated `CNZ-WORK-001.md` rename is reflected here
+- The active task charter filename is `CNZ-WORK-001.md` (hyphen, with `.md` extension), at `PROGRAM_CONTROL/DIRECTIVES/QUEUE/CNZ-WORK-001.md`. Earlier references to `CNZ_WORK-001` (underscore, no extension) in this kickoff and in the standing prompt were a typo and have been corrected.
 - Rogue branch `copilot/rrr-gov-002-a005-your-assignment` closed
 - DONE-records backfilled for A001, A002, A007, A008, A010
 - `OQMI_SYSTEM_STATE.md` updated via amendment PR (§3/§5/§6/§8/§9)

@@ -47,7 +47,7 @@ Do not execute any task until all four files are read.
 
 ## STEP 2 — GROUND TRUTH: WHAT IS ALREADY DONE
 
-The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execute them. Verify their status in `CNZ_WORK-001` matches DONE before proceeding.
+The following Wave A tasks are confirmed DONE as of 2026-04-22. Do NOT re-execute them. Verify their status in `CNZ-WORK-001.md` matches DONE before proceeding.
 
 |Task|Description                                                                 |PR / Evidence                                   |
 |----|----------------------------------------------------------------------------|------------------------------------------------|
