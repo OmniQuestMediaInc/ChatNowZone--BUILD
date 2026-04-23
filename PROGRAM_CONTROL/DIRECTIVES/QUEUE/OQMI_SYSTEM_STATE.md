@@ -60,13 +60,13 @@ Reverse-chronological list of completed work. Each entry one row. Pruning policy
 
 | Date | Item | PR / Commit | Agent | Notes |
 |---|---|---|---|---|
-| 2026-04-22 | CNZ-WORK-001-A001 — Q-000-PRE-READ-AUDIT (foundational repo audit) | direct-land `<FILL-IN A001 SHA>` | claude-code | Agent-hint "copilot" overridden per charter §2; DONE record `CNZ-WORK-001-A001-DONE.md` |
-| 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `<FILL-IN A004 SHA>` | claude-code | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
-| 2026-04-21 | CNZ-WORK-001-A002 — CLAUDE.md archived to `archive/governance/` | #293 `6cf5764` | claude-code | Admin closure filed 2026-04-23; DONE record `CNZ-WORK-001-A002-DONE.md` |
 | 2026-04-23 | CNZ-WORK-001-A005 — Sovereign_Kernel.md.pdf archived to `archive/governance/` | (Wave A cleanup PR) | claude-code | Updated inbound ref in `.github/copilot-instructions.md`; DONE record `CNZ-WORK-001-A005-DONE.md` |
 | 2026-04-23 | CNZ-WORK-001-A006 — root `OQMI_SYSTEM_STATE.md` (v2.0 doctrine) deleted as superseded | (Wave A cleanup PR) | claude-code | Updated `.github/required-files.txt` and `.github/copilot-instructions.md` to live SoT path; DONE record `CNZ-WORK-001-A006-DONE.md` |
 | 2026-04-23 | CNZ-WORK-001-A007 — package-lock.json / yarn.lock co-presence confirmed resolved | (Wave A cleanup PR) | claude-code | Admin closure; `package-lock.json` absent, no CI workflow references it; DONE record `CNZ-WORK-001-A007-DONE.md` |
 | 2026-04-23 | CNZ-WORK-001-A011 — `PROGRAM_CONTROL/DIRECTIVES/DONE/` and `PROGRAM_CONTROL/REPORT_BACK/` presence confirmed | (Wave A cleanup PR) | claude-code | Admin closure; both paths exist and are populated; DONE record `CNZ-WORK-001-A011-DONE.md` |
+| 2026-04-22 | CNZ-WORK-001-A001 — Q-000-PRE-READ-AUDIT (foundational repo audit) | direct-land `<FILL-IN A001 SHA>` | claude-code | Agent-hint "copilot" overridden per charter §2; DONE record `CNZ-WORK-001-A001-DONE.md` |
+| 2026-04-22 | CNZ-WORK-001-A004 — Ghost Alpha provenance landed in §8 | direct-land `<FILL-IN A004 SHA>` | claude-code | Prerequisite for A003 (root README.md deletion); DONE record `CNZ-WORK-001-A004-DONE.md` |
+| 2026-04-21 | CNZ-WORK-001-A002 — CLAUDE.md archived to `archive/governance/` | #293 `6cf5764` | claude-code | Admin closure filed 2026-04-23; DONE record `CNZ-WORK-001-A002-DONE.md` |
 
 ---
 
@@ -135,7 +135,6 @@ Anything an incoming agent needs to know that doesn't fit elsewhere: terminology
 - `Sovereign_Kernel.md.pdf` is RETIRED and has been archived to `archive/governance/Sovereign_Kernel.md.pdf` (CNZ-WORK-001-A005, 2026-04-23). Do not treat as authoritative.
 - [e.g., Branch `copilot/chore-old-branch` is 1 commit ahead of main but stale; review before deletion.]
 - [e.g., This repo's commit prefixes are declared in `README.md` — consult before committing.]
-- `/tests/seed_data/` is the authoritative source for Ghost Alpha simulations.
 
 ---
 
