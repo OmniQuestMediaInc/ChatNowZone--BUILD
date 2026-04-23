@@ -77,7 +77,7 @@ PRs auto-merge on green CI. No human review required by default. Agents land the
 - No unresolved errors are present on the branch (see §2.3)
 - The PR does not touch a Human-Review Category (see §2.2)
 
-**Merge method: squash.** All merges to `main` — auto-merge or manual — use squash merge. This is enforced at the workflow level by `.github/workflows/auto-merge.yml` and is the repo convention. Do not merge via merge-commit or rebase strategies. One feature branch → one commit on `main`.
+**Merge method: squash.** All merges to `main` — auto-merge or manual — use squash merge. The auto-merge workflow in `.github/workflows/auto-merge.yml` uses squash merge, and any manual merge must also use squash per repo policy. Do not merge via merge-commit or rebase strategies. One feature branch → one commit on `main`.
 
 ### 2.2 Human-Review Categories (CEO merge required)
 
