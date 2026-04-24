@@ -223,7 +223,7 @@ Supersedes per-call Yoti/Veriff/Onfido model.**
 | GGS-AV-003 | L2 Continuous Contextual Re-Verification: cross-reference behavioral signals on every transaction. Triggers: new_device_flag, new_geography_flag (over 500km), anomalous_spend_pattern, session_inconsistency_score above threshold. No doc re-upload. No per-call cost. | NET-NEW | NEEDS_DIRECTIVE | — | NO |
 | GGS-AV-004 | L3 Zero-Knowledge Age Attestation: API response contains only age_verified bool + av_zk_proof_hash. No age/DOB/identity data. Satisfies Quebec Law 25, GDPR Art 5(1)(c), Bill S-209. | NET-NEW | NEEDS_DIRECTIVE | — | YES |
 | GGS-AV-005 | AV provider abstraction interface: Yoti at launch, swappable without touching AV business logic. | NET-NEW | NEEDS_DIRECTIVE | — | NO |
-| GGS-AV-006 | Bill S-210 Reliable standard compliance. Bill S-209 positioning. UK Online Safety Act alignment. Compliance architecture document for Navigator Ltd. | NET-NEW | NEEDS_DIRECTIVE | — | NO |
+| GGS-AV-006 | Bill S-210 Reliable standard compliance. Bill S-209 positioning. UK Online Safety Act alignment. Compliance architecture document (counterparty name removed per §12 — see banned-entity invariant). | NET-NEW | NEEDS_DIRECTIVE | — | NO |
 | GGS-AV-007 | av_zk_proof_hash archival: 7 years. Same infrastructure as core GGS ZK proofs. | NET-NEW | NEEDS_DIRECTIVE | — | YES |
 
 ---

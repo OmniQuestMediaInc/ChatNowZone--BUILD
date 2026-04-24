@@ -8,8 +8,8 @@ export interface GeoResolution {
   country_code: string;
   tier: GeoTier;
   multiplier: number;
-  display_tokens: number;     // Token amount shown in chat for this VIP
-  base_tokens: number;        // Creator's set price (HIGH tier = 1.0x)
+  display_tokens: number; // Token amount shown in chat for this VIP
+  base_tokens: number; // Creator's set price (HIGH tier = 1.0x)
   rule_applied_id: string;
 }
 
@@ -36,9 +36,9 @@ export class GeoPricingService {
   applyTierMultiplier(base_token_price: number, tier: GeoTier): number {
     const tiers = GEO_PRICING.TIERS;
     let multiplier: number;
-    if (tier === 'LOW')  multiplier = tiers.LOW.multiplier_min;
+    if (tier === 'LOW') multiplier = tiers.LOW.multiplier_min;
     else if (tier === 'MED') multiplier = tiers.MED.multiplier_min;
-    else multiplier = 1.00;
+    else multiplier = 1.0;
 
     // Never return less than 1 token — floor at 1
     return Math.max(1, Math.round(base_token_price * multiplier));
@@ -54,8 +54,8 @@ export class GeoPricingService {
     const tier = this.resolveGeoTier(params.country_code);
     const display_tokens = this.applyTierMultiplier(params.base_token_price, tier);
     const tiers = GEO_PRICING.TIERS;
-    const multiplier = tier === 'LOW' ? tiers.LOW.multiplier_min
-      : tier === 'MED' ? tiers.MED.multiplier_min : 1.00;
+    const multiplier =
+      tier === 'LOW' ? tiers.LOW.multiplier_min : tier === 'MED' ? tiers.MED.multiplier_min : 1.0;
 
     this.logger.log('GeoPricingService: resolved geo tier', {
       country_code: params.country_code,

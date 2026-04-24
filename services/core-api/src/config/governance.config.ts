@@ -10,7 +10,7 @@ export class GovernanceConfigService {
 
   // ── PROC-001: Webhook Hardening ───────────────────────────────────────────
   /** Maximum allowed drift (seconds) between webhook timestamp and server clock. */
-  public readonly WEBHOOK_REPLAY_WINDOW_SECONDS = 300;   // 5 minutes
+  public readonly WEBHOOK_REPLAY_WINDOW_SECONDS = 300; // 5 minutes
   /** TTL (seconds) for entries in the in-process nonce store before cleanup. */
   public readonly WEBHOOK_NONCE_STORE_TTL_SECONDS = 600; // 10 minutes
   /** HMAC algorithm used for signature verification. */
@@ -27,9 +27,9 @@ export class GovernanceConfigService {
 
 export const COMMISSION_DEFAULTS = {
   MODEL_TOKEN_VALUE_MIN: 0.065, // USD
-  MODEL_TOKEN_VALUE_MAX: 0.08,  // USD
-  DEFAULT_STUDIO_AGENCY_FEE_PCT: 0.20, // 20%
-  PLATFORM_SYSTEM_FEE_FLAT: 50.00,
+  MODEL_TOKEN_VALUE_MAX: 0.08, // USD
+  DEFAULT_STUDIO_AGENCY_FEE_PCT: 0.2, // 20%
+  PLATFORM_SYSTEM_FEE_FLAT: 50.0,
   TIERED_PAYOUT_ENABLED_DEFAULT: false,
 };
 
@@ -38,30 +38,30 @@ export enum StudioFeeType {
   HOURLY_SERVICE = 'SERVICE_HOURLY',
   SESSION_SERVICE = 'SERVICE_SESSION',
   PLATFORM_USAGE_PCT = 'PLATFORM_PCT',
-  PENALTY = 'FINANCIAL_PENALTY'
+  PENALTY = 'FINANCIAL_PENALTY',
 }
 
 // ─── DIAMOND TIER PRICING ────────────────────────────────────────────────────
 export const DIAMOND_TIER = {
-  PAYOUT_RATE_PER_TOKEN: 0.075,          // USD — creator payout floor for Diamond
-  PLATFORM_FLOOR_PER_TOKEN: 0.077,       // USD — minimum platform price (wee profit)
-  EXCHANGE_COST_DIAMOND_PCT: 0.00,       // Diamond conversion is fee-free
-  EXTENSION_FEE_14_DAY_USD: 49.00,       // 14-day token expiry extension
-  RECOVERY_FEE_EXPIRED_USD: 79.00,       // Fee to recover already-expired balance
-  EXPIRED_CREATOR_POOL_PCT: 0.70,        // % of expired tokens to creator bonus pool
-  EXPIRED_PLATFORM_MGMT_PCT: 0.30,       // % retained by OQMI as management fee
-  VIP_BASELINE_PER_1000: 0.12,           // Comparison baseline shown in estimator
+  PAYOUT_RATE_PER_TOKEN: 0.075, // USD — creator payout floor for Diamond
+  PLATFORM_FLOOR_PER_TOKEN: 0.077, // USD — minimum platform price (wee profit)
+  EXCHANGE_COST_DIAMOND_PCT: 0.0, // Diamond conversion is fee-free
+  EXTENSION_FEE_14_DAY_USD: 49.0, // 14-day token expiry extension
+  RECOVERY_FEE_EXPIRED_USD: 79.0, // Fee to recover already-expired balance
+  EXPIRED_CREATOR_POOL_PCT: 0.7, // % of expired tokens to creator bonus pool
+  EXPIRED_PLATFORM_MGMT_PCT: 0.3, // % retained by OQMI as management fee
+  VIP_BASELINE_PER_1000: 0.12, // Comparison baseline shown in estimator
   // CANONICAL — 3-tier structure locked 2026-04-11.
   // Pricing Architecture v1.3 5-tier Concierge table is superseded by this.
   VOLUME_TIERS: [
-    { min_tokens: 10000,  max_tokens: 27499,  base_rate: 0.095 },
-    { min_tokens: 30000,  max_tokens: 57499,  base_rate: 0.088 },
-    { min_tokens: 60000,  max_tokens: Infinity, base_rate: 0.082 },
+    { min_tokens: 10000, max_tokens: 27499, base_rate: 0.095 },
+    { min_tokens: 30000, max_tokens: 57499, base_rate: 0.088 },
+    { min_tokens: 60000, max_tokens: Infinity, base_rate: 0.082 },
   ],
   VELOCITY_MULTIPLIERS: {
-    DAYS_14:  1.00,
-    DAYS_30:  1.00,
-    DAYS_90:  1.08,
+    DAYS_14: 1.0,
+    DAYS_30: 1.0,
+    DAYS_90: 1.08,
     DAYS_180: 1.12,
     DAYS_366: 1.15,
   },
@@ -69,96 +69,121 @@ export const DIAMOND_TIER = {
 
 // ─── SHOWZONE THEATRE PRICING ─────────────────────────────────────────────────
 export const SHOWZONE_PRICING = {
-  PASS_BASE_CZT_TOKENS:      100,        // Base pass price in CZT
-  MIN_SEATS_TO_GO_LIVE:      20,         // Auto-cancel if fewer seats sold at T-1hr
-  PAYOUT_RATE_PER_CZT:       0.08,       // Creator payout per CZT
-  CZT_PRICE_USD:             0.13,       // CZT USD price (for display/estimates)
-  PHASE2_CAPACITY_PCT:       0.25,       // Phase 2 Uber Private = 25% of Phase 1 count
+  PASS_BASE_CZT_TOKENS: 100, // Base pass price in CZT
+  MIN_SEATS_TO_GO_LIVE: 20, // Auto-cancel if fewer seats sold at T-1hr
+  PAYOUT_RATE_PER_CZT: 0.08, // Creator payout per CZT
+  CZT_PRICE_USD: 0.13, // CZT USD price (for display/estimates)
+  PHASE2_CAPACITY_PCT: 0.25, // Phase 2 Uber Private = 25% of Phase 1 count
   PHASE2_PRICE_MULTIPLIERS: {
-    TIER_1: 1.30,                        // +30% over Phase 1 pass
-    TIER_2: 1.50,                        // +50%
-    TIER_3: 1.80,                        // +80%
+    TIER_1: 1.3, // +30% over Phase 1 pass
+    TIER_2: 1.5, // +50%
+    TIER_3: 1.8, // +80%
   },
   DAY_MULTIPLIERS: {
     MON: 0.85,
     TUE: 0.85,
     WED: 0.95,
-    THU: 1.00,
-    FRI: 1.20,
-    SAT: 1.30,
-    SUN: 1.10,
+    THU: 1.0,
+    FRI: 1.2,
+    SAT: 1.3,
+    SUN: 1.1,
   },
   TIME_MULTIPLIERS: {
     // Hour ranges in America/Toronto (24h)
-    AFTERNOON:  { from: 12, to: 17, multiplier: 0.90 },
-    PRIME:      { from: 19, to: 23, multiplier: 1.15 },
-    LATE_NIGHT: { from: 23, to: 26, multiplier: 1.10 }, // 26 = 02:00 next day
-    OFF_PEAK:   { from:  0, to: 12, multiplier: 0.80 },
+    AFTERNOON: { from: 12, to: 17, multiplier: 0.9 },
+    PRIME: { from: 19, to: 23, multiplier: 1.15 },
+    LATE_NIGHT: { from: 23, to: 26, multiplier: 1.1 }, // 26 = 02:00 next day
+    OFF_PEAK: { from: 0, to: 12, multiplier: 0.8 },
   },
   CREATOR_TIER_MULTIPLIERS: {
-    NEW:         0.85,   // < 50 registered fans
-    RISING:      1.00,   // 50–199 fans
-    ESTABLISHED: 1.15,   // 200–999 fans
-    STAR:        1.35,   // 1000+ fans
+    NEW: 0.85, // < 50 registered fans
+    RISING: 1.0, // 50–199 fans
+    ESTABLISHED: 1.15, // 200–999 fans
+    STAR: 1.35, // 1000+ fans
   },
   ADVANCE_PURCHASE_MULTIPLIERS: {
-    SAME_DAY:      1.00, // 0 days ahead
-    ONE_TO_THREE:  0.95, // 1–3 days ahead (early bird)
-    FOUR_TO_SEVEN: 0.90, // 4–7 days ahead
-    EIGHT_PLUS:    0.85, // 8+ days ahead
+    SAME_DAY: 1.0, // 0 days ahead
+    ONE_TO_THREE: 0.95, // 1–3 days ahead (early bird)
+    FOUR_TO_SEVEN: 0.9, // 4–7 days ahead
+    EIGHT_PLUS: 0.85, // 8+ days ahead
   },
 } as const;
 
 // ─── BIJOU PLAY.ZONE PRICING ──────────────────────────────────────────────────
 export const BIJOU_PRICING = {
-  ADMISSION_CZT_TOKENS_BASE: 240,        // Base admission in CZT
-  CREATOR_SPLIT_PCT:         0.85,       // 85% to performing creator
-  OQMI_SPLIT_PCT:            0.15,       // 15% to OmniQuest Media Inc.
-  PAYOUT_RATE_PER_CZT:       0.09,       // Creator payout per CZT (Bijou rate)
-  CZT_PRICE_USD:             0.13,       // CZT USD price
-  MIN_SEATS_TO_GO_LIVE:      8,          // Auto-cancel threshold at T-1hr
-  MAX_PARTICIPANTS:          24,         // Hard SFU cap (VIPs only; host is +1)
-  WRISTBAND_DURATION_HOURS:  72,         // Same as ShowZone wristband
-  SHOW_DURATION_MAX_MINS:    60,
-  STANDBY_ACCEPT_WINDOW_SEC: 10,         // VIP has 10s to claim an opened seat
-  CAMERA_GRACE_PERIOD_SEC:   30,         // Grace before warning screen
-  CAMERA_WARNING_PERIOD_SEC: 30,         // Warning countdown before ejection
-  MIN_ADVANCE_BOOKING_HOURS: 72,         // Must book 72hrs before show
+  ADMISSION_CZT_TOKENS_BASE: 240, // Base admission in CZT
+  CREATOR_SPLIT_PCT: 0.85, // 85% to performing creator
+  OQMI_SPLIT_PCT: 0.15, // 15% to OmniQuest Media Inc.
+  PAYOUT_RATE_PER_CZT: 0.09, // Creator payout per CZT (Bijou rate)
+  CZT_PRICE_USD: 0.13, // CZT USD price
+  MIN_SEATS_TO_GO_LIVE: 8, // Auto-cancel threshold at T-1hr
+  MAX_PARTICIPANTS: 24, // Hard SFU cap (VIPs only; host is +1)
+  WRISTBAND_DURATION_HOURS: 72, // Same as ShowZone wristband
+  SHOW_DURATION_MAX_MINS: 60,
+  STANDBY_ACCEPT_WINDOW_SEC: 10, // VIP has 10s to claim an opened seat
+  CAMERA_GRACE_PERIOD_SEC: 30, // Grace before warning screen
+  CAMERA_WARNING_PERIOD_SEC: 30, // Warning countdown before ejection
+  MIN_ADVANCE_BOOKING_HOURS: 72, // Must book 72hrs before show
   MAX_SCHEDULED_AT_ONE_TIME: 10,
   VELOCITY_RULES: {
-    MAX_SHOWS_PER_24H:     1,
-    CONSECUTIVE_CAP:       3,           // After 3 consecutive shows → 2-day break
-    TWO_BACK_TO_BACK_BREAK_DAYS: 1,     // After 2 back-to-back → 1-day break
+    MAX_SHOWS_PER_24H: 1,
+    CONSECUTIVE_CAP: 3, // After 3 consecutive shows → 2-day break
+    TWO_BACK_TO_BACK_BREAK_DAYS: 1, // After 2 back-to-back → 1-day break
   },
-  DAY_MULTIPLIERS: {                    // Same structure as ShowZone
-    MON: 0.90,
-    TUE: 0.90,
-    WED: 1.00,
+  DAY_MULTIPLIERS: {
+    // Same structure as ShowZone
+    MON: 0.9,
+    TUE: 0.9,
+    WED: 1.0,
     THU: 1.05,
-    FRI: 1.20,
+    FRI: 1.2,
     SAT: 1.25,
-    SUN: 1.10,
+    SUN: 1.1,
   },
 } as const;
 
 // ─── GEO-ADAPTIVE PRICING ─────────────────────────────────────────────────────
 export const GEO_PRICING = {
   TIERS: {
-    LOW: { multiplier_min: 0.33, multiplier_max: 0.50, display_label: 'LOW' },
-    MED: { multiplier_min: 0.60, multiplier_max: 0.80, display_label: 'MED' },
-    HIGH: { multiplier: 1.00,                           display_label: 'HIGH' },
+    LOW: { multiplier_min: 0.33, multiplier_max: 0.5, display_label: 'LOW' },
+    MED: { multiplier_min: 0.6, multiplier_max: 0.8, display_label: 'MED' },
+    HIGH: { multiplier: 1.0, display_label: 'HIGH' },
   },
   // ISO 3166-1 alpha-2 country codes → tier assignment
   // VERSIONED: any change to this map requires FIZ: commit + governance approval
   COUNTRY_TIER_MAP: {
     // LOW tier — developing economy purchasing power
-    CO: 'LOW', UA: 'LOW', MX: 'LOW', PH: 'LOW', ID: 'LOW',
-    VN: 'LOW', NG: 'LOW', PK: 'LOW', BD: 'LOW', EG: 'LOW',
-    KE: 'LOW', ET: 'LOW', GH: 'LOW', TZ: 'LOW', UZ: 'LOW',
+    CO: 'LOW',
+    UA: 'LOW',
+    MX: 'LOW',
+    PH: 'LOW',
+    ID: 'LOW',
+    VN: 'LOW',
+    NG: 'LOW',
+    PK: 'LOW',
+    BD: 'LOW',
+    EG: 'LOW',
+    KE: 'LOW',
+    ET: 'LOW',
+    GH: 'LOW',
+    TZ: 'LOW',
+    UZ: 'LOW',
     // MED tier — mid-range purchasing power
-    BR: 'MED', AR: 'MED', PL: 'MED', RO: 'MED', TR: 'MED',
-    ZA: 'MED', MY: 'MED', TH: 'MED', CL: 'MED', CO_PLUS: 'MED',
-    HU: 'MED', RS: 'MED', HR: 'MED', SK: 'MED', BG: 'MED',
+    BR: 'MED',
+    AR: 'MED',
+    PL: 'MED',
+    RO: 'MED',
+    TR: 'MED',
+    ZA: 'MED',
+    MY: 'MED',
+    TH: 'MED',
+    CL: 'MED',
+    CO_PLUS: 'MED',
+    HU: 'MED',
+    RS: 'MED',
+    HR: 'MED',
+    SK: 'MED',
+    BG: 'MED',
     // HIGH tier — all others default to HIGH (full price)
     DEFAULT: 'HIGH',
   },
@@ -166,11 +191,11 @@ export const GEO_PRICING = {
 
 // ─── WRISTBAND MECHANICS (SHARED) ─────────────────────────────────────────────
 export const WRISTBAND = {
-  SHOWZONE_DURATION_HOURS:  72,
-  BIJOU_DURATION_HOURS:     72,
+  SHOWZONE_DURATION_HOURS: 72,
+  BIJOU_DURATION_HOURS: 72,
   // Bonus token evaporation distribution
-  EVAPORATION_CREATOR_POOL_PCT: 0.70,
-  EVAPORATION_PLATFORM_PCT:     0.30,
+  EVAPORATION_CREATOR_POOL_PCT: 0.7,
+  EVAPORATION_PLATFORM_PCT: 0.3,
   // Minimum dwell time for bonus pool eligibility (per creator, per session)
   DWELL_MIN_ELIGIBILITY_SEC: 20,
   // Wristbands are venue-exclusive. A ShowZone wristband cannot admit to Bijou
@@ -185,132 +210,156 @@ export const MEMBERSHIP = {
   // refer to PASS PRODUCTS, not membership tiers.
   // Pass product eligibility by tier documented in DOMAIN_GLOSSARY.md.
   TIERS: ['VIP', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'] as const,
-  BUNDLE_TENURE_GATE_WEEKS: 5,           // Limited menu for first 5 weeks
+  BUNDLE_TENURE_GATE_WEEKS: 5, // Limited menu for first 5 weeks
   BUNDLE_CAPS: {
-    VIP:      { initial: 1000, expanded: 1000,  risk_quote_above: 0 },
-    SILVER:   { initial: 1000, expanded: 5000,  risk_quote_above: 5000 },
-    GOLD:     { initial: 1000, expanded: 7500,  risk_quote_above: 7500 },
-    PLATINUM: { initial: 1000, expanded: 8000,  risk_quote_above: 8000 },
-    DIAMOND:  { initial: 1000, expanded: null,  risk_quote_above: 0 }, // Concierge only
+    VIP: { initial: 1000, expanded: 1000, risk_quote_above: 0 },
+    SILVER: { initial: 1000, expanded: 5000, risk_quote_above: 5000 },
+    GOLD: { initial: 1000, expanded: 7500, risk_quote_above: 7500 },
+    PLATINUM: { initial: 1000, expanded: 8000, risk_quote_above: 8000 },
+    DIAMOND: { initial: 1000, expanded: null, risk_quote_above: 0 }, // Concierge only
   },
-  TOKEN_EXPIRY_DAYS: 45,                 // Standard token window
-  TOKEN_EXPIRY_BUFFER_DAYS: 1,           // T+1 logic for America/Toronto boundary
+  TOKEN_EXPIRY_DAYS: 45, // Standard token window
+  TOKEN_EXPIRY_BUFFER_DAYS: 1, // T+1 logic for America/Toronto boundary
   DURATION_BONUS_TIERS: [
-    { paid_months: 3,  bonus_months: 1, loyalty_multiplier: 1.0 },
-    { paid_months: 6,  bonus_months: 2, loyalty_multiplier: 1.2 },
+    { paid_months: 3, bonus_months: 1, loyalty_multiplier: 1.0 },
+    { paid_months: 6, bonus_months: 2, loyalty_multiplier: 1.2 },
     { paid_months: 12, bonus_months: 3, loyalty_multiplier: 1.5 },
   ],
   // MEMB-002: ADR-003 bonus month matrix for subscription billing intervals.
   DURATION_BONUS: {
-    QUARTERLY:   { commitment_months: 3,  bonus_months: 1 },
-    SEMI_ANNUAL: { commitment_months: 6,  bonus_months: 2 },
-    ANNUAL:      { commitment_months: 12, bonus_months: 3 },
+    QUARTERLY: { commitment_months: 3, bonus_months: 1 },
+    SEMI_ANNUAL: { commitment_months: 6, bonus_months: 2 },
+    ANNUAL: { commitment_months: 12, bonus_months: 3 },
   },
   // MEMB-003: Monthly CZT stipend per membership tier.
   // Revisable via GOV: commit only. Values in CZT units.
   STIPEND_CZT: {
-    DAY_PASS:      0,
-    ANNUAL:        100,
+    DAY_PASS: 0,
+    ANNUAL: 100,
     OMNIPASS_PLUS: 250,
-    DIAMOND:       500,
+    DIAMOND: 500,
   },
 } as const;
 
 // ─── TOKEN EXTENSION ──────────────────────────────────────────────────────────
 export const TOKEN_EXTENSION = {
   // Option A: pay extension fee on expired tokens — no new token purchase
-  OPTION_A_FEE_PCT:         0.20,  // fee = 20% of expired volume at 1K-bundle rate
-  OPTION_A_LIFESPAN_DAYS:   46,    // 45 + 1
+  OPTION_A_FEE_PCT: 0.2, // fee = 20% of expired volume at 1K-bundle rate
+  OPTION_A_LIFESPAN_DAYS: 46, // 45 + 1
 
   // Option B: buy 2500 new tokens at VIP rate — 25% of expired volume forfeited
-  OPTION_B_TOKEN_PURCHASE:  2500,
-  OPTION_B_FORFEITURE_PCT:  0.25,
-  OPTION_B_LIFESPAN_DAYS:   46,    // 45 + 1
+  OPTION_B_TOKEN_PURCHASE: 2500,
+  OPTION_B_FORFEITURE_PCT: 0.25,
+  OPTION_B_LIFESPAN_DAYS: 46, // 45 + 1
 
   // Option C: buy 5000 new tokens at VIP rate — 20% of expired volume forfeited
-  OPTION_C_TOKEN_PURCHASE:  5000,
-  OPTION_C_FORFEITURE_PCT:  0.20,
-  OPTION_C_LIFESPAN_DAYS:   91,    // 90 + 1
+  OPTION_C_TOKEN_PURCHASE: 5000,
+  OPTION_C_FORFEITURE_PCT: 0.2,
+  OPTION_C_LIFESPAN_DAYS: 91, // 90 + 1
 } as const;
 
 // ─── PRIVATE CALL (PrivateCall Feature) ───────────────────────────────────────
 export const PRIVATE_CALL = {
   BLOCK_DURATIONS_MINS: [6, 12, 24],
   // Per-minute premium rate must be at least this % above equivalent block rate
-  PER_MINUTE_PREMIUM_MIN_PCT: 0.20,
-  MIN_ADVANCE_BOOKING_HOURS: 1,          // Platform minimum; creator can set higher
-  READY_CONFIRM_WINDOW_MIN_BEFORE: 5,    // Push notification sent 5 mins before
-  AUTO_CANCEL_NO_CONFIRM_SEC: 90,        // Cancel if no creator confirmed at T+90s
-  CREATOR_NO_SHOW_STRIKE_THRESHOLD: 3,   // Triggers review flag
+  PER_MINUTE_PREMIUM_MIN_PCT: 0.2,
+  MIN_ADVANCE_BOOKING_HOURS: 1, // Platform minimum; creator can set higher
+  READY_CONFIRM_WINDOW_MIN_BEFORE: 5, // Push notification sent 5 mins before
+  AUTO_CANCEL_NO_CONFIRM_SEC: 90, // Cancel if no creator confirmed at T+90s
+  CREATOR_NO_SHOW_STRIKE_THRESHOLD: 3, // Triggers review flag
 } as const;
 
 // ─── GAMIFICATION ─────────────────────────────────────────────────────────────
 export const GAMIFICATION = {
-  TOKEN_TIERS: [25, 45, 60],             // Low / Mid / High token price options
+  TOKEN_TIERS: [25, 45, 60], // Low / Mid / High token price options
   GAME_TYPES: ['SPIN_WHEEL', 'SLOT_MACHINE', 'DICE'] as const,
-  DICE_RANGE: { min: 2, max: 12 },       // Sum of 2d6
-  PHASE2_SEAT_CAPACITY_WINDOW: 0.25,     // Phase 2 = 25% of Phase 1 attendee count
+  DICE_RANGE: { min: 2, max: 12 }, // Sum of 2d6
+  PHASE2_SEAT_CAPACITY_WINDOW: 0.25, // Phase 2 = 25% of Phase 1 attendee count
 } as const;
 
 // ─── GZ SCHEDULING — GuestZone Operations Scheduling Config ─────────────────
 export const GZ_SCHEDULING = {
   // ── Rolling Two-Week Cycle ──────────────────────────────────────────────
   PERIOD_LENGTH_DAYS: 14,
-  BLOCK_CUTOFF_DAYS_BEFORE: 21,          // B-Lock closes 21 days before period start
-  FINAL_LOCK_DAYS_BEFORE: 14,            // Schedule locked 14 days before period start
-  BLOCK_REMINDER_DAYS: [24, 22],         // Automated reminders sent at these intervals
+  BLOCK_CUTOFF_DAYS_BEFORE: 21, // B-Lock closes 21 days before period start
+  FINAL_LOCK_DAYS_BEFORE: 14, // Schedule locked 14 days before period start
+  BLOCK_REMINDER_DAYS: [24, 22], // Automated reminders sent at these intervals
 
   // ── ZoneBot 1-2-3 Rule ─────────────────────────────────────────────────
-  ZONEBOT_MAX_LOTTERY_POSITIONS: 3,      // Positions 1, 2, 3
-  ZONEBOT_CONFIRMATION_HOURS: 16,        // 16-hour confirmation clock
-  ZONEBOT_SUPPRESSION_CYCLES: 2,         // Awarded staff suppressed for 2 subsequent cycles
+  ZONEBOT_MAX_LOTTERY_POSITIONS: 3, // Positions 1, 2, 3
+  ZONEBOT_CONFIRMATION_HOURS: 16, // 16-hour confirmation clock
+  ZONEBOT_SUPPRESSION_CYCLES: 2, // Awarded staff suppressed for 2 subsequent cycles
 
   // ── Ontario ESA 2026 Compliance ────────────────────────────────────────
-  SHIFT_NOTICE_HOURS: 96,               // 96 hours notice for schedules
-  SHIFT_CHANGE_NOTICE_HOURS: 24,        // 24 hours notice for changes
-  MAX_CONSECUTIVE_DAYS: 6,              // No 7-day streaks (min 1 day off per 7)
-  MIN_CONSECUTIVE_DAYS_OFF_FT: 2,       // Full-time: 2 consecutive days off
-  MIN_CONSECUTIVE_DAYS_OFF_PT: 3,       // Part-time Edge: 3 consecutive days off
-  MAX_DAILY_HOURS: 8,                   // Standard 8-hour day
-  MAX_WEEKLY_HOURS_STANDARD: 44,        // Ontario ESA standard
-  MAX_WEEKLY_HOURS_EXCESS: 48,          // With excess hours agreement
-  MIN_VACATION_DAYS_ANNUAL: 10,         // 2 weeks minimum (FT)
+  SHIFT_NOTICE_HOURS: 96, // 96 hours notice for schedules
+  SHIFT_CHANGE_NOTICE_HOURS: 24, // 24 hours notice for changes
+  MAX_CONSECUTIVE_DAYS: 6, // No 7-day streaks (min 1 day off per 7)
+  MIN_CONSECUTIVE_DAYS_OFF_FT: 2, // Full-time: 2 consecutive days off
+  MIN_CONSECUTIVE_DAYS_OFF_PT: 3, // Part-time Edge: 3 consecutive days off
+  MAX_DAILY_HOURS: 8, // Standard 8-hour day
+  MAX_WEEKLY_HOURS_STANDARD: 44, // Ontario ESA standard
+  MAX_WEEKLY_HOURS_EXCESS: 48, // With excess hours agreement
+  MIN_VACATION_DAYS_ANNUAL: 10, // 2 weeks minimum (FT)
 
   // ── Stat Holiday Pay ───────────────────────────────────────────────────
-  STAT_HOLIDAY_PAY_MULTIPLIER: 1.50,    // 1.5x Premium Pay
+  STAT_HOLIDAY_PAY_MULTIPLIER: 1.5, // 1.5x Premium Pay
   STAT_HOLIDAY_INCLUDES_PUBLIC_PAY: true,
 
   // ── Transit Safety ─────────────────────────────────────────────────────
-  TRANSIT_UNSAFE_START_HOUR: 0,          // Midnight
-  TRANSIT_UNSAFE_END_HOUR: 6.25,        // 6:15 AM — no shifts start/end in this window
+  TRANSIT_UNSAFE_START_HOUR: 0, // Midnight
+  TRANSIT_UNSAFE_END_HOUR: 6.25, // 6:15 AM — no shifts start/end in this window
 
   // ── Waterfall Shift Blocks (GuestZone) ─────────────────────────────────
   SHIFTS: {
-    A: { code: 'A', label: 'Morning',  start: '07:00', end: '15:45', duration_hours: 8.75, meal_break_start: '11:30', meal_break_mins: 30 },
-    B: { code: 'B', label: 'Swing',    start: '15:15', end: '00:00', duration_hours: 8.75, meal_break_start: '19:30', meal_break_mins: 30 },
-    C: { code: 'C', label: 'Night',    start: '23:30', end: '08:15', duration_hours: 8.75, meal_break_start: '03:00', meal_break_mins: 30 },
+    A: {
+      code: 'A',
+      label: 'Morning',
+      start: '07:00',
+      end: '15:45',
+      duration_hours: 8.75,
+      meal_break_start: '11:30',
+      meal_break_mins: 30,
+    },
+    B: {
+      code: 'B',
+      label: 'Swing',
+      start: '15:15',
+      end: '00:00',
+      duration_hours: 8.75,
+      meal_break_start: '19:30',
+      meal_break_mins: 30,
+    },
+    C: {
+      code: 'C',
+      label: 'Night',
+      start: '23:30',
+      end: '08:15',
+      duration_hours: 8.75,
+      meal_break_start: '03:00',
+      meal_break_mins: 30,
+    },
   },
 
   // ── Minimum Coverage Baselines ─────────────────────────────────────────
-  GZ_MIN_AGENTS_PER_SHIFT: 3,           // 3-GZSA baseline during peak traffic
-  GZ_DIALPAD_LICENSES: 4,               // 4 Dialpad licenses, 1 "Safety Seat" open
-  GZ_CROSSOVER_MINS: 15,                // 15-minute staggered crossover
+  GZ_MIN_AGENTS_PER_SHIFT: 3, // 3-GZSA baseline during peak traffic
+  GZ_DIALPAD_LICENSES: 4, // 4 Dialpad licenses, 1 "Safety Seat" open
+  GZ_CROSSOVER_MINS: 15, // 15-minute staggered crossover
 
   // ── Departmental Hours ─────────────────────────────────────────────────
   DEPARTMENTS: {
-    GUESTZONE:   { hours_24_7: true },
-    FINANCE:     { start: '09:00', end: '21:00', days: 'DAILY' },
-    TECH:        { hours_24_7: true },
-    LEGAL:       { start: '09:00', end: '20:00', days: 'MON_FRI', on_call_24_7: true },
+    GUESTZONE: { hours_24_7: true },
+    FINANCE: { start: '09:00', end: '21:00', days: 'DAILY' },
+    TECH: { hours_24_7: true },
+    LEGAL: { start: '09:00', end: '20:00', days: 'MON_FRI', on_call_24_7: true },
     MAINTENANCE: { start: '07:00', end: '22:00', days: 'DAILY' },
-    RECEPTION:   { start: '08:00', end: '17:00', days: 'DAILY' },
+    RECEPTION: { start: '08:00', end: '17:00', days: 'DAILY' },
   },
 } as const;
 
 // ─── PLATFORM GLOBAL (CEO-DECISIONS-2026-04-12) ───────────────────────────────
 export const PLATFORM_GLOBAL = {
-  CURRENCY: 'USD',             // ISO 4217 — current trading currency
-  MARKETPLACE_FEE_PCT: 0.18,   // 18% — locked CEO 2026-04-12 (revised from 12.5%)
+  CURRENCY: 'USD', // ISO 4217 — current trading currency
+  MARKETPLACE_FEE_PCT: 0.18, // 18% — locked CEO 2026-04-12 (revised from 12.5%)
   // Applied to: digital merchandise, physical merchandise, digital content vault downloads,
   // post-embargo PPV/catalog recording sales.
   // NOT applied to: performance recordings purchased pre/during/post-show (within 24hr).
@@ -318,37 +367,37 @@ export const PLATFORM_GLOBAL = {
 
 // ─── MERCHANDISE CONFIG (CEO-DECISIONS-2026-04-12) ────────────────────────────
 export const MERCHANDISE_CONFIG = {
-  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN',       // ShowTokens rejected at checkout — no exceptions
-  CREATOR_PAYOUT_PER_TOKEN_USD: 0.075,    // $0.075 USD per ChatToken — locked 2026-04-12
-  DISPUTE_HOLD_TRIGGER: 'IMMEDIATE',      // Hold applied on ticket creation
-  DISPUTE_CREATOR_WINDOW_HOURS: 72,       // 72h (3 business days) to resolve
-  DISPUTE_REMINDER_HOURS: [0, 24],        // Reminders at ticket creation and 24h
-  REFUND_ORIGINAL_CARD_ONLY: true,        // No alternate card — no exceptions
+  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN', // ShowTokens rejected at checkout — no exceptions
+  CREATOR_PAYOUT_PER_TOKEN_USD: 0.075, // $0.075 USD per ChatToken — locked 2026-04-12
+  DISPUTE_HOLD_TRIGGER: 'IMMEDIATE', // Hold applied on ticket creation
+  DISPUTE_CREATOR_WINDOW_HOURS: 72, // 72h (3 business days) to resolve
+  DISPUTE_REMINDER_HOURS: [0, 24], // Reminders at ticket creation and 24h
+  REFUND_ORIGINAL_CARD_ONLY: true, // No alternate card — no exceptions
 } as const;
 
 // ─── PERFORMANCE RECORDING (CEO-DECISIONS-2026-04-12) ─────────────────────────
 export const PERFORMANCE_RECORDING = {
-  POST_SHOW_PURCHASE_WINDOW_HOURS: 24,    // Last-call window after show ends
-  EMBARGO_DAYS: 10,                       // Suppression period after post-show window
-  CATALOG_RELEASE_DAY: 11,                // Day 11 — available in creator PPV/merch catalog
-  DM_ON_SHOW_START: true,                 // DM sent to all attendees at show start
-  DM_ON_SHOW_END: true,                   // DM sent to non-purchasers at show end
+  POST_SHOW_PURCHASE_WINDOW_HOURS: 24, // Last-call window after show ends
+  EMBARGO_DAYS: 10, // Suppression period after post-show window
+  CATALOG_RELEASE_DAY: 11, // Day 11 — available in creator PPV/merch catalog
+  DM_ON_SHOW_START: true, // DM sent to all attendees at show start
+  DM_ON_SHOW_END: true, // DM sent to non-purchasers at show end
 } as const;
 
 // ─── CONCIERGE APPOINTMENT (CEO-DECISIONS-2026-04-12) ─────────────────────────
 export const CONCIERGE_APPT = {
-  OPEN_HOUR: 11,        // 11:00 AM billing-address TZ
-  CUTOFF_HOUR: 22,      // 10:00 PM — no new appointments after this hour
-  CUTOFF_MINUTE: 30,    // Combined: 10:30 PM hard cutoff for new appointments
+  OPEN_HOUR: 11, // 11:00 AM billing-address TZ
+  CUTOFF_HOUR: 22, // 10:00 PM — no new appointments after this hour
+  CUTOFF_MINUTE: 30, // Combined: 10:30 PM hard cutoff for new appointments
   // Guests with existing appointments booked before cutoff may still execute
   // purchase up to DFSP_PURCHASE_WINDOW_CLOSE_HOUR (23:00).
 } as const;
 
 // ─── FAN CLUB (CEO-DECISIONS-2026-04-12-B) ────────────────────────────────────
 export const FAN_CLUB = {
-  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN',                 // ShowTokens not accepted
+  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN', // ShowTokens not accepted
   BILLING_CYCLES: ['MONTHLY', 'ANNUAL'] as const,
-  ANNUAL_DISCOUNT_PCT: null,                        // TBD — pending CEO confirmation
+  ANNUAL_DISCOUNT_PCT: null, // TBD — pending CEO confirmation
   // Fan club fee applies PLATFORM_GLOBAL.MARKETPLACE_FEE_PCT (18%) — no separate constant.
 } as const;
 
@@ -356,10 +405,10 @@ export const FAN_CLUB = {
 // Defines which membership tiers may access which zones.
 // ShowZonePass overrides tier gate for SHOW_THEATRE and BIJOU only.
 export const ZONE_MAP = {
-  CHAT_ZONE:         ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
-  SHOW_THEATRE:      ['ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
-  BIJOU:             ['OMNIPASS_PLUS', 'DIAMOND'] as const,
-  PRIVATE_CALL:      ['OMNIPASS_PLUS', 'DIAMOND'] as const,
+  CHAT_ZONE: ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
+  SHOW_THEATRE: ['ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
+  BIJOU: ['OMNIPASS_PLUS', 'DIAMOND'] as const,
+  PRIVATE_CALL: ['OMNIPASS_PLUS', 'DIAMOND'] as const,
   DIAMOND_CONCIERGE: ['DIAMOND'] as const,
 } as const;
 
@@ -368,18 +417,18 @@ export const SHOW_ZONE_PASS_OVERRIDE_ZONES = ['SHOW_THEATRE', 'BIJOU'] as const;
 
 // Canonical membership tiers for zone access (ordered lowest → highest)
 export const ZONE_ACCESS_TIERS = ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const;
-export type ZoneAccessTier = typeof ZONE_ACCESS_TIERS[number];
+export type ZoneAccessTier = (typeof ZONE_ACCESS_TIERS)[number];
 export type ZoneAccessZone = keyof typeof ZONE_MAP;
 
 // ─── CREATOR SAAS (CEO-DECISIONS-2026-04-12-B) ────────────────────────────────
 export const CREATOR_SAAS = {
-  TIERS_ACTIVE: false,            // Master kill switch — admin toggles on
+  TIERS_ACTIVE: false, // Master kill switch — admin toggles on
   FREE_TIER_ENABLED: true,
   TIER_1_MONTHLY_USD: 19.95,
   TIER_2_MONTHLY_USD: 24.95,
   TIER_3_MONTHLY_USD: 49.95,
   BILLING_CYCLES: ['MONTHLY', 'ANNUAL'] as const,
-  ANNUAL_DISCOUNT_PCT: null,      // TBD — pending CEO confirmation
+  ANNUAL_DISCOUNT_PCT: null, // TBD — pending CEO confirmation
   // Build and ship. INACTIVE at launch. Admin-side activation only.
 } as const;
 

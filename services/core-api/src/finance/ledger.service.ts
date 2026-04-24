@@ -27,9 +27,9 @@ export enum TokenType {
 }
 
 export enum WalletBucket {
-  PROMOTIONAL_BONUS = 'PROMOTIONAL_BONUS',   // Priority 1 — spend first
-  MEMBERSHIP_ALLOCATION = 'MEMBERSHIP',      // Priority 2
-  PURCHASED = 'PURCHASED',                   // Priority 3 — spend last
+  PROMOTIONAL_BONUS = 'PROMOTIONAL_BONUS', // Priority 1 — spend first
+  MEMBERSHIP_ALLOCATION = 'MEMBERSHIP', // Priority 2
+  PURCHASED = 'PURCHASED', // Priority 3 — spend last
 }
 
 export interface BucketBalance {
@@ -71,7 +71,9 @@ export class LedgerService {
   }): Promise<unknown> {
     // WO-032: Reject any non-BigInt amount to prevent fractional token entries.
     if (typeof data.amount !== 'bigint') {
-      throw new Error('INVALID_AMOUNT: amount must be a BigInt. Fractional tokens are not permitted.');
+      throw new Error(
+        'INVALID_AMOUNT: amount must be a BigInt. Fractional tokens are not permitted.',
+      );
     }
 
     // WO-032: rule_applied_id — default to GENERAL_GOVERNANCE_v10 and warn when omitted.
@@ -87,7 +89,7 @@ export class LedgerService {
     const existing = await this.ledgerRepo.findOne({ where: { reference_id: data.referenceId } });
     if (existing) {
       this.logger.warn(`Transaction reference_id ${data.referenceId} already exists. Skipping.`);
-      return existing; 
+      return existing;
     }
 
     // 2. Prepare Entry (Enforce America/Toronto context in metadata)
@@ -178,9 +180,7 @@ export class LedgerService {
    * PROMOTIONAL_BONUS / MEMBERSHIP_ALLOCATION → GIFTED (platform grant or allocation).
    */
   private bucketToOrigin(bucket: WalletBucket): TokenOrigin {
-    return bucket === WalletBucket.PURCHASED
-      ? TokenOrigin.PURCHASED
-      : TokenOrigin.GIFTED;
+    return bucket === WalletBucket.PURCHASED ? TokenOrigin.PURCHASED : TokenOrigin.GIFTED;
   }
 
   /**
@@ -237,7 +237,7 @@ export class LedgerService {
     if (remaining > 0n) {
       throw new Error(
         `INSUFFICIENT_BALANCE: Could not debit ${data.amountTokens} tokens for user ${data.userId}. ` +
-        `Shortfall: ${remaining} tokens across all three buckets.`
+          `Shortfall: ${remaining} tokens across all three buckets.`,
       );
     }
 
@@ -248,7 +248,11 @@ export class LedgerService {
    * Derives balance for a specific wallet bucket from ledger history.
    * Bucket is stored in entry metadata.wallet_bucket.
    */
-  async getBucketBalance(userId: string, tokenType: TokenType, bucket: WalletBucket): Promise<bigint> {
+  async getBucketBalance(
+    userId: string,
+    tokenType: TokenType,
+    bucket: WalletBucket,
+  ): Promise<bigint> {
     const result = await this.ledgerRepo
       .createQueryBuilder('ledger')
       .select('SUM(ledger.amount)', 'total')
@@ -265,9 +269,9 @@ export class LedgerService {
    */
   async getAllBucketBalances(userId: string, tokenType: TokenType): Promise<BucketBalance[]> {
     const buckets = [
-      { bucket: WalletBucket.PROMOTIONAL_BONUS,   spendPriority: 1 as const },
+      { bucket: WalletBucket.PROMOTIONAL_BONUS, spendPriority: 1 as const },
       { bucket: WalletBucket.MEMBERSHIP_ALLOCATION, spendPriority: 2 as const },
-      { bucket: WalletBucket.PURCHASED,           spendPriority: 3 as const },
+      { bucket: WalletBucket.PURCHASED, spendPriority: 3 as const },
     ];
 
     return Promise.all(
@@ -275,7 +279,7 @@ export class LedgerService {
         bucket,
         balance: await this.getBucketBalance(userId, tokenType, bucket),
         spendPriority,
-      }))
+      })),
     );
   }
 
@@ -297,10 +301,7 @@ export class LedgerService {
    * Tech Debt Delta 2026-04-16 PAY-001 through PAY-005.
    * Rate is captured at tx_initiated and stored immutably.
    */
-  private resolvePayoutRate(
-    heatScore: number,
-    diamondFloorActive: boolean,
-  ): Decimal {
+  private resolvePayoutRate(heatScore: number, diamondFloorActive: boolean): Decimal {
     let rate: Decimal;
 
     if (heatScore >= GovernanceConfig.HEAT_BAND_HOT_MAX + 1) {

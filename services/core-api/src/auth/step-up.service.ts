@@ -73,7 +73,7 @@ export class StepUpService {
   }): StepUpChallenge {
     if (!this.requiresStepUp(params.action)) {
       throw new Error(
-        `STEP_UP_NOT_REQUIRED: action ${params.action} does not require step-up authentication.`
+        `STEP_UP_NOT_REQUIRED: action ${params.action} does not require step-up authentication.`,
       );
     }
     const now = new Date();

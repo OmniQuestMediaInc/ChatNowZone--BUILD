@@ -9,10 +9,7 @@ import { ZoneBotService } from './zonebot.service';
 import { ShiftCoverageService } from './shift-coverage.service';
 import { ComplianceGuardService } from './compliance-guard.service';
 import { SchedulingSeedService } from './scheduling-seed.service';
-import {
-  SchedulingQueueProcessor,
-  SCHEDULING_QUEUE_NAME,
-} from './scheduling-queue.processor';
+import { SchedulingQueueProcessor, SCHEDULING_QUEUE_NAME } from './scheduling-queue.processor';
 import {
   SchedulePeriodController,
   ShiftAssignmentController,

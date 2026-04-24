@@ -4,7 +4,7 @@
 // Can be called as a runtime seed script for testing or data refresh.
 
 export interface StatHolidayEntry {
-  date: string;  // YYYY-MM-DD
+  date: string; // YYYY-MM-DD
   name: string;
 }
 
@@ -97,11 +97,7 @@ function getGoodFriday(year: number): string {
   const easter = new Date(year, month - 1, day);
   const goodFriday = new Date(easter.getTime() - 2 * 86_400_000);
 
-  return formatDate(
-    goodFriday.getFullYear(),
-    goodFriday.getMonth() + 1,
-    goodFriday.getDate(),
-  );
+  return formatDate(goodFriday.getFullYear(), goodFriday.getMonth() + 1, goodFriday.getDate());
 }
 
 /**
@@ -122,11 +118,7 @@ function getVictoriaDay(year: number): string {
   }
 
   const victoriaDay = new Date(may24.getTime() + offset * 86_400_000);
-  return formatDate(
-    victoriaDay.getFullYear(),
-    victoriaDay.getMonth() + 1,
-    victoriaDay.getDate(),
-  );
+  return formatDate(victoriaDay.getFullYear(), victoriaDay.getMonth() + 1, victoriaDay.getDate());
 }
 
 function formatDate(year: number, month: number, day: number): string {

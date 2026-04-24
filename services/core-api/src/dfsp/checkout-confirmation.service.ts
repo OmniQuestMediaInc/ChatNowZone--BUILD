@@ -42,9 +42,7 @@ export class CheckoutConfirmationService {
    * Partial confirmation throws — purchase cannot proceed.
    * Email receipt and SMS notification published to NATS (delivery wired in v6).
    */
-  async recordConfirmations(
-    input: CheckoutConfirmationInput,
-  ): Promise<CheckoutConfirmationResult> {
+  async recordConfirmations(input: CheckoutConfirmationInput): Promise<CheckoutConfirmationResult> {
     if (
       !input.checkbox_age_confirmed ||
       !input.checkbox_no_refund_confirmed ||

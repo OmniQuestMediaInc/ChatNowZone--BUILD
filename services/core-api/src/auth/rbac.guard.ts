@@ -5,39 +5,34 @@
 // All sensitive actions require role eligibility + step-up (enforced by StepUpService).
 import { Injectable, Logger } from '@nestjs/common';
 
-export type RbacRole =
-  | 'VIEWER'
-  | 'CREATOR'
-  | 'MODERATOR'
-  | 'COMPLIANCE'
-  | 'ADMIN';
+export type RbacRole = 'VIEWER' | 'CREATOR' | 'MODERATOR' | 'COMPLIANCE' | 'ADMIN';
 
 const ROLE_RANK: Record<RbacRole, number> = {
-  VIEWER:     1,
-  CREATOR:    2,
-  MODERATOR:  3,
+  VIEWER: 1,
+  CREATOR: 2,
+  MODERATOR: 3,
   COMPLIANCE: 4,
-  ADMIN:      5,
+  ADMIN: 5,
 };
 
 const PERMISSION_MATRIX: Record<string, RbacRole> = {
-  'content:view':        'VIEWER',
-  'token:purchase':      'VIEWER',
-  'broadcast:start':     'CREATOR',
-  'broadcast:stop':      'CREATOR',
+  'content:view': 'VIEWER',
+  'token:purchase': 'VIEWER',
+  'broadcast:start': 'CREATOR',
+  'broadcast:stop': 'CREATOR',
   'rate_card:configure': 'CREATOR',
-  'earnings:view':       'CREATOR',
-  'content:flag':        'MODERATOR',
-  'stream:suspend':      'MODERATOR',
-  'severity:assign':     'MODERATOR',
+  'earnings:view': 'CREATOR',
+  'content:flag': 'MODERATOR',
+  'stream:suspend': 'MODERATOR',
+  'severity:assign': 'MODERATOR',
   'suspension:override': 'COMPLIANCE',
-  'ncii:suppress':       'COMPLIANCE',
-  'legal_hold:trigger':  'COMPLIANCE',
-  'refund:override':     'COMPLIANCE',
-  'role:manage':         'ADMIN',
-  'audit_log:view':      'ADMIN',
-  'worm:export':         'ADMIN',
-  'geo_block:modify':    'ADMIN',
+  'ncii:suppress': 'COMPLIANCE',
+  'legal_hold:trigger': 'COMPLIANCE',
+  'refund:override': 'COMPLIANCE',
+  'role:manage': 'ADMIN',
+  'audit_log:view': 'ADMIN',
+  'worm:export': 'ADMIN',
+  'geo_block:modify': 'ADMIN',
 };
 
 export interface RbacCheckResult {
@@ -55,11 +50,7 @@ export class RbacGuard {
   private readonly logger = new Logger(RbacGuard.name);
   private readonly RULE_ID = 'RBAC_GUARD_v1';
 
-  check(params: {
-    actor_id: string;
-    actor_role: RbacRole;
-    permission: string;
-  }): RbacCheckResult {
+  check(params: { actor_id: string; actor_role: RbacRole; permission: string }): RbacCheckResult {
     const required_role = PERMISSION_MATRIX[params.permission];
     if (!required_role) {
       this.logger.error('RbacGuard: unknown permission requested', {

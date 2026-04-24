@@ -28,7 +28,7 @@ Everything else lives here and in the sibling REFERENCE_LIBRARY files.
 | Repo | OmniQuestMediaInc/ChatNowZone--BUILD |
 | Hard deadline | 1 October 2026 |
 | Exec team | Blaine Lenher, Darrell Peckford |
-| **BANNED ENTITY** | **Jaime Watt / Navigator Ltd. — NEVER reference** |
+| **BANNED ENTITY** | **[REDACTED — governance §12] — NEVER reference this individual or firm in any OmniQuest Media Inc. material** |
 
 ---
 

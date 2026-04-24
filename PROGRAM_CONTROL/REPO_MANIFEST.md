@@ -34,11 +34,7 @@ Auto-generated on every push. Do not edit manually.
 - `.markdownlintignore`
 - `.prettierignore`
 - `.prettierrc`
-- `LEGACY_CONFIGS/.eslintrc.js`
-- `LEGACY_CONFIGS/.gitignore`
-- `LEGACY_CONFIGS/.prettierrc`
-- `LEGACY_CONFIGS/package.json`
-- `LEGACY_CONFIGS/tsconfig.json`
+- `OQMI_SYSTEM_STATE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-002.md`
@@ -221,6 +217,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/fix-yarn-lockfile-ci.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
+- `README.md`
 - `REFERENCE_LIBRARY/00_THREAD_BOOTSTRAP.md`
 - `REFERENCE_LIBRARY/01_CANONICAL_LOCKS.md`
 - `REFERENCE_LIBRARY/02_DOMAIN_TAXONOMY.md`
@@ -240,8 +237,12 @@ Auto-generated on every push. Do not edit manually.
 - `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-zoom-clone/REFS_MANIFEST.md`
 - `REFERENCE_LIBRARY/TEMPLATES/OQMInc_REFERENCE_LIBRARY_MASTER_TEMPLATE.md`
 - `REFERENCE_LIBRARY/TEMPLATES/README.md`
-- `archive/governance/CLAUDE.md`
-- `archive/governance/Sovereign_Kernel.md.pdf`
+- `archive/LEGACY_CONFIGS_2026-04/.eslintrc.js`
+- `archive/LEGACY_CONFIGS_2026-04/.gitignore`
+- `archive/LEGACY_CONFIGS_2026-04/.prettierrc`
+- `archive/LEGACY_CONFIGS_2026-04/HANDOFF.md`
+- `archive/LEGACY_CONFIGS_2026-04/package.json`
+- `archive/LEGACY_CONFIGS_2026-04/tsconfig.json`
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
@@ -262,6 +263,8 @@ Auto-generated on every push. Do not edit manually.
 - `finance/notification-gateway.service.ts`
 - `finance/schema.ts`
 - `finance/token-extension.service.ts`
+- `governance/CLAUDE.stale.md`
+- `governance/Sovereign_Kernel.md.pdf`
 - `governance/pre-ship-audit.service.ts`
 - `infra/postgres/init-ledger.sql`
 - `jest.config.js`
@@ -352,6 +355,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/growth/referral-reward.service.ts`
 - `services/core-api/src/ingestion/ingestion.module.ts`
 - `services/core-api/src/ingestion/ingestion.service.ts`
+- `services/core-api/src/logger.spec.ts`
 - `services/core-api/src/logger.ts`
 - `services/core-api/src/marketing/gratitude.service.ts`
 - `services/core-api/src/membership/membership.module.ts`
@@ -383,6 +387,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/scheduling/zonebot.service.ts`
 - `services/core-api/src/studio/studio-report.controller.ts`
 - `services/core-api/src/studio/studio-report.service.ts`
+- `services/core-api/src/test/helpers/setTestEnv.ts`
 - `services/core-api/src/zone-access/zone-access.guard.ts`
 - `services/core-api/src/zone-access/zone-access.module.ts`
 - `services/core-api/src/zone-access/zone-access.service.ts`
@@ -398,10 +403,16 @@ Auto-generated on every push. Do not edit manually.
 - `services/nats/topics.registry.js`
 - `services/nats/topics.registry.js.map`
 - `services/nats/topics.registry.ts`
+- `services/notification/src/notification.module.ts`
+- `services/notification/src/notification.service.ts`
 - `services/obs-bridge/src/chat-aggregator.service.ts`
 - `services/obs-bridge/src/obs-bridge.module.ts`
 - `services/obs-bridge/src/obs-bridge.service.ts`
 - `services/obs-bridge/src/persona-engine.service.ts`
+- `services/recovery/src/admin-recovery.controller.ts`
+- `services/recovery/src/recovery.module.ts`
+- `services/recovery/src/recovery.service.ts`
+- `services/recovery/src/recovery.types.ts`
 - `services/rewards-api/src/engine/points-calculator.logic.ts`
 - `services/rewards-api/src/white-label/partner-config.schema.ts`
 - `services/risk-engine/src/region-signal.service.ts`
@@ -427,7 +438,9 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
+- `tests/integration/diamond-concierge-service.spec.ts`
 - `tests/integration/ledger-service.spec.ts`
+- `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
 - `tests/integration/recovery-engine.spec.ts`
 - `tests/integration/redbook-rate-card.spec.ts`

@@ -4,8 +4,11 @@ const config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   rootDir: '.',
-  roots: ['<rootDir>/tests/integration'],
-  testMatch: ['<rootDir>/tests/integration/**/*.spec.ts'],
+  roots: ['<rootDir>/tests/integration', '<rootDir>/services'],
+  testMatch: [
+    '<rootDir>/tests/integration/**/*.spec.ts',
+    '<rootDir>/services/**/src/**/*.spec.ts',
+  ],
   moduleFileExtensions: ['ts', 'js', 'json'],
   globals: {
     'ts-jest': {
