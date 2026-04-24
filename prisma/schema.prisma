@@ -1162,6 +1162,88 @@ model CreatorDwellAccrual {
   @@map("bijou_creator_dwell_accruals")
 }
 
+// ─── CANONICAL FINANCIAL LEDGER — Payload 1 (OQMI_GOVERNANCE + REDBOOK) ──────
+// New canonical three-bucket wallet layer sourced from services/ledger/.
+// Prisma model names are prefixed `Canonical*` to coexist with the legacy
+// LedgerEntry (payment-gateway oriented) without colliding. Table names follow
+// the directive: wallets, wallet_ledger_entries, token_expirations, rate_cards.
+// Append-only: wallet_ledger_entries never UPDATE or DELETE (hash-chained).
+
+model CanonicalWallet {
+  id               String   @id @default(cuid())
+  user_id          String   @unique
+  user_type        String   // "guest" | "creator" | "diamond"
+
+  // Three-bucket balances — enforced by services/ledger/ (never write directly).
+  purchased_tokens  Int     @default(0)
+  membership_tokens Int     @default(0)
+  bonus_tokens      Int     @default(0)
+
+  last_updated     DateTime @updatedAt
+  organization_id  String
+  tenant_id        String
+  created_at       DateTime @default(now())
+
+  ledger_entries    CanonicalLedgerEntry[]
+  token_expirations CanonicalTokenExpiration[]
+
+  @@index([user_type])
+  @@index([organization_id, tenant_id])
+  @@map("wallets")
+}
+
+model CanonicalLedgerEntry {
+  id              String   @id @default(cuid())
+  wallet_id       String
+  correlation_id  String   @unique
+  reason_code     String   // "PURCHASE" | "SPEND" | "PAYOUT" | "EXPIRY_RECOVERY" | "TOKEN_BRIDGE" | "THREE_FIFTHS_EXIT" | ...
+  amount          Int      // signed: positive = credit, negative = debit
+  bucket          String   // "purchased" | "membership" | "bonus"
+  metadata        Json?
+  hash_prev       String?
+  hash_current    String
+  created_at      DateTime @default(now())
+
+  wallet          CanonicalWallet @relation(fields: [wallet_id], references: [id])
+
+  @@index([wallet_id, correlation_id])
+  @@index([wallet_id, created_at])
+  @@index([reason_code])
+  @@map("wallet_ledger_entries")
+}
+
+model CanonicalTokenExpiration {
+  id           String    @id @default(cuid())
+  wallet_id    String
+  tokens       Int
+  expires_at   DateTime
+  status       String    // "active" | "expired" | "recovered" | "extended"
+  recovery_fee Decimal?  @db.Decimal(10, 2)
+  created_at   DateTime  @default(now())
+
+  wallet       CanonicalWallet @relation(fields: [wallet_id], references: [id])
+
+  @@index([wallet_id, status])
+  @@index([status, expires_at])
+  @@map("token_expirations")
+}
+
+model CanonicalRateCard {
+  id              String    @id @default(cuid())
+  tier            String    // "tease_regular" | "tease_showzone" | "diamond_floor" | "vip_baseline"
+  guest_price     Decimal   @db.Decimal(10, 2)
+  member_price    Decimal   @db.Decimal(10, 2)
+  creator_payout  Decimal   @db.Decimal(6, 4)  // $0.065–$0.090 per token
+  platform_margin Decimal   @db.Decimal(6, 4)
+  min_volume      Int?
+  heat_level      String?   // for Room-Heat scaling: "cold" | "warm" | "hot" | "inferno"
+  valid_from      DateTime
+  valid_to        DateTime?
+
+  @@index([tier, valid_from])
+  @@map("rate_cards")
+}
+
 // ─── Creator — OBS-001 foundation fields ─────────────────────────────────────
 // Minimal Creator model carrying OBS stream key hash and persona CREATOR_AUTO
 // flag. Canonical identity / profile fields are deferred to a future directive.

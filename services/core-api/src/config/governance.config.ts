@@ -393,3 +393,72 @@ export const OBS = {
   // Applied to every CREATOR_AUTO=true persona output before publish.
   BILL_149_DISCLOSURE_PREFIX: 'This message was generated with AI assistance. ',
 } as const;
+
+// ─── REDBOOK RATE CARDS (Canonical Ledger — Payload 1) ───────────────────────
+// Source of truth for all CZT bundle pricing, ShowZone premium, and creator
+// payout rates consumed by services/ledger/. Values LOCKED per REDBOOK Section 3
+// + Diamond Tier pricing table. NEVER hardcode prices in service code — always
+// read from this constant. FIZ: commit required for any change.
+export const REDBOOK_RATE_CARDS = {
+  // Tease Phase regular bundles (guest-facing purchase rail).
+  TEASE_REGULAR: [
+    { tokens:    150, guest_usd:  19.99, member_usd:  17.99, creator_payout_per_token: 0.075 },
+    { tokens:    500, guest_usd:  59.99, member_usd:  53.99, creator_payout_per_token: 0.075 },
+    { tokens:  1_000, guest_usd: 119.99, member_usd: 107.99, creator_payout_per_token: 0.075 },
+    { tokens:  5_000, guest_usd: 549.99, member_usd: 494.99, creator_payout_per_token: 0.080 },
+    { tokens: 10_000, guest_usd: 999.99, member_usd: 899.99, creator_payout_per_token: 0.082 },
+  ] as const,
+
+  // ShowZone Premium bundles (theatre pass attendees).
+  TEASE_SHOWZONE: [
+    { tokens:   300, usd:  48.00, creator_payout_per_token: 0.080 },
+    { tokens: 1_000, usd: 145.00, creator_payout_per_token: 0.082 },
+  ] as const,
+
+  // Diamond Tier floor — matches DIAMOND_TIER volume brackets above.
+  // Represented here as the (min,max,rate,velocity) matrix pre-joined for O(1) lookup.
+  DIAMOND_FLOOR_PER_TOKEN_MIN: 0.077,
+  DIAMOND_FLOOR_PER_TOKEN_MAX: 0.120,
+
+  // VIP comparison baseline shown in estimators and Diamond quote flow.
+  VIP_BASELINE_PER_TOKEN: 0.120,
+} as const;
+
+// ─── RECOVERY ENGINE — Unified Customer Service (REDBOOK §5) ─────────────────
+// Drives Recovery Engine workflows in services/ledger/recovery.service.ts.
+// Revisions require CS: commit + CEO sign-off.
+export const RECOVERY_ENGINE = {
+  // Diamond tokens expire 14 days from issuance (unless extended).
+  DIAMOND_EXPIRY_DAYS: 14,
+
+  // Automated warning fires this many hours before expiry.
+  EXPIRY_WARNING_HOURS: 48,
+
+  // Extension fee in USD — applied before expiry to push horizon +14 days.
+  EXTENSION_FEE_USD: 49.00,
+  EXTENSION_GRANT_DAYS: 14,
+
+  // Recovery fee in USD — applied after expiry to restore lapsed balance.
+  RECOVERY_FEE_USD: 79.00,
+
+  // Expired token redistribution (when neither extension nor recovery is exercised).
+  EXPIRED_CREATOR_POOL_PCT: 0.70,     // 70% → Creator Bonus Pool
+  EXPIRED_PLATFORM_PCT:     0.30,     // 30% → Platform (OQMI mgmt fee)
+
+  // Token Bridge — goodwill reinstatement.
+  // Grants a 20% bonus credit + waives the recovery fee on a single future lapse.
+  TOKEN_BRIDGE_BONUS_PCT: 0.20,
+  TOKEN_BRIDGE_WAIVER_LIMIT: 1,       // Waiver applies to one lapse per 365 days.
+
+  // 3/5ths Exit — partial refund with 24h cool-off.
+  // Refunds 60% of current purchased-bucket balance and locks both buy + spend
+  // for 24 hours. Name reflects the three-of-five split (60% refund / 40% retained).
+  THREE_FIFTHS_REFUND_PCT: 0.60,
+  THREE_FIFTHS_LOCK_HOURS: 24,
+} as const;
+
+// ─── LEDGER SPEND ORDER (FIZ-003 — Three-Bucket Wallet) ──────────────────────
+// Authoritative drain order for every debit against a canonical wallet.
+// System-enforced; user cannot choose which bucket funds a spend.
+export const LEDGER_SPEND_ORDER = ['purchased', 'membership', 'bonus'] as const;
+export type LedgerBucket = (typeof LEDGER_SPEND_ORDER)[number];
