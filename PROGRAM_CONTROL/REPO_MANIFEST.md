@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/redbook-dashboard-concierge-xgbN6`
-**Commit:** `ffadd14ac80082743859a1d93c3131ad985458ca`
-**Generated:** 2026-04-24T17:28:14Z
+**Branch:** `claude/gateguard-sentinel-preprocessor-4zXSw`
+**Commit:** `2b07fbb59879c798e23c3988854c08142d5c7498`
+**Generated:** 2026-04-24T17:24:11Z
 
 ## All Files
 
@@ -165,7 +165,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-DFSP001-TOPICS-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/OBS-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
-- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-2-REDBOOK-RECOVERY-DASHBOARD.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-3-GATEGUARD-SENTINEL-PREPROCESSOR.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-002-SUPPRESSION-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-REPORT-BACK.md`
@@ -346,6 +346,11 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/games/game-engine.service.ts`
 - `services/core-api/src/games/games.controller.ts`
 - `services/core-api/src/games/games.module.ts`
+- `services/core-api/src/gateguard/gateguard.middleware.ts`
+- `services/core-api/src/gateguard/gateguard.module.ts`
+- `services/core-api/src/gateguard/gateguard.service.ts`
+- `services/core-api/src/gateguard/gateguard.types.ts`
+- `services/core-api/src/gateguard/welfare-guardian.scorer.ts`
 - `services/core-api/src/geo/geo-pricing.service.ts`
 - `services/core-api/src/governance/governance.config.ts`
 - `services/core-api/src/growth/growth.module.ts`
@@ -431,7 +436,9 @@ Auto-generated on every push. Do not edit manually.
 - `services/zone-gpt/src/zone-gpt.module.ts`
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
-- `tests/integration/diamond-concierge-service.spec.ts`
+- `tests/integration/gateguard-middleware.spec.ts`
+- `tests/integration/gateguard-scorer.spec.ts`
+- `tests/integration/gateguard-service.spec.ts`
 - `tests/integration/ledger-service.spec.ts`
 - `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
