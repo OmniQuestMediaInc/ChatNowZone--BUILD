@@ -234,10 +234,12 @@ export const MEMBERSHIP = {
   // MEMB-003: Monthly CZT stipend per membership tier.
   // Revisable via GOV: commit only. Values in CZT units.
   STIPEND_CZT: {
-    DAY_PASS: 0,
-    ANNUAL: 100,
-    OMNIPASS_PLUS: 250,
-    DIAMOND: 500,
+    GUEST: 0,
+    VIP: 0,
+    VIP_SILVER: 100,
+    VIP_GOLD: 175,
+    VIP_PLATINUM: 250,
+    VIP_DIAMOND: 500,
   },
 } as const;
 
@@ -404,19 +406,20 @@ export const FAN_CLUB = {
 // ─── ZONE MAP (MEMB-001 — Zone Access Enforcement) ───────────────────────────
 // Defines which membership tiers may access which zones.
 // ShowZonePass overrides tier gate for SHOW_THEATRE and BIJOU only.
+// Tier rank order (lowest → highest): GUEST → VIP → VIP_SILVER → VIP_GOLD → VIP_PLATINUM → VIP_DIAMOND
 export const ZONE_MAP = {
-  CHAT_ZONE: ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
-  SHOW_THEATRE: ['ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
-  BIJOU: ['OMNIPASS_PLUS', 'DIAMOND'] as const,
-  PRIVATE_CALL: ['OMNIPASS_PLUS', 'DIAMOND'] as const,
-  DIAMOND_CONCIERGE: ['DIAMOND'] as const,
+  CHAT_ZONE: ['GUEST', 'VIP', 'VIP_SILVER', 'VIP_GOLD', 'VIP_PLATINUM', 'VIP_DIAMOND'] as const,
+  SHOW_THEATRE: ['VIP_SILVER', 'VIP_GOLD', 'VIP_PLATINUM', 'VIP_DIAMOND'] as const,
+  BIJOU: ['VIP_PLATINUM', 'VIP_DIAMOND'] as const,
+  PRIVATE_CALL: ['VIP_PLATINUM', 'VIP_DIAMOND'] as const,
+  DIAMOND_CONCIERGE: ['VIP_DIAMOND'] as const,
 } as const;
 
 // Zones where a ShowZonePass can override tier-based denial
 export const SHOW_ZONE_PASS_OVERRIDE_ZONES = ['SHOW_THEATRE', 'BIJOU'] as const;
 
 // Canonical membership tiers for zone access (ordered lowest → highest)
-export const ZONE_ACCESS_TIERS = ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const;
+export const ZONE_ACCESS_TIERS = ['GUEST', 'VIP', 'VIP_SILVER', 'VIP_GOLD', 'VIP_PLATINUM', 'VIP_DIAMOND'] as const;
 export type ZoneAccessTier = (typeof ZONE_ACCESS_TIERS)[number];
 export type ZoneAccessZone = keyof typeof ZONE_MAP;
 

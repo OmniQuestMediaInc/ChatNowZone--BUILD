@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/update-rebbook-business-plan`
-**Commit:** `97017fbc938bfd95b3bf2a62d9705665cc8da3cc`
-**Generated:** 2026-04-24T19:14:12Z
+**Branch:** `copilot/update-membership-tier-names`
+**Commit:** `bf9c9d1dc62ee149dad1fae3749b540ddecfaf47`
+**Generated:** 2026-04-24T19:27:40Z
 
 ## All Files
 
@@ -86,6 +86,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Lift-From-Index.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Repo-Registry.md`
 - `PROGRAM_CONTROL/LAUNCH_MANIFEST.md`
+- `PROGRAM_CONTROL/LAUNCH_READY.md`
 - `PROGRAM_CONTROL/REPORT_BACK/.gitkeep`
 - `PROGRAM_CONTROL/REPORT_BACK/ADD-CLEARANCE-CONFIRMATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/AUDIT-001-AUDIT-CHAIN-SERVICE.md`

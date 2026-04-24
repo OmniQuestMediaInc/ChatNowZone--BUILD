@@ -28,7 +28,7 @@ export class MembershipService {
 
   /**
    * Resolve the current membership tier for a user.
-   * Returns DAY_PASS if no ACTIVE subscription exists.
+   * Returns GUEST if no ACTIVE subscription exists.
    */
   async getActiveTier(userId: string): Promise<ZoneAccessTier> {
     this.logger.log('MembershipService.getActiveTier', {
@@ -45,13 +45,13 @@ export class MembershipService {
 
     if (!subscription) {
       this.logger.log(
-        'MembershipService.getActiveTier: no active subscription — defaulting to DAY_PASS',
+        'MembershipService.getActiveTier: no active subscription — defaulting to GUEST',
         {
           user_id: userId,
           rule_applied_id: 'MEMB-002_GET_ACTIVE_TIER_v1',
         },
       );
-      return 'DAY_PASS';
+      return 'GUEST';
     }
 
     const tier = subscription.tier as ZoneAccessTier;
@@ -215,7 +215,7 @@ export class MembershipService {
 
   /**
    * Expire a subscription by ID.
-   * Sets status to EXPIRED; user tier downgrades to DAY_PASS (resolved by getActiveTier).
+   * Sets status to EXPIRED; user tier downgrades to GUEST (resolved by getActiveTier).
    * Throws NotFoundException if the subscription does not exist.
    */
   async expireSubscription(
@@ -255,7 +255,7 @@ export class MembershipService {
       },
     });
 
-    this.logger.log('MembershipService.expireSubscription: expired — user downgrades to DAY_PASS', {
+    this.logger.log('MembershipService.expireSubscription: expired — user downgrades to GUEST', {
       subscription_id: subscriptionId,
       user_id: subscription.user_id,
       tier: subscription.tier,

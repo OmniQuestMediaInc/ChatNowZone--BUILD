@@ -175,7 +175,7 @@ export class DiamondConciergeService {
     security_signals: string[];
     hospitality_signals: string[];
   }): ConciergeSurface {
-    const tier_permitted = params.tier === 'DIAMOND';
+    const tier_permitted = params.tier === 'VIP_DIAMOND';
     return {
       user_id: params.user_id,
       tier_permitted,

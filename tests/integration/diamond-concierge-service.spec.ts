@@ -150,7 +150,7 @@ describe('DiamondConciergeService — Concierge surface fusion', () => {
   it('marks Diamond tier as permitted', () => {
     const s = svc.fuseConciergeSurface({
       user_id: 'cu_001',
-      tier: 'DIAMOND',
+      tier: 'VIP_DIAMOND',
       fraud_risk_signals: [],
       security_signals: [],
       hospitality_signals: [],
@@ -161,7 +161,7 @@ describe('DiamondConciergeService — Concierge surface fusion', () => {
   it('marks non-Diamond tiers as not permitted', () => {
     const s = svc.fuseConciergeSurface({
       user_id: 'cu_002',
-      tier: 'OMNIPASS_PLUS',
+      tier: 'VIP_PLATINUM',
       fraud_risk_signals: [],
       security_signals: [],
       hospitality_signals: [],
@@ -172,7 +172,7 @@ describe('DiamondConciergeService — Concierge surface fusion', () => {
   it('fuses all three signal streams into a single surface', () => {
     const s = svc.fuseConciergeSurface({
       user_id: 'cu_003',
-      tier: 'DIAMOND',
+      tier: 'VIP_DIAMOND',
       fraud_risk_signals: ['velocity_spike'],
       security_signals: ['ip_change'],
       hospitality_signals: ['vip_preferred_creator'],
