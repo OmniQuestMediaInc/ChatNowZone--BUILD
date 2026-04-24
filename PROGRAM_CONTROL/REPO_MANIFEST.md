@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/repo-prep-cleanup-x7SZS`
-**Commit:** `6c65544bcfbe7ad3b3c24150e37926da1b8a1bed`
-**Generated:** 2026-04-24T16:34:53Z
+**Branch:** `claude/fix-logger-test-env-56ZlM`
+**Commit:** `3fe88c7d754f8d91ec20b64ec9848007a8fe95a3`
+**Generated:** 2026-04-24T17:16:49Z
 
 ## All Files
 
@@ -353,6 +353,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/growth/referral-reward.service.ts`
 - `services/core-api/src/ingestion/ingestion.module.ts`
 - `services/core-api/src/ingestion/ingestion.service.ts`
+- `services/core-api/src/logger.spec.ts`
 - `services/core-api/src/logger.ts`
 - `services/core-api/src/marketing/gratitude.service.ts`
 - `services/core-api/src/membership/membership.module.ts`
@@ -384,6 +385,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/scheduling/zonebot.service.ts`
 - `services/core-api/src/studio/studio-report.controller.ts`
 - `services/core-api/src/studio/studio-report.service.ts`
+- `services/core-api/src/test/helpers/setTestEnv.ts`
 - `services/core-api/src/zone-access/zone-access.guard.ts`
 - `services/core-api/src/zone-access/zone-access.module.ts`
 - `services/core-api/src/zone-access/zone-access.service.ts`
