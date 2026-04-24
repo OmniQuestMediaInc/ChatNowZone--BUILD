@@ -158,9 +158,9 @@ https://api.github.com/repos/OmniQuestMediaInc/ChatNowZone--BUILD/contents/PROGR
 
 They live in a separate domain (working name: `Pass` / `Entitlement` / `ProductPurchase`) and are handled by a future PASS-001 directive. Not in MembershipTier.
 
-### Jaime Watt / Navigator Ltd.
+### Banned entity ([REDACTED] — governance §12)
 
-Not a partner and may never be. Do not reference, suggest, or include them in any regulatory, advisory, or engagement context.
+Not a partner and may never be. Do not reference, suggest, or include this individual or firm in any regulatory, advisory, or engagement context. Original name redacted per OQMI_GOVERNANCE.md §12 repo invariant.
 
 ---
 
@@ -198,7 +198,7 @@ Claude Chat operates as architect, sequencer, directive author, and verifier. Do
 ### Memory updates
 
 - Memory #10 rewritten to canonical 6-tier enum + supporting rules
-- Memory #11 added: Navigator Ltd. / Jaime Watt not a partner
+- Memory #11 added: banned entity ([REDACTED] per §12) not a partner
 - Memory #12 added: OmniPass/OmniPass+ are products, not tiers
 - Memory #13 added: tier expiry rules (Guest 31d, VIP never, paid 90+1d, verification cadences)
 

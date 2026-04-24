@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/cnz-work-001-pr-authority-hardening`
-**Commit:** `31ae7b4f3fa75a62f4d8ccb49b75a27b7c38e74d`
-**Generated:** 2026-04-23T04:25:13Z
+**Branch:** `claude/repo-prep-cleanup-x7SZS`
+**Commit:** `6c65544bcfbe7ad3b3c24150e37926da1b8a1bed`
+**Generated:** 2026-04-24T16:34:53Z
 
 ## All Files
 
@@ -34,11 +34,7 @@ Auto-generated on every push. Do not edit manually.
 - `.markdownlintignore`
 - `.prettierignore`
 - `.prettierrc`
-- `LEGACY_CONFIGS/.eslintrc.js`
-- `LEGACY_CONFIGS/.gitignore`
-- `LEGACY_CONFIGS/.prettierrc`
-- `LEGACY_CONFIGS/package.json`
-- `LEGACY_CONFIGS/tsconfig.json`
+- `OQMI_SYSTEM_STATE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/.gitkeep`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-001.md`
 - `PROGRAM_CONTROL/DIRECTIVES/DONE/AUDIT-002.md`
@@ -220,6 +216,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/fix-yarn-lockfile-ci.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
+- `README.md`
 - `REFERENCE_LIBRARY/00_THREAD_BOOTSTRAP.md`
 - `REFERENCE_LIBRARY/01_CANONICAL_LOCKS.md`
 - `REFERENCE_LIBRARY/02_DOMAIN_TAXONOMY.md`
@@ -239,8 +236,12 @@ Auto-generated on every push. Do not edit manually.
 - `REFERENCE_LIBRARY/OSS_REF_BRANCH_SEEDS/refs-oss-zoom-clone/REFS_MANIFEST.md`
 - `REFERENCE_LIBRARY/TEMPLATES/OQMInc_REFERENCE_LIBRARY_MASTER_TEMPLATE.md`
 - `REFERENCE_LIBRARY/TEMPLATES/README.md`
-- `archive/governance/CLAUDE.md`
-- `archive/governance/Sovereign_Kernel.md.pdf`
+- `archive/LEGACY_CONFIGS_2026-04/.eslintrc.js`
+- `archive/LEGACY_CONFIGS_2026-04/.gitignore`
+- `archive/LEGACY_CONFIGS_2026-04/.prettierrc`
+- `archive/LEGACY_CONFIGS_2026-04/HANDOFF.md`
+- `archive/LEGACY_CONFIGS_2026-04/package.json`
+- `archive/LEGACY_CONFIGS_2026-04/tsconfig.json`
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
@@ -261,6 +262,8 @@ Auto-generated on every push. Do not edit manually.
 - `finance/notification-gateway.service.ts`
 - `finance/schema.ts`
 - `finance/token-extension.service.ts`
+- `governance/CLAUDE.stale.md`
+- `governance/Sovereign_Kernel.md.pdf`
 - `governance/pre-ship-audit.service.ts`
 - `infra/postgres/init-ledger.sql`
 - `jest.config.js`
