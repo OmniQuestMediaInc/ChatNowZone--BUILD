@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/cnz-work-001-pr-authority-hardening`
-**Commit:** `31ae7b4f3fa75a62f4d8ccb49b75a27b7c38e74d`
-**Generated:** 2026-04-23T04:25:13Z
+**Branch:** `claude/financial-ledger-wallets-FrUdF`
+**Commit:** `9babe8569fad2b6c38a5ba81933aadfe0c20900c`
+**Generated:** 2026-04-24T16:58:47Z
 
 ## All Files
 
@@ -169,6 +169,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-DFSP001-TOPICS-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/OBS-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-001-CANONICAL-LEDGER-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-002-SUPPRESSION-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-REPORT-BACK.md`
@@ -268,6 +269,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260409000000_legal_hold_db_migration/migration.sql`
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
 - `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
+- `prisma/migrations/20260424000000_add_canonical_financial_ledger/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -385,6 +387,13 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/zone-access/zone-access.module.ts`
 - `services/core-api/src/zone-access/zone-access.service.ts`
 - `services/core-api/tsconfig.json`
+- `services/ledger/index.ts`
+- `services/ledger/ledger.service.ts`
+- `services/ledger/payout.service.ts`
+- `services/ledger/recovery.service.ts`
+- `services/ledger/redbook-rate-card.service.ts`
+- `services/ledger/repository.ts`
+- `services/ledger/types.ts`
 - `services/nats/topics.registry.d.ts`
 - `services/nats/topics.registry.js`
 - `services/nats/topics.registry.js.map`
@@ -416,9 +425,12 @@ Auto-generated on every push. Do not edit manually.
 - `services/zone-gpt/src/zone-gpt.module.js.map`
 - `services/zone-gpt/src/zone-gpt.module.ts`
 - `tests/integration/bijou-session.spec.ts`
+- `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
 - `tests/integration/ledger-service.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
+- `tests/integration/recovery-engine.spec.ts`
+- `tests/integration/redbook-rate-card.spec.ts`
 - `tests/integration/scheduling-service.spec.ts`
 - `tests/integration/seed-loader.ts`
 - `tests/integration/stat-holidays.spec.ts`
