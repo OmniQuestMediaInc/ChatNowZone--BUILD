@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/gateguard-sentinel-preprocessor-4zXSw`
-**Commit:** `2b07fbb59879c798e23c3988854c08142d5c7498`
-**Generated:** 2026-04-24T17:24:11Z
+**Branch:** `claude/financial-ledger-wallets-FrUdF`
+**Commit:** `757b32cfc66d9e0be841e862d4874860e61f4f80`
+**Generated:** 2026-04-24T17:33:19Z
 
 ## All Files
 
@@ -165,7 +165,8 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-DFSP001-TOPICS-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/OBS-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
-- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-3-GATEGUARD-SENTINEL-PREPROCESSOR.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-001-CANONICAL-LEDGER-REPORT-BACK.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-2-REDBOOK-RECOVERY-DASHBOARD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-002-SUPPRESSION-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-REPORT-BACK.md`
@@ -272,6 +273,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260409000000_legal_hold_db_migration/migration.sql`
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
 - `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
+- `prisma/migrations/20260424000000_add_canonical_financial_ledger/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -398,6 +400,13 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/tsconfig.json`
 - `services/diamond-concierge/src/diamond-concierge.module.ts`
 - `services/diamond-concierge/src/diamond.service.ts`
+- `services/ledger/index.ts`
+- `services/ledger/ledger.service.ts`
+- `services/ledger/payout.service.ts`
+- `services/ledger/recovery.service.ts`
+- `services/ledger/redbook-rate-card.service.ts`
+- `services/ledger/repository.ts`
+- `services/ledger/types.ts`
 - `services/nats/topics.registry.d.ts`
 - `services/nats/topics.registry.js`
 - `services/nats/topics.registry.js.map`
@@ -435,6 +444,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/zone-gpt/src/zone-gpt.module.js.map`
 - `services/zone-gpt/src/zone-gpt.module.ts`
 - `tests/integration/bijou-session.spec.ts`
+- `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
 - `tests/integration/gateguard-middleware.spec.ts`
 - `tests/integration/gateguard-scorer.spec.ts`
@@ -442,7 +452,9 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/ledger-service.spec.ts`
 - `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
+- `tests/integration/recovery-engine.spec.ts`
 - `tests/integration/recovery-service.spec.ts`
+- `tests/integration/redbook-rate-card.spec.ts`
 - `tests/integration/scheduling-service.spec.ts`
 - `tests/integration/seed-loader.ts`
 - `tests/integration/stat-holidays.spec.ts`
