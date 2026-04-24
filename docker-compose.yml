@@ -1,6 +1,33 @@
-# WO: WO-032 / FT-033
+# PAYLOAD 9 — DEPLOYMENT READINESS (ChatNow.Zone)
+# WO: WO-032 / FT-033 / PAYLOAD-9-INFRA
+#
 # FT-033: Postgres and Redis are isolated to the internal backend network.
 #         No host port bindings for db or redis — internal traffic only.
+#
+# Integrated NestJS modules (all hosted in the core-api monolith):
+#   • GateGuard Sentinel     (services/core-api/src/gateguard)
+#   • Room-Heat Engine       (services/creator-control/src/room-heat.engine)
+#   • CreatorControl.Zone    (services/creator-control)
+#   • Cyrano Whisper Layer   (services/cyrano)
+#   • Immutable Audit        (services/core-api/src/audit)
+#   • Recovery Engine        (services/recovery)
+#   • Integration Hub        (services/integration-hub)
+#
+# AWS scaling notes (Business Plan G.6):
+#   Production: ECS Fargate tasks per service, RDS Aurora Postgres,
+#   ElastiCache Redis Cluster, MSK (Kafka) gateway in front of NATS.
+#   Streaming (mediasoup SFU): dedicated EC2 c6i.xlarge per 500 concurrent.
+#   Target: 10,000 concurrent viewers at launch (Sep 2026).
+#
+# Required env vars (set in .env.local for dev, AWS Secrets Manager for prod):
+#   DB_PASSWORD, REDIS_PASSWORD, NATS_URL, JWT_SECRET, JWT_REFRESH_SECRET,
+#   STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, SENDGRID_API_KEY,
+#   TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER,
+#   GATEGUARD_LOI_PROCESSOR_ID, GATEGUARD_AV_PARTNER_KEY,
+#   CYRANO_LLM_API_KEY, CYRANO_LLM_MODEL, CYRANO_LATENCY_SLO_MS,
+#   WORM_EXPORT_S3_BUCKET, WORM_EXPORT_S3_REGION, AUDIT_HMAC_SECRET,
+#   GEO_PRICING_API_KEY, CREATOR_ONBOARDING_WELCOME_CREDIT_TOKENS
+
 services:
   db:
     image: postgres:16-alpine
@@ -62,6 +89,10 @@ services:
       - backend
 
   api:
+    # Core API monolith — hosts all NestJS modules including:
+    # GateGuard, Room-Heat, CreatorControl, Cyrano, Audit, Recovery,
+    # Integration Hub, Ledger, DFSP, Bijou, ShowZone, OBS-Bridge,
+    # Scheduling, Membership, Risk Engine, Geo, Games, Zone-GPT.
     build:
       context: ./services/core-api
       dockerfile: Dockerfile
@@ -71,7 +102,46 @@ services:
       NODE_ENV: ${NODE_ENV:-production}
       DATABASE_URL: postgresql://chatnow_app:${DB_PASSWORD}@db:5432/chatnow
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      NATS_URL: ${NATS_URL:-nats://nats:4222}
       PORT: 3000
+
+      # Auth
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
+
+      # Payments
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+
+      # Notifications
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
+
+      # GateGuard Sentinel (Business Plan B.5)
+      GATEGUARD_LOI_PROCESSOR_ID: ${GATEGUARD_LOI_PROCESSOR_ID}
+      GATEGUARD_AV_PARTNER_KEY: ${GATEGUARD_AV_PARTNER_KEY}
+
+      # Cyrano Whisper Layer (Business Plan B.3.5)
+      CYRANO_LLM_API_KEY: ${CYRANO_LLM_API_KEY}
+      CYRANO_LLM_MODEL: ${CYRANO_LLM_MODEL:-gpt-4o-mini}
+      CYRANO_LATENCY_SLO_MS: ${CYRANO_LATENCY_SLO_MS:-800}
+
+      # Immutable Audit / WORM Export
+      AUDIT_HMAC_SECRET: ${AUDIT_HMAC_SECRET}
+      WORM_EXPORT_S3_BUCKET: ${WORM_EXPORT_S3_BUCKET}
+      WORM_EXPORT_S3_REGION: ${WORM_EXPORT_S3_REGION:-us-east-1}
+
+      # Geo / Regional pricing
+      GEO_PRICING_API_KEY: ${GEO_PRICING_API_KEY}
+
+      # Creator onboarding
+      CREATOR_ONBOARDING_WELCOME_CREDIT_TOKENS: ${CREATOR_ONBOARDING_WELCOME_CREDIT_TOKENS:-50}
+      PIXEL_LEGACY_RATE_LOCK_ACTIVE: ${PIXEL_LEGACY_RATE_LOCK_ACTIVE:-true}
+
     ports:
       - "3000:3000"
     depends_on:
@@ -89,6 +159,30 @@ services:
       start_period: 30s
     networks:
       - backend
+
+  # ── Streaming SFU (mediasoup) ─────────────────────────────────────────────
+  # SCAFFOLD — requires mediasoup Worker Dockerfile (services/streaming/).
+  # Target: 500 concurrent viewers per SFU instance (AWS c6i.xlarge).
+  # Uncomment and provide Dockerfile before production deployment.
+  #
+  # streaming:
+  #   build:
+  #     context: ./services/streaming
+  #     dockerfile: Dockerfile
+  #   container_name: chatnow_streaming
+  #   restart: unless-stopped
+  #   environment:
+  #     MEDIASOUP_LISTEN_IP: 0.0.0.0
+  #     MEDIASOUP_ANNOUNCED_IP: ${STREAMING_PUBLIC_IP}
+  #     NATS_URL: ${NATS_URL:-nats://nats:4222}
+  #   ports:
+  #     - "3002:3002"
+  #     - "40000-40100:40000-40100/udp"  # RTP port range
+  #   depends_on:
+  #     nats:
+  #       condition: service_healthy
+  #   networks:
+  #     - backend
 
 volumes:
   postgres_data:
