@@ -80,6 +80,10 @@ export class RecoveryEngine {
   private readonly RULE_ID = RECOVERY_RULE_ID;
   private readonly cases = new Map<string, RecoveryCase>();
 
+  // Tracks the timestamp (ms) at which each wallet_id last had a 48h warning
+  // enqueued. Used to enforce idempotency across repeated calls.
+  private readonly warnedWallets = new Map<string, number>();
+
   constructor(private readonly dispatcher?: RecoveryDispatcher) {}
 
   // ── Case lifecycle ───────────────────────────────────────────────────────
@@ -348,7 +352,11 @@ export class RecoveryEngine {
   /**
    * Marks Diamond-tier wallets whose token expiry falls inside the 48-hour
    * window. Emits dispatcher enqueue calls for the NotificationEngine.
-   * Returns the list of snapshots that were flagged (idempotent per wallet).
+   * Returns the list of snapshots that were flagged.
+   *
+   * Idempotent per wallet: duplicate wallet_id entries within the input array
+   * are collapsed (first occurrence wins), and wallets that were already warned
+   * within the current 48h window on a previous call are silently skipped.
    */
   async send48HourWarning(
     diamondWallets: WalletSnapshot[],
@@ -356,19 +364,35 @@ export class RecoveryEngine {
   ): Promise<WalletSnapshot[]> {
     const windowMs =
       RECOVERY_CONSTANTS.EXPIRY_WARNING_WINDOW_HOURS * 60 * 60 * 1000;
-    const cutoff = now_utc.getTime() + windowMs;
+    const nowMs = now_utc.getTime();
+    const cutoff = nowMs + windowMs;
 
-    const toWarn = diamondWallets.filter((w) => {
+    // Deduplicate input by wallet_id — first occurrence wins.
+    const seenIds = new Set<string>();
+    const unique = diamondWallets.filter((w) => {
+      if (seenIds.has(w.wallet_id)) return false;
+      seenIds.add(w.wallet_id);
+      return true;
+    });
+
+    const toWarn = unique.filter((w) => {
       const expiresAt = new Date(w.expires_at_utc).getTime();
-      return (
-        w.is_diamond &&
-        w.remaining_balance_tokens > 0n &&
-        expiresAt > now_utc.getTime() &&
-        expiresAt <= cutoff
-      );
+      if (
+        !w.is_diamond ||
+        w.remaining_balance_tokens <= 0n ||
+        expiresAt <= nowMs ||
+        expiresAt > cutoff
+      ) {
+        return false;
+      }
+      // Cross-call dedup: skip if a warning was already enqueued for this
+      // wallet within the current warning window.
+      const lastWarned = this.warnedWallets.get(w.wallet_id);
+      return lastWarned === undefined || lastWarned < nowMs - windowMs;
     });
 
     for (const snapshot of toWarn) {
+      this.warnedWallets.set(snapshot.wallet_id, nowMs);
       if (this.dispatcher) {
         await this.dispatcher.enqueue48hWarning(snapshot);
       }

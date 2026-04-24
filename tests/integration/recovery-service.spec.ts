@@ -293,6 +293,26 @@ describe('RecoveryEngine — 48h expiry warning', () => {
     await engine.send48HourWarning([snap()]);
     expect(dispatcher.warnings).toHaveLength(1);
   });
+
+  it('deduplicates duplicate wallet_id entries within a single call', async () => {
+    const dispatcher = buildDispatcher();
+    const engine = new RecoveryEngine(dispatcher);
+    // Two snapshots with the same wallet_id — only one warning should be enqueued.
+    const result = await engine.send48HourWarning([snap(), snap()]);
+    expect(result).toHaveLength(1);
+    expect(dispatcher.warnings).toHaveLength(1);
+  });
+
+  it('does not re-enqueue a warning for the same wallet on a repeated call (cross-call idempotency)', async () => {
+    const dispatcher = buildDispatcher();
+    const engine = new RecoveryEngine(dispatcher);
+    const now = new Date();
+    await engine.send48HourWarning([snap()], now);
+    // Second call with the same wallet within the same window — must be suppressed.
+    const secondResult = await engine.send48HourWarning([snap()], now);
+    expect(secondResult).toHaveLength(0);
+    expect(dispatcher.warnings).toHaveLength(1);
+  });
 });
 
 describe('RecoveryEngine — high-balance personal-touch trigger', () => {
