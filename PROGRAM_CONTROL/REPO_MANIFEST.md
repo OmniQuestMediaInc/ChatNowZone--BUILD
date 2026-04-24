@@ -1,10 +1,19 @@
 # REPO MANIFEST
 
-Auto-generated on every push. Do not edit manually.
+Auto-generated on every push via `.github/workflows/repo-manifest.yml`.
+**Do not edit manually** — the list below will be overwritten on the next push.
 
 **Branch:** `claude/cnz-work-001-pr-authority-hardening`
 **Commit:** `31ae7b4f3fa75a62f4d8ccb49b75a27b7c38e74d`
 **Generated:** 2026-04-23T04:25:13Z
+
+> **STALE notice (2026-04-24 Repo Prep & Cleanup):** the file list below
+> reflects the pre-cleanup tree. It omits the 2026-04-24 moves:
+> `LEGACY_CONFIGS/**` → `archive/LEGACY_CONFIGS_2026-04/**` (+ `HANDOFF.md`),
+> `archive/governance/**` → `governance/**` (CLAUDE.stale.md marker),
+> plus new root files `README.md` and `OQMI_SYSTEM_STATE.md`. The next
+> push on `claude/repo-prep-cleanup-x7SZS` will trigger
+> `repo-manifest.yml` and rewrite this file with the current tree.
 
 ## All Files
 

@@ -400,7 +400,7 @@ Directive: Once CEO has answered R-CLARIFY-012 (frontend repo location), decompo
 Eight documentation amendments to the v2.8 business plan. Not code. Run in parallel with anything.
 
 ```
-CNZ-WORK-001-C001: R-P0-003 — Delete Navigator Ltd. residual
+CNZ-WORK-001-C001: R-P0-003 — Delete banned-entity residual (§12)
 Wave: C
 Priority: P0
 Scope: S
@@ -410,7 +410,7 @@ CEO_GATE: NO
 FIZ: NO
 Source: Deficit doc R-P0-003; OQMI_GOVERNANCE.md §12 invariant
 Status: QUEUED
-Directive: Delete the line "Navigator Ltd. GateGuard Sentinel™ co-development conversation initiated" from v2.8 plan Part I Roadmap Q4 FY2026. Per OQMI_GOVERNANCE.md §12 invariant, no Navigator/Jaime Watt references in any OmniQuest Media Inc. material.
+Directive: Delete the banned-entity co-development line (the sentence naming the firm redacted per §12 on Q4 FY2026 Roadmap) from v2.8 plan Part I Roadmap Q4 FY2026. Per OQMI_GOVERNANCE.md §12 invariant, no references to the banned individual or firm ([REDACTED]) may appear in any OmniQuest Media Inc. material.
 ```
 
 ```
@@ -996,7 +996,7 @@ CEO_GATE: YES
 FIZ: NO
 Source: Corpus L0 ship-gate doctrine; Deficit doc §5.4
 Status: QUEUED
-Directive: Audit launch-blocking set against Corpus L0 ship gate: Three-Bucket Wallet (D001), Risk Engine (D002), NATS Fabric (D003), OBS Broadcast Kernel (D004), FairPay + NOWPayouts (D006, E002), RedBook (E001), Compliance Stack (D008), GateGuard Sentinel (E003), Black-Glass Interface (G101+), Navigator residual deletion (C001). Produce sign-off REPORT_BACK. CEO signs before launch.
+Directive: Audit launch-blocking set against Corpus L0 ship gate: Three-Bucket Wallet (D001), Risk Engine (D002), NATS Fabric (D003), OBS Broadcast Kernel (D004), FairPay + NOWPayouts (D006, E002), RedBook (E001), Compliance Stack (D008), GateGuard Sentinel (E003), Black-Glass Interface (G101+), banned-entity residual deletion (C001, §12). Produce sign-off REPORT_BACK. CEO signs before launch.
 ```
 
 ```
