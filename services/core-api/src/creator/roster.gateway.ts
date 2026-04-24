@@ -15,10 +15,7 @@ export class RosterGateway {
     return [];
   }
 
-  async getPerformerContract(
-    _studioId: string,
-    _performerId: string,
-  ): Promise<RosterEntry | null> {
+  async getPerformerContract(_studioId: string, _performerId: string): Promise<RosterEntry | null> {
     // TODO: Implement contract lookup from studio_contracts
     return null;
   }

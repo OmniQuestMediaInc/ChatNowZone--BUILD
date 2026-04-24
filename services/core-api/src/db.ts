@@ -5,5 +5,4 @@ import { PrismaClient } from '@prisma/client';
 // connection pool exhaustion (especially important in serverless environments).
 const globalForPrisma = globalThis as unknown as { _db: PrismaClient | undefined };
 
-export const db: PrismaClient =
-  globalForPrisma._db ?? (globalForPrisma._db = new PrismaClient());
+export const db: PrismaClient = globalForPrisma._db ?? (globalForPrisma._db = new PrismaClient());

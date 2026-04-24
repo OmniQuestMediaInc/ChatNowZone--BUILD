@@ -29,9 +29,7 @@ export class ComplianceGuardService {
    * Full compliance check for a proposed shift assignment.
    * Checks: consecutive days, weekly hours, transit safety, days-off minimums.
    */
-  async validateAssignment(
-    request: ComplianceCheckRequest,
-  ): Promise<ComplianceCheckResult> {
+  async validateAssignment(request: ComplianceCheckRequest): Promise<ComplianceCheckResult> {
     const warnings: ComplianceWarning[] = [];
 
     const staff = await this.prisma.staffMember.findFirst({
@@ -152,9 +150,10 @@ export class ComplianceGuardService {
     }
 
     // Check minimum consecutive days off requirement
-    const minDaysOff = staff_category === 'EDGE'
-      ? GZ_SCHEDULING.MIN_CONSECUTIVE_DAYS_OFF_PT
-      : GZ_SCHEDULING.MIN_CONSECUTIVE_DAYS_OFF_FT;
+    const minDaysOff =
+      staff_category === 'EDGE'
+        ? GZ_SCHEDULING.MIN_CONSECUTIVE_DAYS_OFF_PT
+        : GZ_SCHEDULING.MIN_CONSECUTIVE_DAYS_OFF_FT;
 
     // Check the 7-day window around proposed date for days-off compliance
     const weekStart = new Date(proposedMs - 3 * dayMs);
@@ -296,10 +295,7 @@ export class ComplianceGuardService {
    * Validates that shift notice requirements are met.
    * Schedule: 96 hours notice. Changes: 24 hours notice.
    */
-  checkShiftNotice(
-    shift_date: string,
-    is_change: boolean,
-  ): ComplianceWarning[] {
+  checkShiftNotice(shift_date: string, is_change: boolean): ComplianceWarning[] {
     const warnings: ComplianceWarning[] = [];
     const now = Date.now();
     const shiftMs = new Date(shift_date).getTime();
@@ -325,10 +321,7 @@ export class ComplianceGuardService {
    * Computes a weekly summary for a staff member: total hours,
    * consecutive days, stat holiday hours, on-call count.
    */
-  async getWeeklySummary(
-    staff_member_id: string,
-    week_start_date: string,
-  ): Promise<WeeklySummary> {
+  async getWeeklySummary(staff_member_id: string, week_start_date: string): Promise<WeeklySummary> {
     const dayMs = 86_400_000;
     const weekStartMs = new Date(week_start_date).getTime();
     const weekEnd = new Date(weekStartMs + 6 * dayMs);

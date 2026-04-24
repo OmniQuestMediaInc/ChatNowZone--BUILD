@@ -124,10 +124,7 @@ export class ZoneAccessService {
   /**
    * Check if the user has an active ShowZonePass for the given zone.
    */
-  private async hasActiveShowZonePass(
-    userId: string,
-    zone: ZoneAccessZone,
-  ): Promise<boolean> {
+  private async hasActiveShowZonePass(userId: string, zone: ZoneAccessZone): Promise<boolean> {
     const now = new Date();
     const pass = await this.prisma.showZonePass.findFirst({
       where: {

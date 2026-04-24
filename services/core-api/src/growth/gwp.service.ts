@@ -25,7 +25,7 @@ export interface GwpEvaluationResult {
 
 // Minimum lifetime spend thresholds to qualify as Med or High tipper
 const TIPPER_THRESHOLDS = {
-  MED_MIN_LIFETIME_TOKENS:  500,
+  MED_MIN_LIFETIME_TOKENS: 500,
   HIGH_MIN_LIFETIME_TOKENS: 2000,
 } as const;
 
@@ -42,7 +42,7 @@ export class GwpService {
    */
   classifyTipperTier(lifetime_tokens_spent: number): TipperTier {
     if (lifetime_tokens_spent >= TIPPER_THRESHOLDS.HIGH_MIN_LIFETIME_TOKENS) return 'HIGH';
-    if (lifetime_tokens_spent >= TIPPER_THRESHOLDS.MED_MIN_LIFETIME_TOKENS)  return 'MED';
+    if (lifetime_tokens_spent >= TIPPER_THRESHOLDS.MED_MIN_LIFETIME_TOKENS) return 'MED';
     return 'LOW';
   }
 
@@ -69,9 +69,7 @@ export class GwpService {
     }
 
     // Select first active offer eligible for this membership tier
-    const offer = params.available_offers.find(
-      o => o.trigger_type === 'LOGIN'
-    );
+    const offer = params.available_offers.find((o) => o.trigger_type === 'LOGIN');
 
     if (!offer) {
       return {
@@ -105,11 +103,10 @@ export class GwpService {
    * Records offer acceptance. Publishes NATS event.
    * Caller must post ledger credit entry via LedgerService after this returns.
    */
-  recordAcceptance(params: {
-    user_id: string;
-    voucher_id: string;
-    token_value: number;
-  }): { accepted_at_utc: string; rule_applied_id: string } {
+  recordAcceptance(params: { user_id: string; voucher_id: string; token_value: number }): {
+    accepted_at_utc: string;
+    rule_applied_id: string;
+  } {
     const accepted_at_utc = new Date().toISOString();
 
     this.nats.publish(NATS_TOPICS.GWP_OFFER_ACCEPTED, {

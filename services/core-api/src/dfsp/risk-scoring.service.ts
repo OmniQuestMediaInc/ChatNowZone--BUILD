@@ -83,23 +83,68 @@ export class RiskScoringService {
     }
 
     // Signal weights
-    if (input.account_age_days < 30) { score += 30; flags.push('ACCOUNT_AGE_LT_30'); }
-    else if (input.account_age_days < 90) { score += 15; flags.push('ACCOUNT_AGE_30_90'); }
-    if (input.prior_diamond_count === 0) { score += 20; flags.push('NO_PRIOR_DIAMOND'); }
-    else if (input.prior_diamond_count === 1) { score += 10; flags.push('ONE_PRIOR_DIAMOND'); }
-    else { score -= 10; }
-    if (input.prior_dispute) { score += 25; flags.push('PRIOR_DISPUTE'); }
-    if (input.age_verification_days_old > 90) { score += 20; flags.push('AV_EXPIRED'); }
-    if (input.device_fingerprint_mismatch) { score += 15; flags.push('DEVICE_MISMATCH'); }
-    if (input.ip_country_mismatch) { score += 25; flags.push('IP_COUNTRY_MISMATCH'); }
-    if (input.login_outside_billing_region_days >= 90) { score += 30; flags.push('GEOGRAPHIC_DRIFT_90D'); }
-    if (input.vpn_detected) { score += 20; flags.push('VPN_DETECTED'); }
-    if (input.payment_method === 'credit_card') { score += 15; flags.push('CC_PAYMENT_METHOD'); }
-    if (input.payment_method === 'wire' || input.payment_method === 'e_transfer') { score -= 5; }
-    if (input.lifespan_days_requested < 30) { score += 25; flags.push('LIFESPAN_LT_30D'); }
-    else if (input.lifespan_days_requested < 60) { score += 15; flags.push('LIFESPAN_LT_60D'); }
-    if (input.quantity_vs_90day_avg_ratio > 3) { score += 20; flags.push('QUANTITY_SPIKE'); }
-    if (input.structuring_pattern_detected) { score += 50; flags.push('STRUCTURING_PATTERN'); }
+    if (input.account_age_days < 30) {
+      score += 30;
+      flags.push('ACCOUNT_AGE_LT_30');
+    } else if (input.account_age_days < 90) {
+      score += 15;
+      flags.push('ACCOUNT_AGE_30_90');
+    }
+    if (input.prior_diamond_count === 0) {
+      score += 20;
+      flags.push('NO_PRIOR_DIAMOND');
+    } else if (input.prior_diamond_count === 1) {
+      score += 10;
+      flags.push('ONE_PRIOR_DIAMOND');
+    } else {
+      score -= 10;
+    }
+    if (input.prior_dispute) {
+      score += 25;
+      flags.push('PRIOR_DISPUTE');
+    }
+    if (input.age_verification_days_old > 90) {
+      score += 20;
+      flags.push('AV_EXPIRED');
+    }
+    if (input.device_fingerprint_mismatch) {
+      score += 15;
+      flags.push('DEVICE_MISMATCH');
+    }
+    if (input.ip_country_mismatch) {
+      score += 25;
+      flags.push('IP_COUNTRY_MISMATCH');
+    }
+    if (input.login_outside_billing_region_days >= 90) {
+      score += 30;
+      flags.push('GEOGRAPHIC_DRIFT_90D');
+    }
+    if (input.vpn_detected) {
+      score += 20;
+      flags.push('VPN_DETECTED');
+    }
+    if (input.payment_method === 'credit_card') {
+      score += 15;
+      flags.push('CC_PAYMENT_METHOD');
+    }
+    if (input.payment_method === 'wire' || input.payment_method === 'e_transfer') {
+      score -= 5;
+    }
+    if (input.lifespan_days_requested < 30) {
+      score += 25;
+      flags.push('LIFESPAN_LT_30D');
+    } else if (input.lifespan_days_requested < 60) {
+      score += 15;
+      flags.push('LIFESPAN_LT_60D');
+    }
+    if (input.quantity_vs_90day_avg_ratio > 3) {
+      score += 20;
+      flags.push('QUANTITY_SPIKE');
+    }
+    if (input.structuring_pattern_detected) {
+      score += 50;
+      flags.push('STRUCTURING_PATTERN');
+    }
 
     const greenMax = GovernanceConfig.DFSP_RISK_SCORE_GREEN_MAX;
     const amberMax = GovernanceConfig.DFSP_RISK_SCORE_AMBER_MAX;
@@ -138,7 +183,10 @@ export class RiskScoringService {
     return result;
   }
 
-  private async persistAssessment(input: RiskSignalInput, result: RiskAssessmentResult): Promise<void> {
+  private async persistAssessment(
+    input: RiskSignalInput,
+    result: RiskAssessmentResult,
+  ): Promise<void> {
     await this.prisma.riskAssessment.create({
       data: {
         account_id: result.account_id,

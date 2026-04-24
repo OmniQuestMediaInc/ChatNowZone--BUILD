@@ -24,11 +24,7 @@
 // CEO authorization required to shorten hold below 48h — not implemented
 // here; deferred until a CEO clearance directive authorizes that path.
 
-import {
-  Injectable,
-  Logger,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { NatsService } from '../nats/nats.service';
 import { NATS_TOPICS } from '../../../nats/topics.registry';
@@ -45,12 +41,7 @@ export type ReleaseHoldResultCode =
   | 'HOLD_NOT_FOUND'
   | 'RELEASE_CONDITIONS_NOT_MET';
 
-export type HoldedAction =
-  | 'purchase'
-  | 'gifting'
-  | 'withdrawal'
-  | 'login'
-  | 'settings_change';
+export type HoldedAction = 'purchase' | 'gifting' | 'withdrawal' | 'login' | 'settings_change';
 
 export type EnforcementDecision = 'BLOCKED' | 'PERMITTED';
 
@@ -145,8 +136,7 @@ export class AccountRecoveryHoldService implements OnModuleInit {
     const organizationId =
       typeof payload.organization_id === 'string' ? payload.organization_id : null;
     const tenantId = typeof payload.tenant_id === 'string' ? payload.tenant_id : null;
-    const otpEventId =
-      typeof payload.otp_event_id === 'string' ? payload.otp_event_id : null;
+    const otpEventId = typeof payload.otp_event_id === 'string' ? payload.otp_event_id : null;
 
     if (!accountId || failedAttempts === null || !organizationId || !tenantId) {
       this.logger.warn('AccountRecoveryHoldService: OTP_FAILED payload incomplete — skipping', {
@@ -208,8 +198,7 @@ export class AccountRecoveryHoldService implements OnModuleInit {
 
     const triggeredAt = new Date();
     const holdUntil = new Date(
-      triggeredAt.getTime() +
-        GovernanceConfig.DFSP_ACCOUNT_RECOVERY_HOLD_HOURS * 60 * 60 * 1000,
+      triggeredAt.getTime() + GovernanceConfig.DFSP_ACCOUNT_RECOVERY_HOLD_HOURS * 60 * 60 * 1000,
     );
 
     const record = await this.prisma.accountHold.create({
@@ -374,8 +363,7 @@ export class AccountRecoveryHoldService implements OnModuleInit {
       };
     }
 
-    const decision: EnforcementDecision =
-      params.action === 'login' ? 'PERMITTED' : 'BLOCKED';
+    const decision: EnforcementDecision = params.action === 'login' ? 'PERMITTED' : 'BLOCKED';
 
     if (decision === 'BLOCKED') {
       this.logger.warn('AccountRecoveryHoldService: action blocked by active hold', {

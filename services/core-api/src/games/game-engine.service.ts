@@ -15,7 +15,7 @@ export interface GameOutcome {
     // SLOT_MACHINE: { reel1: number, reel2: number, reel3: number }
     [key: string]: number;
   };
-  prize_slot: string;   // Maps to prize_tables.prize_slot
+  prize_slot: string; // Maps to prize_tables.prize_slot
   resolved_at_utc: string;
   rule_applied_id: string;
 }
@@ -40,14 +40,16 @@ export class GameEngineService {
       return { idempotency_key: '', valid: false, error: `Invalid game_type: ${params.game_type}` };
     }
     if (!GAMIFICATION.TOKEN_TIERS.includes(params.token_tier as 25 | 45 | 60)) {
-      return { idempotency_key: '', valid: false,
-        error: `Invalid token_tier: ${params.token_tier}. Must be one of ${GAMIFICATION.TOKEN_TIERS.join(', ')}` };
+      return {
+        idempotency_key: '',
+        valid: false,
+        error: `Invalid token_tier: ${params.token_tier}. Must be one of ${GAMIFICATION.TOKEN_TIERS.join(', ')}`,
+      };
     }
     // Idempotency key is time-bucketed to 5-minute windows to prevent replay while
     // allowing legitimate retries after network failure
     const window = Math.floor(Date.now() / 300000);
-    const idempotency_key =
-      `GAME:${params.user_id}:${params.creator_id}:${params.game_type}:${params.token_tier}:${window}`;
+    const idempotency_key = `GAME:${params.user_id}:${params.creator_id}:${params.game_type}:${params.token_tier}:${window}`;
     return { idempotency_key, valid: true };
   }
 

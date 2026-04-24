@@ -90,7 +90,10 @@ export class ReferralRewardService {
         governance_timezone: this.config.TIMEZONE,
       },
     });
-    const savedAttribution = await this.attributionEventsRepo.save(attributionEntry) as Record<string, unknown>;
+    const savedAttribution = (await this.attributionEventsRepo.save(attributionEntry)) as Record<
+      string,
+      unknown
+    >;
 
     // 4. Grant reward only for conversion-class events.
     const rewardableEvents = new Set<string>(['FIRST_PURCHASE', 'CONVERSION']);
@@ -132,7 +135,7 @@ export class ReferralRewardService {
         governance_timezone: this.config.TIMEZONE,
       },
     });
-    const savedLedger = await this.ledgerRepo.save(ledgerEntry) as Record<string, unknown>;
+    const savedLedger = (await this.ledgerRepo.save(ledgerEntry)) as Record<string, unknown>;
 
     this.logger.log('REFERRAL_REWARD: ledger entry created', {
       ledgerEntryId: savedLedger['id'],
@@ -152,10 +155,7 @@ export class ReferralRewardService {
    * payment_instrument_hash matches the value stored on the referral_link,
    * which would indicate the link creator is attributing themselves.
    */
-  private assertNoSelfReferral(
-    link: Record<string, unknown>,
-    event: AttributionEventRecord,
-  ): void {
+  private assertNoSelfReferral(link: Record<string, unknown>, event: AttributionEventRecord): void {
     const fingerprintMatch =
       event.deviceFingerprint &&
       link['device_fingerprint'] &&

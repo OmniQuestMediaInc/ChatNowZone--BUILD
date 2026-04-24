@@ -85,7 +85,10 @@ export class PurchaseHoursGateService {
     };
   }
 
-  private async getWindowConfig(country_code: string | null, tier: string): Promise<{ window_open_hour: number; window_close_hour: number } | null> {
+  private async getWindowConfig(
+    country_code: string | null,
+    tier: string,
+  ): Promise<{ window_open_hour: number; window_close_hour: number } | null> {
     if (country_code) {
       const specific = await this.prisma.purchaseWindowConfig.findFirst({
         where: { country_code, tier, active: true },
@@ -110,9 +113,8 @@ export class PurchaseHoursGateService {
   private nextWindowOpen(iana_tz: string, openHour: number): string {
     const now = new Date();
     const currentHour = this.getCurrentHourInTz(iana_tz);
-    const hoursUntilOpen = currentHour >= openHour
-      ? 24 - currentHour + openHour
-      : openHour - currentHour;
+    const hoursUntilOpen =
+      currentHour >= openHour ? 24 - currentHour + openHour : openHour - currentHour;
     return new Date(now.getTime() + hoursUntilOpen * 60 * 60 * 1000).toISOString();
   }
 }

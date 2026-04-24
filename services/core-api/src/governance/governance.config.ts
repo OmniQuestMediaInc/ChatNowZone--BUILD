@@ -40,14 +40,14 @@ export const GovernanceConfig = {
 
   // ── Voice Sample (DFSP Module 5) ─────────────────────────────────────────
   DFSP_VOICE_SAMPLE_MAX_COUNT: 3,
-  DFSP_VOICE_SAMPLE_RETENTION_DAYS: 2555,  // 7 years — financial record standard
+  DFSP_VOICE_SAMPLE_RETENTION_DAYS: 2555, // 7 years — financial record standard
   DFSP_VOICE_SAMPLE_MIN_DURATION_SECONDS: 3,
 
   // ── PROC-001: Webhook Hardening (FIZ) ────────────────────────────────────
   // CEO-AUTHORIZED-STAGED-2026-04-10 — webhook infrastructure only.
   // No ledger writes, no balance columns, no transaction execution.
   /** Maximum allowed drift (seconds) between processor timestamp and server clock. */
-  WEBHOOK_REPLAY_WINDOW_SECONDS: 300,   // 5 minutes
+  WEBHOOK_REPLAY_WINDOW_SECONDS: 300, // 5 minutes
   /** TTL (seconds) for entries in the nonce / event_id dedup stores. */
   WEBHOOK_NONCE_STORE_TTL_SECONDS: 600, // 10 minutes
 
@@ -77,17 +77,17 @@ export const GovernanceConfig = {
   RATE_DIAMOND_FLOOR: new Decimal('0.080'),
 
   // Heat score band boundaries (inclusive)
-  HEAT_BAND_COLD_MAX: 33,     // 0–33 = Cold
-  HEAT_BAND_WARM_MAX: 60,     // 34–60 = Warm
-  HEAT_BAND_HOT_MAX: 85,      // 61–85 = Hot
-                              // 86–100 = Inferno
+  HEAT_BAND_COLD_MAX: 33, // 0–33 = Cold
+  HEAT_BAND_WARM_MAX: 60, // 34–60 = Warm
+  HEAT_BAND_HOT_MAX: 85, // 61–85 = Hot
+  // 86–100 = Inferno
 
   // ── DFSP Concierge (CONCIERGE-CONFIG-001) ─────────────────────────────────
   // Operating hours evaluated in guest billing-address timezone.
   DFSP_CONCIERGE: {
-    OPEN_HOUR: 11,               // 11:00 AM guest billing-address TZ
-    CLOSE_HOUR: 23,              // 11:00 PM guest billing-address TZ
-    LAST_BOOKING_HOUR: 22,       // 10:30 PM last call
+    OPEN_HOUR: 11, // 11:00 AM guest billing-address TZ
+    CLOSE_HOUR: 23, // 11:00 PM guest billing-address TZ
+    LAST_BOOKING_HOUR: 22, // 10:30 PM last call
     LAST_BOOKING_MINUTE: 30,
   },
 

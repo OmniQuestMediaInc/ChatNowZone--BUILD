@@ -34,14 +34,10 @@ export class BatchPayoutService {
     if (!req.periodStart) missing.push('periodStart');
     if (!req.periodEnd) missing.push('periodEnd');
     if (missing.length > 0) {
-      throw new Error(
-        `aggregate: invalid input — missing fields: ${missing.join(', ')}`,
-      );
+      throw new Error(`aggregate: invalid input — missing fields: ${missing.join(', ')}`);
     }
     if (req.periodStart > req.periodEnd) {
-      throw new Error(
-        'aggregate: invalid period — periodStart must be <= periodEnd',
-      );
+      throw new Error('aggregate: invalid period — periodStart must be <= periodEnd');
     }
 
     logger.info('aggregate: starting batch payout aggregation', {
@@ -117,10 +113,7 @@ export class BatchPayoutService {
     }
 
     const lines = Array.from(lineMap.values());
-    const grandTotalCents = lines.reduce(
-      (sum, l) => sum + l.totalAmountCents,
-      BigInt(0),
-    );
+    const grandTotalCents = lines.reduce((sum, l) => sum + l.totalAmountCents, BigInt(0));
 
     const result: BatchPayoutResult = {
       correlationId: req.correlationId,

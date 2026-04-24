@@ -146,9 +146,7 @@ export class ShiftCoverageService {
    * Scans an entire schedule period for coverage gaps across all shifts.
    * Returns all gaps found so they can be posted for ZoneBot lottery.
    */
-  async scanPeriodCoverage(
-    schedule_period_id: string,
-  ): Promise<CoverageReport[]> {
+  async scanPeriodCoverage(schedule_period_id: string): Promise<CoverageReport[]> {
     const period = await this.prisma.schedulePeriod.findUnique({
       where: { id: schedule_period_id },
     });
