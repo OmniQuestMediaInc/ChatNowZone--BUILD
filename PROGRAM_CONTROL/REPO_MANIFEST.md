@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/fix-logger-test-env-56ZlM`
-**Commit:** `3fe88c7d754f8d91ec20b64ec9848007a8fe95a3`
-**Generated:** 2026-04-24T17:16:49Z
+**Branch:** `claude/redbook-dashboard-concierge-xgbN6`
+**Commit:** `ffadd14ac80082743859a1d93c3131ad985458ca`
+**Generated:** 2026-04-24T17:28:14Z
 
 ## All Files
 
@@ -165,6 +165,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/NATS-DFSP001-TOPICS-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/OBS-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-2-REDBOOK-RECOVERY-DASHBOARD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-002-SUPPRESSION-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-REPORT-BACK.md`
@@ -390,14 +391,22 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/zone-access/zone-access.module.ts`
 - `services/core-api/src/zone-access/zone-access.service.ts`
 - `services/core-api/tsconfig.json`
+- `services/diamond-concierge/src/diamond-concierge.module.ts`
+- `services/diamond-concierge/src/diamond.service.ts`
 - `services/nats/topics.registry.d.ts`
 - `services/nats/topics.registry.js`
 - `services/nats/topics.registry.js.map`
 - `services/nats/topics.registry.ts`
+- `services/notification/src/notification.module.ts`
+- `services/notification/src/notification.service.ts`
 - `services/obs-bridge/src/chat-aggregator.service.ts`
 - `services/obs-bridge/src/obs-bridge.module.ts`
 - `services/obs-bridge/src/obs-bridge.service.ts`
 - `services/obs-bridge/src/persona-engine.service.ts`
+- `services/recovery/src/admin-recovery.controller.ts`
+- `services/recovery/src/recovery.module.ts`
+- `services/recovery/src/recovery.service.ts`
+- `services/recovery/src/recovery.types.ts`
 - `services/rewards-api/src/engine/points-calculator.logic.ts`
 - `services/rewards-api/src/white-label/partner-config.schema.ts`
 - `services/risk-engine/src/region-signal.service.ts`
@@ -422,8 +431,11 @@ Auto-generated on every push. Do not edit manually.
 - `services/zone-gpt/src/zone-gpt.module.ts`
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
+- `tests/integration/diamond-concierge-service.spec.ts`
 - `tests/integration/ledger-service.spec.ts`
+- `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
+- `tests/integration/recovery-service.spec.ts`
 - `tests/integration/scheduling-service.spec.ts`
 - `tests/integration/seed-loader.ts`
 - `tests/integration/stat-holidays.spec.ts`
