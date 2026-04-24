@@ -348,6 +348,11 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/games/game-engine.service.ts`
 - `services/core-api/src/games/games.controller.ts`
 - `services/core-api/src/games/games.module.ts`
+- `services/core-api/src/gateguard/gateguard.middleware.ts`
+- `services/core-api/src/gateguard/gateguard.module.ts`
+- `services/core-api/src/gateguard/gateguard.service.ts`
+- `services/core-api/src/gateguard/gateguard.types.ts`
+- `services/core-api/src/gateguard/welfare-guardian.scorer.ts`
 - `services/core-api/src/geo/geo-pricing.service.ts`
 - `services/core-api/src/governance/governance.config.ts`
 - `services/core-api/src/growth/growth.module.ts`
@@ -441,7 +446,9 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
-- `tests/integration/diamond-concierge-service.spec.ts`
+- `tests/integration/gateguard-middleware.spec.ts`
+- `tests/integration/gateguard-scorer.spec.ts`
+- `tests/integration/gateguard-service.spec.ts`
 - `tests/integration/ledger-service.spec.ts`
 - `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`

@@ -155,6 +155,18 @@ export const NATS_TOPICS = {
   OBS_STREAM_KEY_ROTATED:            'obs.stream.key.rotated',
   CHAT_MESSAGE_INGESTED:             'chat.message.ingested',
   PERSONA_RESPONSE_QUEUED:           'persona.response.queued',
+
+  // ── GateGuard Sentinel Pre-Processor (Business Plan B.5) ─────────────────
+  GATEGUARD_EVALUATION_COMPLETED:    'gateguard.evaluation.completed',
+  GATEGUARD_DECISION_APPROVED:       'gateguard.decision.approved',
+  GATEGUARD_DECISION_COOLDOWN:       'gateguard.decision.cooldown',
+  GATEGUARD_DECISION_HARD_DECLINE:   'gateguard.decision.hard_decline',
+  GATEGUARD_DECISION_HUMAN_ESCALATE: 'gateguard.decision.human_escalate',
+  GATEGUARD_WELFARE_SIGNAL:          'gateguard.welfare.signal',
+  GATEGUARD_AV_CHECK_REQUESTED:      'gateguard.av.check_requested',
+  GATEGUARD_AV_CHECK_RETURNED:       'gateguard.av.check_returned',
+  GATEGUARD_FEDERATED_LOOKUP:        'gateguard.federated.lookup',
+  GATEGUARD_HUMAN_CONTACT_ZONE:      'gateguard.human_contact_zone.escalated',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];

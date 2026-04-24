@@ -1,5 +1,7 @@
 // services/core-api/src/app.module.ts
 // CHORE: HOUSE-001 — restore missing module registrations dropped in merge
+// PAYLOAD 3: wire GateGuardModule + GateGuardMiddleware in front of
+//            /purchase, /spend, /payout route trees.
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { CreatorModule } from './creator/creator.module';
@@ -20,6 +22,8 @@ import { ShowZoneModule } from '../../showzone/src/showzone.module';
 import { SchedulingModule } from './scheduling/scheduling.module';
 import { ZoneAccessModule } from './zone-access/zone-access.module';
 import { MembershipModule } from './membership/membership.module';
+import { GateGuardModule } from './gateguard/gateguard.module';
+import { GateGuardMiddleware } from './gateguard/gateguard.middleware';
 
 @Module({
   imports: [
@@ -31,6 +35,8 @@ import { MembershipModule } from './membership/membership.module';
         port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
       },
     }),
+    GateGuardModule,   // Register before finance-adjacent modules — middleware
+                       //  wires against /purchase, /spend, /payout below.
     CreatorModule,
     SafetyModule,
     GrowthModule,
@@ -51,6 +57,14 @@ import { MembershipModule } from './membership/membership.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(SovereignCaCMiddleware).forRoutes('*');
+    consumer
+      .apply(SovereignCaCMiddleware)
+      .forRoutes('*');
+
+    // PAYLOAD 3: GateGuard runs AFTER SovereignCaCMiddleware (jurisdiction
+    // context is attached first) but BEFORE any ledger mutation handler.
+    consumer
+      .apply(GateGuardMiddleware)
+      .forRoutes('/purchase', '/spend', '/payout');
   }
 }
