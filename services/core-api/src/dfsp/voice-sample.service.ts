@@ -195,10 +195,7 @@ export class VoiceSampleService {
     }
 
     const minDuration = GovernanceConfig.DFSP_VOICE_SAMPLE_MIN_DURATION_SECONDS;
-    if (
-      params.durationSeconds !== undefined &&
-      params.durationSeconds < minDuration
-    ) {
+    if (params.durationSeconds !== undefined && params.durationSeconds < minDuration) {
       return {
         code: 'DURATION_TOO_SHORT',
         rule_applied_id: this.RULE_ID,

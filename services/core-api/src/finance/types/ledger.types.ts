@@ -19,5 +19,5 @@ export enum WalletBucket {
  */
 export enum TokenOrigin {
   PURCHASED = 'PURCHASED',
-  GIFTED    = 'GIFTED',
+  GIFTED = 'GIFTED',
 }

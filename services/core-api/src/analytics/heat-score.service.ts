@@ -33,12 +33,12 @@ export interface HeatScoreResult {
 }
 
 const WEIGHTS = {
-  session_spend:  0.35,
-  chat_volume:    0.20,
-  dwell_time:     0.20,
-  churn_rate:    -0.15,
-  token_balance:  0.07,
-  profile_ctr:    0.03,
+  session_spend: 0.35,
+  chat_volume: 0.2,
+  dwell_time: 0.2,
+  churn_rate: -0.15,
+  token_balance: 0.07,
+  profile_ctr: 0.03,
 } as const;
 
 // Mandatory advisory disclaimer — Corpus Ch.5 §6.3
@@ -53,27 +53,38 @@ export class HeatScoreService {
 
   compute(input: HeatScoreInput): HeatScoreResult {
     // Normalize each input to 0–100 range before weighting
-    const spend_norm   = Math.min(input.session_spend_tokens / 500 * 100, 100);
-    const chat_norm    = Math.min(input.chat_message_count / 100 * 100, 100);
-    const dwell_norm   = Math.min(input.avg_dwell_time_secs / 3600 * 100, 100);
-    const churn_norm   = Math.min(input.room_churn_rate_pct, 100);
-    const balance_norm = Math.min(input.avg_attendee_token_balance / 500 * 100, 100);
-    const ctr_norm     = Math.min(input.profile_ctr_pct, 100);
+    const spend_norm = Math.min((input.session_spend_tokens / 500) * 100, 100);
+    const chat_norm = Math.min((input.chat_message_count / 100) * 100, 100);
+    const dwell_norm = Math.min((input.avg_dwell_time_secs / 3600) * 100, 100);
+    const churn_norm = Math.min(input.room_churn_rate_pct, 100);
+    const balance_norm = Math.min((input.avg_attendee_token_balance / 500) * 100, 100);
+    const ctr_norm = Math.min(input.profile_ctr_pct, 100);
 
-    const raw_score = Math.max(0, Math.min(100, Math.round(
-      spend_norm   * WEIGHTS.session_spend +
-      chat_norm    * WEIGHTS.chat_volume +
-      dwell_norm   * WEIGHTS.dwell_time +
-      churn_norm   * WEIGHTS.churn_rate +
-      balance_norm * WEIGHTS.token_balance +
-      ctr_norm     * WEIGHTS.profile_ctr
-    )));
+    const raw_score = Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(
+          spend_norm * WEIGHTS.session_spend +
+            chat_norm * WEIGHTS.chat_volume +
+            dwell_norm * WEIGHTS.dwell_time +
+            churn_norm * WEIGHTS.churn_rate +
+            balance_norm * WEIGHTS.token_balance +
+            ctr_norm * WEIGHTS.profile_ctr,
+        ),
+      ),
+    );
 
     const heat_band: HeatBand =
-      raw_score >= 85 ? 'RED_ZONE' :
-      raw_score >= 65 ? 'HOT' :
-      raw_score >= 45 ? 'WARM' :
-      raw_score >= 25 ? 'COOL' : 'COLD';
+      raw_score >= 85
+        ? 'RED_ZONE'
+        : raw_score >= 65
+          ? 'HOT'
+          : raw_score >= 45
+            ? 'WARM'
+            : raw_score >= 25
+              ? 'COOL'
+              : 'COLD';
 
     this.logger.log('HeatScoreService: HSV computed', {
       creator_id: input.creator_id,

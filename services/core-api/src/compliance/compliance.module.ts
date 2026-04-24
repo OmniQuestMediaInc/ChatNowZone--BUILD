@@ -6,17 +6,7 @@ import { LegalHoldService } from './legal-hold.service';
 import { ReconciliationService } from './reconciliation.service';
 
 @Module({
-  providers: [
-    WormExportService,
-    AuditChainService,
-    LegalHoldService,
-    ReconciliationService,
-  ],
-  exports: [
-    WormExportService,
-    AuditChainService,
-    LegalHoldService,
-    ReconciliationService,
-  ],
+  providers: [WormExportService, AuditChainService, LegalHoldService, ReconciliationService],
+  exports: [WormExportService, AuditChainService, LegalHoldService, ReconciliationService],
 })
 export class ComplianceModule {}

@@ -23,8 +23,8 @@ import { MembershipModule } from './membership/membership.module';
 
 @Module({
   imports: [
-    NatsModule,        // FIRST — global module, must be registered before all others
-    PrismaModule,      // SECOND — global Prisma client
+    NatsModule, // FIRST — global module, must be registered before all others
+    PrismaModule, // SECOND — global Prisma client
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST ?? 'localhost',
@@ -51,8 +51,6 @@ import { MembershipModule } from './membership/membership.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer
-      .apply(SovereignCaCMiddleware)
-      .forRoutes('*');
+    consumer.apply(SovereignCaCMiddleware).forRoutes('*');
   }
 }

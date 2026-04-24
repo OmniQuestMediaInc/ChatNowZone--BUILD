@@ -63,7 +63,7 @@ export class GamesController {
       });
       throw new Error(
         'DEBIT_REQUIRED: ledger_entry_id must be provided before outcome can be resolved. ' +
-        'Debit tokens via LedgerService first.'
+          'Debit tokens via LedgerService first.',
       );
     }
 
@@ -85,9 +85,7 @@ export class GamesController {
       prize_table: body.prize_table,
     });
 
-    const matched_prize = body.prize_table.find(
-      p => p.prize_slot === outcome.prize_slot
-    );
+    const matched_prize = body.prize_table.find((p) => p.prize_slot === outcome.prize_slot);
 
     this.logger.log('GamesController: play resolved', {
       session_id: outcome.session_id,

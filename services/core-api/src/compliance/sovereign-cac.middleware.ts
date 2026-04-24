@@ -10,7 +10,7 @@ const JURISDICTION_RULES_VERSION = 'v1.0.0';
 
 export interface JurisdictionRule {
   country_code: string;
-  region_code?: string;          // Provincial/state level where applicable
+  region_code?: string; // Provincial/state level where applicable
   age_assurance_required: boolean;
   age_assurance_method: 'DECLARATION' | 'RELIABLE_ESTIMATION' | 'VERIFIED_ID';
   ai_disclosure_required: boolean;
@@ -25,8 +25,8 @@ const JURISDICTION_OVERLAY: JurisdictionRule[] = [
   {
     country_code: 'CA',
     age_assurance_required: true,
-    age_assurance_method: 'RELIABLE_ESTIMATION',  // Bill S-210
-    ai_disclosure_required: true,                  // Bill 149 (ON) — applied nationally
+    age_assurance_method: 'RELIABLE_ESTIMATION', // Bill S-210
+    ai_disclosure_required: true, // Bill 149 (ON) — applied nationally
     reporting_obligations: ['BILL_C22_WARRANT_10DAY'],
   },
   {
@@ -34,20 +34,20 @@ const JURISDICTION_OVERLAY: JurisdictionRule[] = [
     region_code: 'ON',
     age_assurance_required: true,
     age_assurance_method: 'RELIABLE_ESTIMATION',
-    ai_disclosure_required: true,                  // Bill 149 specific to Ontario
+    ai_disclosure_required: true, // Bill 149 specific to Ontario
     reporting_obligations: ['BILL_C22_WARRANT_10DAY', 'BILL_149_AI_DISCLOSURE'],
   },
   {
     country_code: 'US',
     age_assurance_required: true,
-    age_assurance_method: 'DECLARATION',           // 18 USC 2257
+    age_assurance_method: 'DECLARATION', // 18 USC 2257
     ai_disclosure_required: false,
     reporting_obligations: ['USC_2257_RECORDS'],
   },
   {
     country_code: 'GB',
     age_assurance_required: true,
-    age_assurance_method: 'VERIFIED_ID',           // UK Online Safety Act
+    age_assurance_method: 'VERIFIED_ID', // UK Online Safety Act
     ai_disclosure_required: false,
   },
   {
@@ -76,9 +76,12 @@ export class SovereignCaCMiddleware implements NestMiddleware {
     // Bill 149 (ON): AI disclosure header — must be present on all responses
     // where AI-assisted content may be returned
     if (rule.ai_disclosure_required) {
-      res.setHeader('X-AI-Disclosure', 'This platform uses AI-assisted features. ' +
-        'AI tools assist creators but do not replace human oversight. ' +
-        'Bill 149 (Ontario) 2024.');
+      res.setHeader(
+        'X-AI-Disclosure',
+        'This platform uses AI-assisted features. ' +
+          'AI tools assist creators but do not replace human oversight. ' +
+          'Bill 149 (Ontario) 2024.',
+      );
     }
 
     // Age assurance gate — enforced at content delivery layer, not here
@@ -116,18 +119,18 @@ export class SovereignCaCMiddleware implements NestMiddleware {
     // Try region-specific match first
     if (region_code) {
       const regional = JURISDICTION_OVERLAY.find(
-        r => r.country_code === country_code && r.region_code === region_code
+        (r) => r.country_code === country_code && r.region_code === region_code,
       );
       if (regional) return regional;
     }
 
     // Country-level match (no region)
     const national = JURISDICTION_OVERLAY.find(
-      r => r.country_code === country_code && !r.region_code
+      (r) => r.country_code === country_code && !r.region_code,
     );
     if (national) return national;
 
     // Default fallback
-    return JURISDICTION_OVERLAY.find(r => r.country_code === 'DEFAULT')!;
+    return JURISDICTION_OVERLAY.find((r) => r.country_code === 'DEFAULT')!;
   }
 }

@@ -220,30 +220,18 @@ export class WebhookHardeningService {
         case 'stripe': {
           // Stripe: HMAC-SHA256 over `${timestamp}.${raw_body}`.
           const signedPayload = `${input.timestamp_seconds}.${input.raw_body}`;
-          return this.verifyHmacSha256(
-            signedPayload,
-            input.signing_secret,
-            input.signature,
-          );
+          return this.verifyHmacSha256(signedPayload, input.signing_secret, input.signature);
         }
         case 'ccbill': {
           // CCBill: HMAC-SHA256 over `${event_id}.${timestamp}.${raw_body}`.
           // The full CCBill DataLink proprietary envelope is layered in at
           // processor integration time; the baseline HMAC is enforced here.
           const signedPayload = `${input.event_id}.${input.timestamp_seconds}.${input.raw_body}`;
-          return this.verifyHmacSha256(
-            signedPayload,
-            input.signing_secret,
-            input.signature,
-          );
+          return this.verifyHmacSha256(signedPayload, input.signing_secret, input.signature);
         }
         case 'epoch': {
           // Epoch: SHA-256 digest over (raw_body || shared_secret).
-          return this.verifyEpochDigest(
-            input.raw_body,
-            input.signing_secret,
-            input.signature,
-          );
+          return this.verifyEpochDigest(input.raw_body, input.signing_secret, input.signature);
         }
       }
     } catch (err) {
@@ -258,23 +246,12 @@ export class WebhookHardeningService {
     return false;
   }
 
-  private verifyHmacSha256(
-    payload: string,
-    secret: string,
-    providedSignature: string,
-  ): boolean {
-    const expected = crypto
-      .createHmac('sha256', secret)
-      .update(payload, 'utf8')
-      .digest('hex');
+  private verifyHmacSha256(payload: string, secret: string, providedSignature: string): boolean {
+    const expected = crypto.createHmac('sha256', secret).update(payload, 'utf8').digest('hex');
     return this.constantTimeEquals(expected, providedSignature);
   }
 
-  private verifyEpochDigest(
-    body: string,
-    secret: string,
-    providedSignature: string,
-  ): boolean {
+  private verifyEpochDigest(body: string, secret: string, providedSignature: string): boolean {
     const expected = crypto
       .createHash('sha256')
       .update(body + secret, 'utf8')
@@ -286,10 +263,7 @@ export class WebhookHardeningService {
     if (typeof a !== 'string' || typeof b !== 'string') return false;
     if (a.length !== b.length) return false;
     try {
-      return crypto.timingSafeEqual(
-        Buffer.from(a, 'utf8'),
-        Buffer.from(b, 'utf8'),
-      );
+      return crypto.timingSafeEqual(Buffer.from(a, 'utf8'), Buffer.from(b, 'utf8'));
     } catch {
       return false;
     }

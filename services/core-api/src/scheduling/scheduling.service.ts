@@ -316,9 +316,7 @@ export class SchedulingService {
     }
 
     // Check for stat holiday pay
-    const payMultiplier = await this.shiftCoverage.getStatHolidayMultiplier(
-      request.shift_date,
-    );
+    const payMultiplier = await this.shiftCoverage.getStatHolidayMultiplier(request.shift_date);
     const isStatHoliday = payMultiplier > 1.0;
 
     // Also check shift notice compliance (warnings only, don't block)
@@ -413,7 +411,11 @@ export class SchedulingService {
     actor_id: string;
     correlation_id: string;
     reason_code: string;
-  }): Promise<{ swapped: boolean; compliance_warnings: import('./scheduling.interfaces').ComplianceWarning[]; rule_applied_id: string }> {
+  }): Promise<{
+    swapped: boolean;
+    compliance_warnings: import('./scheduling.interfaces').ComplianceWarning[];
+    rule_applied_id: string;
+  }> {
     const assignmentA = await this.prisma.shiftAssignment.findUnique({
       where: { id: params.assignment_id_a },
     });
