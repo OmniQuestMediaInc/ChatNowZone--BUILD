@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `claude/financial-ledger-wallets-FrUdF`
-**Commit:** `9babe8569fad2b6c38a5ba81933aadfe0c20900c`
-**Generated:** 2026-04-24T16:58:47Z
+**Commit:** `757b32cfc66d9e0be841e862d4874860e61f4f80`
+**Generated:** 2026-04-24T17:33:19Z
 
 ## All Files
 
@@ -166,6 +166,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/OBS-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-001-CANONICAL-LEDGER-REPORT-BACK.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-2-REDBOOK-RECOVERY-DASHBOARD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-002-SUPPRESSION-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-REPORT-BACK.md`
@@ -392,6 +393,8 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/zone-access/zone-access.module.ts`
 - `services/core-api/src/zone-access/zone-access.service.ts`
 - `services/core-api/tsconfig.json`
+- `services/diamond-concierge/src/diamond-concierge.module.ts`
+- `services/diamond-concierge/src/diamond.service.ts`
 - `services/ledger/index.ts`
 - `services/ledger/ledger.service.ts`
 - `services/ledger/payout.service.ts`
@@ -443,6 +446,7 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
 - `tests/integration/recovery-engine.spec.ts`
+- `tests/integration/recovery-service.spec.ts`
 - `tests/integration/redbook-rate-card.spec.ts`
 - `tests/integration/scheduling-service.spec.ts`
 - `tests/integration/seed-loader.ts`
