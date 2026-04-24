@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/integrate-creatorcontrol-cyrano-U0E1u`
-**Commit:** `b6716e5a1e7f4ad1bf72bb170ccc87f11167a18a`
-**Generated:** 2026-04-24T18:02:57Z
+**Branch:** `copilot/update-rebbook-business-plan`
+**Commit:** `1babe92742ed5667507dba0b60d7276b9c934a51`
+**Generated:** 2026-04-24T18:57:58Z
 
 ## All Files
 
@@ -166,6 +166,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/OBS-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-001-CANONICAL-LEDGER-REPORT-BACK.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-10-ALIGNMENT-SWEEP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-2-REDBOOK-RECOVERY-DASHBOARD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-3-GATEGUARD-SENTINEL-PREPROCESSOR.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
