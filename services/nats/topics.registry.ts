@@ -57,7 +57,20 @@ export const NATS_TOPICS = {
   // ── Audit & compliance ─────────────────────────────────────────────────
   AUDIT_EVENT_WRITTEN:              'audit.event.written',
   AUDIT_CHAIN_INTEGRITY_FAILURE:    'audit.chain.integrity_failure',
+  AUDIT_CHAIN_VERIFIED:             'audit.chain.verified',
   WORM_EXPORT_TRIGGERED:            'worm.export.triggered',
+  WORM_EXPORT_COMPLETED:            'worm.export.completed',
+  WORM_EXPORT_INTEGRITY_FAILURE:    'worm.export.integrity_failure',
+
+  // ── PAYLOAD 6: Immutable audit emission ────────────────────────────────
+  AUDIT_IMMUTABLE_PURCHASE:         'audit.immutable.purchase',
+  AUDIT_IMMUTABLE_SPEND:            'audit.immutable.spend',
+  AUDIT_IMMUTABLE_RECOVERY:         'audit.immutable.recovery',
+  AUDIT_IMMUTABLE_GATEGUARD:        'audit.immutable.gateguard',
+  AUDIT_IMMUTABLE_CYRANO:           'audit.immutable.cyrano',
+  AUDIT_IMMUTABLE_STEP_UP:          'audit.immutable.step_up',
+  AUDIT_IMMUTABLE_RBAC:             'audit.immutable.rbac',
+  AUDIT_IMMUTABLE_DIAMOND:          'audit.immutable.diamond',
 
   // ── Legal hold ─────────────────────────────────────────────────────────
   LEGAL_HOLD_APPLIED:       'compliance.legal_hold.applied',

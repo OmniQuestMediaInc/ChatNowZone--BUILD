@@ -1,7 +1,7 @@
 # OQMI System State — Backlog Snapshot
 
-**Snapshot date:** 2026-04-24
-**Branch of record:** `claude/repo-prep-cleanup-x7SZS`
+**Snapshot date:** 2026-04-24 (PAYLOAD 6 — Immutable Audit + RBAC + Compliance Lockdown)
+**Branch of record:** `claude/audit-rbac-compliance-XkEk9`
 **Authority:** OmniQuest Media Inc. — OQMI_GOVERNANCE.md (Canonical Corpus v10)
 
 > This file is a **periodic snapshot** of program state. It is generated
@@ -71,16 +71,17 @@ H-LAUNCH-READY sign-off directive):
 
 | System | Directive(s) | Status at snapshot |
 | --- | --- | --- |
-| Three-Bucket Wallet | D001 | NEEDS_DIRECTIVE |
+| Three-Bucket Wallet | D001 | DONE — `LedgerService.debitWallet` + `ThreeBucketSpendGuardMiddleware` defence-in-depth |
 | Risk Engine | D002 | NEEDS_DIRECTIVE |
-| NATS Fabric | D003 | DONE (scaffold) — extensions NEEDS_DIRECTIVE |
+| NATS Fabric | D003 | DONE (scaffold) — PAYLOAD 6 extended with AUDIT_IMMUTABLE_* topics |
 | OBS Broadcast Kernel | D004 | NEEDS_DIRECTIVE |
 | FairPay + NOWPayouts | D006, E002 | NEEDS_DIRECTIVE |
-| RedBook | E001 | NEEDS_DIRECTIVE |
-| Compliance Stack | D008 | NEEDS_DIRECTIVE |
-| GateGuard Sentinel | E003 | NEEDS_DIRECTIVE |
+| RedBook | E001 | IN_PROGRESS — recovery engine + legal-hold bridged to immutable chain |
+| Compliance Stack | D008 | DONE — Immutable Audit + RBAC + Step-Up + Compliance Lockdown (PAYLOAD 6) |
+| GateGuard Sentinel | E003 | DONE — PAYLOAD 3 + bridged emission to immutable audit chain |
 | Black-Glass Interface | G101+ | NEEDS_DIRECTIVE |
 | Banned-entity residual purge | C001 (§12) | DONE — purge/redact sweep completed 2026-04-24 |
+| Immutable Audit Architecture | PAYLOAD-6 | DONE — hash-chain + WORM export + Canonical Compliance Checklist |
 
 ---
 
