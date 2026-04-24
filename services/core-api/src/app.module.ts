@@ -27,8 +27,8 @@ import { GateGuardMiddleware } from './gateguard/gateguard.middleware';
 
 @Module({
   imports: [
-    NatsModule,        // FIRST — global module, must be registered before all others
-    PrismaModule,      // SECOND — global Prisma client
+    NatsModule, // FIRST — global module, must be registered before all others
+    PrismaModule, // SECOND — global Prisma client
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST ?? 'localhost',

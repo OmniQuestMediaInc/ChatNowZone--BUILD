@@ -44,10 +44,13 @@ export class MembershipService {
     });
 
     if (!subscription) {
-      this.logger.log('MembershipService.getActiveTier: no active subscription — defaulting to DAY_PASS', {
-        user_id: userId,
-        rule_applied_id: 'MEMB-002_GET_ACTIVE_TIER_v1',
-      });
+      this.logger.log(
+        'MembershipService.getActiveTier: no active subscription — defaulting to DAY_PASS',
+        {
+          user_id: userId,
+          rule_applied_id: 'MEMB-002_GET_ACTIVE_TIER_v1',
+        },
+      );
       return 'DAY_PASS';
     }
 
@@ -83,11 +86,14 @@ export class MembershipService {
       where: { user_id: userId, status: SubscriptionStatus.ACTIVE },
     });
     if (existing) {
-      this.logger.warn('MembershipService.createSubscription: user already has ACTIVE subscription', {
-        user_id: userId,
-        existing_subscription_id: existing.id,
-        rule_applied_id: ruleAppliedId,
-      });
+      this.logger.warn(
+        'MembershipService.createSubscription: user already has ACTIVE subscription',
+        {
+          user_id: userId,
+          existing_subscription_id: existing.id,
+          rule_applied_id: ruleAppliedId,
+        },
+      );
       throw new ConflictException({
         message: 'User already has an active membership subscription.',
         rule_applied_id: ruleAppliedId,

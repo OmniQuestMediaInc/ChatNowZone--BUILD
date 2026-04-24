@@ -48,11 +48,7 @@ export type OtpStatus = 'ISSUED' | 'CONSUMED' | 'EXPIRED' | 'LOCKED';
 
 export type IssueOtpResultCode = 'ISSUED';
 
-export type VerifyOtpResultCode =
-  | 'VERIFIED'
-  | 'INVALID'
-  | 'EXPIRED'
-  | 'ALREADY_CONSUMED';
+export type VerifyOtpResultCode = 'VERIFIED' | 'INVALID' | 'EXPIRED' | 'ALREADY_CONSUMED';
 
 export interface IssueOtpParams {
   accountId: string;
@@ -112,15 +108,10 @@ export class PlatformOtpService {
     const plaintext = this.generateOtpCode();
     const displayCode = `${plaintext.slice(0, 6)}-${plaintext.slice(6)}`;
 
-    const codeHash = await bcrypt.hash(
-      plaintext,
-      GovernanceConfig.DFSP_OTP_BCRYPT_COST,
-    );
+    const codeHash = await bcrypt.hash(plaintext, GovernanceConfig.DFSP_OTP_BCRYPT_COST);
 
     const issuedAt = new Date();
-    const expiresAt = new Date(
-      issuedAt.getTime() + GovernanceConfig.DFSP_OTP_TTL_SECONDS * 1000,
-    );
+    const expiresAt = new Date(issuedAt.getTime() + GovernanceConfig.DFSP_OTP_TTL_SECONDS * 1000);
 
     const record = await this.prisma.otpEvent.create({
       data: {

@@ -11,7 +11,7 @@ export interface WormExportRecord {
   event_count: number;
   first_event_id: string;
   last_event_id: string;
-  hash_seal: string;           // SHA-256 of ordered event payload
+  hash_seal: string; // SHA-256 of ordered event payload
   integrity_verified: boolean;
   exported_at_utc: string;
   rule_applied_id: string;
@@ -55,7 +55,7 @@ export class WormExportService {
     // Order: event_id + created_at concatenated — no metadata included in seal
     // to prevent PII leakage into the hash
     const payload = params.events
-      .map(e => `${e.event_id}:${e.created_at}:${e.event_type}`)
+      .map((e) => `${e.event_id}:${e.created_at}:${e.event_type}`)
       .join('|');
 
     const hash_seal = createHash('sha256').update(payload).digest('hex');
@@ -93,7 +93,7 @@ export class WormExportService {
     events: AuditEventSnapshot[];
   }): boolean {
     const payload = params.events
-      .map(e => `${e.event_id}:${e.created_at}:${e.event_type}`)
+      .map((e) => `${e.event_id}:${e.created_at}:${e.event_type}`)
       .join('|');
 
     const recomputed_hash = createHash('sha256').update(payload).digest('hex');

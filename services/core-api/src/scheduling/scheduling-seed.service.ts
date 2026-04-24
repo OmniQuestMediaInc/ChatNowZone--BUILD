@@ -8,10 +8,7 @@ import { randomUUID } from 'crypto';
 import { PrismaService } from '../prisma.service';
 import { GZ_SCHEDULING } from '../config/governance.config';
 import { SchedulingService } from './scheduling.service';
-import {
-  getRollingThreeYearHolidays,
-  getHolidaysForYears,
-} from './stat-holidays.seed';
+import { getRollingThreeYearHolidays, getHolidaysForYears } from './stat-holidays.seed';
 import {
   FINANCE_COVERAGE,
   MAINTENANCE_COVERAGE,
@@ -212,43 +209,97 @@ export class SchedulingSeedService {
     // GuestZone — 24/7, 3 shifts, 3 agents per shift minimum
     for (let day = 0; day < 7; day++) {
       coverageEntries.push(
-        { department: 'GUESTZONE', day_of_week: day, coverage_start: '07:00', coverage_end: '15:45', min_staff_count: 3, min_supervisor_count: 1, requires_manager: day < 5, is_on_call_only: false, crossover_mins: 15 },
-        { department: 'GUESTZONE', day_of_week: day, coverage_start: '15:15', coverage_end: '00:00', min_staff_count: 3, min_supervisor_count: 1, requires_manager: day < 5, is_on_call_only: false, crossover_mins: 15 },
-        { department: 'GUESTZONE', day_of_week: day, coverage_start: '23:30', coverage_end: '08:15', min_staff_count: 3, min_supervisor_count: 1, requires_manager: false, is_on_call_only: false, crossover_mins: 15 },
+        {
+          department: 'GUESTZONE',
+          day_of_week: day,
+          coverage_start: '07:00',
+          coverage_end: '15:45',
+          min_staff_count: 3,
+          min_supervisor_count: 1,
+          requires_manager: day < 5,
+          is_on_call_only: false,
+          crossover_mins: 15,
+        },
+        {
+          department: 'GUESTZONE',
+          day_of_week: day,
+          coverage_start: '15:15',
+          coverage_end: '00:00',
+          min_staff_count: 3,
+          min_supervisor_count: 1,
+          requires_manager: day < 5,
+          is_on_call_only: false,
+          crossover_mins: 15,
+        },
+        {
+          department: 'GUESTZONE',
+          day_of_week: day,
+          coverage_start: '23:30',
+          coverage_end: '08:15',
+          min_staff_count: 3,
+          min_supervisor_count: 1,
+          requires_manager: false,
+          is_on_call_only: false,
+          crossover_mins: 15,
+        },
       );
     }
 
     // Finance — 9 AM – 9 PM daily
     for (let day = 0; day < 7; day++) {
       coverageEntries.push({
-        department: 'FINANCE', day_of_week: day, coverage_start: '09:00', coverage_end: '21:00',
-        min_staff_count: 3, min_supervisor_count: 1, requires_manager: true,
-        is_on_call_only: false, crossover_mins: FINANCE_COVERAGE.crossover_mins,
+        department: 'FINANCE',
+        day_of_week: day,
+        coverage_start: '09:00',
+        coverage_end: '21:00',
+        min_staff_count: 3,
+        min_supervisor_count: 1,
+        requires_manager: true,
+        is_on_call_only: false,
+        crossover_mins: FINANCE_COVERAGE.crossover_mins,
       });
     }
 
     // Tech — 24/7/365
     for (let day = 0; day < 7; day++) {
       coverageEntries.push({
-        department: 'TECH', day_of_week: day, coverage_start: '00:00', coverage_end: '23:59',
-        min_staff_count: 2, min_supervisor_count: 1, requires_manager: false,
-        is_on_call_only: false, crossover_mins: 0,
+        department: 'TECH',
+        day_of_week: day,
+        coverage_start: '00:00',
+        coverage_end: '23:59',
+        min_staff_count: 2,
+        min_supervisor_count: 1,
+        requires_manager: false,
+        is_on_call_only: false,
+        crossover_mins: 0,
       });
     }
 
     // Legal — M-F onsite, weekend on-call
     for (let day = 0; day < 5; day++) {
       coverageEntries.push({
-        department: 'LEGAL', day_of_week: day, coverage_start: '09:00', coverage_end: '20:00',
-        min_staff_count: 2, min_supervisor_count: 0, requires_manager: false,
-        is_on_call_only: false, crossover_mins: 0,
+        department: 'LEGAL',
+        day_of_week: day,
+        coverage_start: '09:00',
+        coverage_end: '20:00',
+        min_staff_count: 2,
+        min_supervisor_count: 0,
+        requires_manager: false,
+        is_on_call_only: false,
+        crossover_mins: 0,
       });
     }
     for (let day = 5; day < 7; day++) {
       coverageEntries.push({
-        department: 'LEGAL', day_of_week: day, coverage_start: '00:00', coverage_end: '23:59',
-        min_staff_count: 1, min_supervisor_count: 0, requires_manager: false,
-        is_on_call_only: true, crossover_mins: 0,
+        department: 'LEGAL',
+        day_of_week: day,
+        coverage_start: '00:00',
+        coverage_end: '23:59',
+        min_staff_count: 1,
+        min_supervisor_count: 0,
+        requires_manager: false,
+        is_on_call_only: true,
+        crossover_mins: 0,
       });
     }
 
@@ -256,14 +307,26 @@ export class SchedulingSeedService {
     for (let day = 0; day < 7; day++) {
       coverageEntries.push(
         {
-          department: 'MAINTENANCE', day_of_week: day, coverage_start: MAINTENANCE_COVERAGE.shift_1.start, coverage_end: MAINTENANCE_COVERAGE.shift_1.end,
-          min_staff_count: 1, min_supervisor_count: 0, requires_manager: false,
-          is_on_call_only: false, crossover_mins: 0,
+          department: 'MAINTENANCE',
+          day_of_week: day,
+          coverage_start: MAINTENANCE_COVERAGE.shift_1.start,
+          coverage_end: MAINTENANCE_COVERAGE.shift_1.end,
+          min_staff_count: 1,
+          min_supervisor_count: 0,
+          requires_manager: false,
+          is_on_call_only: false,
+          crossover_mins: 0,
         },
         {
-          department: 'MAINTENANCE', day_of_week: day, coverage_start: MAINTENANCE_COVERAGE.shift_2.start, coverage_end: MAINTENANCE_COVERAGE.shift_2.end,
-          min_staff_count: 1, min_supervisor_count: 0, requires_manager: false,
-          is_on_call_only: false, crossover_mins: 0,
+          department: 'MAINTENANCE',
+          day_of_week: day,
+          coverage_start: MAINTENANCE_COVERAGE.shift_2.start,
+          coverage_end: MAINTENANCE_COVERAGE.shift_2.end,
+          min_staff_count: 1,
+          min_supervisor_count: 0,
+          requires_manager: false,
+          is_on_call_only: false,
+          crossover_mins: 0,
         },
       );
     }
@@ -271,9 +334,15 @@ export class SchedulingSeedService {
     // Reception — 8 AM – 5 PM daily
     for (let day = 0; day < 7; day++) {
       coverageEntries.push({
-        department: 'RECEPTION', day_of_week: day, coverage_start: RECEPTION_COVERAGE.start, coverage_end: RECEPTION_COVERAGE.end,
-        min_staff_count: 1, min_supervisor_count: 0, requires_manager: false,
-        is_on_call_only: false, crossover_mins: 0,
+        department: 'RECEPTION',
+        day_of_week: day,
+        coverage_start: RECEPTION_COVERAGE.start,
+        coverage_end: RECEPTION_COVERAGE.end,
+        min_staff_count: 1,
+        min_supervisor_count: 0,
+        requires_manager: false,
+        is_on_call_only: false,
+        crossover_mins: 0,
       });
     }
 
@@ -317,9 +386,7 @@ export class SchedulingSeedService {
    * each position across all three shifts (A/B/C).
    * Idempotent — skips positions that already exist by employee_ref.
    */
-  async seedMasterRoster(
-    correlation_id: string,
-  ): Promise<{ created: number; skipped: number }> {
+  async seedMasterRoster(correlation_id: string): Promise<{ created: number; skipped: number }> {
     let created = 0;
     let skipped = 0;
 
@@ -354,12 +421,15 @@ export class SchedulingSeedService {
             staff_category: position.category,
             department: 'GUESTZONE',
             languages: ['EN'],
-            hourly_rate_cad: isSalaried ? null : 22.00,
+            hourly_rate_cad: isSalaried ? null : 22.0,
             annual_salary_cad: isSalaried
-              ? position.role === 'GZM' ? 82500.00
-              : position.role === 'GZAM' ? 75000.00
-              : position.role === 'GZS' ? 63500.00
-              : null
+              ? position.role === 'GZM'
+                ? 82500.0
+                : position.role === 'GZAM'
+                  ? 75000.0
+                  : position.role === 'GZS'
+                    ? 63500.0
+                    : null
               : null,
             is_active: true,
             hire_date: new Date(),

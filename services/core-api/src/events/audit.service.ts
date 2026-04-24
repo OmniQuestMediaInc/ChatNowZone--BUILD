@@ -45,8 +45,12 @@ export class AuditService {
   private static toZonedISO(date: Date, timezone: string): string {
     const fmt = new Intl.DateTimeFormat('en-CA', {
       timeZone: timezone,
-      year: 'numeric', month: '2-digit', day: '2-digit',
-      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
       hour12: false,
     });
     const parts = fmt.formatToParts(date);
