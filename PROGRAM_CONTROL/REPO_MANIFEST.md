@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/financial-ledger-wallets-FrUdF`
-**Commit:** `757b32cfc66d9e0be841e862d4874860e61f4f80`
-**Generated:** 2026-04-24T17:33:19Z
+**Branch:** `claude/audit-rbac-compliance-XkEk9`
+**Commit:** `d47fc5247526cfb33c8daa3186e8886508532de6`
+**Generated:** 2026-04-24T17:57:26Z
 
 ## All Files
 
@@ -167,6 +167,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-001-CANONICAL-LEDGER-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-2-REDBOOK-RECOVERY-DASHBOARD.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-3-GATEGUARD-SENTINEL-PREPROCESSOR.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-002-SUPPRESSION-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-REPORT-BACK.md`
@@ -246,6 +247,7 @@ Auto-generated on every push. Do not edit manually.
 - `archive/LEGACY_CONFIGS_2026-04/tsconfig.json`
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
+- `docs/CANONICAL_COMPLIANCE_CHECKLIST.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
 - `docs/DOMAIN_GLOSSARY.md`
 - `docs/MEMBERSHIP_LIFECYCLE_POLICY.md`
@@ -274,6 +276,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
 - `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
 - `prisma/migrations/20260424000000_add_canonical_financial_ledger/migration.sql`
+- `prisma/migrations/20260424120000_immutable_audit_architecture/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -306,11 +309,15 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/analytics/analytics.module.ts`
 - `services/core-api/src/analytics/heat-score.service.ts`
 - `services/core-api/src/app.module.ts`
+- `services/core-api/src/audit/audit-bridge.service.ts`
 - `services/core-api/src/audit/audit-dashboard.controller.ts`
 - `services/core-api/src/audit/audit-dashboard.service.ts`
 - `services/core-api/src/audit/audit.module.ts`
+- `services/core-api/src/audit/immutable-audit.controller.ts`
+- `services/core-api/src/audit/immutable-audit.service.ts`
 - `services/core-api/src/auth/auth.module.ts`
 - `services/core-api/src/auth/rbac.guard.ts`
+- `services/core-api/src/auth/rbac.service.ts`
 - `services/core-api/src/auth/step-up.service.ts`
 - `services/core-api/src/compliance/audit-chain.service.ts`
 - `services/core-api/src/compliance/compliance.module.ts`
@@ -343,6 +350,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/finance/ledger.module.ts`
 - `services/core-api/src/finance/ledger.service.ts`
 - `services/core-api/src/finance/ledger.types.ts`
+- `services/core-api/src/finance/three-bucket-spend-guard.middleware.ts`
 - `services/core-api/src/finance/tip.service.ts`
 - `services/core-api/src/finance/types/ledger.types.ts`
 - `services/core-api/src/games/game-engine.service.ts`
@@ -446,18 +454,22 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
+- `tests/integration/diamond-concierge-service.spec.ts`
 - `tests/integration/gateguard-middleware.spec.ts`
 - `tests/integration/gateguard-scorer.spec.ts`
 - `tests/integration/gateguard-service.spec.ts`
+- `tests/integration/immutable-audit-service.spec.ts`
 - `tests/integration/ledger-service.spec.ts`
 - `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
+- `tests/integration/rbac-service.spec.ts`
 - `tests/integration/recovery-engine.spec.ts`
 - `tests/integration/recovery-service.spec.ts`
 - `tests/integration/redbook-rate-card.spec.ts`
 - `tests/integration/scheduling-service.spec.ts`
 - `tests/integration/seed-loader.ts`
 - `tests/integration/stat-holidays.spec.ts`
+- `tests/integration/three-bucket-spend-guard.spec.ts`
 - `tests/integration/zonebot-service.spec.ts`
 - `tests/seed_data/.gitkeep`
 - `tests/seed_data/admin_rules_TEST DATA.csv`
