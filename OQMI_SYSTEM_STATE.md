@@ -76,9 +76,13 @@ H-LAUNCH-READY sign-off directive):
 | NATS Fabric | D003 | DONE (scaffold) — PAYLOAD 6 extended with AUDIT_IMMUTABLE_* topics |
 | OBS Broadcast Kernel | D004 | NEEDS_DIRECTIVE |
 | FairPay + NOWPayouts | D006, E002 | NEEDS_DIRECTIVE |
-| RedBook | E001 | IN_PROGRESS — recovery engine + legal-hold bridged to immutable chain |
-| Compliance Stack | D008 | DONE — Immutable Audit + RBAC + Step-Up + Compliance Lockdown (PAYLOAD 6) |
-| GateGuard Sentinel | E003 | DONE — PAYLOAD 3 + bridged emission to immutable audit chain |
+| RedBook | E001 | NEEDS_DIRECTIVE |
+| Compliance Stack | D008 | NEEDS_DIRECTIVE |
+| GateGuard Sentinel | E003 | NEEDS_DIRECTIVE |
+| Room-Heat Engine | PAYLOAD 5 | DONE (scaffold) — deterministic tier computation + NATS emission, persistence NEEDS_DIRECTIVE |
+| CreatorControl.Zone | PAYLOAD 5 | DONE (scaffold) — Broadcast Timing + Session Monitoring copilots, single-pane snapshot; frontend NEEDS_DIRECTIVE |
+| Cyrano Layer 1 | PAYLOAD 5 | DONE (scaffold) — 8-category whisper engine, memory, personas, latency SLO; Layer 2 (LLM + Prisma memory) NEEDS_DIRECTIVE |
+| Integration Hub | PAYLOAD 5 | DONE (scaffold) — Ledger↔GateGuard, Recovery↔Diamond Concierge, Room-Heat↔CreatorControl+Cyrano handoffs |
 | Black-Glass Interface | G101+ | NEEDS_DIRECTIVE |
 | Banned-entity residual purge | C001 (§12) | DONE — purge/redact sweep completed 2026-04-24 |
 | Immutable Audit Architecture | PAYLOAD-6 | DONE — hash-chain + WORM export + Canonical Compliance Checklist |
