@@ -1179,3 +1179,56 @@ model Creator {
 
   @@map("creators")
 }
+
+// ─── GateGuard Sentinel Pre-Processor (Business Plan B.5 + Canonical Corpus) ─
+// Every financial transaction (purchase / spend / payout) is routed through
+// GateGuard BEFORE it reaches the append-only ledger. Each evaluation yields
+// a Welfare Guardian Score (fraud + welfare + risk factors) that drives a
+// deterministic decision: APPROVE / COOLDOWN / HARD_DECLINE / HUMAN_ESCALATE.
+//
+// Both tables are append-only. The GateGuardLog is hash-chained so that any
+// tampering with a decision record is detectable downstream (Audit Chain).
+
+model WelfareGuardianScore {
+  id              String   @id @default(uuid())
+  // A single transaction receives exactly one authoritative score.
+  transaction_id  String   @unique @db.VarChar(200)
+  // Both scores are normalised integers in the 0..100 band.
+  fraud_score     Int
+  welfare_score   Int
+  // Aggregate risk: opaque JSON envelope produced by the scorer. Shape is
+  // intentionally flexible — new signals can be added without migration.
+  risk_factors    Json
+  // Final gate decision. Mirrors GateGuardDecision in the service layer.
+  decision        String   @db.VarChar(32)
+  // Correlation across microservices (ledger, NATS, UI) for a single attempt.
+  correlation_id  String   @db.VarChar(100)
+  // Rule set version used to produce this score — never mutated after write.
+  rule_applied_id String   @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@index([correlation_id])
+  @@index([decision, created_at])
+  @@map("welfare_guardian_scores")
+}
+
+model GateGuardLog {
+  id              String   @id @default(uuid())
+  transaction_id  String   @db.VarChar(200)
+  // Action being gated: "PURCHASE" | "SPEND" | "PAYOUT" | "AV_CALLBACK" ...
+  action          String   @db.VarChar(50)
+  // Snapshot of the score object at decision time.
+  score           Json
+  decision        String   @db.VarChar(32)
+  // Hash chain — hash_current = SHA256(hash_prior || canonical(payload))
+  hash_prior      String   @db.Char(64)
+  hash_current    String   @db.Char(64)
+  correlation_id  String   @db.VarChar(100)
+  rule_applied_id String   @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@index([transaction_id])
+  @@index([correlation_id])
+  @@index([action, created_at])
+  @@map("gateguard_logs")
+}
