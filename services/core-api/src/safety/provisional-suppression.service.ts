@@ -21,7 +21,11 @@ export interface SuppressionRecord {
 }
 
 export interface AuditEvent {
-  event_type: 'SUPPRESSION_APPLIED' | 'SUPPRESSION_LIFTED' | 'SUPPRESSION_FINALIZED' | 'UPLOAD_BLOCKED';
+  event_type:
+    | 'SUPPRESSION_APPLIED'
+    | 'SUPPRESSION_LIFTED'
+    | 'SUPPRESSION_FINALIZED'
+    | 'UPLOAD_BLOCKED';
   severity: 'SEV1';
   content_id: string;
   case_id: string;
@@ -218,14 +222,11 @@ export class ProvisionalSuppressionService {
       timestamp_utc: new Date().toISOString(),
     };
 
-    logger.warn(
-      'ProvisionalSuppressionService: SEV1 — suppression finalized and hash registered',
-      {
-        context: 'ProvisionalSuppressionService',
-        audit_event: auditEvent,
-        hash: contentHash,
-      },
-    );
+    logger.warn('ProvisionalSuppressionService: SEV1 — suppression finalized and hash registered', {
+      context: 'ProvisionalSuppressionService',
+      audit_event: auditEvent,
+      hash: contentHash,
+    });
   }
 
   /**
@@ -241,12 +242,10 @@ export class ProvisionalSuppressionService {
       orderBy: { created_at_utc: 'asc' },
     });
 
-    const timeline: Array<{ event: string; timestamp: string }> = registryEntries.map(
-      (entry) => ({
-        event: `Hash registered: action=${entry.action_taken}, rule=${entry.rule_applied_id}`,
-        timestamp: entry.created_at_utc.toISOString(),
-      }),
-    );
+    const timeline: Array<{ event: string; timestamp: string }> = registryEntries.map((entry) => ({
+      event: `Hash registered: action=${entry.action_taken}, rule=${entry.rule_applied_id}`,
+      timestamp: entry.created_at_utc.toISOString(),
+    }));
 
     // Include provisional suppression events for this case from the DB
     const suppressionRecords = await this.prisma.contentSuppressionQueue.findMany({
@@ -263,8 +262,7 @@ export class ProvisionalSuppressionService {
     timeline.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 
     const hashReferences = registryEntries.map((e) => e.hash);
-    const ruleApplied =
-      registryEntries.length > 0 ? registryEntries[0].rule_applied_id : 'UNKNOWN';
+    const ruleApplied = registryEntries.length > 0 ? registryEntries[0].rule_applied_id : 'UNKNOWN';
 
     const packet: EvidencePacket = {
       case_id: caseId,

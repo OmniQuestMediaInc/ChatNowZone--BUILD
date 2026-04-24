@@ -7,29 +7,13 @@ export type EmploymentType = 'FT' | 'PT';
 
 export type StaffCategory = 'CORE' | 'EDGE';
 
-export type Department =
-  | 'GUESTZONE'
-  | 'FINANCE'
-  | 'TECH'
-  | 'LEGAL'
-  | 'MAINTENANCE'
-  | 'RECEPTION';
+export type Department = 'GUESTZONE' | 'FINANCE' | 'TECH' | 'LEGAL' | 'MAINTENANCE' | 'RECEPTION';
 
 export type ShiftCode = 'A' | 'B' | 'C';
 
-export type PeriodStatus =
-  | 'DRAFT'
-  | 'B_LOCKED'
-  | 'FINAL_LOCKED'
-  | 'ACTIVE'
-  | 'ARCHIVED';
+export type PeriodStatus = 'DRAFT' | 'B_LOCKED' | 'FINAL_LOCKED' | 'ACTIVE' | 'ARCHIVED';
 
-export type GapStatus =
-  | 'OPEN'
-  | 'BIDDING'
-  | 'AWARDED'
-  | 'FILLED'
-  | 'CANCELLED';
+export type GapStatus = 'OPEN' | 'BIDDING' | 'AWARDED' | 'FILLED' | 'CANCELLED';
 
 export type BidStatus =
   | 'PENDING'
@@ -59,8 +43,8 @@ export type ScheduleAuditEventType =
 export interface ShiftDefinition {
   code: ShiftCode;
   label: string;
-  start: string;  // HH:mm
-  end: string;    // HH:mm
+  start: string; // HH:mm
+  end: string; // HH:mm
   duration_hours: number;
   meal_break_start: string;
   meal_break_mins: number;
@@ -68,7 +52,7 @@ export interface ShiftDefinition {
 
 export interface CreatePeriodRequest {
   department: Department;
-  period_start: string;    // YYYY-MM-DD
+  period_start: string; // YYYY-MM-DD
   actor_id: string;
   correlation_id: string;
   reason_code: string;
@@ -90,7 +74,7 @@ export interface AssignShiftRequest {
   schedule_period_id: string;
   staff_member_id: string;
   shift_template_id: string;
-  shift_date: string;       // YYYY-MM-DD
+  shift_date: string; // YYYY-MM-DD
   override_start_time?: string;
   override_end_time?: string;
   assignment_source: AssignmentSource;

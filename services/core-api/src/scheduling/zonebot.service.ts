@@ -8,10 +8,7 @@ import { PrismaService } from '../prisma.service';
 import { NatsService } from '../nats/nats.service';
 import { NATS_TOPICS } from '../../../nats/topics.registry';
 import { GZ_SCHEDULING } from '../config/governance.config';
-import type {
-  LotteryResult,
-  SubmitBidRequest,
-} from './scheduling.interfaces';
+import type { LotteryResult, SubmitBidRequest } from './scheduling.interfaces';
 
 @Injectable()
 export class ZoneBotService {
@@ -37,7 +34,9 @@ export class ZoneBotService {
     }
 
     if (gap.status !== 'OPEN' && gap.status !== 'BIDDING') {
-      throw new Error(`ZONEBOT_GAP_CLOSED: Gap ${request.shift_gap_id} is ${gap.status}, not open for bids`);
+      throw new Error(
+        `ZONEBOT_GAP_CLOSED: Gap ${request.shift_gap_id} is ${gap.status}, not open for bids`,
+      );
     }
 
     const staff = await this.prisma.staffMember.findFirst({
@@ -45,7 +44,9 @@ export class ZoneBotService {
     });
 
     if (!staff) {
-      throw new Error(`ZONEBOT_STAFF_INACTIVE: Staff ${request.staff_member_id} not found or inactive`);
+      throw new Error(
+        `ZONEBOT_STAFF_INACTIVE: Staff ${request.staff_member_id} not found or inactive`,
+      );
     }
 
     // Check role eligibility
@@ -118,18 +119,13 @@ export class ZoneBotService {
    * Uses crypto.randomInt() (Invariant #4) to randomly assign positions.
    * Position #1 gets the first 16-hour offer window.
    */
-  async runLottery(
-    shift_gap_id: string,
-    correlation_id: string,
-  ): Promise<LotteryResult> {
+  async runLottery(shift_gap_id: string, correlation_id: string): Promise<LotteryResult> {
     const gap = await this.prisma.shiftGap.findUnique({
       where: { id: shift_gap_id },
     });
 
     if (!gap || gap.status !== 'BIDDING') {
-      throw new Error(
-        `ZONEBOT_LOTTERY_INVALID: Gap ${shift_gap_id} is not in BIDDING status`,
-      );
+      throw new Error(`ZONEBOT_LOTTERY_INVALID: Gap ${shift_gap_id} is not in BIDDING status`);
     }
 
     const bids = await this.prisma.shiftBid.findMany({
@@ -151,10 +147,7 @@ export class ZoneBotService {
     }
 
     // Assign positions 1-3 (or fewer if less than 3 bids)
-    const maxPositions = Math.min(
-      shuffled.length,
-      GZ_SCHEDULING.ZONEBOT_MAX_LOTTERY_POSITIONS,
-    );
+    const maxPositions = Math.min(shuffled.length, GZ_SCHEDULING.ZONEBOT_MAX_LOTTERY_POSITIONS);
 
     const positions: LotteryResult['positions'] = [];
 
@@ -298,10 +291,7 @@ export class ZoneBotService {
    * Accepts a bid offer. Awards the shift, updates the gap, and
    * applies 2-cycle suppression for fairness.
    */
-  async acceptBid(
-    bid_id: string,
-    correlation_id: string,
-  ): Promise<void> {
+  async acceptBid(bid_id: string, correlation_id: string): Promise<void> {
     const bid = await this.prisma.shiftBid.findUnique({
       where: { id: bid_id },
     });
@@ -411,10 +401,7 @@ export class ZoneBotService {
   /**
    * Declines a bid offer. Cascades the offer to the next lottery position.
    */
-  async declineBid(
-    bid_id: string,
-    correlation_id: string,
-  ): Promise<void> {
+  async declineBid(bid_id: string, correlation_id: string): Promise<void> {
     const bid = await this.prisma.shiftBid.findUnique({
       where: { id: bid_id },
     });

@@ -54,9 +54,9 @@ export class GuardedNotificationService {
     const platformTime = this.getPlatformTime();
 
     // 1. Consent gate: look up the user's opt-in status.
-    const consentRecord = await this.consentRepo.findOne({
+    const consentRecord = (await this.consentRepo.findOne({
       where: { user_id: request.userId, channel: request.channel },
-    }) as Record<string, unknown> | null;
+    })) as Record<string, unknown> | null;
 
     const isOptedIn = consentRecord ? Boolean(consentRecord['is_opted_in']) : false;
 
@@ -76,7 +76,7 @@ export class GuardedNotificationService {
         governance_timezone: this.config.TIMEZONE,
       },
     });
-    const savedAudit = await this.auditRepo.save(auditEntry) as Record<string, unknown>;
+    const savedAudit = (await this.auditRepo.save(auditEntry)) as Record<string, unknown>;
 
     if (!isOptedIn) {
       this.logger.warn('NOTIFICATION_SUPPRESSED: user has not opted in', {

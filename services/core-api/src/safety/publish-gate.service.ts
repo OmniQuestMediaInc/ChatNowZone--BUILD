@@ -8,7 +8,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { NatsService } from '../nats/nats.service';
 import { NATS_TOPICS } from '../../../nats/topics.registry';
 
-export type PublishGateOutcome = 'APPROVED' | 'BLOCKED_AGE_GATE' | 'BLOCKED_KYC_PENDING' | 'BLOCKED_KYC_EXPIRED';
+export type PublishGateOutcome =
+  | 'APPROVED'
+  | 'BLOCKED_AGE_GATE'
+  | 'BLOCKED_KYC_PENDING'
+  | 'BLOCKED_KYC_EXPIRED';
 
 export interface PublishGateResult {
   content_id: string;
@@ -62,9 +66,8 @@ export class PublishGateService {
 
     // Block 1: KYC must be VERIFIED
     if (params.kyc_status !== 'VERIFIED') {
-      const outcome: PublishGateOutcome = params.kyc_status === 'EXPIRED'
-        ? 'BLOCKED_KYC_EXPIRED'
-        : 'BLOCKED_KYC_PENDING';
+      const outcome: PublishGateOutcome =
+        params.kyc_status === 'EXPIRED' ? 'BLOCKED_KYC_EXPIRED' : 'BLOCKED_KYC_PENDING';
 
       this.logger.warn('PublishGateService: blocked — KYC not verified', {
         content_id: params.content_id,

@@ -9,9 +9,9 @@ export class GratitudeService {
   };
 
   private delayIntervals = {
-    silver: 1000,  // 1 second
-    gold: 2000,    // 2 seconds
-    platinum: 3000  // 3 seconds
+    silver: 1000, // 1 second
+    gold: 2000, // 2 seconds
+    platinum: 3000, // 3 seconds
   };
 
   getCustomizableDelay(tier: string): number {

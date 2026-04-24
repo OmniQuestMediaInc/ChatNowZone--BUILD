@@ -13,12 +13,21 @@ import { NATS_TOPICS } from '../../../nats/topics.registry';
 
 // ISO 3166-1 alpha-2 jurisdiction codes in scope
 export type JurisdictionCode =
-  | 'CA' | 'CA-QC' | 'CA-ON'           // Canada + provinces
-  | 'US' | 'US-CA' | 'US-TX'           // USA + states
-  | 'DE' | 'FR' | 'IT' | 'ES'          // EU DSA member states
-  | 'CH' | 'GB'                         // Non-EU: Switzerland, UK
-  | 'AU' | 'NZ'                         // APAC
-  | string;                             // Forward-compat for unlisted codes
+  | 'CA'
+  | 'CA-QC'
+  | 'CA-ON' // Canada + provinces
+  | 'US'
+  | 'US-CA'
+  | 'US-TX' // USA + states
+  | 'DE'
+  | 'FR'
+  | 'IT'
+  | 'ES' // EU DSA member states
+  | 'CH'
+  | 'GB' // Non-EU: Switzerland, UK
+  | 'AU'
+  | 'NZ' // APAC
+  | string; // Forward-compat for unlisted codes
 
 export type EnforcementOutcome = 'BLOCK' | 'REDIRECT' | 'FEATURE_LIMIT' | 'ALLOW';
 
@@ -26,8 +35,8 @@ export interface JurisdictionRule {
   jurisdiction_code: JurisdictionCode;
   outcome: EnforcementOutcome;
   reason_code: string;
-  redirect_url?: string;              // Required when outcome is REDIRECT
-  feature_limits?: string[];          // Required when outcome is FEATURE_LIMIT
+  redirect_url?: string; // Required when outcome is REDIRECT
+  feature_limits?: string[]; // Required when outcome is FEATURE_LIMIT
   rule_applied_id: string;
   gdpr_cross_border_restricted: boolean;
   dsa_member_state: boolean;
@@ -48,7 +57,7 @@ export interface GeoFencingResult {
 
 // Jurisdiction rule registry — extend as regulatory scope expands
 const JURISDICTION_RULES: Partial<Record<JurisdictionCode, JurisdictionRule>> = {
-  'DE': {
+  DE: {
     jurisdiction_code: 'DE',
     outcome: 'FEATURE_LIMIT',
     reason_code: 'DSA_DE_MEMBER_STATE_STRICT',
@@ -57,7 +66,7 @@ const JURISDICTION_RULES: Partial<Record<JurisdictionCode, JurisdictionRule>> = 
     gdpr_cross_border_restricted: true,
     dsa_member_state: true,
   },
-  'CH': {
+  CH: {
     jurisdiction_code: 'CH',
     outcome: 'FEATURE_LIMIT',
     reason_code: 'GDPR_NON_EU_CROSS_BORDER',
@@ -84,13 +93,16 @@ export class GeoFencingService {
 
   // Per-account override store (in-memory — DB migration tracked separately)
   // TODO: GEO-OVERRIDE-DB — migrate to DB-backed store before go-live
-  private readonly overrides = new Map<string, {
-    jurisdiction_code: JurisdictionCode;
-    outcome: EnforcementOutcome;
-    actor_id: string;
-    applied_at_utc: string;
-    reason_code: string;
-  }>();
+  private readonly overrides = new Map<
+    string,
+    {
+      jurisdiction_code: JurisdictionCode;
+      outcome: EnforcementOutcome;
+      actor_id: string;
+      applied_at_utc: string;
+      reason_code: string;
+    }
+  >();
 
   constructor(private readonly nats: NatsService) {}
 
@@ -101,10 +113,7 @@ export class GeoFencingService {
    * Returns ALLOW if no rule applies.
    * COMPLIANCE override must be asserted by caller before calling applyOverride().
    */
-  evaluate(params: {
-    account_id: string;
-    jurisdiction_code: JurisdictionCode;
-  }): GeoFencingResult {
+  evaluate(params: { account_id: string; jurisdiction_code: JurisdictionCode }): GeoFencingResult {
     const now = new Date().toISOString();
 
     // 1. Check per-account override first

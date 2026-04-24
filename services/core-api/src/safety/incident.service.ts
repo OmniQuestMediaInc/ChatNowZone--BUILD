@@ -12,8 +12,8 @@ export type IncidentStatus = 'OPEN' | 'UNDER_REVIEW' | 'ACTIONED' | 'CLOSED';
 export type IncidentSeverity = 'SEV1' | 'SEV2' | 'SEV3';
 export type IncidentAssignedRole = 'MODERATOR' | 'COMPLIANCE' | 'ADMIN';
 export type IncidentCategory =
-  | 'NCII'          // Non-consensual intimate imagery — 48h SLA (TAKE IT DOWN Act)
-  | 'CSAM'          // Child sexual abuse material — immediate SEV1
+  | 'NCII' // Non-consensual intimate imagery — 48h SLA (TAKE IT DOWN Act)
+  | 'CSAM' // Child sexual abuse material — immediate SEV1
   | 'HATE_SPEECH'
   | 'VIOLENCE'
   | 'FRAUD'
@@ -22,8 +22,8 @@ export type IncidentCategory =
 
 // SLA window in milliseconds for categories requiring timed removal
 const SLA_WINDOWS_MS: Partial<Record<IncidentCategory, number>> = {
-  NCII: 48 * 60 * 60 * 1000,   // 48 hours — TAKE IT DOWN Act, FTC enforced, effective May 2026
-  CSAM: 0,                      // Immediate — no window, block on creation
+  NCII: 48 * 60 * 60 * 1000, // 48 hours — TAKE IT DOWN Act, FTC enforced, effective May 2026
+  CSAM: 0, // Immediate — no window, block on creation
 };
 
 export interface Incident {
@@ -37,7 +37,7 @@ export interface Incident {
   evidence_hash: string | null;
   reason_code: string;
   resolution_summary: string | null;
-  sla_deadline_utc: string | null;  // null for non-SLA categories; set at creation for NCII/CSAM
+  sla_deadline_utc: string | null; // null for non-SLA categories; set at creation for NCII/CSAM
   created_at_utc: string;
   updated_at_utc: string;
   closed_at_utc: string | null;
@@ -46,10 +46,10 @@ export interface Incident {
 
 // Valid lifecycle transitions — enforced as allow-list
 const VALID_TRANSITIONS: Record<IncidentStatus, IncidentStatus[]> = {
-  OPEN:         ['UNDER_REVIEW'],
+  OPEN: ['UNDER_REVIEW'],
   UNDER_REVIEW: ['ACTIONED'],
-  ACTIONED:     ['CLOSED'],
-  CLOSED:       [],
+  ACTIONED: ['CLOSED'],
+  CLOSED: [],
 };
 
 // Minimum role required to transition by severity
