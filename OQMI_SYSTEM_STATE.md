@@ -1,7 +1,18 @@
 # OQMI System State — Backlog Snapshot
 
-**Snapshot date:** 2026-04-24 (PAYLOAD 6 — Immutable Audit + RBAC + Compliance Lockdown)
-**Branch of record:** `claude/audit-rbac-compliance-XkEk9`
+## BUILD COMPLETE
+
+> **ChatNow.Zone — Core Build COMPLETE (Alpha Launch Ready — September 2026 Target)**
+> Payloads 1–9 executed. Infrastructure, finance, compliance, creator tooling,
+> and deployment readiness scaffolding are complete. Remaining NEEDS_DIRECTIVE
+> items (Wave B–H of CNZ-WORK-001) are tracked in `docs/REQUIREMENTS_MASTER.md`
+> and `docs/PRE_LAUNCH_CHECKLIST.md`. Launch go/no-go requires CEO clearance
+> per `PROGRAM_CONTROL/CLEARANCES/`. See `PROGRAM_CONTROL/LAUNCH_MANIFEST.md`.
+
+---
+
+**Snapshot date:** 2026-04-24 (PAYLOAD 9 — Deployment Readiness + Full System Consolidation + Launch Prep)
+**Branch of record:** `copilot/infra-deployment-readiness`
 **Authority:** OmniQuest Media Inc. — OQMI_GOVERNANCE.md (Canonical Corpus v10)
 
 > This file is a **periodic snapshot** of program state. It is generated
@@ -77,15 +88,21 @@ H-LAUNCH-READY sign-off directive):
 | OBS Broadcast Kernel | D004 | NEEDS_DIRECTIVE |
 | FairPay + NOWPayouts | D006, E002 | NEEDS_DIRECTIVE |
 | RedBook | E001 | NEEDS_DIRECTIVE |
-| Compliance Stack | D008 | NEEDS_DIRECTIVE |
-| GateGuard Sentinel | E003 | NEEDS_DIRECTIVE |
+| Compliance Stack | D008 | DONE (scaffold) — Immutable Audit + WORM + Legal Hold + Sovereign CaC |
+| GateGuard Sentinel | E003 | DONE (scaffold) — Middleware + Welfare Scorer + AV check topics; LOI + federated lookup NEEDS_DIRECTIVE |
 | Room-Heat Engine | PAYLOAD 5 | DONE (scaffold) — deterministic tier computation + NATS emission, persistence NEEDS_DIRECTIVE |
 | CreatorControl.Zone | PAYLOAD 5 | DONE (scaffold) — Broadcast Timing + Session Monitoring copilots, single-pane snapshot; frontend NEEDS_DIRECTIVE |
 | Cyrano Layer 1 | PAYLOAD 5 | DONE (scaffold) — 8-category whisper engine, memory, personas, latency SLO; Layer 2 (LLM + Prisma memory) NEEDS_DIRECTIVE |
-| Integration Hub | PAYLOAD 5 | DONE (scaffold) — Ledger↔GateGuard, Recovery↔Diamond Concierge, Room-Heat↔CreatorControl+Cyrano handoffs |
+| Integration Hub | PAYLOAD 5–9 | DONE — Ledger↔GateGuard, Recovery↔Diamond Concierge, Room-Heat↔CreatorControl+Cyrano handoffs |
 | Black-Glass Interface | G101+ | NEEDS_DIRECTIVE |
 | Banned-entity residual purge | C001 (§12) | DONE — purge/redact sweep completed 2026-04-24 |
 | Immutable Audit Architecture | PAYLOAD-6 | DONE — hash-chain + WORM export + Canonical Compliance Checklist |
+| docker-compose.yml (all modules) | PAYLOAD-9 | DONE — all service env vars + streaming SFU scaffold |
+| deploy.yml (CI/CD pipeline) | PAYLOAD-9 | DONE — install → Prisma migrate → build → health check |
+| Pre-Launch Checklist | PAYLOAD-9 | DONE — `docs/PRE_LAUNCH_CHECKLIST.md` (9 gates) |
+| Architecture Overview | PAYLOAD-9 | DONE — `docs/ARCHITECTURE_OVERVIEW.md` |
+| Launch Manifest | PAYLOAD-9 | DONE — `PROGRAM_CONTROL/LAUNCH_MANIFEST.md` (Pixel Legacy + Mic Drop + Rate Lock + LOI stub) |
+| pixel_legacy rate-lock table | FIZ-scoped | NEEDS_DIRECTIVE — schema migration + cohort-counter service |
 
 ---
 

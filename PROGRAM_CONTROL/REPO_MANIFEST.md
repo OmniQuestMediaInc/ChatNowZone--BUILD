@@ -22,6 +22,7 @@ Auto-generated on every push. Do not edit manually.
 - `.github/workflows/ci.yml`
 - `.github/workflows/codeql.yml`
 - `.github/workflows/copilot-setup-steps.yml`
+- `.github/workflows/deploy.yml`
 - `.github/workflows/directive-dispatch.yml`
 - `.github/workflows/directive-intake.yml`
 - `.github/workflows/harvest-oss-refs.yml`
@@ -84,6 +85,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Lift-From-Index.md`
 - `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OSS-Repo-Registry.md`
+- `PROGRAM_CONTROL/LAUNCH_MANIFEST.md`
 - `PROGRAM_CONTROL/REPORT_BACK/.gitkeep`
 - `PROGRAM_CONTROL/REPORT_BACK/ADD-CLEARANCE-CONFIRMATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/AUDIT-001-AUDIT-CHAIN-SERVICE.md`
@@ -247,11 +249,13 @@ Auto-generated on every push. Do not edit manually.
 - `archive/LEGACY_CONFIGS_2026-04/package.json`
 - `archive/LEGACY_CONFIGS_2026-04/tsconfig.json`
 - `docker-compose.yml`
+- `docs/ARCHITECTURE_OVERVIEW.md`
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/CANONICAL_COMPLIANCE_CHECKLIST.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
 - `docs/DOMAIN_GLOSSARY.md`
 - `docs/MEMBERSHIP_LIFECYCLE_POLICY.md`
+- `docs/PRE_LAUNCH_CHECKLIST.md`
 - `docs/REQUIREMENTS_MASTER.md`
 - `docs/ROADMAP_MANIFEST.md`
 - `docs/RRR_CEO_DECISIONS_FINAL_2026-04-17.md`
