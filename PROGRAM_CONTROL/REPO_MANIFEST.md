@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `claude/integrate-creatorcontrol-cyrano-U0E1u`
-**Commit:** `e7851dc2eea2025ee08e3ecc301d06b0546aabf3`
-**Generated:** 2026-04-24T17:58:00Z
+**Commit:** `b6716e5a1e7f4ad1bf72bb170ccc87f11167a18a`
+**Generated:** 2026-04-24T18:02:57Z
 
 ## All Files
 
@@ -472,6 +472,7 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/gateguard-middleware.spec.ts`
 - `tests/integration/gateguard-scorer.spec.ts`
 - `tests/integration/gateguard-service.spec.ts`
+- `tests/integration/immutable-audit-service.spec.ts`
 - `tests/integration/integration-hub.spec.ts`
 - `tests/integration/ledger-service.spec.ts`
 - `tests/integration/notification-engine.spec.ts`
