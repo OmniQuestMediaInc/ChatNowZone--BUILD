@@ -86,7 +86,7 @@ export interface ExpirationDistribution {
 export interface WalletSnapshot {
   wallet_id: string;
   user_id: string;
-  tier: 'DAY_PASS' | 'ANNUAL' | 'OMNIPASS_PLUS' | 'DIAMOND' | string;
+  tier: 'GUEST' | 'VIP' | 'VIP_SILVER' | 'VIP_GOLD' | 'VIP_PLATINUM' | 'VIP_DIAMOND' | string;
   remaining_balance_tokens: bigint;
   remaining_balance_usd_cents: bigint;
   expires_at_utc: string;

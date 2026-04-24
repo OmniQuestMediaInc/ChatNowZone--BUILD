@@ -1,3 +1,17 @@
+## CHATNOW.ZONE BUILD STATUS
+
+**Date:** April 24, 2026
+**Status:** BUILD COMPLETE — CANONICAL COMPLIANT (Alpha Launch Ready)
+
+All L0 ship-gates closed per Canonical Corpus v10 + REDBOOK + Business Plan v2.8.
+Payloads 1–10 executed and verified.
+Retired tier alignment complete: `DAY_PASS`, `ANNUAL` (as tier), `OMNIPASS_PLUS`, and standalone `DIAMOND`
+replaced with canonical `GUEST` / `VIP` / `VIP_SILVER` / `VIP_GOLD` / `VIP_PLATINUM` / `VIP_DIAMOND`
+across `ZONE_MAP`, `ZONE_ACCESS_TIERS`, `MEMBERSHIP.STIPEND_CZT`, `MembershipService`,
+`ZoneAccessService`, `RecoveryTypes`, `DiamondConciergeService`, and all integration tests.
+
+---
+
 # OQMI System State — Backlog Snapshot
 
 ## BUILD COMPLETE

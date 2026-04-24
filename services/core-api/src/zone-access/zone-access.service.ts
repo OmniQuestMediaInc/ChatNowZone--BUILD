@@ -115,7 +115,7 @@ export class ZoneAccessService {
 
   /**
    * Resolve user's current membership tier via MembershipService (MEMB-002).
-   * Returns DAY_PASS if no active subscription exists.
+   * Returns GUEST if no active subscription exists.
    */
   async resolveUserTier(userId: string): Promise<ZoneAccessTier> {
     return this.membershipService.getActiveTier(userId);
