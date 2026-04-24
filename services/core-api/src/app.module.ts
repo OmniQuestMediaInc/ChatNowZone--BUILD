@@ -24,11 +24,14 @@ import { ZoneAccessModule } from './zone-access/zone-access.module';
 import { MembershipModule } from './membership/membership.module';
 import { GateGuardModule } from './gateguard/gateguard.module';
 import { GateGuardMiddleware } from './gateguard/gateguard.middleware';
+import { AuditModule } from './audit/audit.module';
+import { ThreeBucketSpendGuardMiddleware } from './finance/three-bucket-spend-guard.middleware';
 
 @Module({
   imports: [
     NatsModule, // FIRST — global module, must be registered before all others
     PrismaModule, // SECOND — global Prisma client
+    AuditModule, // THIRD — global ImmutableAuditService available everywhere
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST ?? 'localhost',
@@ -66,5 +69,12 @@ export class AppModule implements NestModule {
     consumer
       .apply(GateGuardMiddleware)
       .forRoutes('/purchase', '/spend', '/payout');
+
+    // PAYLOAD 6: Three-bucket spend-order guard runs after GateGuard on
+    // /spend routes. Final defence against a handler that tries to debit
+    // PURCHASED before MEMBERSHIP_ALLOCATION or PROMOTIONAL_BONUS.
+    consumer
+      .apply(ThreeBucketSpendGuardMiddleware)
+      .forRoutes('/spend');
   }
 }

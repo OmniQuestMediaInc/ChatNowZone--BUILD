@@ -1314,3 +1314,61 @@ model GateGuardLog {
   @@index([action, created_at])
   @@map("gateguard_logs")
 }
+
+// ── PAYLOAD 6: Immutable Audit Architecture ──────────────────────────────
+// Canonical Corpus v10, Chapter 7 §5 + Appendix D/H.
+// Append-only. Hash-chained. No UPDATE, no DELETE. Enforced at the service
+// layer (ImmutableAuditService) and, in production, by DB triggers.
+// Every row: hash_current = SHA-256(hash_prior || canonical(payload_hash)).
+// payload_hash itself is a SHA-256 of the redacted, canonicalised payload
+// so raw sensitive data never enters the ledger.
+
+model ImmutableAuditEvent {
+  event_id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  event_type      String   @db.VarChar(64)
+  // Correlation across spans of the same business flow (purchase, recovery,
+  // gateguard decision, cyrano suggestion, etc.). Unique to prevent double
+  // emission for the same business event.
+  correlation_id  String   @unique @db.VarChar(128)
+  actor_id        String   @db.VarChar(128)
+  actor_role      String   @db.VarChar(32)
+  reason_code     String   @db.VarChar(64)
+  // SHA-256 of canonical(redacted_payload). Never store raw PII or secrets.
+  payload_hash    String   @db.Char(64)
+  // Hash chain pointers — hash_prior is nullable ONLY for genesis row.
+  hash_prior      String?  @db.Char(64)
+  hash_current    String   @db.Char(64)
+  // Monotonic sequence number within the chain for O(1) prior lookup.
+  sequence_number BigInt   @unique
+  // Non-sensitive metadata (ids, codes, outcomes). Never raw payload fields.
+  metadata        Json?
+  rule_applied_id String   @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@index([event_type, created_at])
+  @@index([actor_id, event_type])
+  @@map("immutable_audit_events")
+}
+
+// Periodic WORM (Write-Once-Read-Many) export seals. Each row pins a
+// contiguous range of immutable_audit_events via first/last sequence numbers
+// and a hash_seal covering the ordered event IDs + timestamps. A failing
+// verify_integrity call is a P0 incident.
+model WormExportRecord {
+  export_id          String   @id @db.VarChar(128)
+  from_utc           DateTime @db.Timestamptz
+  to_utc             DateTime @db.Timestamptz
+  first_event_id     String   @db.Uuid
+  last_event_id      String   @db.Uuid
+  first_sequence     BigInt
+  last_sequence      BigInt
+  event_count        Int
+  hash_seal          String   @db.Char(64)
+  storage_uri        String?  @db.VarChar(512)
+  integrity_verified Boolean  @default(true)
+  rule_applied_id    String   @db.VarChar(100)
+  exported_at        DateTime @default(now()) @db.Timestamptz
+
+  @@index([exported_at])
+  @@map("worm_export_records")
+}

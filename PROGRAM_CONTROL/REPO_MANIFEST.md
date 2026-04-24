@@ -247,6 +247,7 @@ Auto-generated on every push. Do not edit manually.
 - `archive/LEGACY_CONFIGS_2026-04/tsconfig.json`
 - `docker-compose.yml`
 - `docs/AUDIT_CERTIFICATION_V1.md`
+- `docs/CANONICAL_COMPLIANCE_CHECKLIST.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
 - `docs/DOMAIN_GLOSSARY.md`
 - `docs/MEMBERSHIP_LIFECYCLE_POLICY.md`
@@ -275,6 +276,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260412000000_gz_scheduling_module/migration.sql`
 - `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
 - `prisma/migrations/20260424000000_add_canonical_financial_ledger/migration.sql`
+- `prisma/migrations/20260424120000_immutable_audit_architecture/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -307,11 +309,15 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/analytics/analytics.module.ts`
 - `services/core-api/src/analytics/heat-score.service.ts`
 - `services/core-api/src/app.module.ts`
+- `services/core-api/src/audit/audit-bridge.service.ts`
 - `services/core-api/src/audit/audit-dashboard.controller.ts`
 - `services/core-api/src/audit/audit-dashboard.service.ts`
 - `services/core-api/src/audit/audit.module.ts`
+- `services/core-api/src/audit/immutable-audit.controller.ts`
+- `services/core-api/src/audit/immutable-audit.service.ts`
 - `services/core-api/src/auth/auth.module.ts`
 - `services/core-api/src/auth/rbac.guard.ts`
+- `services/core-api/src/auth/rbac.service.ts`
 - `services/core-api/src/auth/step-up.service.ts`
 - `services/core-api/src/compliance/audit-chain.service.ts`
 - `services/core-api/src/compliance/compliance.module.ts`
@@ -344,6 +350,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/finance/ledger.module.ts`
 - `services/core-api/src/finance/ledger.service.ts`
 - `services/core-api/src/finance/ledger.types.ts`
+- `services/core-api/src/finance/three-bucket-spend-guard.middleware.ts`
 - `services/core-api/src/finance/tip.service.ts`
 - `services/core-api/src/finance/types/ledger.types.ts`
 - `services/core-api/src/games/game-engine.service.ts`
@@ -469,12 +476,14 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/ledger-service.spec.ts`
 - `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
+- `tests/integration/rbac-service.spec.ts`
 - `tests/integration/recovery-engine.spec.ts`
 - `tests/integration/recovery-service.spec.ts`
 - `tests/integration/redbook-rate-card.spec.ts`
 - `tests/integration/scheduling-service.spec.ts`
 - `tests/integration/seed-loader.ts`
 - `tests/integration/stat-holidays.spec.ts`
+- `tests/integration/three-bucket-spend-guard.spec.ts`
 - `tests/integration/zonebot-service.spec.ts`
 - `tests/seed_data/.gitkeep`
 - `tests/seed_data/admin_rules_TEST DATA.csv`
