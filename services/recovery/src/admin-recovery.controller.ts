@@ -66,7 +66,7 @@ export class AdminRecoveryController {
         user_id: c.user_id,
         tier: 'UNKNOWN',
         stage: c.stage,
-        balance_usd_cents: c.original_purchase_price_usd_cents.toString(),
+        balance_usd_cents: null,
         opened_at_utc: c.opened_at_utc,
         flags: c.flags,
       }));
