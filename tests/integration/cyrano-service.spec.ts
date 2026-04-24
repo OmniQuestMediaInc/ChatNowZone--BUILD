@@ -77,7 +77,7 @@ function makeService(clockMs = 1_000_000): {
 describe('CyranoService.selectCategory — phase gates', () => {
   it('OPENING phase always selects CAT_SESSION_OPEN', () => {
     const { svc } = makeService();
-    const out = svc.evaluate(frame({ phase: 'OPENING', heat: heat('BLAZING') }));
+    const out = svc.evaluate(frame({ phase: 'OPENING', heat: heat('INFERNO') }));
     expect(out?.category).toBe('CAT_SESSION_OPEN');
   });
 
@@ -89,9 +89,9 @@ describe('CyranoService.selectCategory — phase gates', () => {
 });
 
 describe('CyranoService.selectCategory — tier weighting', () => {
-  it('BLAZING tier selects monetization (highest tier weight = 95)', () => {
+  it('INFERNO tier selects monetization (highest tier weight = 95)', () => {
     const { svc } = makeService();
-    const out = svc.evaluate(frame({ phase: 'PEAK', heat: heat('BLAZING') }));
+    const out = svc.evaluate(frame({ phase: 'PEAK', heat: heat('INFERNO') }));
     expect(out?.category).toBe('CAT_MONETIZATION');
   });
 
@@ -114,10 +114,10 @@ describe('CyranoService.selectCategory — tier weighting', () => {
 });
 
 describe('CyranoService.computeWeight — modulators', () => {
-  it('BLAZING monetization with guest_has_tipped is boosted (+10)', () => {
+  it('INFERNO monetization with guest_has_tipped is boosted (+10)', () => {
     const { svc } = makeService();
     const out = svc.evaluate(
-      frame({ phase: 'PEAK', heat: heat('BLAZING'), guest_has_tipped: true }),
+      frame({ phase: 'PEAK', heat: heat('INFERNO'), guest_has_tipped: true }),
     );
     // Base 95 + 10 = 105 → clamped to 100.
     expect(out?.category).toBe('CAT_MONETIZATION');
@@ -170,7 +170,7 @@ describe('CyranoService — memory + persona integration', () => {
       active: true,
     });
     personas.activateForSession({ session_id: 'sess-1', creator_id: 'creator-1', persona_id: 'p1' });
-    const out = svc.evaluate(frame({ phase: 'PEAK', heat: heat('BLAZING') }));
+    const out = svc.evaluate(frame({ phase: 'PEAK', heat: heat('INFERNO') }));
     expect(out?.copy).toContain('[playful_dominant]');
     expect(out?.persona_id).toBe('p1');
   });
@@ -185,7 +185,7 @@ describe('CyranoService — latency SLO', () => {
     const svcAny = svc as any;
     // Tick the internal clock ~5s forward before the eval call resolves.
     advance(CYRANO_LATENCY.HARD_CUTOFF_MS + 500);
-    const result = svcAny.evaluate(frame({ phase: 'PEAK', heat: heat('BLAZING') }), t0);
+    const result = svcAny.evaluate(frame({ phase: 'PEAK', heat: heat('INFERNO') }), t0);
     expect(result).toBeNull();
     const drop = published.find((p) => p.topic === NATS_TOPICS.CYRANO_SUGGESTION_DROPPED);
     expect(drop).toBeDefined();
@@ -194,7 +194,7 @@ describe('CyranoService — latency SLO', () => {
 
   it('emits on CYRANO_SUGGESTION_EMITTED when within the SLO', () => {
     const { svc, published } = makeService();
-    svc.evaluate(frame({ phase: 'PEAK', heat: heat('BLAZING') }));
+    svc.evaluate(frame({ phase: 'PEAK', heat: heat('INFERNO') }));
     const emitted = published.find((p) => p.topic === NATS_TOPICS.CYRANO_SUGGESTION_EMITTED);
     expect(emitted).toBeDefined();
     expect(emitted?.payload.category).toBe('CAT_MONETIZATION');

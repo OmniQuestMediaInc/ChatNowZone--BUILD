@@ -14,7 +14,7 @@ import { NATS_TOPICS } from '../../nats/topics.registry';
 
 export const ROOM_HEAT_RULE_ID = 'ROOM_HEAT_ENGINE_v1';
 
-export type HeatTier = 'COLD' | 'WARM' | 'HOT' | 'BLAZING';
+export type HeatTier = 'COLD' | 'WARM' | 'HOT' | 'INFERNO';
 
 export interface RoomHeatSample {
   session_id: string;
@@ -41,12 +41,13 @@ export interface HeatScore {
   rule_applied_id: string;
 }
 
-// Tier thresholds — deterministic bands over the composite score.
-// Spec: Business Plan B.4 §4.2 (room-heat tier mapping).
+// Tier thresholds — canonical bands locked in GovernanceConfig.HEAT_BAND_* constants.
+// COLD 0–33, WARM 34–60, HOT 61–85, INFERNO 86–100.
+// Source of truth: GovernanceConfig (governance.config.ts) + DOMAIN_GLOSSARY.md.
 const TIER_THRESHOLDS: Array<{ min: number; tier: HeatTier }> = [
-  { min: 75, tier: 'BLAZING' },
-  { min: 50, tier: 'HOT' },
-  { min: 25, tier: 'WARM' },
+  { min: 86, tier: 'INFERNO' },
+  { min: 61, tier: 'HOT' },
+  { min: 34, tier: 'WARM' },
   { min: 0,  tier: 'COLD' },
 ];
 
@@ -110,7 +111,7 @@ export class RoomHeatEngine {
       });
     }
 
-    if (score.tier === 'BLAZING') {
+    if (score.tier === 'INFERNO') {
       this.nats.publish(NATS_TOPICS.ROOM_HEAT_PEAK, {
         session_id: sample.session_id,
         creator_id: sample.creator_id,

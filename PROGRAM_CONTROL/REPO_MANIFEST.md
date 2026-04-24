@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/infra-deployment-readiness`
-**Commit:** `f7c154835e95ebd21d55f1ce7657659441a06a48`
-**Generated:** 2026-04-24T18:54:24Z
+**Branch:** `copilot/update-rebbook-business-plan`
+**Commit:** `97017fbc938bfd95b3bf2a62d9705665cc8da3cc`
+**Generated:** 2026-04-24T19:14:12Z
 
 ## All Files
 
@@ -168,6 +168,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/OBS-001-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-001-CANONICAL-LEDGER-REPORT-BACK.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-10-ALIGNMENT-SWEEP.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-2-REDBOOK-RECOVERY-DASHBOARD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-3-GATEGUARD-SENTINEL-PREPROCESSOR.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`

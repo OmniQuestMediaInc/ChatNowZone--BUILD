@@ -43,7 +43,7 @@ export enum StudioFeeType {
 
 // ─── DIAMOND TIER PRICING ────────────────────────────────────────────────────
 export const DIAMOND_TIER = {
-  PAYOUT_RATE_PER_TOKEN: 0.075, // USD — creator payout floor for Diamond
+  PAYOUT_RATE_PER_TOKEN: 0.075, // USD — standard minimum creator payout (cold-band rate, RATE_COLD); see GovernanceConfig.RATE_DIAMOND_FLOOR (0.080) for the 10K+ bulk Diamond floor
   PLATFORM_FLOOR_PER_TOKEN: 0.077, // USD — minimum platform price (wee profit)
   EXCHANGE_COST_DIAMOND_PCT: 0.0, // Diamond conversion is fee-free
   EXTENSION_FEE_14_DAY_USD: 49.0, // 14-day token expiry extension
@@ -367,7 +367,7 @@ export const PLATFORM_GLOBAL = {
 
 // ─── MERCHANDISE CONFIG (CEO-DECISIONS-2026-04-12) ────────────────────────────
 export const MERCHANDISE_CONFIG = {
-  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN', // ShowTokens rejected at checkout — no exceptions
+  ACCEPTED_TOKEN_TYPE: 'CZT', // ShowTokens rejected at checkout — no exceptions
   CREATOR_PAYOUT_PER_TOKEN_USD: 0.075, // $0.075 USD per ChatToken — locked 2026-04-12
   DISPUTE_HOLD_TRIGGER: 'IMMEDIATE', // Hold applied on ticket creation
   DISPUTE_CREATOR_WINDOW_HOURS: 72, // 72h (3 business days) to resolve
@@ -395,7 +395,7 @@ export const CONCIERGE_APPT = {
 
 // ─── FAN CLUB (CEO-DECISIONS-2026-04-12-B) ────────────────────────────────────
 export const FAN_CLUB = {
-  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN', // ShowTokens not accepted
+  ACCEPTED_TOKEN_TYPE: 'CZT', // ShowTokens not accepted
   BILLING_CYCLES: ['MONTHLY', 'ANNUAL'] as const,
   ANNUAL_DISCOUNT_PCT: null, // TBD — pending CEO confirmation
   // Fan club fee applies PLATFORM_GLOBAL.MARKETPLACE_FEE_PCT (18%) — no separate constant.
@@ -475,7 +475,7 @@ export const REDBOOK_RATE_CARDS = {
 
 // ─── RECOVERY ENGINE — Unified Customer Service (REDBOOK §5) ─────────────────
 // Drives Recovery Engine workflows in services/ledger/recovery.service.ts.
-// Revisions require CS: commit + CEO sign-off.
+// Revisions require REDBOOK: commit + CEO sign-off.
 export const RECOVERY_ENGINE = {
   // Diamond tokens expire 14 days from issuance (unless extended).
   DIAMOND_EXPIRY_DAYS: 14,
