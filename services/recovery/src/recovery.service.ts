@@ -146,12 +146,8 @@ export class RecoveryEngine {
     const caseRecord = this.requireCase(case_id);
     this.requireStage(caseRecord, ['OPEN', 'THREE_FIFTHS_EXIT_POLICY_GATED']);
 
-    const bonus_tokens = BigInt(
-      Math.floor(
-        Number(caseRecord.remaining_balance_tokens) *
-          RECOVERY_CONSTANTS.TOKEN_BRIDGE_BONUS_PCT,
-      ),
-    );
+    const bonus_tokens =
+      (caseRecord.remaining_balance_tokens * 20n) / 100n;
 
     const offer_expires_at_utc = new Date(
       Date.now() +
