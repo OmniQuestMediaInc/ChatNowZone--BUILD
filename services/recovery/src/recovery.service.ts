@@ -367,6 +367,14 @@ export class RecoveryEngine {
     const nowMs = now_utc.getTime();
     const cutoff = nowMs + windowMs;
 
+    // Prune stale dedup entries (older than one window) to bound memory growth.
+    const staleThreshold = nowMs - windowMs;
+    for (const [id, ts] of this.warnedWallets) {
+      if (ts < staleThreshold) {
+        this.warnedWallets.delete(id);
+      }
+    }
+
     // Deduplicate input by wallet_id — first occurrence wins.
     const seenIds = new Set<string>();
     const unique = diamondWallets.filter((w) => {
