@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/financial-ledger-wallets-FrUdF`
-**Commit:** `757b32cfc66d9e0be841e862d4874860e61f4f80`
-**Generated:** 2026-04-24T17:33:19Z
+**Branch:** `claude/integrate-creatorcontrol-cyrano-U0E1u`
+**Commit:** `e7851dc2eea2025ee08e3ecc301d06b0546aabf3`
+**Generated:** 2026-04-24T17:58:00Z
 
 ## All Files
 
@@ -167,6 +167,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/PAY-RATES-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-001-CANONICAL-LEDGER-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-2-REDBOOK-RECOVERY-DASHBOARD.md`
+- `PROGRAM_CONTROL/REPORT_BACK/PAYLOAD-3-GATEGUARD-SENTINEL-PREPROCESSOR.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-001-SCHEMA-GENERATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PRISMA-002-SUPPRESSION-DB-MIGRATION.md`
 - `PROGRAM_CONTROL/REPORT_BACK/PROC-001-REPORT-BACK.md`
@@ -398,8 +399,20 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/zone-access/zone-access.module.ts`
 - `services/core-api/src/zone-access/zone-access.service.ts`
 - `services/core-api/tsconfig.json`
+- `services/creator-control/src/broadcast-timing.copilot.ts`
+- `services/creator-control/src/creator-control.module.ts`
+- `services/creator-control/src/creator-control.service.ts`
+- `services/creator-control/src/room-heat.engine.ts`
+- `services/creator-control/src/session-monitoring.copilot.ts`
+- `services/cyrano/src/cyrano.module.ts`
+- `services/cyrano/src/cyrano.service.ts`
+- `services/cyrano/src/cyrano.types.ts`
+- `services/cyrano/src/persona.manager.ts`
+- `services/cyrano/src/session-memory.store.ts`
 - `services/diamond-concierge/src/diamond-concierge.module.ts`
 - `services/diamond-concierge/src/diamond.service.ts`
+- `services/integration-hub/src/hub.module.ts`
+- `services/integration-hub/src/hub.service.ts`
 - `services/ledger/index.ts`
 - `services/ledger/ledger.service.ts`
 - `services/ledger/payout.service.ts`
@@ -446,9 +459,13 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
+- `tests/integration/creator-control-service.spec.ts`
+- `tests/integration/cyrano-service.spec.ts`
+- `tests/integration/diamond-concierge-service.spec.ts`
 - `tests/integration/gateguard-middleware.spec.ts`
 - `tests/integration/gateguard-scorer.spec.ts`
 - `tests/integration/gateguard-service.spec.ts`
+- `tests/integration/integration-hub.spec.ts`
 - `tests/integration/ledger-service.spec.ts`
 - `tests/integration/notification-engine.spec.ts`
 - `tests/integration/purchase-hours-gate.spec.ts`
@@ -471,5 +488,6 @@ Auto-generated on every push. Do not edit manually.
 - `tests/seed_data/transactions_TEST DATA.csv`
 - `tests/seed_data/wallets_TEST DATA.csv`
 - `tsconfig.json`
+- `ui/types/creator-control-contracts.ts`
 - `ui/types/finance-contracts.ts`
 - `yarn.lock`
