@@ -167,6 +167,26 @@ export const NATS_TOPICS = {
   GATEGUARD_AV_CHECK_RETURNED:       'gateguard.av.check_returned',
   GATEGUARD_FEDERATED_LOOKUP:        'gateguard.federated.lookup',
   GATEGUARD_HUMAN_CONTACT_ZONE:      'gateguard.human_contact_zone.escalated',
+
+  // ── Room-Heat Engine (Business Plan B.4 — room-level telemetry) ──────────
+  ROOM_HEAT_SAMPLE:                  'room.heat.sample',
+  ROOM_HEAT_TIER_CHANGED:            'room.heat.tier.changed',
+  ROOM_HEAT_PEAK:                    'room.heat.peak',
+
+  // ── CreatorControl.Zone (Business Plan B.3 — creator workstation) ────────
+  CREATOR_CONTROL_BROADCAST_SUGGESTION: 'creator_control.broadcast.suggestion',
+  CREATOR_CONTROL_SESSION_SUGGESTION:   'creator_control.session.suggestion',
+  CREATOR_CONTROL_PRICE_NUDGE:          'creator_control.price.nudge',
+
+  // ── Cyrano Layer 1 (Business Plan B.3.5 — whisper copilot) ───────────────
+  CYRANO_SUGGESTION_EMITTED:         'cyrano.suggestion.emitted',
+  CYRANO_SUGGESTION_DROPPED:         'cyrano.suggestion.dropped',
+  CYRANO_MEMORY_UPDATED:             'cyrano.memory.updated',
+
+  // ── Integration Hub (Business Plan B.3 + B.4 — cross-service wiring) ─────
+  HUB_HIGH_HEAT_MONETIZATION:        'hub.high_heat.monetization',
+  HUB_PAYOUT_SCALING_APPLIED:        'hub.payout.scaling_applied',
+  HUB_DIAMOND_CONCIERGE_HANDOFF:     'hub.diamond_concierge.handoff',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];
