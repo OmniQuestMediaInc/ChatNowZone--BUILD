@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/integrate-creatorcontrol-cyrano-U0E1u`
-**Commit:** `b6716e5a1e7f4ad1bf72bb170ccc87f11167a18a`
-**Generated:** 2026-04-24T18:02:57Z
+**Branch:** `claude/frontend-polish-concierge-ui-mlqrR`
+**Commit:** `6884b262173f70568fa50e56945a26e30359dcb3`
+**Generated:** 2026-04-25T06:29:19Z
 
 ## All Files
 
@@ -219,6 +219,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/fix-yarn-lockfile-ci.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
+- `PROGRAM_CONTROL/ship-gate-verifier.ts`
 - `README.md`
 - `REFERENCE_LIBRARY/00_THREAD_BOOTSTRAP.md`
 - `REFERENCE_LIBRARY/01_CANONICAL_LOCKS.md`
@@ -246,11 +247,13 @@ Auto-generated on every push. Do not edit manually.
 - `archive/LEGACY_CONFIGS_2026-04/package.json`
 - `archive/LEGACY_CONFIGS_2026-04/tsconfig.json`
 - `docker-compose.yml`
+- `docs/ARCHITECTURE_OVERVIEW.md`
 - `docs/AUDIT_CERTIFICATION_V1.md`
 - `docs/CANONICAL_COMPLIANCE_CHECKLIST.md`
 - `docs/DIRECTIVE_TEMPLATE.md`
 - `docs/DOMAIN_GLOSSARY.md`
 - `docs/MEMBERSHIP_LIFECYCLE_POLICY.md`
+- `docs/PRE_LAUNCH_CHECKLIST.md`
 - `docs/REQUIREMENTS_MASTER.md`
 - `docs/ROADMAP_MANIFEST.md`
 - `docs/RRR_CEO_DECISIONS_FINAL_2026-04-17.md`
@@ -463,6 +466,13 @@ Auto-generated on every push. Do not edit manually.
 - `services/zone-gpt/src/zone-gpt.module.js`
 - `services/zone-gpt/src/zone-gpt.module.js.map`
 - `services/zone-gpt/src/zone-gpt.module.ts`
+- `tests/e2e/audit-chain-replay.spec.ts`
+- `tests/e2e/diamond-recovery-flows.spec.ts`
+- `tests/e2e/full-token-purchase-flow.spec.ts`
+- `tests/e2e/high-heat-cyrano-payout-flow.spec.ts`
+- `tests/e2e/rbac-step-up-enforcement.spec.ts`
+- `tests/e2e/ship-gate-verifier.spec.ts`
+- `tests/e2e/ui-presenters.spec.ts`
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
@@ -498,6 +508,23 @@ Auto-generated on every push. Do not edit manually.
 - `tests/seed_data/transactions_TEST DATA.csv`
 - `tests/seed_data/wallets_TEST DATA.csv`
 - `tsconfig.json`
+- `ui/app/admin/diamond/page.ts`
+- `ui/app/admin/recovery/page.ts`
+- `ui/app/creator/control/page.ts`
+- `ui/app/diamond/purchase/page.ts`
+- `ui/app/tokens/page.ts`
+- `ui/app/wallet/page.ts`
+- `ui/components/render-plan.ts`
+- `ui/config/accessibility.ts`
+- `ui/config/build-config.ts`
+- `ui/config/seo.ts`
+- `ui/config/theme.ts`
+- `ui/types/admin-diamond-contracts.ts`
 - `ui/types/creator-control-contracts.ts`
+- `ui/types/creator-panel-contracts.ts`
 - `ui/types/finance-contracts.ts`
+- `ui/types/public-wallet-contracts.ts`
+- `ui/view-models/creator-control.presenter.ts`
+- `ui/view-models/diamond-concierge.presenter.ts`
+- `ui/view-models/public-wallet.presenter.ts`
 - `yarn.lock`
