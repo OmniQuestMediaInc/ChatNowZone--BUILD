@@ -1421,6 +1421,8 @@ model RoomHeatAdaptiveWeights {
   created_at      DateTime @default(now()) @db.Timestamptz
 
   @@map("room_heat_adaptive_weights")
+}
+
 // ── HeartSync + Guest-Heat models ────────────────────────────────────────
 
 // Per-tier on/off toggle for HeartSync biometric relay.
