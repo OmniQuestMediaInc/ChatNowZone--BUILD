@@ -75,9 +75,12 @@ export class ZonebotSchedulingService {
           continue;
         }
 
-        const startHour = 7 + (staggerIndex % 4) * HCZ.STAGGER_OFFSET_MINS / 60;
+        const staggerSlot = staggerIndex % 4;
+        const staggerMinutes = staggerSlot * HCZ.STAGGER_OFFSET_MINS;
+        const startHour = 7 + Math.floor(staggerMinutes / 60);
+        const startMin = staggerMinutes % 60;
         const startUtc = new Date(shiftDate);
-        startUtc.setUTCHours(startHour, (staggerIndex % 4) * HCZ.STAGGER_OFFSET_MINS % 60, 0, 0);
+        startUtc.setUTCHours(startHour, startMin, 0, 0);
         const endUtc = new Date(startUtc.getTime() + 8.75 * 3_600_000);
 
         const breakStartUtc = new Date(startUtc.getTime() + 4 * 3_600_000);
@@ -178,13 +181,26 @@ export class ZonebotSchedulingService {
         }
       }
 
-      // 6-consecutive-day check
-      if (sorted.length > HCZ.MAX_CONSECUTIVE_DAYS) {
+      // 6-consecutive-day check — count actual consecutive runs
+      let maxRun = 0;
+      let run = 1;
+      for (let i = 1; i < sorted.length; i++) {
+        const prevDate = new Date(sorted[i - 1].shiftDate).getTime();
+        const currDate = new Date(sorted[i].shiftDate).getTime();
+        if (currDate - prevDate === 86_400_000) {
+          run++;
+          if (run > maxRun) maxRun = run;
+        } else {
+          run = 1;
+        }
+      }
+      if (sorted.length === 1) maxRun = 1;
+      if (maxRun > HCZ.MAX_CONSECUTIVE_DAYS) {
         violations.push({
-          type: 'MAX_CONSECUTIVE_6D',
+          type: 'EXCEEDS_MAX_CONSECUTIVE_DAYS',
           severity: 'ERROR',
           staffMemberId: staffId,
-          message: `${sorted.length} consecutive days scheduled — maximum is ${HCZ.MAX_CONSECUTIVE_DAYS}`,
+          message: `${maxRun} consecutive days scheduled — maximum is ${HCZ.MAX_CONSECUTIVE_DAYS}`,
         });
       }
     }
@@ -473,7 +489,9 @@ export class ZonebotSchedulingService {
       otMinutes += shift.overtimeMinutes;
     }
 
-    const hourlyRate = 18_00; // $18.00/h in cents — placeholder; real rate from StaffMember
+    // Fallback rate from environment; real per-staff rate should be sourced from StaffMember.hourly_rate_cad
+    // TODO: aggregate per-staff hourly_rate_cad for accurate forecast (ASSUMPTIONS.md A-009)
+    const hourlyRate = parseInt(process.env.HCZ_DEFAULT_HOURLY_RATE_CAD_CENTS ?? '1800', 10);
     const labourCents = Math.round(((ftMinutes + ptMinutes) / 60) * hourlyRate);
 
     return {

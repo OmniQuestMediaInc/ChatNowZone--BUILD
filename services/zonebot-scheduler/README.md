@@ -33,7 +33,7 @@ schema and Postgres instance.
 | Budget forecast (CAD cents, weekly) | WO-002 CEO spec |
 | Shift swap (bilateral, supervisor-approved) | WO-002 CEO spec |
 | Wellbeing pulse check-ins | WO-002 CEO spec |
-| Spin-wheel cash incentive ($50 CAD) | WO-002 CEO spec |
+| Spin-wheel cash incentive ($50 CAD) — ledger infrastructure ready; trigger logic pending CEO decision (see FLAGS.md FLAG-002) | WO-002 CEO spec |
 | Payroll export (REG/OT/STAT breakdown) | WO-002 CEO spec |
 | Hiring model (FT/PT gap projection) | WO-002 CEO spec |
 | 5 paid sick days / year (Ontario ESA) | WO-002 CEO spec |
