@@ -9,17 +9,17 @@ import {
   Post,
 } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { HeartSyncService } from './heartsync.service';
+import { SenSyncService } from './sensync.service';
 import type {
   HapticDriver,
-  HeartSyncCombinedBpm,
-  HeartSyncConsent,
-  HeartSyncMode,
-  HeartSyncRelayEvent,
-  HeartSyncSample,
-  HeartSyncSessionState,
+  SenSyncCombinedBpm,
+  SenSyncConsent,
+  SenSyncMode,
+  SenSyncRelayEvent,
+  SenSyncSample,
+  SenSyncSessionState,
   MembershipTier,
-} from './heartsync.types';
+} from './sensync.types';
 
 // ── REST DTOs ─────────────────────────────────────────────────────────────────
 
@@ -28,7 +28,7 @@ export interface OpenSessionDto {
   creator_id: string;
   guest_id: string;
   tier: MembershipTier;
-  mode: HeartSyncMode;
+  mode: SenSyncMode;
   driver: HapticDriver;
 }
 
@@ -63,15 +63,15 @@ export interface RefreshTierConfigDto {
 
 // ── Controller ────────────────────────────────────────────────────────────────
 
-@Controller('heartsync')
-export class HeartSyncController {
-  private readonly logger = new Logger(HeartSyncController.name);
+@Controller('sensync')
+export class SenSyncController {
+  private readonly logger = new Logger(SenSyncController.name);
 
-  constructor(private readonly heartSync: HeartSyncService) {}
+  constructor(private readonly heartSync: SenSyncService) {}
 
-  /** POST /heartsync/sessions */
+  /** POST /sensync/sessions */
   @Post('sessions')
-  openSession(@Body() dto: OpenSessionDto): HeartSyncSessionState | { error: string } {
+  openSession(@Body() dto: OpenSessionDto): SenSyncSessionState | { error: string } {
     const state = this.heartSync.openSession(
       dto.session_id,
       dto.creator_id,
@@ -81,14 +81,14 @@ export class HeartSyncController {
       dto.driver,
     );
     if (!state) {
-      return { error: 'HEARTSYNC_TIER_DISABLED_OR_COMBINED_NOT_PERMITTED' };
+      return { error: 'SENSYNC_TIER_DISABLED_OR_COMBINED_NOT_PERMITTED' };
     }
     return state;
   }
 
-  /** POST /heartsync/consent/grant */
+  /** POST /sensync/consent/grant */
   @Post('consent/grant')
-  grantConsent(@Body() dto: GrantConsentDto): HeartSyncConsent {
+  grantConsent(@Body() dto: GrantConsentDto): SenSyncConsent {
     return this.heartSync.grantConsent(
       dto.session_id,
       dto.guest_id,
@@ -98,17 +98,17 @@ export class HeartSyncController {
     );
   }
 
-  /** POST /heartsync/consent/revoke */
+  /** POST /sensync/consent/revoke */
   @Post('consent/revoke')
   revokeConsent(@Body() dto: RevokeConsentDto): { ok: true } {
     this.heartSync.revokeConsent(dto.session_id, dto.guest_id, dto.creator_id);
     return { ok: true };
   }
 
-  /** POST /heartsync/samples */
+  /** POST /sensync/samples */
   @Post('samples')
-  submitSample(@Body() dto: SubmitSampleDto): HeartSyncRelayEvent | HeartSyncCombinedBpm | { ok: false; reason: string } {
-    const sample: HeartSyncSample = {
+  submitSample(@Body() dto: SubmitSampleDto): SenSyncRelayEvent | SenSyncCombinedBpm | { ok: false; reason: string } {
+    const sample: SenSyncSample = {
       sample_id: randomUUID(),
       session_id: dto.session_id,
       creator_id: dto.creator_id,
@@ -128,16 +128,16 @@ export class HeartSyncController {
     return result;
   }
 
-  /** DELETE /heartsync/sessions/:session_id */
+  /** DELETE /sensync/sessions/:session_id */
   @Delete('sessions/:session_id')
   closeSession(@Param('session_id') session_id: string): { ok: true } {
     this.heartSync.closeSession(session_id);
     return { ok: true };
   }
 
-  /** GET /heartsync/sessions/:session_id */
+  /** GET /sensync/sessions/:session_id */
   @Get('sessions/:session_id')
-  getSession(@Param('session_id') session_id: string): HeartSyncSessionState | { error: string } {
+  getSession(@Param('session_id') session_id: string): SenSyncSessionState | { error: string } {
     const state = this.heartSync.getSessionState(session_id);
     if (!state) {
       return { error: 'SESSION_NOT_FOUND' };
@@ -145,7 +145,7 @@ export class HeartSyncController {
     return state;
   }
 
-  /** POST /heartsync/tier-config/refresh */
+  /** POST /sensync/tier-config/refresh */
   @Post('tier-config/refresh')
   async refreshTierConfig(@Body() _dto: RefreshTierConfigDto): Promise<{ ok: true }> {
     await this.heartSync.refreshTierConfig();

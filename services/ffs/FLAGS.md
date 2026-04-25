@@ -1,9 +1,9 @@
-# Room-Heat Engine — FLAGS
+# Flicker n'Flame Scoring (FFS) — FLAGS
 
 **Work Order:** WO-003  
 **Rule ID:** `ROOM_HEAT_ENGINE_v2`
 
-Feature flags and deferred capabilities for the Room-Heat Engine.
+Feature flags and deferred capabilities for the Flicker n'Flame Scoring (FFS).
 
 ---
 
@@ -31,5 +31,5 @@ Feature flags and deferred capabilities for the Room-Heat Engine.
 | `ROOM_HEAT_PERSISTENT_LEADERBOARD` | Post-launch requirement | Persist leaderboard state to `room_heat_leaderboard_entries` DB table for restart-safety. |
 | `ROOM_HEAT_REDIS_WINDOWS` | Volume scaling | Move rolling-window aggregations (tips/min, chat/min, hearts/min) from caller-provided inputs to Redis ZADD windows within the engine. |
 | `ROOM_HEAT_CYRANO_DIRECT_INJECT` | Cyrano L2 integration | Allow the engine to directly call `CyranoService.evaluate()` instead of emitting via NATS + Hub. |
-| `ROOM_HEAT_WEBHOOK_SNAPSHOT_EXPORT` | Compliance request | Export room_heat_snapshots to WORM storage on session end. |
+| `ROOM_HEAT_WEBHOOK_SNAPSHOT_EXPORT` | Compliance request | Export ffs_snapshots to WORM storage on session end. |
 | `ROOM_HEAT_ML_WEIGHTS` | ML pipeline ready | Replace static adaptive weight learning with an ML-trained model inference call. |

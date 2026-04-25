@@ -4,7 +4,7 @@
 // broadcast timing copilot, persona switcher, payout rate indicator.
 
 import type {
-  HeatTier,
+  FfsTier,
   HeatMeterFrame,
   PriceNudgeCard,
   BroadcastWindowRow,
@@ -14,7 +14,7 @@ import type {
 /** Payout rate indicator — live creator revenue per token. */
 export interface PayoutRateIndicator {
   creator_id: string;
-  tier_context: HeatTier;
+  tier_context: FfsTier;
   current_rate_per_token_usd: number;
   redbook_floor_per_token_usd: number; // 0.075
   redbook_ceiling_per_token_usd: number; // 0.090
@@ -26,7 +26,7 @@ export interface PayoutRateIndicator {
 /** Room-Heat meter (visual gauge). */
 export interface RoomHeatMeter {
   session_id: string;
-  tier: HeatTier;
+  tier: FfsTier;
   score: number; // 0..100
   components: {
     tipper_pressure: number; // 0..40
