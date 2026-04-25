@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/implement-full-heartsync-guestheat-cyrano`
-**Commit:** `c42d98c284e0a6f934b02e94feda5e4a1b098ca6`
-**Generated:** 2026-04-25T05:26:34Z
+**Branch:** `copilot/wo-003-room-heat-engine`
+**Commit:** `f65db10428dabbe2a46cf26dd80fec8b3338356b`
+**Generated:** 2026-04-25T05:36:28Z
 
 ## All Files
 
@@ -285,6 +285,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
 - `prisma/migrations/20260424000000_add_canonical_financial_ledger/migration.sql`
 - `prisma/migrations/20260424120000_immutable_audit_architecture/migration.sql`
+- `prisma/migrations/20260425000000_add_room_heat/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -474,6 +475,15 @@ Auto-generated on every push. Do not edit manually.
 - `services/rewards-api/src/white-label/partner-config.schema.ts`
 - `services/risk-engine/src/region-signal.service.ts`
 - `services/risk-engine/src/risk.module.ts`
+- `services/room-heat/.env.example`
+- `services/room-heat/ASSUMPTIONS.md`
+- `services/room-heat/FLAGS.md`
+- `services/room-heat/README.md`
+- `services/room-heat/src/dto/room-heat.dto.ts`
+- `services/room-heat/src/room-heat.controller.ts`
+- `services/room-heat/src/room-heat.module.ts`
+- `services/room-heat/src/room-heat.service.ts`
+- `services/room-heat/src/types/room-heat.types.ts`
 - `services/showzone/src/room-session.service.d.ts`
 - `services/showzone/src/room-session.service.js`
 - `services/showzone/src/room-session.service.js.map`

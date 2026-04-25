@@ -206,6 +206,12 @@ export const NATS_TOPICS = {
   ROOM_HEAT_SAMPLE:                  'room.heat.sample',
   ROOM_HEAT_TIER_CHANGED:            'room.heat.tier.changed',
   ROOM_HEAT_PEAK:                    'room.heat.peak',
+  ROOM_HEAT_LEADERBOARD_UPDATED:     'room.heat.leaderboard.updated',
+  ROOM_HEAT_HOT_AND_READY:           'room.heat.hot_and_ready',
+  ROOM_HEAT_DUAL_FLAME_PEAK:         'room.heat.dual_flame.peak',
+  ROOM_HEAT_SESSION_STARTED:         'room.heat.session.started',
+  ROOM_HEAT_SESSION_ENDED:           'room.heat.session.ended',
+  ROOM_HEAT_ADAPTIVE_UPDATED:        'room.heat.adaptive.updated',
 
   // ── CreatorControl.Zone (Business Plan B.3 — creator workstation) ────────
   CREATOR_CONTROL_BROADCAST_SUGGESTION: 'creator_control.broadcast.suggestion',
