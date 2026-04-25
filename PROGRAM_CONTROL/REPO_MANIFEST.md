@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/add-refund-policy-acknowledgment-event`
-**Commit:** `088da9a47c5984b8c08499ec725300a429d28141`
-**Generated:** 2026-04-25T05:41:24Z
+**Branch:** `copilot/hcz-zonebot-installation-payload`
+**Commit:** `3cea800c45f4985e4fbef6ae1b6afdf188dfab7c`
+**Generated:** 2026-04-25T05:58:24Z
 
 ## All Files
 
@@ -198,6 +198,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/TOK-RETIRE-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/Thread 13 cleanup`
 - `PROGRAM_CONTROL/REPORT_BACK/VISION-MONITOR-INIT.md`
+- `PROGRAM_CONTROL/REPORT_BACK/WO-002-ZONEBOT-ZOEY-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-019-020-021-ISSUE-SCAFFOLD.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-019-020-021-ISSUES.md`
 - `PROGRAM_CONTROL/REPORT_BACK/WO-020-UI.md`
@@ -286,6 +287,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260424000000_add_canonical_financial_ledger/migration.sql`
 - `prisma/migrations/20260424120000_immutable_audit_architecture/migration.sql`
 - `prisma/migrations/20260425000000_add_room_heat/migration.sql`
+- `prisma/migrations/20260425100000_zonebot_scheduler/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -471,6 +473,8 @@ Auto-generated on every push. Do not edit manually.
 - `services/obs-bridge/src/obs-bridge.module.ts`
 - `services/obs-bridge/src/obs-bridge.service.ts`
 - `services/obs-bridge/src/persona-engine.service.ts`
+- `services/prisma/prisma.module.ts`
+- `services/prisma/prisma.service.ts`
 - `services/recovery/src/admin-recovery.controller.ts`
 - `services/recovery/src/recovery.module.ts`
 - `services/recovery/src/recovery.service.ts`
@@ -506,6 +510,14 @@ Auto-generated on every push. Do not edit manually.
 - `services/zone-gpt/src/zone-gpt.module.js`
 - `services/zone-gpt/src/zone-gpt.module.js.map`
 - `services/zone-gpt/src/zone-gpt.module.ts`
+- `services/zonebot-scheduler/.env.example`
+- `services/zonebot-scheduler/ASSUMPTIONS.md`
+- `services/zonebot-scheduler/FLAGS.md`
+- `services/zonebot-scheduler/README.md`
+- `services/zonebot-scheduler/src/interfaces.ts`
+- `services/zonebot-scheduler/src/zonebot-scheduler.controller.ts`
+- `services/zonebot-scheduler/src/zonebot-scheduler.module.ts`
+- `services/zonebot-scheduler/src/zonebot-scheduler.service.ts`
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
