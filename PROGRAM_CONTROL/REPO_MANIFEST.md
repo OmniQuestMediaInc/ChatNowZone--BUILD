@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/create-directory-structure-and-schema-additions`
-**Commit:** `ae8515e7b3fa695101890f589a0873b6f6f69d82`
-**Generated:** 2026-04-25T06:16:54Z
+**Branch:** `copilot/create-gateguard-sentinel-v0-3-prototype`
+**Commit:** `1c54705e23c6c8de7d39fc82e80b65300728cd31`
+**Generated:** 2026-04-25T06:26:04Z
 
 ## All Files
 
@@ -275,6 +275,38 @@ Auto-generated on every push. Do not edit manually.
 - `finance/notification-gateway.service.ts`
 - `finance/schema.ts`
 - `finance/token-extension.service.ts`
+- `gateguard/README.md`
+- `gateguard/demo.py`
+- `gateguard/gateguard/__init__.py`
+- `gateguard/gateguard/__pycache__/__init__.cpython-312.pyc`
+- `gateguard/gateguard/__pycache__/chargeback_proxy.cpython-312.pyc`
+- `gateguard/gateguard/__pycache__/decision_combiner.cpython-312.pyc`
+- `gateguard/gateguard/__pycache__/state_provider.cpython-312.pyc`
+- `gateguard/gateguard/__pycache__/welfare_engine.cpython-312.pyc`
+- `gateguard/gateguard/audit/__init__.py`
+- `gateguard/gateguard/audit/__pycache__/__init__.cpython-312.pyc`
+- `gateguard/gateguard/audit/__pycache__/persistent_log.cpython-312.pyc`
+- `gateguard/gateguard/audit/persistent_log.py`
+- `gateguard/gateguard/chargeback_proxy.py`
+- `gateguard/gateguard/decision_combiner.py`
+- `gateguard/gateguard/federation/__init__.py`
+- `gateguard/gateguard/federation/__pycache__/__init__.cpython-312.pyc`
+- `gateguard/gateguard/federation/__pycache__/participant_sim.cpython-312.pyc`
+- `gateguard/gateguard/federation/__pycache__/protocol.cpython-312.pyc`
+- `gateguard/gateguard/federation/participant_sim.py`
+- `gateguard/gateguard/federation/protocol.py`
+- `gateguard/gateguard/state_provider.py`
+- `gateguard/gateguard/tests/__init__.py`
+- `gateguard/gateguard/tests/__pycache__/__init__.cpython-312.pyc`
+- `gateguard/gateguard/tests/__pycache__/test_audit_chain.cpython-312-pytest-9.0.3.pyc`
+- `gateguard/gateguard/tests/__pycache__/test_decision_combiner.cpython-312-pytest-9.0.3.pyc`
+- `gateguard/gateguard/tests/__pycache__/test_federation_aggregation.cpython-312-pytest-9.0.3.pyc`
+- `gateguard/gateguard/tests/test_audit_chain.py`
+- `gateguard/gateguard/tests/test_decision_combiner.py`
+- `gateguard/gateguard/tests/test_federation_aggregation.py`
+- `gateguard/gateguard/welfare_engine.py`
+- `gateguard/gateguard_audit.db`
+- `gateguard/requirements.txt`
 - `governance/CLAUDE.stale.md`
 - `governance/Sovereign_Kernel.md.pdf`
 - `governance/pre-ship-audit.service.ts`
