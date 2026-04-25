@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/hcz-zonebot-installation-payload`
-**Commit:** `0cf8d5bf8a77b781022746271598e012aee3efff`
-**Generated:** 2026-04-25T06:14:08Z
+**Branch:** `copilot/create-directory-structure-and-schema-additions`
+**Commit:** `ae8515e7b3fa695101890f589a0873b6f6f69d82`
+**Generated:** 2026-04-25T06:16:54Z
 
 ## All Files
 
@@ -438,6 +438,14 @@ Auto-generated on every push. Do not edit manually.
 - `services/cyrano/src/session-memory.store.ts`
 - `services/diamond-concierge/src/diamond-concierge.module.ts`
 - `services/diamond-concierge/src/diamond.service.ts`
+- `services/fraud-prevention/src/AbuseDetector.ts`
+- `services/fraud-prevention/src/TokenExtensionTool.ts`
+- `services/fraud-prevention/src/events/ServiceToSaleEmitter.ts`
+- `services/fraud-prevention/src/fraud-prevention.module.ts`
+- `services/fraud-prevention/src/gateguard/GateGuardRiskService.ts`
+- `services/fraud-prevention/src/gateguard/RiskScoreMLInference.ts`
+- `services/fraud-prevention/src/interfaces/shared.ts`
+- `services/fraud-prevention/src/repositories/ChargebackRepository.ts`
 - `services/guest-heat/.env.example`
 - `services/guest-heat/ASSUMPTIONS.md`
 - `services/guest-heat/FLAGS.md`
