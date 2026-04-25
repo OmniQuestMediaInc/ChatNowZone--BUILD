@@ -1,5 +1,13 @@
 // HZ: HeartSync REST controller — session management + consent endpoints
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { HeartSyncService } from './heartsync.service';
 import type {
@@ -53,16 +61,17 @@ export interface RefreshTierConfigDto {
   operator_id: string;
 }
 
-// ── Controller (framework-agnostic for testability) ───────────────────────────
+// ── Controller ────────────────────────────────────────────────────────────────
 
-@Injectable()
+@Controller('heartsync')
 export class HeartSyncController {
   private readonly logger = new Logger(HeartSyncController.name);
 
   constructor(private readonly heartSync: HeartSyncService) {}
 
   /** POST /heartsync/sessions */
-  openSession(dto: OpenSessionDto): HeartSyncSessionState | { error: string } {
+  @Post('sessions')
+  openSession(@Body() dto: OpenSessionDto): HeartSyncSessionState | { error: string } {
     const state = this.heartSync.openSession(
       dto.session_id,
       dto.creator_id,
@@ -78,7 +87,8 @@ export class HeartSyncController {
   }
 
   /** POST /heartsync/consent/grant */
-  grantConsent(dto: GrantConsentDto): HeartSyncConsent {
+  @Post('consent/grant')
+  grantConsent(@Body() dto: GrantConsentDto): HeartSyncConsent {
     return this.heartSync.grantConsent(
       dto.session_id,
       dto.guest_id,
@@ -89,13 +99,15 @@ export class HeartSyncController {
   }
 
   /** POST /heartsync/consent/revoke */
-  revokeConsent(dto: RevokeConsentDto): { ok: true } {
+  @Post('consent/revoke')
+  revokeConsent(@Body() dto: RevokeConsentDto): { ok: true } {
     this.heartSync.revokeConsent(dto.session_id, dto.guest_id, dto.creator_id);
     return { ok: true };
   }
 
   /** POST /heartsync/samples */
-  submitSample(dto: SubmitSampleDto): HeartSyncRelayEvent | HeartSyncCombinedBpm | { ok: false; reason: string } {
+  @Post('samples')
+  submitSample(@Body() dto: SubmitSampleDto): HeartSyncRelayEvent | HeartSyncCombinedBpm | { ok: false; reason: string } {
     const sample: HeartSyncSample = {
       sample_id: randomUUID(),
       session_id: dto.session_id,
@@ -117,13 +129,15 @@ export class HeartSyncController {
   }
 
   /** DELETE /heartsync/sessions/:session_id */
-  closeSession(session_id: string): { ok: true } {
+  @Delete('sessions/:session_id')
+  closeSession(@Param('session_id') session_id: string): { ok: true } {
     this.heartSync.closeSession(session_id);
     return { ok: true };
   }
 
   /** GET /heartsync/sessions/:session_id */
-  getSession(session_id: string): HeartSyncSessionState | { error: string } {
+  @Get('sessions/:session_id')
+  getSession(@Param('session_id') session_id: string): HeartSyncSessionState | { error: string } {
     const state = this.heartSync.getSessionState(session_id);
     if (!state) {
       return { error: 'SESSION_NOT_FOUND' };
@@ -132,8 +146,11 @@ export class HeartSyncController {
   }
 
   /** POST /heartsync/tier-config/refresh */
-  async refreshTierConfig(_dto: RefreshTierConfigDto): Promise<{ ok: true }> {
+  @Post('tier-config/refresh')
+  async refreshTierConfig(@Body() _dto: RefreshTierConfigDto): Promise<{ ok: true }> {
     await this.heartSync.refreshTierConfig();
     return { ok: true };
   }
 }
+
+

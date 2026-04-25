@@ -60,8 +60,6 @@ import { GuestHeatModule } from '../../guest-heat/src/guest-heat.module';
     SchedulingModule,
     MembershipModule,
     ZoneAccessModule,
-    RefundModule,
-    MembershipModule,
     RoomHeatModule,
     HeartSyncModule,
     GuestHeatModule,
