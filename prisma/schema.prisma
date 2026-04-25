@@ -854,8 +854,11 @@ model User {
   created_at            DateTime        @default(now()) @db.Timestamptz
   updated_at            DateTime        @updatedAt @db.Timestamptz
 
-  membership            Membership?
-  card_on_file          CardOnFile?
+  membership                 Membership?
+  card_on_file               CardOnFile?
+  extension_action_records   ExtensionActionRecord[]
+  guest_risk_profile         GuestRiskProfile?
+  friendly_fraud_signals     FriendlyFraudSignal[]
 
   @@map("users")
 }
@@ -1413,6 +1416,8 @@ model RoomHeatAdaptiveWeights {
   created_at      DateTime @default(now()) @db.Timestamptz
 
   @@map("room_heat_adaptive_weights")
+}
+
 // ── HeartSync + Guest-Heat models ────────────────────────────────────────
 
 // Per-tier on/off toggle for HeartSync biometric relay.
@@ -1509,4 +1514,104 @@ model GemstoneAward {
   @@index([guest_id, status])
   @@index([session_id, status])
   @@map("gemstone_awards")
+}
+
+// ── Fraud Prevention Models ───────────────────────────────────────────────────
+
+model ExtensionActionRecord {
+  actionId            String   @id @default(cuid())
+  guestId             String
+  agentId             String
+  agentTier           String
+  action              String
+  expiryExtensionDays Int?
+  goodwillCreditCZT   Int?
+  interactionRef      String
+  reason              String
+  executedAt          DateTime
+  ceoReviewFlagged    Boolean  @default(false)
+  createdAt           DateTime @default(now())
+
+  user                User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([guestId, executedAt])
+  @@map("extension_action_records")
+}
+
+model GuestRiskProfile {
+  guestId        String   @id
+  riskScore      Int      @default(0)
+  tier           String   @default("GREEN")
+  activeSignals  String[]
+  lastUpdated    DateTime @updatedAt
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user           User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([riskScore])
+  @@index([tier])
+  @@map("guest_risk_profiles")
+}
+
+model FriendlyFraudSignal {
+  id             String   @id @default(cuid())
+  guestId        String
+  score          Int
+  triggers       String[]
+  recommendation String
+  detectedAt     DateTime @default(now())
+  rawData        Json?
+
+  user           User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([guestId])
+  @@index([detectedAt])
+  @@map("friendly_fraud_signals")
+}
+
+model MlModelRegistry {
+  id                    String   @id @default(cuid())
+  version               String   @unique
+  onnxModel             Bytes
+  shapAnalysis          Json?
+  fairnessReport        Json?
+  benchmarkSnapshot     Json?
+  complianceAuditId     String?
+  fintracRetentionUntil DateTime
+  trainingTrigger       String
+  createdAt             DateTime @default(now())
+
+  @@map("ml_model_registry")
+}
+
+model PipedaComplianceLog {
+  id         String   @id @default(cuid())
+  auditId    String   @unique
+  reportJson Json
+  pdfBuffer  String
+  createdAt  DateTime @default(now())
+
+  @@map("pipeda_compliance_logs")
+}
+
+model InternationalComplianceLog {
+  id          String   @id @default(cuid())
+  cycleId     String   @unique
+  masterPDF   String
+  summaryJson Json
+  createdAt   DateTime @default(now())
+
+  @@map("international_compliance_logs")
+}
+
+model FintracEvidencePackage {
+  id          String   @id @default(cuid())
+  packageId   String   @unique
+  pdfBuffer   String
+  jsonPayload Json
+  createdAt   DateTime @default(now())
+
+  @@map("fintrac_evidence_packages")
 }
