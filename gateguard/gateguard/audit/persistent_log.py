@@ -2,7 +2,7 @@ import sqlite3
 import hashlib
 import json
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any
 
 
@@ -28,7 +28,7 @@ class AuditLog:
 
     def log_decision(self, decision: Dict[str, Any]) -> str:
         decision_id = str(uuid.uuid4())
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         prior_hash = "genesis"  # simplified for prototype
         telemetry_str = json.dumps(decision, sort_keys=True)
         row_data = (

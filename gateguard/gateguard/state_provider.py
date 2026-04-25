@@ -1,5 +1,5 @@
 from typing import Dict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 class StateProvider:
@@ -10,11 +10,11 @@ class StateProvider:
     def is_in_cooling_period(self, user_id: str) -> bool:
         return (
             user_id in self.cooling_periods
-            and datetime.utcnow() < self.cooling_periods[user_id]
+            and datetime.now(timezone.utc) < self.cooling_periods[user_id]
         )
 
     def set_cooling_period(self, user_id: str, hours: int = 24):
-        self.cooling_periods[user_id] = datetime.utcnow() + timedelta(hours=hours)
+        self.cooling_periods[user_id] = datetime.now(timezone.utc) + timedelta(hours=hours)
 
     def record_welfare_score(self, user_id: str, score: float):
         if user_id not in self.welfare_history:
