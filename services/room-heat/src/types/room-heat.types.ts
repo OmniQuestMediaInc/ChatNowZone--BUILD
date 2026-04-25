@@ -123,9 +123,9 @@ export interface LeaderboardEntry {
   creator_id: string;
   score: number;
   tier: HeatTier;
-  /** 0-indexed rank in the filtered set (0 = coolest). */
+  /** 0-indexed rank in the filtered set. Rank 0 = coolest (lowest score); higher rank = hotter session. */
   rank: number;
-  /** Row in the 10×10 grid (0 = top/coolest row, 9 = bottom/hottest row). */
+  /** Row in the 10×10 grid. Row 0 = top row (coolest), row 9 = bottom row (hottest). */
   grid_row: number;
   /** Column in the 10×10 grid. */
   grid_col: number;

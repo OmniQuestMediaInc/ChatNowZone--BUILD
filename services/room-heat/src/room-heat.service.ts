@@ -114,6 +114,10 @@ export class RoomHeatService implements OnModuleInit, OnModuleDestroy {
   private readonly heatIntervals = new Map<string, NodeJS.Timeout>();
   // Most-recent input frames: session_id → last input (for 1 Hz re-emit)
   private readonly lastInput = new Map<string, RoomHeatInput>();
+  // Per-session 1 Hz tick counters — used to throttle leaderboard broadcasts
+  private readonly tickCounters = new Map<string, number>();
+  /** Emit leaderboard broadcast every N ticks (default: every 10 s at 1 Hz). */
+  private static readonly LEADERBOARD_EMIT_EVERY_TICKS = 10;
 
   constructor(
     private readonly nats: NatsService,
@@ -316,7 +320,7 @@ export class RoomHeatService implements OnModuleInit, OnModuleDestroy {
         creator_id:               creatorId,
         score:                    0,
         tier:                     'COLD',
-        components:               this.zeroCcomponents(),
+        components:               this.zeroComponents(),
         adaptive_multiplier:      1.0,
         anti_flicker_pending_tier: null,
         anti_flicker_ticks:       0,
@@ -749,8 +753,11 @@ export class RoomHeatService implements OnModuleInit, OnModuleDestroy {
       const score = this.calculateHeatScore(refreshed);
       this.updateSessionState(refreshed, score);
       this.emitScoreEvents(score, refreshed);
-      // Emit leaderboard update every 10 ticks (~10s)
-      if (Date.now() % 10 < 2) {
+
+      // Emit leaderboard broadcast every LEADERBOARD_EMIT_EVERY_TICKS ticks (~10 s)
+      const ticks = (this.tickCounters.get(sessionId) ?? 0) + 1;
+      this.tickCounters.set(sessionId, ticks);
+      if (ticks % RoomHeatService.LEADERBOARD_EMIT_EVERY_TICKS === 0) {
         const leaderboard = this.getLeaderboard('all');
         this.nats.publish(NATS_TOPICS.ROOM_HEAT_LEADERBOARD_UPDATED, {
           ...leaderboard,
@@ -766,6 +773,7 @@ export class RoomHeatService implements OnModuleInit, OnModuleDestroy {
     if (handle) {
       clearInterval(handle);
       this.heatIntervals.delete(sessionId);
+      this.tickCounters.delete(sessionId);
     }
   }
 
@@ -839,7 +847,7 @@ export class RoomHeatService implements OnModuleInit, OnModuleDestroy {
   // PRIVATE — HELPERS
   // ══════════════════════════════════════════════════════════════════════════
 
-  private zeroCcomponents(): HeatScoreComponents {
+  private zeroComponents(): HeatScoreComponents {
     return {
       tip_pressure:      0,
       chat_velocity:     0,
