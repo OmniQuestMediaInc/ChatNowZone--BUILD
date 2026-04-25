@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/update-membership-tier-names`
-**Commit:** `bf9c9d1dc62ee149dad1fae3749b540ddecfaf47`
-**Generated:** 2026-04-24T19:27:40Z
+**Branch:** `claude/fix-codeql-analysis-LuuvB`
+**Commit:** `d21300ccbf492b3a841fb05e6ff3dac4a48d9afb`
+**Generated:** 2026-04-25T00:39:09Z
 
 ## All Files
 
