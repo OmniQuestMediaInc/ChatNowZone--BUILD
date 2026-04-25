@@ -1,235 +1,146 @@
 # ChatNow.Zone — Architecture Overview
 
-**Authority:** OmniQuest Media Inc. (OQMInc™) — Kevin B. Hartley, CEO
-**Canonical Corpus:** v10 — `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`
-**Snapshot date:** 2026-04-24 (Payload 9 — Deployment Readiness)
+> **Status:** BUILD COMPLETE (Payload 9, 2026-04-24)
+> **Authority:** OQMI_GOVERNANCE.md (Canonical Corpus v10)
+> **Audience:** Engineering, Compliance, Investor Diligence
+
+This document is the canonical map of the ChatNow.Zone runtime. It
+records the boundaries between Payloads 1–8, the cross-Payload
+contracts enforced by the Integration Hub, and the deploy topology.
 
 ---
 
-## 1. Platform Summary
-
-ChatNow.Zone is a **live-creator monetisation platform** built as a
-TypeScript + NestJS + Prisma monorepo deployed on AWS. Creators stream
-live; guests purchase token packs and spend them on tips, paid chat,
-private sessions, and theatre seats. Every financial interaction flows
-through a deterministic, append-only ledger enforced at the database
-trigger level.
-
----
-
-## 2. High-Level Service Map
+## 1. Runtime Topology
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        ChatNow.Zone Platform                        │
-│                                                                     │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────┐  │
-│  │  Black-Glass │    │ Creator      │    │  Guest / Fan UI      │  │
-│  │  Dashboard   │    │ Control.Zone │    │  (web + mobile)      │  │
-│  └──────┬───────┘    └──────┬───────┘    └──────────┬───────────┘  │
-│         │                  │                        │              │
-│  ══════════════════════ API Gateway (REST + WS) ══════════════════  │
-│                                                                     │
-│  ┌─────────────────────── Core API (NestJS Monolith) ────────────┐  │
-│  │                                                               │  │
-│  │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐  │  │
-│  │  │  GateGuard  │  │   Ledger /   │  │  Three-Bucket       │  │  │
-│  │  │  Sentinel   │  │   Finance    │  │  Wallet Guard        │  │  │
-│  │  │  (B.5)      │  │   (FIZ)      │  │  (Middleware)        │  │  │
-│  │  └──────┬──────┘  └──────┬───────┘  └──────────┬──────────┘  │  │
-│  │         │                │                     │             │  │
-│  │  ┌──────▼──────────────────────────────────────▼──────────┐  │  │
-│  │  │              Immutable Audit Chain                      │  │  │
-│  │  │  (hash-chain + NATS emission + WORM export)             │  │  │
-│  │  └─────────────────────────────────────────────────────────┘  │  │
-│  │                                                               │  │
-│  │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐  │  │
-│  │  │  Bijou      │  │  ShowZone    │  │  GZ Scheduling      │  │  │
-│  │  │  Play.Zone  │  │  Theatre     │  │  Module             │  │  │
-│  │  └─────────────┘  └──────────────┘  └─────────────────────┘  │  │
-│  │                                                               │  │
-│  │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐  │  │
-│  │  │  Membership │  │  KYC/Publish │  │  DFSP Diamond       │  │  │
-│  │  │  Lifecycle  │  │  Gate        │  │  Financial Security  │  │  │
-│  │  └─────────────┘  └──────────────┘  └─────────────────────┘  │  │
-│  │                                                               │  │
-│  │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐  │  │
-│  │  │  Risk Engine│  │  Geo/Pricing │  │  Auth + Step-Up     │  │  │
-│  │  │  (D002)     │  │  (multi-CCY) │  │  + RBAC             │  │  │
-│  │  └─────────────┘  └──────────────┘  └─────────────────────┘  │  │
-│  │                                                               │  │
-│  └───────────────────────────────────────────────────────────────┘  │
-│                                                                     │
-│  ┌─────────────────────── Creator Services ─────────────────────┐  │
-│  │                                                               │  │
-│  │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐  │  │
-│  │  │  Room-Heat  │  │ CreatorControl│  │  Cyrano Whisper    │  │  │
-│  │  │  Engine     │  │  .Zone        │  │  Layer (B.3.5)     │  │  │
-│  │  │  (B.4)      │  │  (B.3)        │  │  < 800 ms SLO      │  │  │
-│  │  └──────┬──────┘  └──────┬───────┘  └──────────┬──────────┘  │  │
-│  │         └────────────────┴─────────────────────┘             │  │
-│  │                          │                                    │  │
-│  │              ┌───────────▼───────────┐                       │  │
-│  │              │  Integration Hub      │                       │  │
-│  │              │  (cross-service wire) │                       │  │
-│  │              └───────────────────────┘                       │  │
-│  │                                                               │  │
-│  │  ┌─────────────┐  ┌──────────────┐                           │  │
-│  │  │  Recovery   │  │  Diamond     │                           │  │
-│  │  │  Engine     │  │  Concierge   │                           │  │
-│  │  └─────────────┘  └──────────────┘                           │  │
-│  └───────────────────────────────────────────────────────────────┘  │
-│                                                                     │
-│  ┌─────────────────────── Infrastructure ───────────────────────┐  │
-│  │                                                               │  │
-│  │  NATS JetStream ─── Postgres 16 (FT-033) ─── Redis 7         │  │
-│  │  (all real-time events)  (internal only)   (sessions/cache)  │  │
-│  │                                                               │  │
-│  │  OBS Bridge  ───  Streaming SFU (mediasoup) ─── HeartZone    │  │
-│  │  (multi-platform)  (SCAFFOLD — EC2 c6i.xlarge)   (biometrics)│  │
-│  │                                                               │  │
-│  └───────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│                          Public Edge (HTTPS)                           │
+│                       CloudFront + WAF (planned)                       │
+└──────────────────┬─────────────────────────────────────────────────────┘
+                   │
+              ┌────▼─────┐    REST + SSE     ┌─────────────────────────┐
+              │   api    │──────────────────▶│  Web / Native Clients   │
+              │ (Nest)   │                   └─────────────────────────┘
+              └────┬─────┘
+                   │  internal-only (FT-033)
+   ┌───────────────┼────────────────┬─────────────────────────────┐
+   ▼               ▼                ▼                             ▼
+┌─────┐       ┌──────────┐    ┌──────────┐                 ┌──────────┐
+│ db  │       │  redis   │    │   nats   │                 │ external │
+│ pg16│       │  v7      │    │ JetStream│                 │ webhooks │
+└─────┘       └──────────┘    └──────────┘                 └──────────┘
 ```
 
----
+The `api` container is the composite runtime: every Payload module
+mounts as a NestJS module inside it (see `services/core-api/src/app.module.ts`).
+Horizontal split per service is documented in Business Plan §G.6 and is
+gated by environment feature flags (`*_ENABLED` env vars in `docker-compose.yml`).
 
-## 3. Financial Integrity Zone (FIZ) Invariants
+## 2. Payload Map
 
-All financial flows obey these invariants — enforced at Postgres trigger level
-and checked by `ThreeBucketSpendGuardMiddleware` on every transaction:
+| # | Payload | Code Location | Public Contract |
+| - | --- | --- | --- |
+| 1 | Canonical Financial Ledger + Three-Bucket Wallet + REDBOOK Rate Cards | `services/ledger/`, `services/core-api/src/finance/` | `LedgerService.debitWallet`, `ThreeBucketSpendGuardMiddleware` |
+| 2 | REDBOOK Customer-Service Recovery + Diamond Concierge | `services/diamond-concierge/`, `services/recovery/` | `RecoveryService`, `DiamondService`, `admin-recovery.controller.ts` |
+| 3 | GateGuard Sentinel Pre-Processor + Welfare Guardian Score | `services/core-api/src/gateguard/` | `GateGuardMiddleware`, `WelfareGuardianScorer` |
+| 4 | OBS Streaming Bridge + Room-Heat Engine | `services/obs-bridge/`, `services/creator-control/src/room-heat.engine.ts`, `services/showzone/`, `services/bijou/` | NATS `OBS_*`, `ROOM_HEAT_*` |
+| 5 | CreatorControl.Zone + Cyrano Layer 1 + Integration Hub | `services/creator-control/`, `services/cyrano/`, `services/integration-hub/` | `IntegrationHubService` |
+| 6 | Immutable Audit Architecture (hash-chain + WORM export) | `services/core-api/src/audit/` | `AUDIT_IMMUTABLE_*` topics, `audit_events` append-only table |
+| 7 | RBAC Step-Up + Compliance Lockdown | `services/core-api/src/auth/`, `services/core-api/src/compliance/` | `STEP_UP_CHALLENGE_*` topics, `LegalHold` model |
+| 8 | (Reserved — covered by Payloads 1–7 cross-cutting work) | — | — |
+| 9 | Deployment Readiness + Launch Prep | `.github/workflows/deploy.yml`, `docker-compose.yml`, `docs/PRE_LAUNCH_CHECKLIST.md`, `PROGRAM_CONTROL/LAUNCH_MANIFEST.md` | This document |
 
-| Invariant | Enforcement |
-|---|---|
-| Append-only ledger | Postgres triggers on `ledger_entries`, `transactions`, `audit_events` |
-| Three-bucket spend order | `LEDGER_SPEND_ORDER` from `governance.config.ts` |
-| `correlation_id` + `reason_code` | Required on every financial/audit write |
-| GateGuard pre-process | Every transaction routed through GateGuard before ledger write |
-| Audit emission | Every ledger write emits `AUDIT_IMMUTABLE_*` NATS topic |
-| WORM export | 90-day cycle to S3 immutable storage |
+## 3. Cross-Payload Invariants (enforced)
 
-**Three-Bucket Spend Order (canonical):**
-```
-PROMOTIONAL_TOKENS → EARNED_TOKENS → PURCHASED_TOKENS
-```
+1. **GateGuard pre-processor on every ledger touch.** `IntegrationHubService.forwardGuardedLedgerRequest` is the only authorised path. HARD_DECLINE / HUMAN_ESCALATE blocks the forward; COOLDOWN forwards but is audited.
+2. **Three-bucket spend order is authoritative.** `LEDGER_SPEND_ORDER = ['purchased','membership','bonus']` is consumed by both `LedgerService.debitWallet` and `ThreeBucketSpendGuardMiddleware`. Defence-in-depth.
+3. **Append-only finance.** `infra/postgres/init-ledger.sql` triggers block `UPDATE`/`DELETE` on `ledger_entries`, `audit_events`, `referral_links`, `attribution_events`, `notification_consent_store`, `game_sessions`, `call_sessions`, `voucher_vault`, `content_suppression_queue`. `identity_verification` DELETE-blocked.
+4. **`correlation_id` + `reason_code` on every financial / audit write.** Verified per Prisma model in OQMI_SYSTEM_STATE §5.2.
+5. **Immutable audit emission.** Every guarded event publishes `AUDIT_IMMUTABLE_*`. Hash-chain integrity verified via `AUDIT_CHAIN_VERIFIED` and failures via `AUDIT_CHAIN_INTEGRITY_FAILURE`.
+6. **Network isolation (FT-033).** Postgres and Redis are internal-only on the `backend` Docker network.
+7. **NATS for chat + haptic.** REST polling forbidden. Topic registry at `services/nats/topics.registry.ts` is the only source of subjects.
+8. **No secrets in tree.** All credentials are read from environment. Compose declares `${VAR:?required}` for the four mandatory secrets (`DB_PASSWORD`, `REDIS_PASSWORD`, `WEBHOOK_SIGNING_SECRET`, `RBAC_STEP_UP_SIGNING_SECRET`).
+9. **REDBOOK + RECOVERY_ENGINE constants are read-only.** Inlined values are forbidden — read from `services/core-api/src/config/governance.config.ts`.
+10. **§12 banned-entity purge.** Zero references outside `archive/`.
 
----
-
-## 4. NATS Topic Architecture
-
-All real-time events flow through NATS JetStream (`nats:4222` internal).
-REST polling is prohibited for chat and haptic events (Latency Invariant).
-
-Topic namespaces:
-- `geo.*` — geo-pricing and geo-blocking
-- `game.*` — gamification outcomes
-- `bijou.*` — Bijou Play.Zone session lifecycle
-- `showzone.*` — ShowZone theatre lifecycle
-- `chat.*` — chat ingestion and broadcast (staggered)
-- `hz.*` — HeartZone BPM + haptic triggers
-- `risk.*` — risk flags and containment
-- `auth.*` — step-up challenges
-- `kyc.*` — publish gate decisions
-- `audit.*` / `worm.*` — immutable audit chain + WORM export
-- `compliance.*` — legal hold, reconciliation drift
-- `fiz.*` / `payments.*` — webhook and financial events
-- `dfsp.*` — Diamond Financial Security Platform
-- `gz.schedule.*` — GuestZone scheduling
-- `zone.*` / `membership.*` — zone access + membership lifecycle
-- `gateguard.*` — GateGuard Sentinel decisions
-- `room.heat.*` — Room-Heat tier engine
-- `creator_control.*` — CreatorControl.Zone suggestions
-- `cyrano.*` — Cyrano whisper engine
-- `hub.*` — Integration Hub cross-service handoffs
-- `obs.*` / `persona.*` — OBS bridge + persona engine
-
-Full registry: `services/nats/topics.registry.ts`
-
----
-
-## 5. Data Layer
-
-**Database:** Postgres 16 (production: AWS RDS Aurora PostgreSQL)
-
-Key schema files:
-- `infra/postgres/init-ledger.sql` — raw SQL triggers + initial tables
-- `prisma/schema.prisma` — Prisma ORM models (canonical source of truth)
-- `prisma/migrations/` — migration history
-
-**Redis 7** (production: AWS ElastiCache Redis Cluster):
-- Session storage (`express-session`)
-- Rate limiting counters
-- NATS idempotency cache
-
----
-
-## 6. Auth Architecture
-
-- JWT access token (15 min default) + refresh token (7 days)
-- Step-Up Auth: additional OTP challenge for high-value operations
-- RBAC: `RolesGuard` + `@Roles()` decorator on all controller routes
-- KYC Publish Gate: creator must pass AV check before first broadcast
-
----
-
-## 7. Creator Monetisation Stack (Business Plan B.3–B.5)
+## 4. Cross-Service Wiring (Integration Hub)
 
 ```
-Guest tip / spend
-      │
-      ▼
-ThreeBucketSpendGuardMiddleware
-      │
-      ▼
-GateGuard Sentinel pre-process
-  (welfare score + AV check + federated lookup)
-      │
-      ├─ APPROVED ──► LedgerService.debitWallet (append-only)
-      │                     │
-      │               AUDIT_IMMUTABLE_SPEND emitted ──► Audit Chain
-      │
-      └─ DECLINED ──► GATEGUARD_DECISION_HARD_DECLINE emitted
-                            │
-                       Human escalation path
+                     ┌────────────────────────┐
+                     │    GateGuard (P3)      │
+                     │ welfare_guardian_score │
+                     └───────────┬────────────┘
+                                 │  GateGuardEvaluation
+                                 ▼
+┌─────────────────┐    ┌──────────────────────────┐    ┌─────────────────┐
+│  Caller (any)   │───▶│  IntegrationHubService   │───▶│   Ledger (P1)   │
+│  e.g. Tip svc   │    │ forwardGuardedLedgerReq  │    │  debitWallet    │
+└─────────────────┘    └────────┬─────────────────┘    └─────────────────┘
+                                │
+                ┌───────────────┼───────────────┐
+                ▼               ▼               ▼
+       AUDIT_IMMUTABLE_     GATEGUARD_      LEDGER_SPEND_
+       GATEGUARD            DECISION_*      ORDER (returned)
+
+                     ┌────────────────────────┐
+                     │  Recovery Engine (P2)  │
+                     │  expiry tick / lapse   │
+                     └───────────┬────────────┘
+                                 │
+                                 ▼
+                     ┌────────────────────────┐
+                     │ IntegrationHubService  │
+                     │ emitRecoveryExpiryWarn │
+                     │ emitDiamondConcierge   │
+                     └────┬─────────────┬─────┘
+                          ▼             ▼
+                AUDIT_IMMUTABLE_   HUB_DIAMOND_
+                RECOVERY           CONCIERGE_HANDOFF
+
+                     ┌────────────────────────┐
+                     │  Room-Heat Engine (P4) │
+                     │  RoomHeatSample        │
+                     └───────────┬────────────┘
+                                 │
+                                 ▼
+                     ┌────────────────────────┐
+                     │ IntegrationHubService  │
+                     │ processHighHeatSession │
+                     └────┬─────────────┬─────┘
+                          ▼             ▼
+                 Cyrano (P5)      HUB_HIGH_HEAT_MONETIZATION
+                 evaluate()       HUB_PAYOUT_SCALING_APPLIED
+                 ≤ 350 ms SLO
 ```
 
-**Payout flow:**
-- Creator earns at RedBook floor rate (per-token, USD)
-- Room-Heat tier adds scaling bump (0% COLD/WARM, +5% HOT, +10% BLAZING)
-- Cyrano suggestion at HOT/BLAZING tier → monetisation push
-- Integration Hub emits `HUB_PAYOUT_SCALING_APPLIED` for next statement cycle
+## 5. Deployment Pipeline
 
----
+`.github/workflows/deploy.yml` runs four jobs:
 
-## 8. AWS Production Topology (Business Plan G.6)
+1. **build** — frozen install, Prisma generate + push, typecheck, lint, jest
+2. **validate-schema** — applies `infra/postgres/init-ledger.sql` against a live Postgres 16
+3. **stack-health** — `docker compose config --quiet` validates the compose file with all required env vars bound
+4. **readiness-gate** — final summary status (workflow_dispatch only, blocks production promotion)
 
-| Component | AWS Service | Notes |
-|---|---|---|
-| Core API | ECS Fargate | Auto-scales to 10k concurrent |
-| Database | RDS Aurora PostgreSQL 16 | Multi-AZ, encrypted at rest |
-| Cache | ElastiCache Redis 7 | Cluster mode |
-| Message fabric | NATS on ECS Fargate | JetStream enabled |
-| Streaming SFU | EC2 c6i.xlarge | 500 viewers/instance; mediasoup |
-| Static assets | S3 + CloudFront CDN | |
-| WORM audit export | S3 Glacier Instant Retrieval | Immutable bucket policy |
-| Secrets | AWS Secrets Manager | Rotated 90-day cycle |
-| Container registry | Amazon ECR | Image signing via Sigstore |
-| DNS | Route 53 | `chatnow.zone` |
-| TLS | ACM | Wildcard cert |
-| Observability | CloudWatch + X-Ray | NATS lag + API error alarms |
+## 6. Production Topology (planned — Business Plan §G.6)
 
----
+| Layer | Service | AWS target |
+| --- | --- | --- |
+| Edge | CloudFront + WAF | us-east-1 |
+| Compute | `api` (Fargate) | multi-AZ |
+| Database | Postgres 16 | RDS Multi-AZ + PITR |
+| Cache | Redis 7 | ElastiCache cluster mode + TLS |
+| Event fabric | NATS JetStream | EC2 cluster (3-node) + EBS |
+| Object store (recordings, audit WORM) | S3 | Object Lock COMPLIANCE mode |
+| Secrets | Secrets Manager + Parameter Store | per-environment |
+| Observability | CloudWatch + PagerDuty | dashboards in `infra/observability/` |
 
-## 9. Key Governance Files
+## 7. Where to Look Next
 
-| File | Purpose |
-|---|---|
-| `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md` | Canonical governance invariants |
-| `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md` | Coding doctrine v2.0 |
-| `docs/DOMAIN_GLOSSARY.md` | Naming authority (commit prefixes + terms) |
-| `docs/REQUIREMENTS_MASTER.md` | Live requirements backlog |
-| `docs/PRE_LAUNCH_CHECKLIST.md` | Launch gate checklist |
-| `PROGRAM_CONTROL/LAUNCH_MANIFEST.md` | Pixel Legacy onboarding + rate lock |
-| `docs/CANONICAL_COMPLIANCE_CHECKLIST.md` | Compliance self-assessment |
-| `docs/AUDIT_CERTIFICATION_V1.md` | Immutable audit certification |
-| `OQMI_SYSTEM_STATE.md` | Periodic snapshot of ship-gate + invariant audit status |
+- Domain glossary → `docs/DOMAIN_GLOSSARY.md`
+- Requirements master → `docs/REQUIREMENTS_MASTER.md`
+- Membership policy → `docs/MEMBERSHIP_LIFECYCLE_POLICY.md`
+- Canonical compliance checklist → `docs/CANONICAL_COMPLIANCE_CHECKLIST.md`
+- Launch manifest → `PROGRAM_CONTROL/LAUNCH_MANIFEST.md`
+- Pre-launch checklist → `docs/PRE_LAUNCH_CHECKLIST.md`
+- Governance doctrine → `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md`

@@ -1,23 +1,29 @@
-// PAYLOAD 5 — Integration Hub
-// Business Plan B.3 + B.4 — wires the creator-facing systems together.
+// PAYLOAD 5 + PAYLOAD 9 — Integration Hub (final wiring for Payloads 1–8)
+// Business Plan B.3 + B.4 + B.5 — single point of cross-service orchestration.
 //
-// Connections:
-//   • Ledger (Payload 1)  ↔ GateGuard (Payload 3)
-//   • Recovery (Payload 2) ↔ Diamond Concierge
-//   • Room-Heat + Streaming (Payload 4) ↔ CreatorControl + Cyrano
-//
-// Rules:
-//   • Every ledger-touching path MUST pre-process through GateGuard.
-//   • Three-bucket spend order (LEDGER_SPEND_ORDER) is authoritative;
-//     the Hub never bypasses it.
-//   • Append-only: the Hub publishes decision + handoff events but
-//     never mutates a prior ledger entry or GateGuard score.
+// Canonical cross-service invariants enforced here:
+//   1. GateGuard Sentinel pre-processes EVERY transaction before the ledger
+//      ever sees it (Payload 3). The Hub refuses to forward to the ledger
+//      when GateGuard hard-declines.
+//   2. Three-bucket spend order (LEDGER_SPEND_ORDER) is authoritative; the
+//      Hub never re-orders or bypasses it (Payload 1 — FIZ-003).
+//   3. Append-only: the Hub publishes decision + handoff events but never
+//      mutates a prior ledger entry, GateGuard score, or audit record.
+//   4. Every financial / guarded event MUST emit an immutable audit topic
+//      (Payload 6 — AUDIT_IMMUTABLE_*).
+//   5. Recovery (Payload 2) ↔ Diamond Concierge bridge is emit-only — the
+//      Hub does not execute Recovery or Concierge logic directly.
+//   6. Cyrano latency budget (≤ 350 ms) must be respected when the Hub
+//      joins Room-Heat output into a Cyrano evaluate() call (Payload 5).
+//   7. REDBOOK rate cards and RECOVERY_ENGINE constants are read-only
+//      references from `governance.config.ts` — never inlined.
 
 import { Injectable, Logger } from '@nestjs/common';
 import { NatsService } from '../../core-api/src/nats/nats.service';
 import { NATS_TOPICS } from '../../nats/topics.registry';
 import {
   LEDGER_SPEND_ORDER,
+  RECOVERY_ENGINE,
   REDBOOK_RATE_CARDS,
 } from '../../core-api/src/config/governance.config';
 import type { HeatScore, HeatTier, RoomHeatSample } from '../../creator-control/src/room-heat.engine';
@@ -25,7 +31,54 @@ import type { CyranoInputFrame, CyranoSuggestion } from '../../cyrano/src/cyrano
 import type { CreatorControlService } from '../../creator-control/src/creator-control.service';
 import type { CyranoService } from '../../cyrano/src/cyrano.service';
 
-export const HUB_RULE_ID = 'INTEGRATION_HUB_v1';
+// PAYLOAD 9 — version bump: final consolidation release of the Hub.
+export const HUB_RULE_ID = 'INTEGRATION_HUB_v2';
+
+/**
+ * GateGuard decision shape accepted by the Hub. Mirrors
+ * `services/core-api/src/gateguard/gateguard.types.ts` without a runtime
+ * import so the Hub stays module-boundary-clean.
+ */
+export type GateGuardDecision =
+  | 'APPROVED'
+  | 'COOLDOWN'
+  | 'HARD_DECLINE'
+  | 'HUMAN_ESCALATE';
+
+export interface GateGuardEvaluation {
+  decision: GateGuardDecision;
+  welfare_guardian_score: number;
+  reason_code: string;
+  correlation_id: string;
+}
+
+/**
+ * Every ledger-touching request must pass this pre-processor guard before
+ * reaching the ledger repository. The Hub does not implement the scoring
+ * — it consumes it. This type is the canonical interface downstream
+ * services use when they ask the Hub to route a transaction.
+ */
+export interface GuardedLedgerRequest {
+  intent: 'PURCHASE' | 'SPEND' | 'EXTENSION' | 'RECOVERY' | 'DIAMOND_QUOTE';
+  wallet_id: string;
+  actor_user_id: string;
+  amount_tokens: number;
+  amount_usd_cents: bigint;
+  correlation_id: string;
+  reason_code: string;
+  captured_at_utc: string;
+  gateguard: GateGuardEvaluation;
+}
+
+export interface GuardedLedgerDecision {
+  forwarded: boolean;
+  spend_order: readonly string[];
+  gateguard_decision: GateGuardDecision;
+  reason_code: string;
+  correlation_id: string;
+  rule_applied_id: string;
+  captured_at_utc: string;
+}
 
 /**
  * Deterministic payout scaling bump per heat tier. Flat percentage applied
@@ -161,5 +214,113 @@ export class IntegrationHubService {
     };
     this.logger.log('IntegrationHubService: diamond concierge handoff', payload);
     this.nats.publish(NATS_TOPICS.HUB_DIAMOND_CONCIERGE_HANDOFF, payload);
+  }
+
+  /**
+   * PAYLOAD 9 — canonical pre-ledger guard.
+   *
+   * Every service that wants to write to the ledger MUST route the request
+   * through this method first. The Hub:
+   *   1. Refuses to forward when GateGuard returns HARD_DECLINE or
+   *      HUMAN_ESCALATE (COOLDOWN is permitted but audited).
+   *   2. Emits the AUDIT_IMMUTABLE_GATEGUARD hash-chain record so the
+   *      decision is written to the WORM audit trail (Payload 6).
+   *   3. Publishes GATEGUARD_* decision topics for observability.
+   *   4. Returns the authoritative spend order so callers cannot drift.
+   *
+   * The Hub does NOT perform the debit itself — callers invoke
+   * `LedgerService.debitWallet` with the decision attached. That keeps
+   * the ledger the only component that mutates balances.
+   */
+  forwardGuardedLedgerRequest(req: GuardedLedgerRequest): GuardedLedgerDecision {
+    const capturedAt = req.captured_at_utc ?? new Date().toISOString();
+    const approved =
+      req.gateguard.decision === 'APPROVED' ||
+      req.gateguard.decision === 'COOLDOWN';
+
+    this.nats.publish(NATS_TOPICS.AUDIT_IMMUTABLE_GATEGUARD, {
+      correlation_id: req.correlation_id,
+      wallet_id: req.wallet_id,
+      actor_user_id: req.actor_user_id,
+      intent: req.intent,
+      amount_tokens: req.amount_tokens,
+      amount_usd_cents: req.amount_usd_cents.toString(),
+      decision: req.gateguard.decision,
+      welfare_guardian_score: req.gateguard.welfare_guardian_score,
+      reason_code: req.gateguard.reason_code,
+      spend_order: LEDGER_SPEND_ORDER,
+      rule_applied_id: HUB_RULE_ID,
+      captured_at_utc: capturedAt,
+    });
+
+    const decisionTopic: string =
+      req.gateguard.decision === 'APPROVED'
+        ? NATS_TOPICS.GATEGUARD_DECISION_APPROVED
+        : req.gateguard.decision === 'COOLDOWN'
+        ? NATS_TOPICS.GATEGUARD_DECISION_COOLDOWN
+        : req.gateguard.decision === 'HARD_DECLINE'
+        ? NATS_TOPICS.GATEGUARD_DECISION_HARD_DECLINE
+        : NATS_TOPICS.GATEGUARD_DECISION_HUMAN_ESCALATE;
+
+    this.nats.publish(decisionTopic, {
+      correlation_id: req.correlation_id,
+      wallet_id: req.wallet_id,
+      intent: req.intent,
+      welfare_guardian_score: req.gateguard.welfare_guardian_score,
+      reason_code: req.gateguard.reason_code,
+      emitted_at_utc: capturedAt,
+    });
+
+    if (!approved) {
+      this.logger.warn('IntegrationHubService: GateGuard blocked ledger forward', {
+        correlation_id: req.correlation_id,
+        decision: req.gateguard.decision,
+        reason_code: req.gateguard.reason_code,
+      });
+    }
+
+    return {
+      forwarded: approved,
+      spend_order: LEDGER_SPEND_ORDER,
+      gateguard_decision: req.gateguard.decision,
+      reason_code: req.gateguard.reason_code,
+      correlation_id: req.correlation_id,
+      rule_applied_id: HUB_RULE_ID,
+      captured_at_utc: capturedAt,
+    };
+  }
+
+  /**
+   * PAYLOAD 9 — Recovery expiry tick handoff.
+   *
+   * When the Recovery service detects a Diamond wallet has crossed the
+   * EXPIRY_WARNING_HOURS threshold, the Hub emits the canonical recovery
+   * notification so the Notification service + Concierge can co-ordinate
+   * outreach. This method honours the authoritative constants in
+   * RECOVERY_ENGINE — no local overrides.
+   */
+  emitRecoveryExpiryWarning(params: {
+    wallet_id: string;
+    creator_id: string | null;
+    tokens_at_risk: number;
+    expiry_at_utc: string;
+    correlation_id: string;
+  }): void {
+    const payload = {
+      wallet_id: params.wallet_id,
+      creator_id: params.creator_id,
+      tokens_at_risk: params.tokens_at_risk,
+      expiry_at_utc: params.expiry_at_utc,
+      warning_window_hours: RECOVERY_ENGINE.EXPIRY_WARNING_HOURS,
+      extension_fee_usd: RECOVERY_ENGINE.EXTENSION_FEE_USD,
+      recovery_fee_usd: RECOVERY_ENGINE.RECOVERY_FEE_USD,
+      three_fifths_refund_pct: RECOVERY_ENGINE.THREE_FIFTHS_REFUND_PCT,
+      token_bridge_bonus_pct: RECOVERY_ENGINE.TOKEN_BRIDGE_BONUS_PCT,
+      correlation_id: params.correlation_id,
+      rule_applied_id: HUB_RULE_ID,
+      emitted_at_utc: new Date().toISOString(),
+    };
+    this.logger.log('IntegrationHubService: recovery expiry warning', payload);
+    this.nats.publish(NATS_TOPICS.AUDIT_IMMUTABLE_RECOVERY, payload);
   }
 }
