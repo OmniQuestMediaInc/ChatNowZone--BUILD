@@ -292,10 +292,8 @@ export class OfferEngine {
     base_czt: number,
     geo_region?: string,
   ): { adjusted: number; display: string } {
-    const multiplier: number =
-      (geo_region !== undefined && GEO_PRICE_MULTIPLIERS[geo_region] !== undefined)
-        ? GEO_PRICE_MULTIPLIERS[geo_region]
-        : 1.0;
+    // geo_region may be undefined or a code not in the table — default to 1.0.
+    const multiplier: number = GEO_PRICE_MULTIPLIERS[geo_region ?? ''] ?? 1.0;
     const adjusted = Math.max(1, Math.round(base_czt * multiplier));
     const display = `${adjusted}`;
     return { adjusted, display };

@@ -116,6 +116,9 @@ export class ForecastService {
   // ── Signal detection ───────────────────────────────────────────────────────
 
   private detectSignals(dt: Date, _geo_region?: string): ForecastSignal[] {
+    // _geo_region is reserved for future integration with a regional weather/
+    // calendar API (see ASSUMPTIONS.md A006). Currently unused — all signals
+    // are derived from UTC date logic only.
     const signals: ForecastSignal[] = [];
     const month = dt.getUTCMonth() + 1; // 1-based
     const day   = dt.getUTCDate();

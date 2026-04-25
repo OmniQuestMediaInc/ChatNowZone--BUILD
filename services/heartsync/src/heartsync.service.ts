@@ -139,7 +139,6 @@ export class HeartSyncService implements OnModuleInit {
 
     this.nats.publish(NATS_TOPICS.HEARTSYNC_CONSENT_GRANTED, {
       ...consent,
-      rule_applied_id: HEARTSYNC_RULE_ID,
     } as unknown as Record<string, unknown>);
 
     this.logger.log('HeartSyncService: consent granted', { session_id, guest_id });
