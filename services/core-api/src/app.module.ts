@@ -26,6 +26,7 @@ import { GateGuardModule } from './gateguard/gateguard.module';
 import { GateGuardMiddleware } from './gateguard/gateguard.middleware';
 import { AuditModule } from './audit/audit.module';
 import { ThreeBucketSpendGuardMiddleware } from './finance/three-bucket-spend-guard.middleware';
+import { RoomHeatModule } from '../../room-heat/src/room-heat.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { ThreeBucketSpendGuardMiddleware } from './finance/three-bucket-spend-gu
     MembershipModule,
     ZoneAccessModule,
     MembershipModule,
+    RoomHeatModule,
   ],
 })
 export class AppModule implements NestModule {
