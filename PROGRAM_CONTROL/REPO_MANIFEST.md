@@ -5,6 +5,9 @@ Auto-generated on every push. Do not edit manually.
 **Branch:** `copilot/create-directory-structure-and-schema-additions`
 **Commit:** `124f368770dc4308500bd5af28e7b64a3f2d507d`
 **Generated:** 2026-04-25T06:02:55Z
+**Branch:** `copilot/add-heart-sync-guest-heat-cyrano`
+**Commit:** `f3a327da2518453a0ec37c603e84b87b3feb597d`
+**Generated:** 2026-04-25T05:58:55Z
 
 ## All Files
 
@@ -286,6 +289,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260424000000_add_canonical_financial_ledger/migration.sql`
 - `prisma/migrations/20260424120000_immutable_audit_architecture/migration.sql`
 - `prisma/migrations/20260425000000_add_room_heat/migration.sql`
+- `prisma/migrations/20260425120000_add_heartsync_guest_heat/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -424,6 +428,10 @@ Auto-generated on every push. Do not edit manually.
 - `services/creator-control/src/creator-control.service.ts`
 - `services/creator-control/src/room-heat.engine.ts`
 - `services/creator-control/src/session-monitoring.copilot.ts`
+- `services/cyrano/.env.example`
+- `services/cyrano/ASSUMPTIONS.md`
+- `services/cyrano/FLAGS.md`
+- `services/cyrano/README.md`
 - `services/cyrano/src/cyrano.module.ts`
 - `services/cyrano/src/cyrano.service.ts`
 - `services/cyrano/src/cyrano.types.ts`
