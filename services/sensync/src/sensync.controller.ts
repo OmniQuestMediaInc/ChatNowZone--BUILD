@@ -1,4 +1,4 @@
-// HZ: HeartSync REST controller — session management + consent endpoints
+// HZ: SenSync™ REST controller — session management + consent endpoints
 import {
   Body,
   Controller,
@@ -67,12 +67,12 @@ export interface RefreshTierConfigDto {
 export class SenSyncController {
   private readonly logger = new Logger(SenSyncController.name);
 
-  constructor(private readonly heartSync: SenSyncService) {}
+  constructor(private readonly senSync: SenSyncService) {}
 
   /** POST /sensync/sessions */
   @Post('sessions')
   openSession(@Body() dto: OpenSessionDto): SenSyncSessionState | { error: string } {
-    const state = this.heartSync.openSession(
+    const state = this.senSync.openSession(
       dto.session_id,
       dto.creator_id,
       dto.guest_id,
@@ -89,7 +89,7 @@ export class SenSyncController {
   /** POST /sensync/consent/grant */
   @Post('consent/grant')
   grantConsent(@Body() dto: GrantConsentDto): SenSyncConsent {
-    return this.heartSync.grantConsent(
+    return this.senSync.grantConsent(
       dto.session_id,
       dto.guest_id,
       dto.creator_id,
@@ -101,7 +101,7 @@ export class SenSyncController {
   /** POST /sensync/consent/revoke */
   @Post('consent/revoke')
   revokeConsent(@Body() dto: RevokeConsentDto): { ok: true } {
-    this.heartSync.revokeConsent(dto.session_id, dto.guest_id, dto.creator_id);
+    this.senSync.revokeConsent(dto.session_id, dto.guest_id, dto.creator_id);
     return { ok: true };
   }
 
@@ -121,7 +121,7 @@ export class SenSyncController {
       tier: dto.tier,
     };
 
-    const result = this.heartSync.submitSample(sample);
+    const result = this.senSync.submitSample(sample);
     if (!result) {
       return { ok: false, reason: 'SAMPLE_REJECTED_OR_NO_SESSION' };
     }
@@ -131,14 +131,14 @@ export class SenSyncController {
   /** DELETE /sensync/sessions/:session_id */
   @Delete('sessions/:session_id')
   closeSession(@Param('session_id') session_id: string): { ok: true } {
-    this.heartSync.closeSession(session_id);
+    this.senSync.closeSession(session_id);
     return { ok: true };
   }
 
   /** GET /sensync/sessions/:session_id */
   @Get('sessions/:session_id')
   getSession(@Param('session_id') session_id: string): SenSyncSessionState | { error: string } {
-    const state = this.heartSync.getSessionState(session_id);
+    const state = this.senSync.getSessionState(session_id);
     if (!state) {
       return { error: 'SESSION_NOT_FOUND' };
     }
@@ -148,7 +148,7 @@ export class SenSyncController {
   /** POST /sensync/tier-config/refresh */
   @Post('tier-config/refresh')
   async refreshTierConfig(@Body() _dto: RefreshTierConfigDto): Promise<{ ok: true }> {
-    await this.heartSync.refreshTierConfig();
+    await this.senSync.refreshTierConfig();
     return { ok: true };
   }
 }

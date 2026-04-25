@@ -1,4 +1,4 @@
-// HZ: HeartSync biometric relay service
+// HZ: SenSync™ biometric relay service
 // Business Plan §HZ — bidirectional haptic + BPM relay for consenting guests.
 //
 // Contract:
@@ -72,7 +72,7 @@ export class SenSyncService implements OnModuleInit {
   // ── Public API ────────────────────────────────────────────────────────────
 
   /**
-   * Open a HeartSync relay session.
+   * Open a SenSync™ relay session.
    * Must be called before any samples are submitted.
    * Returns the initial session state.
    */
@@ -225,7 +225,7 @@ export class SenSyncService implements OnModuleInit {
   }
 
   /**
-   * Close a HeartSync session — purges all ephemeral state.
+   * Close a SenSync™ session — purges all ephemeral state.
    */
   closeSession(session_id: string): void {
     this.sessions.delete(session_id);
@@ -377,7 +377,7 @@ export class SenSyncService implements OnModuleInit {
       session_id,
       guest_id,
       tier,
-      reason_code: 'TIER_HEARTSYNC_DISABLED',
+      reason_code: 'TIER_SENSYNC_DISABLED',
       occurred_at_utc: new Date().toISOString(),
       rule_applied_id: SENSYNC_RULE_ID,
     };
@@ -412,7 +412,7 @@ export class SenSyncService implements OnModuleInit {
    * Called on module init. Can be called again by operators without restart.
    */
   async refreshTierConfig(): Promise<void> {
-    const rows = await this.prisma.heartSyncTierConfig.findMany();
+    const rows = await this.prisma.senSyncTierConfig.findMany();
     this.tierEnabled.clear();
     this.tierCombinedAllowed.clear();
 

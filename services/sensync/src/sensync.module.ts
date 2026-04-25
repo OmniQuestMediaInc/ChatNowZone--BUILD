@@ -1,4 +1,4 @@
-// HZ: HeartSync module
+// HZ: SenSync™ module
 import { Module } from '@nestjs/common';
 import { SenSyncController } from './sensync.controller';
 import { SenSyncService } from './sensync.service';

@@ -1,4 +1,4 @@
-// HZ: HeartSync biometric relay — shared types
+// HZ: SenSync™ biometric relay — shared types
 // Business Plan §HZ — bidirectional haptic + BPM relay for consenting guests.
 
 /** All membership tiers supported by the platform. */
@@ -11,7 +11,7 @@ export type MembershipTier =
   | 'VIP_PLATINUM'
   | 'VIP_DIAMOND';
 
-/** HeartSync relay transmission mode. */
+/** SenSync™ relay transmission mode. */
 export type SenSyncMode =
   | 'BIDIRECTIONAL' // guest ↔ creator — each receives the other's BPM
   | 'CREATOR_TO_GUEST' // only creator BPM flows to guest device
@@ -112,7 +112,7 @@ export interface SenSyncTierDisabledEvent {
   session_id: string;
   guest_id: string;
   tier: MembershipTier;
-  reason_code: 'TIER_HEARTSYNC_DISABLED';
+  reason_code: 'TIER_SENSYNC_DISABLED';
   occurred_at_utc: string;
   rule_applied_id: string;
 }
@@ -149,7 +149,7 @@ export const SENSYNC_BPM_MIN = 30;
 export const SENSYNC_BPM_MAX = 220;
 
 /** Random sampling interval bounds (milliseconds). */
-export const HEARTSYNC_SAMPLE_INTERVAL_MIN_MS = 1_500;
-export const HEARTSYNC_SAMPLE_INTERVAL_MAX_MS = 3_000;
+export const SENSYNC_SAMPLE_INTERVAL_MIN_MS = 1_500;
+export const SENSYNC_SAMPLE_INTERVAL_MAX_MS = 3_000;
 
-export const SENSYNC_RULE_ID = 'HEARTSYNC_v1';
+export const SENSYNC_RULE_ID = 'SENSYNC_v1';
