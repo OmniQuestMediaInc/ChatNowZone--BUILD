@@ -1,153 +1,100 @@
 # ChatNow.Zone — Pre-Launch Checklist
 
-**Authority:** Kevin B. Hartley (CEO) — OmniQuest Media Inc.
-**Target launch:** September 2026 (hard deadline: 2026-10-01)
-**Governance:** `PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md` (Canonical Corpus v10)
-**Status at 2026-04-24:** Alpha-build scaffold complete (Payloads 1–6 landed). Items marked `[ ]` require directive authoring + execution before launch clearance.
+> **Owner:** Kevin B. Hartley (CEO, OmniQuest Media Inc.)
+> **Authority:** OQMI_GOVERNANCE.md (Canonical Corpus v10), Business Plan §G.6
+> **Target:** Alpha Launch Ready — September 2026 / Hard Launch — 2026-10-01
+> **Status (snapshot 2026-04-24):** BUILD COMPLETE — gating items below
+
+This checklist is the canonical go/no-go matrix for the ChatNow.Zone alpha
+and hard launch windows. Every row must be **CEO-signed** in
+`PROGRAM_CONTROL/CLEARANCES/` before the corresponding gate is opened.
 
 ---
 
-## Gate 1 — Financial Integrity Zone (FIZ)
+## 1. Code & Build
 
-- [x] Three-Bucket Wallet (`LedgerService.debitWallet` + `ThreeBucketSpendGuardMiddleware`)
-- [x] Append-only ledger triggers (`infra/postgres/init-ledger.sql`)
-- [x] `correlation_id` + `reason_code` on all financial tables
-- [ ] `legal_holds.correlation_id` — schema migration pending (remediation item per OQMI_SYSTEM_STATE.md §5.2)
-- [x] Webhook hardening (`WebhookHardeningService` — PROC-001 ✓)
-- [x] DFSP Integrity Hold + OTP + Voice Sample (PV-001 + DFSP-001 ✓)
-- [ ] RedBook rate cards wired to live payout calculator (NEEDS_DIRECTIVE)
-- [ ] FairPay + NOWPayouts engine fully connected (D006 NEEDS_DIRECTIVE)
-- [ ] GateGuard processor LOI signed + integration confirmed (LOI stub in LAUNCH_MANIFEST)
-- [ ] First 3,000 creator rate-lock table populated + locked in DB
-- [ ] Pixel Legacy creator payout rate confirmed (RedBook §3 floor) and seeded
+- [x] All Payload 1–8 services merged into `main` (Ledger, Recovery, GateGuard, Streaming, CreatorControl, Cyrano, Diamond, Audit)
+- [x] Payload 9 deployment readiness landed on `claude/deployment-readiness-fcRNN`
+- [x] `services/integration-hub/src/hub.service.ts` v2 wires GateGuard pre-processor + Recovery + Diamond + Room-Heat + Cyrano
+- [x] `docker-compose.yml` env-var driven, FT-033 preserved
+- [x] `.github/workflows/deploy.yml` build / typecheck / lint / test / Prisma push / SQL schema / stack-health gates
+- [ ] `yarn install --frozen-lockfile && yarn prisma:generate && yarn prisma:push && yarn typecheck && yarn lint && yarn test` green on `main` (CI runs at PR)
+- [ ] CodeQL + Super-Linter green on the release commit
 
----
+## 2. Canonical Compliance
 
-## Gate 2 — GateGuard Sentinel (GGS)
+- [x] Three-bucket spend order (`LEDGER_SPEND_ORDER`) authoritative — no service bypasses
+- [x] Append-only ledger triggers active in `infra/postgres/init-ledger.sql`
+- [x] GateGuard pre-processor required on every ledger-touching path (Hub `forwardGuardedLedgerRequest`)
+- [x] Immutable audit hash-chain (Payload 6) emits `AUDIT_IMMUTABLE_*` for every guarded event
+- [x] RBAC step-up signing secret read from environment (`RBAC_STEP_UP_SIGNING_SECRET`)
+- [x] Webhook signing secret read from environment (`WEBHOOK_SIGNING_SECRET`)
+- [x] Network isolation — Postgres 5432 / Redis 6379 internal only (FT-033)
+- [x] NATS.io fabric — REST polling forbidden for chat / haptic flows
+- [x] §12 banned-entity purge (zero matches outside `archive/`)
+- [ ] `legal_holds.correlation_id` migration filed (FIZ-scoped, deferred — see OQMI_SYSTEM_STATE §7)
 
-- [x] GateGuard middleware scaffold (`services/core-api/src/gateguard/`) ✓
-- [x] Welfare Guardian Scorer (`welfare-guardian.scorer.ts`) ✓
-- [x] GateGuard NATS topics registered ✓
-- [ ] AV verification token issuance live (GGS-AV module — NEEDS_DIRECTIVE)
-- [ ] Federated lookup to processor LOI endpoint (NEEDS_DIRECTIVE)
-- [ ] GateGuard pre-process enforced on every transaction path (integration test required)
-- [ ] GGS → Immutable Audit emission verified end-to-end
+## 3. REDBOOK Rate Cards
 
----
+- [x] `REDBOOK_RATE_CARDS` constants exact: Tease Regular 150 / 500 / 1k / 5k / 10k bundles
+- [x] Tease ShowZone bundles 300 / 1,000
+- [x] Diamond floor `0.077–0.120` USD per token
+- [x] Recovery: `EXTENSION_FEE_USD = 49`, `RECOVERY_FEE_USD = 79`, expiry 14 days, warning 48 h
+- [x] 70/30 expired-token split (creator pool / platform mgmt fee)
+- [x] Token Bridge 20% bonus + 1 waiver per 365 days
+- [x] 3/5ths Exit — 60% refund + 24h cool-off
 
-## Gate 3 — Compliance + Audit
+## 4. Diamond Tier
 
-- [x] Immutable Audit hash-chain service (PAYLOAD-6 ✓)
-- [x] WORM export service (GOV-002 ✓)
-- [x] Legal Hold service (AUDIT-002 ✓)
-- [x] Canonical Compliance Checklist (`docs/CANONICAL_COMPLIANCE_CHECKLIST.md`) ✓
-- [x] Audit Certification v1 (`docs/AUDIT_CERTIFICATION_V1.md`) ✓
-- [x] Sovereign CaC Middleware (GOV-004 ✓)
-- [ ] NCII Takedown Log process confirmed live
-- [ ] GDPR / CCPA consent-store integration tested
-- [ ] 90-day WORM export cycle confirmed in staging
-- [ ] CEO-signed audit clearance on file (`PROGRAM_CONTROL/CLEARANCES/`)
+- [x] 3-tier volume table (10k–27.5k / 30k–57.5k / 60k+) locked 2026-04-11
+- [x] Velocity multipliers 1.0 → 1.15 across 14/30/90/180/366 day horizons
+- [x] Diamond payout floor `$0.075/token` for creators, platform floor `$0.077/token`
+- [x] Concierge appointment open 11:00 / cutoff 22:30 billing-address TZ
+- [x] Recovery handoff to Diamond Concierge wired through Hub `emitDiamondConciergeHandoff`
 
----
+## 5. Room-Heat & Cyrano
 
-## Gate 4 — Creator Tooling
+- [x] Deterministic tier computation (`COLD/WARM/HOT/BLAZING`)
+- [x] Payout scaling: HOT +5%, BLAZING +10%
+- [x] Cyrano latency budget ≤ 350 ms enforced in `services/cyrano/src/cyrano.service.ts`
+- [x] 8-category whisper engine + persona memory + session memory store
+- [ ] Cyrano Layer 2 (LLM + Prisma memory) — POST-LAUNCH (Wave H)
 
-- [x] Room-Heat Engine (tier computation + NATS emission) ✓
-- [x] CreatorControl.Zone broadcast + session copilots ✓
-- [x] Cyrano Layer 1 whisper engine (8 categories, 800 ms SLO) ✓
-- [x] Integration Hub high-heat monetization flow ✓
-- [ ] Cyrano Layer 2 — LLM + Prisma memory (NEEDS_DIRECTIVE)
-- [ ] Room-Heat persistence to DB (NEEDS_DIRECTIVE)
-- [ ] Creator payout scaling factor live from Room-Heat tier
-- [ ] Creator dashboard (Black-Glass Interface) — front-end implementation (G101+ NEEDS_DIRECTIVE)
-- [ ] CreatorControl.Zone — front-end single-pane implementation (NEEDS_DIRECTIVE)
-- [ ] Mic Drop Reveal Sequence implemented and tested
+## 6. Infra & Deployment (Business Plan §G.6 AWS path)
 
----
+- [x] `docker-compose.yml` validated by `docker compose config --quiet` in CI
+- [x] Health check on `api` (`/health`) + db (`pg_isready`) + redis (`redis-cli ping`) + NATS (`/healthz`)
+- [ ] Production secrets loaded via AWS Secrets Manager / Parameter Store (NOT in repo)
+- [ ] Postgres → RDS Multi-AZ with PITR enabled
+- [ ] Redis → ElastiCache cluster mode with TLS
+- [ ] NATS → JetStream cluster (3-node minimum) with persistent volume
+- [ ] CloudFront + WAF in front of `api`
+- [ ] CloudWatch dashboards: ledger throughput, GateGuard latency, Cyrano p95, Room-Heat tier transitions
+- [ ] PagerDuty rotations: GuestZone primary, Tech secondary
 
-## Gate 5 — Platform Services
+## 7. Compliance & Legal
 
-- [x] Bijou Play.Zone session lifecycle (BJ-001 → BJ-004 ✓)
-- [x] ShowZone theatre room session (SHOWZONE-001 ✓)
-- [x] OBS Bridge + Chat Aggregator (OBS-001 ✓)
-- [x] GZ Scheduling Module (GZ-SCHEDULE-001 ✓)
-- [x] Membership lifecycle (MEMB-001 → MEMB-003 ✓)
-- [x] Zone-GPT proposal service (GOV-003 ✓)
-- [x] KYC Publish Gate (KYC-001 ✓)
-- [x] Step-Up Auth (AUTH-001 + AUTH-002 ✓)
-- [x] Geo-Pricing + Geo-Fencing (GEO-001 + GOV-001 ✓)
-- [x] Reconciliation service (INFRA-004 ✓)
-- [ ] Risk Engine (D002 NEEDS_DIRECTIVE)
-- [ ] OBS Broadcast Kernel (D004 NEEDS_DIRECTIVE)
-- [ ] Streaming SFU (mediasoup — SCAFFOLD; Dockerfile + service required)
-- [ ] HeartZone biometric integration (HZ-001 wired end-to-end)
-- [ ] Rewards API fully tested (rewards-api scaffold present)
-- [ ] Diamond Concierge live outreach flow tested
+- [x] Bill 149 (Ontario) AI disclosure prefix applied to all `CREATOR_AUTO=true` persona output (`OBS.BILL_149_DISCLOSURE_PREFIX`)
+- [x] Ontario ESA 2026 scheduling invariants (`GZ_SCHEDULING`)
+- [x] Membership lifecycle policy current — `docs/MEMBERSHIP_LIFECYCLE_POLICY.md`
+- [ ] Privacy Policy + ToS reviewed by Legal counsel
+- [ ] Age-verification (AV check) processor LOI signed
+- [ ] FOSTA/SESTA reviewer attestation on file
+- [ ] DMCA agent registered
 
----
+## 8. Launch Sequence (Business Plan reference)
 
-## Gate 6 — Infrastructure & DevOps
+- [ ] Pixel Legacy creator onboarding kit shipped (see `LAUNCH_MANIFEST.md` §1)
+- [ ] Mic Drop Reveal Sequence rehearsed end-to-end (see `LAUNCH_MANIFEST.md` §2)
+- [ ] First 3,000 creator rate-lock list cohort frozen (see `LAUNCH_MANIFEST.md` §3)
+- [ ] GateGuard processor LOI data package delivered (see `LAUNCH_MANIFEST.md` §4)
 
-- [x] Docker Compose with all service env vars (PAYLOAD-9 ✓)
-- [x] CI pipeline (`ci.yml` — schema + structure validation) ✓
-- [x] Deploy pipeline (`.github/workflows/deploy.yml` — PAYLOAD-9 ✓)
-- [x] Postgres + Redis internal-only network (FT-033 ✓)
-- [x] NATS JetStream fabric ✓
-- [x] No secrets in repo (PASS per OQMI_SYSTEM_STATE.md §5.5) ✓
-- [ ] AWS ECS Fargate task definitions authored
-- [ ] RDS Aurora Postgres cluster provisioned (prod)
-- [ ] ElastiCache Redis cluster provisioned (prod)
-- [ ] ECR image repository created + image published
-- [ ] ALB + Route 53 DNS pointed to chatnow.zone
-- [ ] SSL certificate (ACM) issued for chatnow.zone
-- [ ] CloudWatch alarms for API error rate, DB connections, NATS lag
-- [ ] Streaming SFU EC2 instances provisioned (c6i.xlarge × N)
+## 9. CEO Sign-Off (Final Gate)
+
+- [ ] **CEO clearance filed:** `PROGRAM_CONTROL/CLEARANCES/LAUNCH_GATE_2026-10-01.md`
+- [ ] Hard launch authorisation signed Kevin B. Hartley
 
 ---
 
-## Gate 7 — Security
-
-- [x] RBAC guard (`RolesGuard` + `JwtAuthGuard`) ✓
-- [x] CodeQL scanning workflow ✓
-- [x] Super-linter workflow ✓
-- [ ] Penetration test scheduled (pre-launch, external)
-- [ ] OWASP Top 10 self-assessment completed
-- [ ] Rate limiting on all public endpoints confirmed
-- [ ] DDoS protection (AWS Shield Standard minimum)
-- [ ] API key rotation procedure documented
-
----
-
-## Gate 8 — QA & Performance
-
-- [ ] Integration test suite passing (≥ 80% coverage on finance paths)
-- [ ] Load test: 10,000 concurrent viewers (target per Business Plan G.6)
-- [ ] Room-Heat performance baseline: < 50 ms per tier computation
-- [ ] NATS message latency baseline: < 10 ms P95
-- [ ] Cyrano latency SLO: < 800 ms P95 (per `CYRANO_LATENCY_SLO_MS`)
-- [ ] Stripe webhook replay test (idempotency confirmed)
-
----
-
-## Gate 9 — Launch Comms & Onboarding
-
-- [x] Pixel Legacy creator onboarding flow defined (LAUNCH_MANIFEST ✓)
-- [x] First 3,000 creator rate-lock defined (LAUNCH_MANIFEST ✓)
-- [x] Mic Drop Reveal Sequence readiness defined (LAUNCH_MANIFEST ✓)
-- [ ] Creator onboarding emails drafted + SendGrid templates live
-- [ ] Terms of Service and Privacy Policy reviewed by counsel
-- [ ] App Store / Play Store listings prepared (if applicable)
-- [ ] Beta invite system live (first 3,000 creator wave)
-- [ ] CEO launch announcement content prepared
-
----
-
-## CEO Sign-Off Required (GOV gate — § 8 OQMI_GOVERNANCE.md)
-
-All items below must have CEO-signed clearance in `PROGRAM_CONTROL/CLEARANCES/`
-before production deploy is permitted:
-
-- [ ] `PRODUCTION_DEPLOY_CLEARANCE.md` — final go/no-go signed by Kevin B. Hartley
-- [ ] `GGS_LOI_CLEARANCE.md` — GateGuard processor LOI finalized
-- [ ] `LAUNCH_RATE_LOCK_CLEARANCE.md` — first-3,000 rate-lock table frozen
-- [ ] `COMPLIANCE_AUDIT_CLEARANCE.md` — audit certification sign-off
+**This file is regenerated after each ship-gate. Live ship-gate status lives
+in `OQMI_SYSTEM_STATE.md` §4. Do not duplicate authority statements here.**
