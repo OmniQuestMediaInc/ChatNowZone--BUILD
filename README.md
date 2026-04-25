@@ -19,7 +19,9 @@ tree.
 
 - **Governance doctrine:** [`PROGRAM_CONTROL/OQMI_GOVERNANCE.md`](PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_GOVERNANCE.md) — invariants, agent roles, PR-lifecycle authority.
 - **Coding doctrine:** [`PROGRAM_CONTROL/OQMI_SYSTEM_STATE.md`](PROGRAM_CONTROL/DIRECTIVES/QUEUE/OQMI_SYSTEM_STATE.md) — OQMI Coding Doctrine v2.0.
-- **Program control pipeline:** [`PROGRAM_CONTROL/`](PROGRAM_CONTROL/) — directive queue, in-progress, done, report-backs, repo manifest.
+- **Program control pipeline:** [`PROGRAM_CONTROL/`](PROGRAM_CONTROL/) — directive queue, in-progress, done, report-backs, repo manifest, ship-gate verifier.
+- **Architecture overview (Payloads 1–8):** [`docs/ARCHITECTURE_OVERVIEW.md`](docs/ARCHITECTURE_OVERVIEW.md).
+- **Pre-launch L0 checklist:** [`docs/PRE_LAUNCH_CHECKLIST.md`](docs/PRE_LAUNCH_CHECKLIST.md).
 - **Engineering docs root:** [`docs/`](docs/) — `DOMAIN_GLOSSARY.md`, `REQUIREMENTS_MASTER.md`, `MEMBERSHIP_LIFECYCLE_POLICY.md`, `ROADMAP_MANIFEST.md`, compliance, doctrine.
 - **Agent instructions (GitHub Copilot + Claude Code):** [`.github/copilot-instructions.md`](.github/copilot-instructions.md).
 - **Backlog snapshot:** [`OQMI_SYSTEM_STATE.md`](OQMI_SYSTEM_STATE.md) (repo root — periodic snapshot of ship-gate and invariant-audit status).
@@ -74,15 +76,36 @@ environment without rebuilding the container.
 
 ## Package scripts
 
-| Command | Purpose |
-| --- | --- |
-| `yarn lint` / `yarn lint:fix` | ESLint `services/**/*.ts` (zero warnings) |
-| `yarn format` / `yarn format:check` | Prettier across the tree |
-| `yarn typecheck` / `yarn typecheck:api` | `tsc --noEmit` (root / core-api) |
-| `yarn test` | Jest integration suite |
-| `yarn prisma:generate` | Regenerate Prisma client from `prisma/schema.prisma` |
-| `yarn prisma:push` | Push Prisma schema to the database |
-| `yarn seed:scheduling` | Seed GuestZone scheduling reference data |
+| Command                                 | Purpose                                                            |
+| --------------------------------------- | ------------------------------------------------------------------ |
+| `yarn lint` / `yarn lint:fix`           | ESLint `services/**/*.ts` (zero warnings)                          |
+| `yarn format` / `yarn format:check`     | Prettier across the tree                                           |
+| `yarn typecheck` / `yarn typecheck:api` | `tsc --noEmit` (root / core-api)                                   |
+| `yarn test`                             | Jest integration + E2E suite (`tests/integration/` + `tests/e2e/`) |
+| `yarn prisma:generate`                  | Regenerate Prisma client from `prisma/schema.prisma`               |
+| `yarn prisma:push`                      | Push Prisma schema to the database                                 |
+| `yarn seed:scheduling`                  | Seed GuestZone scheduling reference data                           |
+| `yarn ship-gate`                        | Run `PROGRAM_CONTROL/ship-gate-verifier.ts` (L0 compliance report) |
+
+---
+
+## Architecture map (Payloads 1–8)
+
+| Surface                                                   | Path                                                                |
+| --------------------------------------------------------- | ------------------------------------------------------------------- |
+| Canonical Ledger (three-bucket + hash chain)              | `services/ledger/`                                                  |
+| Diamond Concierge (volume + velocity quotes)              | `services/diamond-concierge/`                                       |
+| Recovery Engine (Token Bridge / 3/5ths Exit / Expiration) | `services/recovery/` + `services/ledger/recovery.service.ts`        |
+| GateGuard Sentinel + Welfare Guardian                     | `services/core-api/src/gateguard/`                                  |
+| RBAC + step-up                                            | `services/core-api/src/auth/`                                       |
+| Compliance + WORM + audit chain                           | `services/core-api/src/compliance/`, `services/core-api/src/audit/` |
+| CreatorControl + Cyrano                                   | `services/creator-control/`, `services/cyrano/`                     |
+| Integration Hub                                           | `services/integration-hub/`                                         |
+| UI presenters + page builders                             | `ui/types/`, `ui/view-models/`, `ui/app/`, `ui/config/`             |
+| End-to-end tests                                          | `tests/e2e/`                                                        |
+| Ship-gate verifier                                        | `PROGRAM_CONTROL/ship-gate-verifier.ts`                             |
+
+Detailed map: [`docs/ARCHITECTURE_OVERVIEW.md`](docs/ARCHITECTURE_OVERVIEW.md).
 
 ---
 
@@ -107,10 +130,21 @@ the full topology, cross-Payload contracts, and AWS deploy plan.
 
 ## Ship-gate status (vs Canonical Corpus L0)
 
-See [`OQMI_SYSTEM_STATE.md`](OQMI_SYSTEM_STATE.md) §4 for the current
-matrix. Summary at 2026-04-24: **BUILD COMPLETE** — Payloads 1–9 in
-`main`. Remaining items are post-launch (Cyrano Layer 2 LLM, Black-Glass
-Interface G101+) and operational (legal_holds.correlation_id migration).
+Snapshot at 2026-04-25 (Payload 7 + 8):
+
+- **PAYLOAD 1 (Canonical Ledger)** — DONE. Three-bucket wallet + hash chain.
+- **PAYLOAD 2 (Recovery Engine)** — DONE. REDBOOK §5 pillars wired.
+- **PAYLOAD 3 (GateGuard)** — DONE (scaffold + middleware).
+- **PAYLOAD 4 (OBS bridge / Room-Heat)** — DONE (scaffold).
+- **PAYLOAD 5 (CreatorControl + Cyrano L1)** — DONE.
+- **PAYLOAD 6 (Immutable audit + RBAC + compliance)** — DONE.
+- **PAYLOAD 7 (Frontend polish + Diamond Concierge UI)** — DONE.
+- **PAYLOAD 8 (E2E validation + ship-gate verifier)** — DONE.
+
+Remaining `NEEDS_DIRECTIVE` items (deferred to post-alpha): Black-Glass
+Interface (G101+), Cyrano Layer 2, FairPay + NOWPayouts wiring, OBS
+Broadcast Kernel hardening, `legal_holds.correlation_id` migration.
+See `docs/REQUIREMENTS_MASTER.md` for the live matrix.
 
 ---
 

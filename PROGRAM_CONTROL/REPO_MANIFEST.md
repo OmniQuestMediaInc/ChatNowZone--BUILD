@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/create-gateguard-sentinel-v0-3-prototype`
-**Commit:** `c0a404139ab2a3dfe9e0c12ef1453968c4347634`
-**Generated:** 2026-04-25T06:27:13Z
+**Branch:** `claude/frontend-polish-concierge-ui-mlqrR`
+**Commit:** `a2e44772d6bc94e64510076b1ab6184a9d94e893`
+**Generated:** 2026-04-25T06:47:40Z
 
 ## All Files
 
@@ -226,6 +226,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/WO-PAYROLL-SPLIT-001.md`
 - `PROGRAM_CONTROL/REPORT_BACK/fix-yarn-lockfile-ci.md`
 - `PROGRAM_CONTROL/REPO_MANIFEST.md`
+- `PROGRAM_CONTROL/ship-gate-verifier.ts`
 - `README.md`
 - `REFERENCE_LIBRARY/00_THREAD_BOOTSTRAP.md`
 - `REFERENCE_LIBRARY/01_CANONICAL_LOCKS.md`
@@ -563,6 +564,13 @@ Auto-generated on every push. Do not edit manually.
 - `services/zonebot-scheduler/src/zonebot-scheduler.controller.ts`
 - `services/zonebot-scheduler/src/zonebot-scheduler.module.ts`
 - `services/zonebot-scheduler/src/zonebot-scheduler.service.ts`
+- `tests/e2e/audit-chain-replay.spec.ts`
+- `tests/e2e/diamond-recovery-flows.spec.ts`
+- `tests/e2e/full-token-purchase-flow.spec.ts`
+- `tests/e2e/high-heat-cyrano-payout-flow.spec.ts`
+- `tests/e2e/rbac-step-up-enforcement.spec.ts`
+- `tests/e2e/ship-gate-verifier.spec.ts`
+- `tests/e2e/ui-presenters.spec.ts`
 - `tests/integration/bijou-session.spec.ts`
 - `tests/integration/canonical-ledger.spec.ts`
 - `tests/integration/compliance-guard.spec.ts`
@@ -599,6 +607,23 @@ Auto-generated on every push. Do not edit manually.
 - `tests/seed_data/transactions_TEST DATA.csv`
 - `tests/seed_data/wallets_TEST DATA.csv`
 - `tsconfig.json`
+- `ui/app/admin/diamond/page.ts`
+- `ui/app/admin/recovery/page.ts`
+- `ui/app/creator/control/page.ts`
+- `ui/app/diamond/purchase/page.ts`
+- `ui/app/tokens/page.ts`
+- `ui/app/wallet/page.ts`
+- `ui/components/render-plan.ts`
+- `ui/config/accessibility.ts`
+- `ui/config/build-config.ts`
+- `ui/config/seo.ts`
+- `ui/config/theme.ts`
+- `ui/types/admin-diamond-contracts.ts`
 - `ui/types/creator-control-contracts.ts`
+- `ui/types/creator-panel-contracts.ts`
 - `ui/types/finance-contracts.ts`
+- `ui/types/public-wallet-contracts.ts`
+- `ui/view-models/creator-control.presenter.ts`
+- `ui/view-models/diamond-concierge.presenter.ts`
+- `ui/view-models/public-wallet.presenter.ts`
 - `yarn.lock`
