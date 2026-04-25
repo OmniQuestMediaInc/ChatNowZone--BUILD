@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/wo-003-room-heat-engine`
-**Commit:** `f65db10428dabbe2a46cf26dd80fec8b3338356b`
-**Generated:** 2026-04-25T05:36:28Z
+**Branch:** `copilot/add-refund-policy-acknowledgment-event`
+**Commit:** `088da9a47c5984b8c08499ec725300a429d28141`
+**Generated:** 2026-04-25T05:41:24Z
 
 ## All Files
 
@@ -390,6 +390,10 @@ Auto-generated on every push. Do not edit manually.
 - `services/core-api/src/payments/webhook-hardening.service.ts`
 - `services/core-api/src/prisma.module.ts`
 - `services/core-api/src/prisma.service.ts`
+- `services/core-api/src/refund/extension.service.ts`
+- `services/core-api/src/refund/refund-disclosure.service.ts`
+- `services/core-api/src/refund/refund-disclosure.types.ts`
+- `services/core-api/src/refund/refund.module.ts`
 - `services/core-api/src/risk/risk-score.service.ts`
 - `services/core-api/src/safety/incident.service.ts`
 - `services/core-api/src/safety/provisional-suppression.service.ts`
@@ -520,6 +524,7 @@ Auto-generated on every push. Do not edit manually.
 - `tests/integration/recovery-engine.spec.ts`
 - `tests/integration/recovery-service.spec.ts`
 - `tests/integration/redbook-rate-card.spec.ts`
+- `tests/integration/refund-disclosure.spec.ts`
 - `tests/integration/scheduling-service.spec.ts`
 - `tests/integration/seed-loader.ts`
 - `tests/integration/stat-holidays.spec.ts`

@@ -227,6 +227,12 @@ export const NATS_TOPICS = {
   HUB_HIGH_HEAT_MONETIZATION:        'hub.high_heat.monetization',
   HUB_PAYOUT_SCALING_APPLIED:        'hub.payout.scaling_applied',
   HUB_DIAMOND_CONCIERGE_HANDOFF:     'hub.diamond_concierge.handoff',
+
+  // ── Refund policy & CS extensions ─────────────────────────────────────────
+  REFUND_POLICY_ACKNOWLEDGED:        'refund.policy.acknowledged',
+  REFUND_EXTENSION_EXECUTED:         'refund.extension.executed',
+  SERVICE_TO_SALE_TRIGGERED:         'refund.service_to_sale.triggered',
+  FRIENDLY_FRAUD_SIGNAL_RAISED:      'risk.friendly_fraud.signal_raised',
 } as const;
 
 export type NatsTopic = typeof NATS_TOPICS[keyof typeof NATS_TOPICS];
