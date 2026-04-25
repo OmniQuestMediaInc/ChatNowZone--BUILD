@@ -90,11 +90,11 @@ const PAYOUT_SCALING_PCT_BY_TIER: Record<HeatTier, number> = {
   COLD:    0.00,
   WARM:    0.00,
   HOT:     0.05,
-  BLAZING: 0.10,
+  INFERNO: 0.10,
 };
 
 /** Minimum heat tier that triggers a monetization handoff to Cyrano. */
-const MONETIZATION_TRIGGER_TIERS: ReadonlySet<HeatTier> = new Set(['HOT', 'BLAZING']);
+const MONETIZATION_TRIGGER_TIERS: ReadonlySet<HeatTier> = new Set(['HOT', 'INFERNO']);
 
 export interface HighHeatFlowInput {
   /** Telemetry sample — CreatorControl is the authoritative scorer. */

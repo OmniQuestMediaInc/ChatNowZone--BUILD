@@ -41,17 +41,17 @@ export const CYRANO_LATENCY = {
  *   • COLD   → OPEN / ENGAGEMENT / RECOVERY dominate
  *   • WARM   → ENGAGEMENT / NARRATIVE / CALLBACK
  *   • HOT    → ESCALATION / NARRATIVE / MONETIZATION
- *   • BLAZING→ MONETIZATION / ESCALATION / CLOSE (peak is for revenue)
+ *   • INFERNO→ MONETIZATION / ESCALATION / CLOSE (peak is for revenue)
  */
-const CATEGORY_TIER_WEIGHTS: Record<CyranoCategory, Record<'COLD' | 'WARM' | 'HOT' | 'BLAZING', number>> = {
-  CAT_SESSION_OPEN:  { COLD: 90, WARM: 40, HOT: 10, BLAZING: 5  },
-  CAT_ENGAGEMENT:    { COLD: 70, WARM: 80, HOT: 55, BLAZING: 30 },
-  CAT_ESCALATION:    { COLD: 20, WARM: 55, HOT: 85, BLAZING: 80 },
-  CAT_NARRATIVE:     { COLD: 35, WARM: 70, HOT: 70, BLAZING: 45 },
-  CAT_CALLBACK:      { COLD: 45, WARM: 65, HOT: 40, BLAZING: 25 },
-  CAT_RECOVERY:      { COLD: 80, WARM: 50, HOT: 20, BLAZING: 10 },
-  CAT_MONETIZATION:  { COLD: 15, WARM: 45, HOT: 80, BLAZING: 95 },
-  CAT_SESSION_CLOSE: { COLD: 10, WARM: 15, HOT: 35, BLAZING: 60 },
+const CATEGORY_TIER_WEIGHTS: Record<CyranoCategory, Record<'COLD' | 'WARM' | 'HOT' | 'INFERNO', number>> = {
+  CAT_SESSION_OPEN:  { COLD: 90, WARM: 40, HOT: 10, INFERNO: 5  },
+  CAT_ENGAGEMENT:    { COLD: 70, WARM: 80, HOT: 55, INFERNO: 30 },
+  CAT_ESCALATION:    { COLD: 20, WARM: 55, HOT: 85, INFERNO: 80 },
+  CAT_NARRATIVE:     { COLD: 35, WARM: 70, HOT: 70, INFERNO: 45 },
+  CAT_CALLBACK:      { COLD: 45, WARM: 65, HOT: 40, INFERNO: 25 },
+  CAT_RECOVERY:      { COLD: 80, WARM: 50, HOT: 20, INFERNO: 10 },
+  CAT_MONETIZATION:  { COLD: 15, WARM: 45, HOT: 80, INFERNO: 95 },
+  CAT_SESSION_CLOSE: { COLD: 10, WARM: 15, HOT: 35, INFERNO: 60 },
 };
 
 @Injectable()
@@ -138,7 +138,7 @@ export class CyranoService {
     if (
       !frame.guest_has_tipped &&
       frame.silence_seconds >= 30 &&
-      frame.heat.tier !== 'BLAZING'
+      frame.heat.tier !== 'INFERNO'
     ) {
       return 'CAT_RECOVERY';
     }

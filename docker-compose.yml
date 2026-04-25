@@ -70,6 +70,10 @@ services:
       - backend
 
   api:
+    # Core API monolith — hosts all NestJS modules including:
+    # GateGuard, Room-Heat, CreatorControl, Cyrano, Audit, Recovery,
+    # Integration Hub, Ledger, DFSP, Bijou, ShowZone, OBS-Bridge,
+    # Scheduling, Membership, Risk Engine, Geo, Games, Zone-GPT.
     build:
       context: ./services/core-api
       dockerfile: Dockerfile
@@ -113,6 +117,30 @@ services:
       start_period: 30s
     networks:
       - backend
+
+  # ── Streaming SFU (mediasoup) ─────────────────────────────────────────────
+  # SCAFFOLD — requires mediasoup Worker Dockerfile (services/streaming/).
+  # Target: 500 concurrent viewers per SFU instance (AWS c6i.xlarge).
+  # Uncomment and provide Dockerfile before production deployment.
+  #
+  # streaming:
+  #   build:
+  #     context: ./services/streaming
+  #     dockerfile: Dockerfile
+  #   container_name: chatnow_streaming
+  #   restart: unless-stopped
+  #   environment:
+  #     MEDIASOUP_LISTEN_IP: 0.0.0.0
+  #     MEDIASOUP_ANNOUNCED_IP: ${STREAMING_PUBLIC_IP}
+  #     NATS_URL: ${NATS_URL:-nats://nats:4222}
+  #   ports:
+  #     - "3002:3002"
+  #     - "40000-40100:40000-40100/udp"  # RTP port range
+  #   depends_on:
+  #     nats:
+  #       condition: service_healthy
+  #   networks:
+  #     - backend
 
 volumes:
   postgres_data:

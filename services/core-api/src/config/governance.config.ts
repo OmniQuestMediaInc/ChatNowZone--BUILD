@@ -43,7 +43,7 @@ export enum StudioFeeType {
 
 // ─── DIAMOND TIER PRICING ────────────────────────────────────────────────────
 export const DIAMOND_TIER = {
-  PAYOUT_RATE_PER_TOKEN: 0.075, // USD — creator payout floor for Diamond
+  PAYOUT_RATE_PER_TOKEN: 0.075, // USD — standard minimum creator payout (cold-band rate, RATE_COLD); see GovernanceConfig.RATE_DIAMOND_FLOOR (0.080) for the 10K+ bulk Diamond floor
   PLATFORM_FLOOR_PER_TOKEN: 0.077, // USD — minimum platform price (wee profit)
   EXCHANGE_COST_DIAMOND_PCT: 0.0, // Diamond conversion is fee-free
   EXTENSION_FEE_14_DAY_USD: 49.0, // 14-day token expiry extension
@@ -234,10 +234,12 @@ export const MEMBERSHIP = {
   // MEMB-003: Monthly CZT stipend per membership tier.
   // Revisable via GOV: commit only. Values in CZT units.
   STIPEND_CZT: {
-    DAY_PASS: 0,
-    ANNUAL: 100,
-    OMNIPASS_PLUS: 250,
-    DIAMOND: 500,
+    GUEST: 0,
+    VIP: 0,
+    VIP_SILVER: 100,
+    VIP_GOLD: 175,
+    VIP_PLATINUM: 250,
+    VIP_DIAMOND: 500,
   },
 } as const;
 
@@ -367,7 +369,7 @@ export const PLATFORM_GLOBAL = {
 
 // ─── MERCHANDISE CONFIG (CEO-DECISIONS-2026-04-12) ────────────────────────────
 export const MERCHANDISE_CONFIG = {
-  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN', // ShowTokens rejected at checkout — no exceptions
+  ACCEPTED_TOKEN_TYPE: 'CZT', // ShowTokens rejected at checkout — no exceptions
   CREATOR_PAYOUT_PER_TOKEN_USD: 0.075, // $0.075 USD per ChatToken — locked 2026-04-12
   DISPUTE_HOLD_TRIGGER: 'IMMEDIATE', // Hold applied on ticket creation
   DISPUTE_CREATOR_WINDOW_HOURS: 72, // 72h (3 business days) to resolve
@@ -395,7 +397,7 @@ export const CONCIERGE_APPT = {
 
 // ─── FAN CLUB (CEO-DECISIONS-2026-04-12-B) ────────────────────────────────────
 export const FAN_CLUB = {
-  ACCEPTED_TOKEN_TYPE: 'CHATTOKEN', // ShowTokens not accepted
+  ACCEPTED_TOKEN_TYPE: 'CZT', // ShowTokens not accepted
   BILLING_CYCLES: ['MONTHLY', 'ANNUAL'] as const,
   ANNUAL_DISCOUNT_PCT: null, // TBD — pending CEO confirmation
   // Fan club fee applies PLATFORM_GLOBAL.MARKETPLACE_FEE_PCT (18%) — no separate constant.
@@ -404,19 +406,20 @@ export const FAN_CLUB = {
 // ─── ZONE MAP (MEMB-001 — Zone Access Enforcement) ───────────────────────────
 // Defines which membership tiers may access which zones.
 // ShowZonePass overrides tier gate for SHOW_THEATRE and BIJOU only.
+// Tier rank order (lowest → highest): GUEST → VIP → VIP_SILVER → VIP_GOLD → VIP_PLATINUM → VIP_DIAMOND
 export const ZONE_MAP = {
-  CHAT_ZONE: ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
-  SHOW_THEATRE: ['ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const,
-  BIJOU: ['OMNIPASS_PLUS', 'DIAMOND'] as const,
-  PRIVATE_CALL: ['OMNIPASS_PLUS', 'DIAMOND'] as const,
-  DIAMOND_CONCIERGE: ['DIAMOND'] as const,
+  CHAT_ZONE: ['GUEST', 'VIP', 'VIP_SILVER', 'VIP_GOLD', 'VIP_PLATINUM', 'VIP_DIAMOND'] as const,
+  SHOW_THEATRE: ['VIP_SILVER', 'VIP_GOLD', 'VIP_PLATINUM', 'VIP_DIAMOND'] as const,
+  BIJOU: ['VIP_PLATINUM', 'VIP_DIAMOND'] as const,
+  PRIVATE_CALL: ['VIP_PLATINUM', 'VIP_DIAMOND'] as const,
+  DIAMOND_CONCIERGE: ['VIP_DIAMOND'] as const,
 } as const;
 
 // Zones where a ShowZonePass can override tier-based denial
 export const SHOW_ZONE_PASS_OVERRIDE_ZONES = ['SHOW_THEATRE', 'BIJOU'] as const;
 
 // Canonical membership tiers for zone access (ordered lowest → highest)
-export const ZONE_ACCESS_TIERS = ['DAY_PASS', 'ANNUAL', 'OMNIPASS_PLUS', 'DIAMOND'] as const;
+export const ZONE_ACCESS_TIERS = ['GUEST', 'VIP', 'VIP_SILVER', 'VIP_GOLD', 'VIP_PLATINUM', 'VIP_DIAMOND'] as const;
 export type ZoneAccessTier = (typeof ZONE_ACCESS_TIERS)[number];
 export type ZoneAccessZone = keyof typeof ZONE_MAP;
 
@@ -475,7 +478,7 @@ export const REDBOOK_RATE_CARDS = {
 
 // ─── RECOVERY ENGINE — Unified Customer Service (REDBOOK §5) ─────────────────
 // Drives Recovery Engine workflows in services/ledger/recovery.service.ts.
-// Revisions require CS: commit + CEO sign-off.
+// Revisions require REDBOOK: commit + CEO sign-off.
 export const RECOVERY_ENGINE = {
   // Diamond tokens expire 14 days from issuance (unless extended).
   DIAMOND_EXPIRY_DAYS: 14,
