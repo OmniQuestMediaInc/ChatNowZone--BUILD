@@ -244,7 +244,7 @@ describe('RecoveryEngine — 48h expiry warning', () => {
     return {
       wallet_id: 'w_warn',
       user_id: 'cu_warn',
-      tier: 'DIAMOND',
+      tier: 'VIP_DIAMOND',
       remaining_balance_tokens: 5_000n,
       remaining_balance_usd_cents: 65_000n,
       expires_at_utc: new Date(
@@ -282,7 +282,7 @@ describe('RecoveryEngine — 48h expiry warning', () => {
 
   it('excludes non-Diamond wallets', async () => {
     const engine = new RecoveryEngine();
-    const nonDiamond = snap({ is_diamond: false, tier: 'ANNUAL' });
+    const nonDiamond = snap({ is_diamond: false, tier: 'VIP_SILVER' });
     const result = await engine.send48HourWarning([nonDiamond]);
     expect(result).toHaveLength(0);
   });
@@ -322,7 +322,7 @@ describe('RecoveryEngine — high-balance personal-touch trigger', () => {
     const high: WalletSnapshot = {
       wallet_id: 'w_high',
       user_id: 'cu_high',
-      tier: 'DIAMOND',
+      tier: 'VIP_DIAMOND',
       remaining_balance_tokens: 80_000n,
       remaining_balance_usd_cents: 1_050_000n, // $10,500
       expires_at_utc: new Date().toISOString(),
@@ -339,7 +339,7 @@ describe('RecoveryEngine — high-balance personal-touch trigger', () => {
     const below: WalletSnapshot = {
       wallet_id: 'w_low',
       user_id: 'cu_low',
-      tier: 'DIAMOND',
+      tier: 'VIP_DIAMOND',
       remaining_balance_tokens: 80_000n,
       remaining_balance_usd_cents: 1_000_000n, // exactly $10,000
       expires_at_utc: new Date().toISOString(),

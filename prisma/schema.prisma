@@ -660,21 +660,29 @@ model CollectionsQueue {
 // Ontario ESA 2026 compliance. Append-only for audit logs.
 
 model StaffMember {
-  id                String   @id @default(uuid())
-  employee_ref      String   @unique @db.VarChar(50)
-  display_name      String   @db.VarChar(100)
-  role              String   @db.VarChar(20)       // GZM, GZAM, GZS, GZSA
-  employment_type   String   @db.VarChar(10)       // FT, PT
-  staff_category    String   @db.VarChar(10)       // CORE, EDGE
-  department        String   @db.VarChar(30)       // GUESTZONE, FINANCE, TECH, LEGAL, MAINTENANCE, RECEPTION
-  languages         String[]                       // e.g. ['EN','FR','ES']
-  hourly_rate_cad   Decimal? @db.Decimal(8, 2)     // Hourly staff
-  annual_salary_cad Decimal? @db.Decimal(10, 2)    // Salaried staff
-  is_active         Boolean  @default(true)
-  hire_date         DateTime @db.Date
-  correlation_id    String   @db.VarChar(64)
-  reason_code       String   @db.VarChar(100)
-  created_at        DateTime @default(now()) @db.Timestamptz
+  id                      String    @id @default(uuid())
+  employee_ref            String    @unique @db.VarChar(50)
+  display_name            String    @db.VarChar(100)
+  role                    String    @db.VarChar(20)       // GZM, GZAM, GZS, GZSA
+  employment_type         String    @db.VarChar(10)       // FT, PT
+  staff_category          String    @db.VarChar(10)       // CORE, EDGE
+  department              String    @db.VarChar(30)       // GUESTZONE, FINANCE, TECH, LEGAL, MAINTENANCE, RECEPTION
+  languages               String[]                        // e.g. ['EN','FR','ES']
+  hourly_rate_cad         Decimal?  @db.Decimal(8, 2)    // Hourly staff
+  annual_salary_cad       Decimal?  @db.Decimal(10, 2)   // Salaried staff
+  is_active               Boolean   @default(true)
+  hire_date               DateTime  @db.Date
+  // WO-002: HCZ Zoey scheduler additions
+  target_weekly_hours     Int       @default(385)         // Tenths of hours: 385 = 38.5h target
+  min_weekly_hours        Int       @default(360)         // Tenths of hours: 360 = 36.0h floor
+  jurisdiction            String    @default("ON")        // Provincial jurisdiction code
+  birthday                DateTime? @db.Date
+  sick_hours_remaining    Int       @default(40)          // Hours: 40h = 5 sick days
+  sick_carryover_hours    Int       @default(0)
+  sick_carryover_expires  DateTime? @db.Date
+  correlation_id          String    @db.VarChar(64)
+  reason_code             String    @db.VarChar(100)
+  created_at              DateTime  @default(now()) @db.Timestamptz
 
   @@map("staff_members")
 }
@@ -854,8 +862,11 @@ model User {
   created_at            DateTime        @default(now()) @db.Timestamptz
   updated_at            DateTime        @updatedAt @db.Timestamptz
 
-  membership            Membership?
-  card_on_file          CardOnFile?
+  membership                 Membership?
+  card_on_file               CardOnFile?
+  extension_action_records   ExtensionActionRecord[]
+  guest_risk_profile         GuestRiskProfile?
+  friendly_fraud_signals     FriendlyFraudSignal[]
 
   @@map("users")
 }
@@ -1371,4 +1382,422 @@ model WormExportRecord {
 
   @@index([exported_at])
   @@map("worm_export_records")
+}
+
+// ─── Room-Heat Engine (WO-003 — Business Plan B.4) ────────────────────────────
+// Migration: 20260425000000_add_room_heat
+
+/// Time-series heat score snapshots — one row per ingest() call.
+/// Append-only by convention (no UPDATE/DELETE in service code).
+model RoomHeatSnapshot {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  session_id      String   @db.VarChar(200)
+  creator_id      String   @db.Uuid
+  heat_score      Decimal  @db.Decimal(5, 2)
+  heat_tier       String   @db.VarChar(20)
+  /// JSON object of HeatScoreComponents (all 13 component values).
+  components      Json
+  correlation_id  String   @db.VarChar(128)
+  reason_code     String   @db.VarChar(100)
+  is_dual_flame   Boolean  @default(false)
+  rule_applied_id String   @default("ROOM_HEAT_ENGINE_v2") @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@index([session_id, created_at])
+  @@index([creator_id, created_at])
+  @@map("room_heat_snapshots")
+}
+
+/// Per-creator adaptive weight multipliers, learned from tip events.
+/// One row per creator — updated in-place via increment-only tip_events_seen.
+model RoomHeatAdaptiveWeights {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creator_id      String   @unique @db.Uuid
+  /// JSON Record<string, number> — multipliers for each scoring component.
+  weights         Json
+  /// Monotonic counter of tip events that have driven weight updates.
+  tip_events_seen Int      @default(0)
+  last_updated_at DateTime @default(now()) @db.Timestamptz
+  correlation_id  String   @db.VarChar(128)
+  reason_code     String   @default("ADAPTIVE_INIT") @db.VarChar(100)
+  rule_applied_id String   @default("ROOM_HEAT_ADAPTIVE_v1") @db.VarChar(100)
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@map("room_heat_adaptive_weights")
+}
+
+// ── HeartSync + Guest-Heat models ────────────────────────────────────────
+
+// Per-tier on/off toggle for HeartSync biometric relay.
+// Managed by platform operators. Non-FIZ; no financial impact.
+model HeartSyncTierConfig {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  // Membership tier this row governs.
+  tier           String   @db.VarChar(40)
+  // Whether HeartSync relay is enabled for this tier.
+  enabled        Boolean  @default(false)
+  // Whether COMBINED ("feel as one") mode is permitted for this tier.
+  combined_mode  Boolean  @default(false)
+  correlation_id String   @db.VarChar(100)
+  reason_code    String   @db.VarChar(100)
+  updated_by     String   @db.Uuid
+  created_at     DateTime @default(now()) @db.Timestamptz
+  updated_at     DateTime @default(now()) @db.Timestamptz
+
+  @@unique([tier])
+  @@index([tier, enabled])
+  @@map("heartsync_tier_configs")
+}
+
+// Room-level visual/haptic effect config (e.g. dual-flame pulse).
+model RoomEffectConfig {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  room_id        String   @db.VarChar(100)
+  effect_type    String   @db.VarChar(60)
+  enabled        Boolean  @default(true)
+  parameters     Json?
+  correlation_id String   @db.VarChar(100)
+  reason_code    String   @db.VarChar(100)
+  created_at     DateTime @default(now()) @db.Timestamptz
+  updated_at     DateTime @default(now()) @db.Timestamptz
+
+  @@unique([room_id, effect_type])
+  @@index([room_id])
+  @@map("room_effect_configs")
+}
+
+// Whale profile — spending intelligence, preference vectors, loyalty scoring.
+// Append-heavy: new rows on each rescore event. No update of previous rows.
+model WhaleProfile {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  guest_id              String   @db.Uuid
+  // Loyalty tier derived from multi-window spend analysis.
+  loyalty_tier          String   @db.VarChar(30)
+  // Composite whale score 0..100.
+  whale_score           Decimal  @db.Decimal(5, 2)
+  // Rolling spend windows (CZT tokens).
+  spend_24h             Decimal  @default(0) @db.Decimal(14, 4)
+  spend_72h             Decimal  @default(0) @db.Decimal(14, 4)
+  spend_7d              Decimal  @default(0) @db.Decimal(14, 4)
+  spend_14d             Decimal  @default(0) @db.Decimal(14, 4)
+  spend_30d             Decimal  @default(0) @db.Decimal(14, 4)
+  // Preference vector — opaque JSON envelope; shape is intentionally flexible.
+  preference_vector     Json?
+  // Geo-pricing region tag (ISO 3166-1 alpha-2 or CNZ region code).
+  geo_region            String?  @db.VarChar(10)
+  correlation_id        String   @db.VarChar(100)
+  reason_code           String   @db.VarChar(100)
+  rule_applied_id       String   @db.VarChar(100)
+  scored_at             DateTime @default(now()) @db.Timestamptz
+  created_at            DateTime @default(now()) @db.Timestamptz
+
+  @@index([guest_id, scored_at])
+  @@index([loyalty_tier, scored_at])
+  @@map("whale_profiles")
+}
+
+// Gemstone awards — queued symbolic gifting from the platform to a guest.
+// Append-only; delivery state updated via reason_code field progression.
+model GemstoneAward {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  guest_id       String    @db.Uuid
+  session_id     String?   @db.VarChar(100)
+  // Gem type (e.g. RUBY, SAPPHIRE, EMERALD, DIAMOND).
+  gem_type       String    @db.VarChar(40)
+  // Symbolic description shown to the guest (customisable).
+  symbolism      String    @db.VarChar(255)
+  // PUBLIC or PRIVATE visibility in room feed.
+  visibility     String    @db.VarChar(20)
+  // QUEUED | SENT | VIEWED | DECLINED.
+  status         String    @default("QUEUED") @db.VarChar(20)
+  // ISO timestamp of when the gem was dispatched (null until sent).
+  sent_at        DateTime? @db.Timestamptz
+  // Deliberate send delay in seconds (simulates human-like timing).
+  send_delay_sec Int       @default(0)
+  correlation_id String    @db.VarChar(100)
+  reason_code    String    @db.VarChar(100)
+  rule_applied_id String   @db.VarChar(100)
+  created_at     DateTime  @default(now()) @db.Timestamptz
+
+  @@index([guest_id, status])
+  @@index([session_id, status])
+  @@map("gemstone_awards")
+}
+
+// ── Fraud Prevention Models ───────────────────────────────────────────────────
+
+model ExtensionActionRecord {
+  actionId            String   @id @default(cuid())
+  guestId             String
+  agentId             String
+  agentTier           String
+  action              String
+  expiryExtensionDays Int?
+  goodwillCreditCZT   Int?
+  interactionRef      String
+  reason              String
+  executedAt          DateTime
+  ceoReviewFlagged    Boolean  @default(false)
+  createdAt           DateTime @default(now())
+
+  user                User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([guestId, executedAt])
+  @@map("extension_action_records")
+}
+
+model GuestRiskProfile {
+  guestId        String   @id
+  riskScore      Int      @default(0)
+  tier           String   @default("GREEN")
+  activeSignals  String[]
+  lastUpdated    DateTime @updatedAt
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user           User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([riskScore])
+  @@index([tier])
+  @@map("guest_risk_profiles")
+}
+
+model FriendlyFraudSignal {
+  id             String   @id @default(cuid())
+  guestId        String
+  score          Int
+  triggers       String[]
+  recommendation String
+  detectedAt     DateTime @default(now())
+  rawData        Json?
+
+  user           User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([guestId])
+  @@index([detectedAt])
+  @@map("friendly_fraud_signals")
+}
+
+model MlModelRegistry {
+  id                    String   @id @default(cuid())
+  version               String   @unique
+  onnxModel             Bytes
+  shapAnalysis          Json?
+  fairnessReport        Json?
+  benchmarkSnapshot     Json?
+  complianceAuditId     String?
+  fintracRetentionUntil DateTime
+  trainingTrigger       String
+  createdAt             DateTime @default(now())
+
+  @@map("ml_model_registry")
+}
+
+model PipedaComplianceLog {
+  id         String   @id @default(cuid())
+  auditId    String   @unique
+  reportJson Json
+  pdfBuffer  String
+  createdAt  DateTime @default(now())
+
+  @@map("pipeda_compliance_logs")
+}
+
+model InternationalComplianceLog {
+  id          String   @id @default(cuid())
+  cycleId     String   @unique
+  masterPDF   String
+  summaryJson Json
+  createdAt   DateTime @default(now())
+
+  @@map("international_compliance_logs")
+}
+
+model FintracEvidencePackage {
+  id          String   @id @default(cuid())
+  packageId   String   @unique
+  pdfBuffer   String
+  jsonPayload Json
+  createdAt   DateTime @default(now())
+
+  @@map("fintrac_evidence_packages")
+// ─── WO-002: HCZ ZoneBot Zoey — Scheduling System ───────────────────────────
+// Standalone scheduler service (services/zonebot-scheduler).
+// All tables are append-only for audit integrity.
+
+model HczShift {
+  id                     String    @id @default(uuid())
+  staff_member_id        String    @db.Uuid
+  schedule_period_id     String?   @db.Uuid
+  shift_date             DateTime  @db.Date
+  start_utc              DateTime  @db.Timestamptz
+  end_utc                DateTime  @db.Timestamptz
+  break_start_utc        DateTime? @db.Timestamptz
+  break_minutes          Int       @default(30)
+  is_break_locked        Boolean   @default(false)
+  locked_by_staff_id     String?   @db.Uuid
+  actual_start_utc       DateTime? @db.Timestamptz
+  actual_end_utc         DateTime? @db.Timestamptz
+  payroll_code           String    @default("REG")
+  overtime_minutes       Int       @default(0)
+  reason_code            String?
+  override_by            String?   @db.Uuid
+  override_reason        String?
+  role_segment           Json?
+  stagger_offset_minutes Int?      @default(0)
+  correlation_id         String
+  rule_applied_id        String    @default("HCZ_ZOEY_SHIFT_v1")
+  created_at             DateTime  @default(now()) @db.Timestamptz
+
+  @@index([staff_member_id, shift_date])
+  @@index([shift_date])
+  @@map("hcz_shifts")
+}
+
+model HczLeaveRequest {
+  id               String    @id @default(uuid())
+  staff_member_id  String    @db.Uuid
+  leave_type       String                      // SICK, VACATION, PERSONAL, BEREAVEMENT
+  start_date       DateTime  @db.Date
+  end_date         DateTime  @db.Date
+  hours_requested  Int
+  status           String    @default("PENDING")  // PENDING, APPROVED, DENIED
+  approved_by      String?   @db.Uuid
+  approved_at      DateTime? @db.Timestamptz
+  denial_reason    String?
+  correlation_id   String
+  reason_code      String
+  rule_applied_id  String    @default("HCZ_LEAVE_v1")
+  created_at       DateTime  @default(now()) @db.Timestamptz
+
+  @@index([staff_member_id])
+  @@map("hcz_leave_requests")
+}
+
+model HczShiftOffer {
+  id              String    @id @default(uuid())
+  shift_id        String    @db.Uuid
+  offered_by      String    @db.Uuid
+  status          String    @default("OPEN")   // OPEN, CLAIMED, EXPIRED, CANCELLED
+  claimed_by      String?   @db.Uuid
+  claimed_at      DateTime? @db.Timestamptz
+  expires_at      DateTime? @db.Timestamptz
+  correlation_id  String
+  reason_code     String
+  rule_applied_id String    @default("HCZ_SHIFT_OFFER_v1")
+  created_at      DateTime  @default(now()) @db.Timestamptz
+
+  @@map("hcz_shift_offers")
+}
+
+model HczShiftSwap {
+  id                  String    @id @default(uuid())
+  initiator_id        String    @db.Uuid
+  initiator_shift_id  String    @db.Uuid
+  recipient_id        String    @db.Uuid
+  recipient_shift_id  String    @db.Uuid
+  status              String    @default("PENDING")  // PENDING, APPROVED, REJECTED, CANCELLED
+  approved_by         String?   @db.Uuid
+  approved_at         DateTime? @db.Timestamptz
+  rejection_reason    String?
+  correlation_id      String
+  reason_code         String
+  rule_applied_id     String    @default("HCZ_SHIFT_SWAP_v1")
+  created_at          DateTime  @default(now()) @db.Timestamptz
+
+  @@map("hcz_shift_swaps")
+}
+
+model HczWellbeingResponse {
+  id                   String   @id @default(uuid())
+  staff_member_id      String   @db.Uuid
+  response_date        DateTime @db.Date
+  energy_score         Int                        // 1-10
+  stress_score         Int                        // 1-10
+  satisfaction_score   Int                        // 1-10
+  notes                String?
+  is_anonymous         Boolean  @default(false)
+  correlation_id       String
+  reason_code          String
+  rule_applied_id      String   @default("HCZ_WELLBEING_v1")
+  created_at           DateTime @default(now()) @db.Timestamptz
+
+  @@index([staff_member_id, response_date])
+  @@map("hcz_wellbeing_responses")
+}
+
+model HczFatigueScore {
+  id                    String   @id @default(uuid())
+  staff_member_id       String   @db.Uuid
+  score_date            DateTime @db.Date
+  score                 Int                        // 0-100; higher = more fatigued
+  consecutive_days      Int      @default(0)
+  hours_past_7_days     Int      @default(0)
+  recent_overtime_hours Int      @default(0)
+  flags                 Json?
+  correlation_id        String
+  reason_code           String
+  rule_applied_id       String   @default("HCZ_FATIGUE_v1")
+  created_at            DateTime @default(now()) @db.Timestamptz
+
+  @@unique([staff_member_id, score_date])
+  @@map("hcz_fatigue_scores")
+}
+
+// Append-only: no UPDATE or DELETE permitted (cash incentive disbursements)
+model HczIncentiveLedger {
+  id                  String   @id @default(uuid())
+  staff_member_id     String   @db.Uuid
+  incentive_type      String                      // SPIN_WIN, COVERAGE_BONUS, REFERRAL, OTHER
+  amount_cad_cents    Int                         // Always in cents (e.g. 5000 = $50.00)
+  reference_shift_id  String?  @db.Uuid
+  awarded_at          DateTime @default(now()) @db.Timestamptz
+  payroll_period      String?
+  correlation_id      String
+  reason_code         String
+  rule_applied_id     String   @default("HCZ_INCENTIVE_v1")
+  created_at          DateTime @default(now()) @db.Timestamptz
+
+  @@index([staff_member_id])
+  @@map("hcz_incentive_ledger")
+}
+
+model HczDemandHistory {
+  id                   String   @id @default(uuid())
+  week_start           DateTime @db.Date
+  department           String
+  day_of_week          Int                        // 0=Mon, 6=Sun
+  hour_of_day          Int                        // 0-23
+  volume_index         Decimal  @db.Decimal(6, 3) // normalized 0.000-1.000
+  actual_staff_count   Int      @default(0)
+  source               String   @default("ACTUAL")  // ACTUAL, FORECAST
+  correlation_id       String
+  reason_code          String
+  rule_applied_id      String   @default("HCZ_DEMAND_v1")
+  created_at           DateTime @default(now()) @db.Timestamptz
+
+  @@unique([week_start, department, day_of_week, hour_of_day])
+  @@map("hcz_demand_history")
+}
+
+model HczBudgetForecast {
+  id                           String    @id @default(uuid())
+  week_start                   DateTime  @db.Date
+  department                   String
+  projected_labour_cad_cents   BigInt    @default(0)
+  actual_labour_cad_cents      BigInt?
+  projected_ft_hours           Int       @default(0)
+  projected_pt_hours           Int       @default(0)
+  projected_ot_hours           Int       @default(0)
+  headcount_ft                 Int       @default(0)
+  headcount_pt                 Int       @default(0)
+  status                       String    @default("DRAFT")  // DRAFT, APPROVED, ACTUAL
+  correlation_id               String
+  reason_code                  String
+  rule_applied_id              String    @default("HCZ_BUDGET_v1")
+  created_at                   DateTime  @default(now()) @db.Timestamptz
+
+  @@unique([week_start, department])
+  @@map("hcz_budget_forecasts")
 }

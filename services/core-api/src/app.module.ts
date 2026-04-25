@@ -2,6 +2,7 @@
 // CHORE: HOUSE-001 — restore missing module registrations dropped in merge
 // PAYLOAD 3: wire GateGuardModule + GateGuardMiddleware in front of
 //            /purchase, /spend, /payout route trees.
+// HZ: register HeartSyncModule + GuestHeatModule.
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { CreatorModule } from './creator/creator.module';
@@ -26,6 +27,10 @@ import { GateGuardModule } from './gateguard/gateguard.module';
 import { GateGuardMiddleware } from './gateguard/gateguard.middleware';
 import { AuditModule } from './audit/audit.module';
 import { ThreeBucketSpendGuardMiddleware } from './finance/three-bucket-spend-guard.middleware';
+import { RefundModule } from './refund/refund.module';
+import { RoomHeatModule } from '../../room-heat/src/room-heat.module';
+import { HeartSyncModule } from '../../heartsync/src/heartsync.module';
+import { GuestHeatModule } from '../../guest-heat/src/guest-heat.module';
 
 @Module({
   imports: [
@@ -55,7 +60,9 @@ import { ThreeBucketSpendGuardMiddleware } from './finance/three-bucket-spend-gu
     SchedulingModule,
     MembershipModule,
     ZoneAccessModule,
-    MembershipModule,
+    RoomHeatModule,
+    HeartSyncModule,
+    GuestHeatModule,
   ],
 })
 export class AppModule implements NestModule {

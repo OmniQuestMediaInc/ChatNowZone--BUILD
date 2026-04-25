@@ -75,7 +75,7 @@ function blazingFrame(): Omit<CyranoInputFrame, 'heat'> {
 }
 
 describe('IntegrationHubService.processHighHeatSession — E2E flow', () => {
-  it('returns BLAZING heat + CAT_MONETIZATION suggestion + 10% payout scaling', async () => {
+  it('returns INFERNO heat + CAT_MONETIZATION suggestion + 10% payout scaling', async () => {
     const { hub, published } = makeHub();
     const result = await hub.processHighHeatSession({
       sample: blazingSample(),
@@ -84,7 +84,7 @@ describe('IntegrationHubService.processHighHeatSession — E2E flow', () => {
       base_wallet_id: 'wallet-creator-e2e',
     });
 
-    expect(result.heat.tier).toBe('BLAZING');
+    expect(result.heat.tier).toBe('INFERNO');
     expect(result.suggestion?.category).toBe('CAT_MONETIZATION');
     expect(result.payout_scaling_pct).toBe(0.10);
     expect(result.scaled_payout_per_token_usd).toBeCloseTo(0.0825, 4);

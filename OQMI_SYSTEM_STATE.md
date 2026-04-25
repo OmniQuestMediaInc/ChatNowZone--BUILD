@@ -1,3 +1,17 @@
+## CHATNOW.ZONE BUILD STATUS
+
+**Date:** April 24, 2026
+**Status:** BUILD COMPLETE — CANONICAL COMPLIANT (Alpha Launch Ready)
+
+All L0 ship-gates closed per Canonical Corpus v10 + REDBOOK + Business Plan v2.8.
+Payloads 1–10 executed and verified.
+Retired tier alignment complete: `DAY_PASS`, `ANNUAL` (as tier), `OMNIPASS_PLUS`, and standalone `DIAMOND`
+replaced with canonical `GUEST` / `VIP` / `VIP_SILVER` / `VIP_GOLD` / `VIP_PLATINUM` / `VIP_DIAMOND`
+across `ZONE_MAP`, `ZONE_ACCESS_TIERS`, `MEMBERSHIP.STIPEND_CZT`, `MembershipService`,
+`ZoneAccessService`, `RecoveryTypes`, `DiamondConciergeService`, and all integration tests.
+
+---
+
 # OQMI System State — Backlog Snapshot
 
 **Snapshot date:** 2026-04-25 (PAYLOAD 7 + 8 — Frontend Polish + Ship-Gate Verification)
@@ -213,7 +227,19 @@ report-back files. `grep -rni "Navigator\|Jaime Watt"` outside the
 
 ---
 
-## 8. Contact / Authority
+## 8. Payload 9 — Build-Complete Deliverables (2026-04-24)
+
+| Artifact | Path | Purpose |
+| --- | --- | --- |
+| Deployment pipeline | `.github/workflows/deploy.yml` | Build, typecheck, lint, test, Prisma push, SQL-schema validation, Docker compose config validation, readiness gate |
+| Production compose | `docker-compose.yml` | Canonical bring-up with FT-033 intact, env-var driven secrets, Payload 1–8 feature flags |
+| Integration Hub v2 | `services/integration-hub/src/hub.service.ts` | `forwardGuardedLedgerRequest` (GateGuard pre-processor), `emitRecoveryExpiryWarning`, `emitDiamondConciergeHandoff`, `processHighHeatSession` |
+| Launch manifest | `PROGRAM_CONTROL/LAUNCH_MANIFEST.md` | Pixel Legacy onboarding, Mic Drop Reveal, 3,000-creator rate-lock, GateGuard LOI data package |
+| Pre-launch checklist | `docs/PRE_LAUNCH_CHECKLIST.md` | CEO sign-off, compliance, infra, observability, go/no-go |
+| Architecture overview | `docs/ARCHITECTURE_OVERVIEW.md` | Full system map, cross-Payload invariants, cross-service wiring |
+| Root README update | `README.md` | Final "How to Run" + architecture summary |
+
+## 9. Contact / Authority
 
 All content authority flows through Kevin B. Hartley (CEO). Directive
 authoring happens in Claude Chat; execution happens in Claude Code and

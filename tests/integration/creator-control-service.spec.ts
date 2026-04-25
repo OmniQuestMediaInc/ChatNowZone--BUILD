@@ -50,7 +50,7 @@ describe('RoomHeatEngine — tier resolution', () => {
     expect(score.score).toBe(0);
   });
 
-  it('computes BLAZING when pressure + velocity + VIPs all saturate', () => {
+  it('computes INFERNO when pressure + velocity + VIPs all saturate', () => {
     const { stub } = natsStub();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const engine = new RoomHeatEngine(stub as any);
@@ -63,7 +63,7 @@ describe('RoomHeatEngine — tier resolution', () => {
       }),
     );
     expect(score.score).toBe(100);
-    expect(score.tier).toBe('BLAZING');
+    expect(score.tier).toBe('INFERNO');
   });
 
   it('publishes TIER_CHANGED only when the tier crosses a band boundary', () => {
@@ -122,12 +122,12 @@ describe('BroadcastTimingCopilot', () => {
 });
 
 describe('SessionMonitoringCopilot', () => {
-  it('suggests RAISE at BLAZING with 20% magnitude', () => {
+  it('suggests RAISE at INFERNO with 20% magnitude', () => {
     const copilot = new SessionMonitoringCopilot();
     const nudge = copilot.suggestNudge({
       session_id: 's',
       creator_id: 'c',
-      tier: 'BLAZING',
+      tier: 'INFERNO',
       score: 90,
       components: { tipper_pressure: 40, velocity: 40, vip_presence: 10 },
       captured_at_utc: 't',
@@ -183,7 +183,7 @@ describe('CreatorControlService — workstation orchestration', () => {
     const { heat, nudge } = svc.ingestSample(
       sample({ tippers_online: 50, tips_per_minute: 20, avg_tip_tokens: 20, diamond_guests_present: 4 }),
     );
-    expect(heat.tier).toBe('BLAZING');
+    expect(heat.tier).toBe('INFERNO');
     expect(nudge.direction).toBe('RAISE');
     const topics = published.map((p) => p.topic);
     expect(topics).toContain(NATS_TOPICS.CREATOR_CONTROL_SESSION_SUGGESTION);
@@ -201,7 +201,8 @@ describe('CreatorControlService — workstation orchestration', () => {
       new BroadcastTimingCopilot(),
       new SessionMonitoringCopilot(),
     );
-    svc.ingestSample(sample({ tippers_online: 25, tips_per_minute: 0, avg_tip_tokens: 0, diamond_guests_present: 0 }));
+    // tippers_online: 40 → pressure=40, velocity=0, vip=0 → score=40 → WARM (34–60) → HOLD → no PRICE_NUDGE
+    svc.ingestSample(sample({ tippers_online: 40, tips_per_minute: 0, avg_tip_tokens: 0, diamond_guests_present: 0 }));
     const nudgeEvents = published.filter((p) => p.topic === NATS_TOPICS.CREATOR_CONTROL_PRICE_NUDGE);
     expect(nudgeEvents).toHaveLength(0);
   });
