@@ -5,6 +5,9 @@ Auto-generated on every push. Do not edit manually.
 **Branch:** `copilot/wo-003-room-heat-engine`
 **Commit:** `a049ec34e30080cfa234f0aab5b08dd28d057aa9`
 **Generated:** 2026-04-25T05:33:57Z
+**Branch:** `copilot/implement-full-heartsync-guestheat-cyrano`
+**Commit:** `c42d98c284e0a6f934b02e94feda5e4a1b098ca6`
+**Generated:** 2026-04-25T05:26:34Z
 
 ## All Files
 
@@ -427,6 +430,27 @@ Auto-generated on every push. Do not edit manually.
 - `services/cyrano/src/session-memory.store.ts`
 - `services/diamond-concierge/src/diamond-concierge.module.ts`
 - `services/diamond-concierge/src/diamond.service.ts`
+- `services/guest-heat/.env.example`
+- `services/guest-heat/ASSUMPTIONS.md`
+- `services/guest-heat/FLAGS.md`
+- `services/guest-heat/README.md`
+- `services/guest-heat/src/cyrano-teleprompter.service.ts`
+- `services/guest-heat/src/dual-flame-pulse.service.ts`
+- `services/guest-heat/src/forecast.service.ts`
+- `services/guest-heat/src/gemstone.service.ts`
+- `services/guest-heat/src/guest-heat.controller.ts`
+- `services/guest-heat/src/guest-heat.module.ts`
+- `services/guest-heat/src/guest-heat.service.ts`
+- `services/guest-heat/src/guest-heat.types.ts`
+- `services/guest-heat/src/performance-timer.service.ts`
+- `services/heartsync/.env.example`
+- `services/heartsync/ASSUMPTIONS.md`
+- `services/heartsync/FLAGS.md`
+- `services/heartsync/README.md`
+- `services/heartsync/src/heartsync.controller.ts`
+- `services/heartsync/src/heartsync.module.ts`
+- `services/heartsync/src/heartsync.service.ts`
+- `services/heartsync/src/heartsync.types.ts`
 - `services/integration-hub/src/hub.module.ts`
 - `services/integration-hub/src/hub.service.ts`
 - `services/ledger/index.ts`
