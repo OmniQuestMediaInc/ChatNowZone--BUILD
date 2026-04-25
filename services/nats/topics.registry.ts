@@ -34,6 +34,27 @@ export const NATS_TOPICS = {
   HZ_HAPTIC_TRIGGER:        'hz.haptic.trigger',
   HZ_WISH_FULFILLED:        'hz.wish.fulfilled',
 
+  // ── HeartSync biometric relay ──────────────────────────────────────────
+  HEARTSYNC_SAMPLE_RECEIVED:        'heartsync.sample.received',
+  HEARTSYNC_RELAY_EMITTED:          'heartsync.relay.emitted',
+  HEARTSYNC_COMBINED_BPM:           'heartsync.combined.bpm',
+  HEARTSYNC_CONSENT_GRANTED:        'heartsync.consent.granted',
+  HEARTSYNC_CONSENT_REVOKED:        'heartsync.consent.revoked',
+  HEARTSYNC_HAPTIC_DISPATCHED:      'heartsync.haptic.dispatched',
+  HEARTSYNC_PLAUSIBILITY_REJECTED:  'heartsync.plausibility.rejected',
+  HEARTSYNC_TIER_DISABLED:          'heartsync.tier.disabled',
+
+  // ── Guest-Heat intelligence layer ─────────────────────────────────────
+  GUEST_HEAT_WHALE_SCORED:          'guest_heat.whale.scored',
+  GUEST_HEAT_OFFER_TRIGGERED:       'guest_heat.offer.triggered',
+  GUEST_HEAT_OFFER_ACCEPTED:        'guest_heat.offer.accepted',
+  GUEST_HEAT_GEMSTONE_QUEUED:       'guest_heat.gemstone.queued',
+  GUEST_HEAT_GEMSTONE_SENT:         'guest_heat.gemstone.sent',
+  GUEST_HEAT_DUAL_FLAME_TRIGGERED:  'guest_heat.dual_flame.triggered',
+  GUEST_HEAT_FORECAST_UPDATED:      'guest_heat.forecast.updated',
+  GUEST_HEAT_PERF_TIMER_STATE:      'guest_heat.perf_timer.state',
+  GUEST_HEAT_TELEPROMPTER_ADVANCED: 'guest_heat.teleprompter.advanced',
+
   // ── Risk & fraud ───────────────────────────────────────────────────────
   RISK_FLAG_RAISED:         'risk.flag.raised',
   RISK_CONTAINMENT_APPLIED: 'risk.containment.applied',
@@ -185,6 +206,12 @@ export const NATS_TOPICS = {
   ROOM_HEAT_SAMPLE:                  'room.heat.sample',
   ROOM_HEAT_TIER_CHANGED:            'room.heat.tier.changed',
   ROOM_HEAT_PEAK:                    'room.heat.peak',
+  ROOM_HEAT_LEADERBOARD_UPDATED:     'room.heat.leaderboard.updated',
+  ROOM_HEAT_HOT_AND_READY:           'room.heat.hot_and_ready',
+  ROOM_HEAT_DUAL_FLAME_PEAK:         'room.heat.dual_flame.peak',
+  ROOM_HEAT_SESSION_STARTED:         'room.heat.session.started',
+  ROOM_HEAT_SESSION_ENDED:           'room.heat.session.ended',
+  ROOM_HEAT_ADAPTIVE_UPDATED:        'room.heat.adaptive.updated',
 
   // ── CreatorControl.Zone (Business Plan B.3 — creator workstation) ────────
   CREATOR_CONTROL_BROADCAST_SUGGESTION: 'creator_control.broadcast.suggestion',

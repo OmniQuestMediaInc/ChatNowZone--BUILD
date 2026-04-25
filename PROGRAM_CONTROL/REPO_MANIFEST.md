@@ -5,6 +5,9 @@ Auto-generated on every push. Do not edit manually.
 **Branch:** `copilot/add-refund-policy-acknowledgment-event`
 **Commit:** `6a1d7514514b08c55fe00a12f890155e594c37ff`
 **Generated:** 2026-04-25T05:39:18Z
+**Branch:** `copilot/wo-003-room-heat-engine`
+**Commit:** `f65db10428dabbe2a46cf26dd80fec8b3338356b`
+**Generated:** 2026-04-25T05:36:28Z
 
 ## All Files
 
@@ -285,6 +288,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260417000000_add_token_origin_to_token_balances/migration.sql`
 - `prisma/migrations/20260424000000_add_canonical_financial_ledger/migration.sql`
 - `prisma/migrations/20260424120000_immutable_audit_architecture/migration.sql`
+- `prisma/migrations/20260425000000_add_room_heat/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -430,6 +434,27 @@ Auto-generated on every push. Do not edit manually.
 - `services/cyrano/src/session-memory.store.ts`
 - `services/diamond-concierge/src/diamond-concierge.module.ts`
 - `services/diamond-concierge/src/diamond.service.ts`
+- `services/guest-heat/.env.example`
+- `services/guest-heat/ASSUMPTIONS.md`
+- `services/guest-heat/FLAGS.md`
+- `services/guest-heat/README.md`
+- `services/guest-heat/src/cyrano-teleprompter.service.ts`
+- `services/guest-heat/src/dual-flame-pulse.service.ts`
+- `services/guest-heat/src/forecast.service.ts`
+- `services/guest-heat/src/gemstone.service.ts`
+- `services/guest-heat/src/guest-heat.controller.ts`
+- `services/guest-heat/src/guest-heat.module.ts`
+- `services/guest-heat/src/guest-heat.service.ts`
+- `services/guest-heat/src/guest-heat.types.ts`
+- `services/guest-heat/src/performance-timer.service.ts`
+- `services/heartsync/.env.example`
+- `services/heartsync/ASSUMPTIONS.md`
+- `services/heartsync/FLAGS.md`
+- `services/heartsync/README.md`
+- `services/heartsync/src/heartsync.controller.ts`
+- `services/heartsync/src/heartsync.module.ts`
+- `services/heartsync/src/heartsync.service.ts`
+- `services/heartsync/src/heartsync.types.ts`
 - `services/integration-hub/src/hub.module.ts`
 - `services/integration-hub/src/hub.service.ts`
 - `services/ledger/index.ts`
@@ -457,6 +482,15 @@ Auto-generated on every push. Do not edit manually.
 - `services/rewards-api/src/white-label/partner-config.schema.ts`
 - `services/risk-engine/src/region-signal.service.ts`
 - `services/risk-engine/src/risk.module.ts`
+- `services/room-heat/.env.example`
+- `services/room-heat/ASSUMPTIONS.md`
+- `services/room-heat/FLAGS.md`
+- `services/room-heat/README.md`
+- `services/room-heat/src/dto/room-heat.dto.ts`
+- `services/room-heat/src/room-heat.controller.ts`
+- `services/room-heat/src/room-heat.module.ts`
+- `services/room-heat/src/room-heat.service.ts`
+- `services/room-heat/src/types/room-heat.types.ts`
 - `services/showzone/src/room-session.service.d.ts`
 - `services/showzone/src/room-session.service.js`
 - `services/showzone/src/room-session.service.js.map`
