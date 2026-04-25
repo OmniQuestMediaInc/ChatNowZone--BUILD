@@ -3,8 +3,8 @@
 Auto-generated on every push. Do not edit manually.
 
 **Branch:** `claude/frontend-polish-concierge-ui-mlqrR`
-**Commit:** `6884b262173f70568fa50e56945a26e30359dcb3`
-**Generated:** 2026-04-25T06:29:19Z
+**Commit:** `a2e44772d6bc94e64510076b1ab6184a9d94e893`
+**Generated:** 2026-04-25T06:47:40Z
 
 ## All Files
 
@@ -556,6 +556,14 @@ Auto-generated on every push. Do not edit manually.
 - `services/zone-gpt/src/zone-gpt.module.js`
 - `services/zone-gpt/src/zone-gpt.module.js.map`
 - `services/zone-gpt/src/zone-gpt.module.ts`
+- `services/zonebot-scheduler/.env.example`
+- `services/zonebot-scheduler/ASSUMPTIONS.md`
+- `services/zonebot-scheduler/FLAGS.md`
+- `services/zonebot-scheduler/README.md`
+- `services/zonebot-scheduler/src/interfaces.ts`
+- `services/zonebot-scheduler/src/zonebot-scheduler.controller.ts`
+- `services/zonebot-scheduler/src/zonebot-scheduler.module.ts`
+- `services/zonebot-scheduler/src/zonebot-scheduler.service.ts`
 - `tests/e2e/audit-chain-replay.spec.ts`
 - `tests/e2e/diamond-recovery-flows.spec.ts`
 - `tests/e2e/full-token-purchase-flow.spec.ts`
