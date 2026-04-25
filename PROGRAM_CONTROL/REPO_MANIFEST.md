@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `copilot/add-refund-policy-acknowledgment-event`
-**Commit:** `088da9a47c5984b8c08499ec725300a429d28141`
-**Generated:** 2026-04-25T05:41:24Z
+**Branch:** `copilot/create-directory-structure-and-schema-additions`
+**Commit:** `4038554c3127911379939d4d709f77d502035809`
+**Generated:** 2026-04-25T05:59:59Z
 
 ## All Files
 
@@ -431,6 +431,14 @@ Auto-generated on every push. Do not edit manually.
 - `services/cyrano/src/session-memory.store.ts`
 - `services/diamond-concierge/src/diamond-concierge.module.ts`
 - `services/diamond-concierge/src/diamond.service.ts`
+- `services/fraud-prevention/src/AbuseDetector.ts`
+- `services/fraud-prevention/src/TokenExtensionTool.ts`
+- `services/fraud-prevention/src/events/ServiceToSaleEmitter.ts`
+- `services/fraud-prevention/src/fraud-prevention.module.ts`
+- `services/fraud-prevention/src/gateguard/GateGuardRiskService.ts`
+- `services/fraud-prevention/src/gateguard/RiskScoreMLInference.ts`
+- `services/fraud-prevention/src/interfaces/shared.ts`
+- `services/fraud-prevention/src/repositories/ChargebackRepository.ts`
 - `services/guest-heat/.env.example`
 - `services/guest-heat/ASSUMPTIONS.md`
 - `services/guest-heat/FLAGS.md`
