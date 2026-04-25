@@ -36,11 +36,11 @@ export class GateGuardRiskService {
   }
 
   private async extractFeatures(guestId: string): Promise<RiskFeatures> {
-    const chargebackCount30d = await this.repository.getChargebackCount30d(guestId);
+    const extensionActionCount30d = await this.repository.getExtensionActionCount30d(guestId);
 
     return {
       friendlyFraudScore: 15,
-      chargebackCount30d,
+      chargebackCount30d: extensionActionCount30d,
       extensionAbuseCount: 1,
       lowUsageAfterPurchase: 25,
       rapidPurchaseVelocity: 2,

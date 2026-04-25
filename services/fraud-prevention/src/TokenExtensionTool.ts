@@ -38,8 +38,7 @@ export class TokenExtensionTool {
       throw new BadRequestException('EXCEEDS_TIER_AUTHORITY');
     }
 
-    const record: ExtensionActionRecord = {
-      actionId: `ext_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`,
+    const record: Omit<ExtensionActionRecord, 'actionId'> = {
       guestId: request.guestId,
       agentId: request.agentId,
       agentTier: request.agentTier,

@@ -6,9 +6,11 @@ import { RiskScoreMLInference } from './gateguard/RiskScoreMLInference';
 import { AbuseDetector } from './AbuseDetector';
 import { ServiceToSaleEmitter } from './events/ServiceToSaleEmitter';
 import { ChargebackRepository } from './repositories/ChargebackRepository';
+import { PrismaService } from '../../core-api/src/prisma.service';
 
 @Module({
   providers: [
+    PrismaService,
     TokenExtensionTool,
     GateGuardRiskService,
     RiskScoreMLInference,
