@@ -1,8 +1,9 @@
 # OQMI System State — Backlog Snapshot
 
-**Snapshot date:** 2026-04-24 (PAYLOAD 6 — Immutable Audit + RBAC + Compliance Lockdown)
-**Branch of record:** `claude/audit-rbac-compliance-XkEk9`
+**Snapshot date:** 2026-04-25 (PAYLOAD 7 + 8 — Frontend Polish + Ship-Gate Verification)
+**Branch of record:** `claude/frontend-polish-concierge-ui-mlqrR`
 **Authority:** OmniQuest Media Inc. — OQMI_GOVERNANCE.md (Canonical Corpus v10)
+**Launch posture:** **ChatNow.Zone Core — Launch Ready (Alpha)**
 
 > This file is a **periodic snapshot** of program state. It is generated
 > during governance runs (most recently: Repo Prep & Cleanup 2026-04-24).
@@ -18,25 +19,25 @@
 
 ## 1. Core Identifiers
 
-| Field | Value |
-| --- | --- |
-| Company | OmniQuest Media Inc. (OQMInc™) |
-| CEO / CD / LD | Kevin B. Hartley |
-| Platform (primary) | ChatNow.Zone — `chatnow.zone` |
-| Secondary platform | Cyrano (60–120 days post-CNZ stabilization) |
-| Repo | `OmniQuestMediaInc/ChatNowZone--BUILD` |
-| Hard launch deadline | 2026-10-01 |
+| Field                | Value                                                                     |
+| -------------------- | ------------------------------------------------------------------------- |
+| Company              | OmniQuest Media Inc. (OQMInc™)                                            |
+| CEO / CD / LD        | Kevin B. Hartley                                                          |
+| Platform (primary)   | ChatNow.Zone — `chatnow.zone`                                             |
+| Secondary platform   | Cyrano (60–120 days post-CNZ stabilization)                               |
+| Repo                 | `OmniQuestMediaInc/ChatNowZone--BUILD`                                    |
+| Hard launch deadline | 2026-10-01                                                                |
 | Governance ban (§12) | Banned entity (name [REDACTED]) — never referenced in any OQMInc material |
 
 ---
 
 ## 2. Directive Pipeline (snapshot counts)
 
-| Bucket | Count | Source |
-| --- | ---: | --- |
-| `PROGRAM_CONTROL/DIRECTIVES/DONE/` | 39 | filesystem |
-| `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/` | 0 | filesystem |
-| `PROGRAM_CONTROL/DIRECTIVES/QUEUE/` | 7 | filesystem (excludes standing prompts) |
+| Bucket                                    | Count | Source                                 |
+| ----------------------------------------- | ----: | -------------------------------------- |
+| `PROGRAM_CONTROL/DIRECTIVES/DONE/`        |    39 | filesystem                             |
+| `PROGRAM_CONTROL/DIRECTIVES/IN_PROGRESS/` |     0 | filesystem                             |
+| `PROGRAM_CONTROL/DIRECTIVES/QUEUE/`       |     7 | filesystem (excludes standing prompts) |
 
 **Active QUEUE contents (2026-04-24):**
 
@@ -54,13 +55,13 @@
 
 Counts from `docs/REQUIREMENTS_MASTER.md` (114 tracked rows):
 
-| Status | Count |
-| --- | ---: |
-| DONE | 20 |
-| QUEUED | 12 |
-| IN_PROGRESS | 4 |
-| NEEDS_DIRECTIVE | 73 |
-| RETIRED | 9 |
+| Status          | Count |
+| --------------- | ----: |
+| DONE            |    20 |
+| QUEUED          |    12 |
+| IN_PROGRESS     |     4 |
+| NEEDS_DIRECTIVE |    73 |
+| RETIRED         |     9 |
 
 ---
 
@@ -69,23 +70,25 @@ Counts from `docs/REQUIREMENTS_MASTER.md` (114 tracked rows):
 Ship-gate components tracked against Corpus L0 (from `CNZ-WORK-001` Wave H,
 H-LAUNCH-READY sign-off directive):
 
-| System | Directive(s) | Status at snapshot |
-| --- | --- | --- |
-| Three-Bucket Wallet | D001 | DONE — `LedgerService.debitWallet` + `ThreeBucketSpendGuardMiddleware` defence-in-depth |
-| Risk Engine | D002 | NEEDS_DIRECTIVE |
-| NATS Fabric | D003 | DONE (scaffold) — PAYLOAD 6 extended with AUDIT_IMMUTABLE_* topics |
-| OBS Broadcast Kernel | D004 | NEEDS_DIRECTIVE |
-| FairPay + NOWPayouts | D006, E002 | NEEDS_DIRECTIVE |
-| RedBook | E001 | NEEDS_DIRECTIVE |
-| Compliance Stack | D008 | NEEDS_DIRECTIVE |
-| GateGuard Sentinel | E003 | NEEDS_DIRECTIVE |
-| Room-Heat Engine | PAYLOAD 5 | DONE (scaffold) — deterministic tier computation + NATS emission, persistence NEEDS_DIRECTIVE |
-| CreatorControl.Zone | PAYLOAD 5 | DONE (scaffold) — Broadcast Timing + Session Monitoring copilots, single-pane snapshot; frontend NEEDS_DIRECTIVE |
-| Cyrano Layer 1 | PAYLOAD 5 | DONE (scaffold) — 8-category whisper engine, memory, personas, latency SLO; Layer 2 (LLM + Prisma memory) NEEDS_DIRECTIVE |
-| Integration Hub | PAYLOAD 5 | DONE (scaffold) — Ledger↔GateGuard, Recovery↔Diamond Concierge, Room-Heat↔CreatorControl+Cyrano handoffs |
-| Black-Glass Interface | G101+ | NEEDS_DIRECTIVE |
-| Banned-entity residual purge | C001 (§12) | DONE — purge/redact sweep completed 2026-04-24 |
-| Immutable Audit Architecture | PAYLOAD-6 | DONE — hash-chain + WORM export + Canonical Compliance Checklist |
+| System                                     | Directive(s) | Status at snapshot                                                                                                                                                                |
+| ------------------------------------------ | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Three-Bucket Wallet                        | D001         | DONE — `LedgerService.debitWallet` + `ThreeBucketSpendGuardMiddleware` defence-in-depth                                                                                           |
+| Risk Engine                                | D002         | NEEDS_DIRECTIVE                                                                                                                                                                   |
+| NATS Fabric                                | D003         | DONE (scaffold) — PAYLOAD 6 extended with AUDIT*IMMUTABLE*\* topics                                                                                                               |
+| OBS Broadcast Kernel                       | D004         | NEEDS_DIRECTIVE                                                                                                                                                                   |
+| FairPay + NOWPayouts                       | D006, E002   | NEEDS_DIRECTIVE                                                                                                                                                                   |
+| RedBook                                    | E001         | NEEDS_DIRECTIVE                                                                                                                                                                   |
+| Compliance Stack                           | D008         | NEEDS_DIRECTIVE                                                                                                                                                                   |
+| GateGuard Sentinel                         | E003         | NEEDS_DIRECTIVE                                                                                                                                                                   |
+| Room-Heat Engine                           | PAYLOAD 5    | DONE (scaffold) — deterministic tier computation + NATS emission, persistence NEEDS_DIRECTIVE                                                                                     |
+| CreatorControl.Zone                        | PAYLOAD 5    | DONE (scaffold) — Broadcast Timing + Session Monitoring copilots, single-pane snapshot; frontend NEEDS_DIRECTIVE                                                                  |
+| Cyrano Layer 1                             | PAYLOAD 5    | DONE (scaffold) — 8-category whisper engine, memory, personas, latency SLO; Layer 2 (LLM + Prisma memory) NEEDS_DIRECTIVE                                                         |
+| Integration Hub                            | PAYLOAD 5    | DONE (scaffold) — Ledger↔GateGuard, Recovery↔Diamond Concierge, Room-Heat↔CreatorControl+Cyrano handoffs                                                                          |
+| Black-Glass Interface                      | G101+        | NEEDS_DIRECTIVE — visual treatment deferred to post-alpha (Payload 7 ships brand tokens + dark-mode default)                                                                      |
+| Banned-entity residual purge               | C001 (§12)   | DONE — purge/redact sweep completed 2026-04-24                                                                                                                                    |
+| Immutable Audit Architecture               | PAYLOAD-6    | DONE — hash-chain + WORM export + Canonical Compliance Checklist                                                                                                                  |
+| Frontend Polish + Diamond Concierge UI     | PAYLOAD-7    | DONE — `/admin/diamond`, `/admin/recovery`, `/creator/control`, `/tokens`, `/diamond/purchase`, `/wallet` page builders + presenters + render plans + theme + SEO + accessibility |
+| End-to-end validation + Ship-Gate verifier | PAYLOAD-8    | DONE — six E2E flows + `PROGRAM_CONTROL/ship-gate-verifier.ts` + `docs/ARCHITECTURE_OVERVIEW.md` + `docs/PRE_LAUNCH_CHECKLIST.md`                                                 |
 
 ---
 
@@ -161,7 +164,29 @@ report-back files. `grep -rni "Navigator\|Jaime Watt"` outside the
 
 ---
 
-## 6. Repo Hygiene Actions (2026-04-24 run)
+## 6. Repo Hygiene Actions (2026-04-25 — Payload 7 + 8)
+
+- Built UI surface: `ui/types/` (admin-diamond, public-wallet, creator-panel),
+  `ui/view-models/` (presenters), `ui/app/` (page builders for
+  `/admin/diamond`, `/admin/recovery`, `/creator/control`, `/tokens`,
+  `/diamond/purchase`, `/wallet`), `ui/config/` (theme, SEO, build config,
+  accessibility), `ui/components/render-plan.ts`.
+- Added six end-to-end test files under `tests/e2e/` covering the
+  canonical token purchase, high-heat → Cyrano → payout scaling,
+  Diamond recovery flows, expiration redistribution, immutable audit
+  chain replay, RBAC step-up enforcement, and the UI presenters.
+- Authored `PROGRAM_CONTROL/ship-gate-verifier.ts` — exits non-zero if
+  any L0 invariant is violated; `tests/e2e/ship-gate-verifier.spec.ts`
+  pins its report shape.
+- Added `docs/PRE_LAUNCH_CHECKLIST.md` (L0 ship-gate sign-off form) and
+  `docs/ARCHITECTURE_OVERVIEW.md` (Payloads 1–8 map).
+- Updated root `README.md` with the new architecture map + ship-gate
+  status.
+- Updated `jest.config.js` to include `tests/e2e/**/*.spec.ts` +
+  `ui/**/*.spec.ts` roots.
+- Added `yarn ship-gate` script to `package.json`.
+
+## 6.1 Repo Hygiene Actions (2026-04-24 run — historical)
 
 - Quarantined `LEGACY_CONFIGS/` → `archive/LEGACY_CONFIGS_2026-04/`
   (HANDOFF.md filed).
@@ -180,11 +205,11 @@ report-back files. `grep -rni "Navigator\|Jaime Watt"` outside the
 
 ## 7. Known Remediation Items (not executed in this run)
 
-| Item | Reason | Follow-up |
-| --- | --- | --- |
-| `legal_holds.correlation_id` missing | Requires FIZ-scoped schema migration; not a hygiene change | Author GOV-scoped directive |
+| Item                                                               | Reason                                                                            | Follow-up                                                     |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `legal_holds.correlation_id` missing                               | Requires FIZ-scoped schema migration; not a hygiene change                        | Author GOV-scoped directive                                   |
 | `yarn install` / `lint --fix` / `prettier --write` not run locally | Sandbox registry returned HTTP 503 repeatedly; no cached `node_modules` available | CI `ci.yml` + `super-linter.yml` workflows will enforce on PR |
-| Wave B–H of `CNZ-WORK-001` still open | Normal backlog | Tracked in `docs/REQUIREMENTS_MASTER.md` |
+| Wave B–H of `CNZ-WORK-001` still open                              | Normal backlog                                                                    | Tracked in `docs/REQUIREMENTS_MASTER.md`                      |
 
 ---
 

@@ -44,7 +44,7 @@ export interface RecoveryCase {
 
 export interface RecoveryAuditEntry {
   action: RecoveryAction;
-  actor_id: string;          // CS agent id OR 'SYSTEM'
+  actor_id: string; // CS agent id OR 'SYSTEM'
   reason_code: string;
   correlation_id: string;
   rule_applied_id: string;
@@ -65,10 +65,10 @@ export interface TokenBridgeOffer {
 export interface ThreeFifthsExitOutcome {
   case_id: string;
   result_code: RecoveryResultCode;
-  refund_percentage: number;     // Nominal 0.60 per REDBOOK §5
-  lock_hours: number;            // 24h buy/spend lock
+  refund_percentage: number; // Nominal 0.60 per REDBOOK §5
+  lock_hours: number; // 24h buy/spend lock
   processing_business_days: [number, number]; // [7, 10]
-  permanent_flag: string;        // "Aware of policy / declined two goodwill offers"
+  permanent_flag: string; // "Aware of policy / declined two goodwill offers"
   policy_gate_reference?: string; // FIZ-002-REVISION-2026-04-11 when gated
   rule_applied_id: string;
 }
@@ -76,10 +76,10 @@ export interface ThreeFifthsExitOutcome {
 export interface ExpirationDistribution {
   wallet_id: string;
   expired_tokens: bigint;
-  creator_bonus_pool_tokens: bigint;   // 70%
-  platform_mgmt_fee_tokens: bigint;    // 30%
-  extension_fee_usd: number;           // $49
-  recovery_fee_usd: number;            // $79
+  creator_bonus_pool_tokens: bigint; // 70%
+  platform_mgmt_fee_tokens: bigint; // 30%
+  extension_fee_usd: number; // $49
+  recovery_fee_usd: number; // $79
   rule_applied_id: string;
 }
 
@@ -99,7 +99,7 @@ export interface DashboardCaseRow {
   user_id: string;
   tier: string;
   stage: RecoveryStage;
-  balance_usd_cents: string;    // bigint as string for JSON safety
+  balance_usd_cents: string | null; // bigint as string for JSON safety; null when unresolved at this surface
   opened_at_utc: string;
   flags: string[];
 }
