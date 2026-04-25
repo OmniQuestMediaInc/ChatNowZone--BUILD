@@ -56,7 +56,6 @@ import { RefundModule } from './refund/refund.module';
     SchedulingModule,
     MembershipModule,
     ZoneAccessModule,
-    MembershipModule,
     RefundModule,
   ],
 })

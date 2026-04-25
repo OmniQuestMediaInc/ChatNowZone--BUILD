@@ -219,11 +219,9 @@ export class ExtensionService {
         agentTier === ExtensionAuthority.TIER_3
           ? EXTENSION_LIMITS.TIER_3_MAX_EXTENSION_DAYS
           : EXTENSION_LIMITS.TIER_2_MAX_EXTENSION_DAYS;
-      if (days > maxDays && !this.requiresCeoReview({ ...request })) {
-        // Hard-ceiling enforced before CEO-review path. CEO review is the
-        // only escape hatch above the tier ceiling.
+      if (days > maxDays) {
         throw new Error(
-          `EXTENSION_AUTHORITY_EXCEEDED: ${agentTier} may not grant more than ${maxDays} days extension without CEO review`,
+          `EXTENSION_AUTHORITY_EXCEEDED: ${agentTier} may not grant more than ${maxDays} days extension`,
         );
       }
     }
