@@ -40,7 +40,7 @@ amendment requires a `CHORE: bump rule_applied_id` commit.
 
 6. The leaderboard is **fully in-memory**.  On service restart, it is rebuilt
    from live `ingest()` calls.  There is no DB-backed leaderboard replay.  If
-   a persistent leaderboard is required post-launch, add a `RoomHeatLeaderboardEntry`
+   a persistent leaderboard is required post-launch, add a `FfsLeaderboardEntry`
    model (flagged in FLAGS.md).
 
 7. The 10×10 grid is a visual layout hint for the frontend.  The engine

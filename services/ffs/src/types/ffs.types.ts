@@ -36,8 +36,8 @@ export interface FfsInput {
   /** Session runtime in minutes. */
   dwell_minutes: number;
 
-  // ── Group 2: Biometric Signals (HeartSync + vision-monitor) ───────────────
-  /** Current BPM from HeartSync band. 0 = signal absent / not paired. */
+  // ── Group 2: Biometric Signals (SenSync™ + vision-monitor) ───────────────
+  /** Current BPM from SenSync™ band. 0 = signal absent / not paired. */
   heart_rate_bpm: number;
   /** Creator's individual resting baseline BPM (from calibration). */
   heart_rate_baseline_bpm: number;

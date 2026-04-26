@@ -1385,11 +1385,11 @@ model WormExportRecord {
 }
 
 // ─── Flicker n'Flame Scoring (FFS) Engine (WO-003 — Business Plan B.4) ────────────────────────────
-// Migration: 20260425000000_add_room_heat
+// Migration: 20260425000000_add_ffs_scoring
 
-/// Time-series heat score snapshots — one row per ingest() call.
+/// Time-series FFS score snapshots — one row per ingest() call.
 /// Append-only by convention (no UPDATE/DELETE in service code).
-model RoomHeatSnapshot {
+model FfsSnapshot {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   session_id      String   @db.VarChar(200)
   creator_id      String   @db.Uuid
@@ -1400,7 +1400,7 @@ model RoomHeatSnapshot {
   correlation_id  String   @db.VarChar(128)
   reason_code     String   @db.VarChar(100)
   is_dual_flame   Boolean  @default(false)
-  rule_applied_id String   @default("ROOM_HEAT_ENGINE_v2") @db.VarChar(100)
+  rule_applied_id String   @default("FFS_ENGINE_v2") @db.VarChar(100)
   created_at      DateTime @default(now()) @db.Timestamptz
 
   @@index([session_id, created_at])
@@ -1410,7 +1410,7 @@ model RoomHeatSnapshot {
 
 /// Per-creator adaptive weight multipliers, learned from tip events.
 /// One row per creator — updated in-place via increment-only tip_events_seen.
-model RoomHeatAdaptiveWeights {
+model FfsAdaptiveWeights {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   creator_id      String   @unique @db.Uuid
   /// JSON Record<string, number> — multipliers for each scoring component.
@@ -1420,7 +1420,7 @@ model RoomHeatAdaptiveWeights {
   last_updated_at DateTime @default(now()) @db.Timestamptz
   correlation_id  String   @db.VarChar(128)
   reason_code     String   @default("ADAPTIVE_INIT") @db.VarChar(100)
-  rule_applied_id String   @default("ROOM_HEAT_ADAPTIVE_v1") @db.VarChar(100)
+  rule_applied_id String   @default("FFS_ADAPTIVE_v1") @db.VarChar(100)
   created_at      DateTime @default(now()) @db.Timestamptz
 
   @@map("ffs_adaptive_weights")

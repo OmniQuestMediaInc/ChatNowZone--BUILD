@@ -1,6 +1,6 @@
 // PAYLOAD 7 — Creator-facing UI contracts for /creator/control (Command Center).
 // Extends the Payload-5 creator-control-contracts.ts with view-model shapes
-// specific to the CreatorControl command pane: room-heat meter, Cyrano panel,
+// specific to the CreatorControl command pane: FFS (Flicker n'Flame Scoring) meter, Cyrano panel,
 // broadcast timing copilot, persona switcher, payout rate indicator.
 
 import type {
@@ -23,8 +23,8 @@ export interface PayoutRateIndicator {
   reason_code: 'PAYOUT_SCALING_APPLIED';
 }
 
-/** Room-Heat meter (visual gauge). */
-export interface RoomHeatMeter {
+/** Flicker n'Flame Scoring (FFS) meter (visual gauge). */
+export interface FfsMeter {
   session_id: string;
   tier: FfsTier;
   score: number; // 0..100
@@ -79,7 +79,7 @@ export interface CreatorCommandCenterView {
   display_name: string;
   obs_ready: boolean;
   chat_aggregator_ready: boolean;
-  heat_meter: RoomHeatMeter | null;
+  heat_meter: FfsMeter | null;
   session_monitoring: SessionMonitoringPanel;
   broadcast_timing: BroadcastTimingDashboard;
   cyrano_panel: CyranoWhisperPanel;

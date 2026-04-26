@@ -25,7 +25,7 @@ live creator session.  The score is published to NATS at **1 Hz** and consumed b
 NATS (HZ_BPM_UPDATE, CHAT_MESSAGE_INGESTED)
         │
         ▼
- RoomHeatService.ingest(RoomHeatInput)
+ FlickerNFlameScoringService.ingest(FfsInput)
         │
         ├─ calculateComponents()   ← 13 weighted signals
         ├─ earlyPhaseBoost()       ← +10 % if dwell < 5 min
@@ -36,7 +36,7 @@ NATS (HZ_BPM_UPDATE, CHAT_MESSAGE_INGESTED)
         │                FFS_SCORE_PEAK, FFS_SCORE_HOT_AND_READY,
         │                FFS_SCORE_DUAL_FLAME_PEAK)
         │
-        ├─ Prisma.roomHeatSnapshot.create()  (async)
+        ├─ Prisma.ffsSnapshot.create()  (async)
         │
         └─ 1 Hz interval → re-emit with refreshed timestamp
 ```
@@ -141,7 +141,7 @@ Multipliers are persisted to `room_heat_adaptive_weights` and cached in-memory.
 | Table | Purpose |
 |-------|---------|
 | `ffs_snapshots` | Append-only time-series of every heat score computed |
-| `room_heat_adaptive_weights` | One row per creator — learned component multipliers |
+| `ffs_adaptive_weights` | One row per creator — learned component multipliers |
 
 ---
 

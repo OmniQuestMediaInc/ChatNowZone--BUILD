@@ -14,7 +14,7 @@ explicitly enable it per tier via `sensync_tier_configs`.
 **Values:** min = 30 BPM, max = 220 BPM.  
 **Intent:** Medical-grade resting/peak range. Samples outside this window
 are considered device error or spoofed data and are silently discarded.
-To adjust, update `HEARTSYNC_BPM_MIN` and `HEARTSYNC_BPM_MAX` in
+To adjust, update `SENSYNC_BPM_MIN` and `SENSYNC_BPM_MAX` in
 `sensync.types.ts` and redeploy.
 
 ## FLAG-004: CONSENT_REQUIRED_BEFORE_RELAY

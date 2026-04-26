@@ -580,7 +580,7 @@ export class FlickerNFlameScoringService implements OnModuleInit, OnModuleDestro
 
   private async loadAdaptiveWeightsFromDb(creatorId: string): Promise<void> {
     try {
-      const row = await this.prisma.roomHeatAdaptiveWeights.findUnique({
+      const row = await this.prisma.ffsAdaptiveWeights.findUnique({
         where: { creator_id: creatorId },
       });
       if (row) {
@@ -607,12 +607,12 @@ export class FlickerNFlameScoringService implements OnModuleInit, OnModuleDestro
     weights: Record<string, number>,
   ): Promise<void> {
     try {
-      const existing = await this.prisma.roomHeatAdaptiveWeights.findUnique({
+      const existing = await this.prisma.ffsAdaptiveWeights.findUnique({
         where: { creator_id: creatorId },
       });
 
       if (existing) {
-        await this.prisma.roomHeatAdaptiveWeights.update({
+        await this.prisma.ffsAdaptiveWeights.update({
           where: { creator_id: creatorId },
           data:  {
             weights,
@@ -621,7 +621,7 @@ export class FlickerNFlameScoringService implements OnModuleInit, OnModuleDestro
           },
         });
       } else {
-        await this.prisma.roomHeatAdaptiveWeights.create({
+        await this.prisma.ffsAdaptiveWeights.create({
           data: {
             creator_id:      creatorId,
             weights,
@@ -786,7 +786,7 @@ export class FlickerNFlameScoringService implements OnModuleInit, OnModuleDestro
     _input: FfsInput,
   ): Promise<void> {
     try {
-      await this.prisma.roomHeatSnapshot.create({
+      await this.prisma.ffsSnapshot.create({
         data: {
           session_id:      score.session_id,
           creator_id:      score.creator_id,
@@ -812,7 +812,7 @@ export class FlickerNFlameScoringService implements OnModuleInit, OnModuleDestro
   // ══════════════════════════════════════════════════════════════════════════
 
   private subscribeNatsEvents(): void {
-    // HeartSync BPM updates — update heart rate in last known input
+    // SenSync™ BPM updates — update heart rate in last known input
     this.nats.subscribe(NATS_TOPICS.HZ_BPM_UPDATE, (payload) => {
       const sessionId = payload['session_id'] as string | undefined;
       const bpm       = payload['bpm'] as number | undefined;

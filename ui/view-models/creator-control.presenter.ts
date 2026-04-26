@@ -15,14 +15,14 @@ import type {
   BroadcastTimingDashboard,
   CreatorCommandCenterView,
   CyranoWhisperPanel,
+  FfsMeter,
   PayoutRateIndicator,
-  RoomHeatMeter,
   SessionMonitoringPanel,
 } from '../types/creator-panel-contracts';
 
 export const CREATOR_PRESENTER_RULE_ID = 'CREATOR_CONTROL_UI_v1';
 
-/** Tier-boundary lookup mirrors the Room-Heat Engine TIER_THRESHOLDS. */
+/** Tier-boundary lookup mirrors the Flicker n'Flame Scoring (FFS) TIER_THRESHOLDS. */
 const TIER_BOUNDS: Record<FfsTier, { min: number; max: number }> = {
   COLD: { min: 0, max: 25 },
   WARM: { min: 25, max: 50 },
@@ -159,7 +159,7 @@ export class CreatorControlPresenter {
     };
   }
 
-  buildHeatMeter(heat: HeatSampleInput): RoomHeatMeter {
+  buildHeatMeter(heat: HeatSampleInput): FfsMeter {
     const bounds = TIER_BOUNDS[heat.tier];
     return {
       session_id: heat.session_id,
