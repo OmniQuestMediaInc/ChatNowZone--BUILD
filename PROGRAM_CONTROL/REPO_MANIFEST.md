@@ -2,9 +2,9 @@
 
 Auto-generated on every push. Do not edit manually.
 
-**Branch:** `claude/frontend-polish-concierge-ui-mlqrR`
-**Commit:** `a2e44772d6bc94e64510076b1ab6184a9d94e893`
-**Generated:** 2026-04-25T06:47:40Z
+**Branch:** `copilot/global-rename-room-heat-to-ffs`
+**Commit:** `370bb90e18d1737e1e43711ee8890aa04aa1e2c5`
+**Generated:** 2026-04-26T00:08:12Z
 
 ## All Files
 
@@ -138,6 +138,7 @@ Auto-generated on every push. Do not edit manually.
 - `PROGRAM_CONTROL/REPORT_BACK/FIZ-004-SCHEMA-NEW-TABLES.md`
 - `PROGRAM_CONTROL/REPORT_BACK/FIZ-PRICING-DECISIONS-2026-04-11.md`
 - `PROGRAM_CONTROL/REPORT_BACK/GEO-001-GEO-FENCING-SERVICE.md`
+- `PROGRAM_CONTROL/REPORT_BACK/GLOBAL-RENAME-FFS-SENSYNC-REPORT-BACK.md`
 - `PROGRAM_CONTROL/REPORT_BACK/GM-001-GAME-ENGINE-SERVICE.md`
 - `PROGRAM_CONTROL/REPORT_BACK/GM-002-GAMES-MODULE-WIRING.md`
 - `PROGRAM_CONTROL/REPORT_BACK/GOV-001-GEO-PRICING-SERVICE.md`
@@ -253,6 +254,8 @@ Auto-generated on every push. Do not edit manually.
 - `archive/LEGACY_CONFIGS_2026-04/HANDOFF.md`
 - `archive/LEGACY_CONFIGS_2026-04/package.json`
 - `archive/LEGACY_CONFIGS_2026-04/tsconfig.json`
+- `copilot-global-rename.bundle`
+- `copilot-global-rename.patch`
 - `docker-compose.yml`
 - `docs/ARCHITECTURE_OVERVIEW.md`
 - `docs/AUDIT_CERTIFICATION_V1.md`
@@ -321,7 +324,7 @@ Auto-generated on every push. Do not edit manually.
 - `prisma/migrations/20260424120000_immutable_audit_architecture/migration.sql`
 - `prisma/migrations/20260425000000_add_room_heat/migration.sql`
 - `prisma/migrations/20260425100000_zonebot_scheduler/migration.sql`
-- `prisma/migrations/20260425120000_add_sensync_guest_heat/migration.sql`
+- `prisma/migrations/20260425120000_add_heartsync_guest_heat/migration.sql`
 - `prisma/migrations/migration_lock.toml`
 - `prisma/schema.prisma`
 - `prisma/seed.test.ts`
@@ -352,7 +355,7 @@ Auto-generated on every push. Do not edit manually.
 - `services/bijou/src/pass-pricing.service.js.map`
 - `services/bijou/src/pass-pricing.service.ts`
 - `services/core-api/src/analytics/analytics.module.ts`
-- `services/core-api/src/analytics/heat-score.service.ts`
+- `services/core-api/src/analytics/ffs-score.service.ts`
 - `services/core-api/src/app.module.ts`
 - `services/core-api/src/audit/audit-bridge.service.ts`
 - `services/core-api/src/audit/audit-dashboard.controller.ts`
@@ -471,6 +474,15 @@ Auto-generated on every push. Do not edit manually.
 - `services/cyrano/src/session-memory.store.ts`
 - `services/diamond-concierge/src/diamond-concierge.module.ts`
 - `services/diamond-concierge/src/diamond.service.ts`
+- `services/ffs/.env.example`
+- `services/ffs/ASSUMPTIONS.md`
+- `services/ffs/FLAGS.md`
+- `services/ffs/README.md`
+- `services/ffs/src/dto/ffs.dto.ts`
+- `services/ffs/src/ffs.controller.ts`
+- `services/ffs/src/ffs.module.ts`
+- `services/ffs/src/ffs.service.ts`
+- `services/ffs/src/types/ffs.types.ts`
 - `services/fraud-prevention/src/AbuseDetector.ts`
 - `services/fraud-prevention/src/TokenExtensionTool.ts`
 - `services/fraud-prevention/src/events/ServiceToSaleEmitter.ts`
@@ -492,14 +504,6 @@ Auto-generated on every push. Do not edit manually.
 - `services/guest-heat/src/guest-heat.service.ts`
 - `services/guest-heat/src/guest-heat.types.ts`
 - `services/guest-heat/src/performance-timer.service.ts`
-- `services/sensync/.env.example`
-- `services/sensync/ASSUMPTIONS.md`
-- `services/sensync/FLAGS.md`
-- `services/sensync/README.md`
-- `services/sensync/src/sensync.controller.ts`
-- `services/sensync/src/sensync.module.ts`
-- `services/sensync/src/sensync.service.ts`
-- `services/sensync/src/sensync.types.ts`
 - `services/integration-hub/src/hub.module.ts`
 - `services/integration-hub/src/hub.service.ts`
 - `services/ledger/index.ts`
@@ -529,15 +533,14 @@ Auto-generated on every push. Do not edit manually.
 - `services/rewards-api/src/white-label/partner-config.schema.ts`
 - `services/risk-engine/src/region-signal.service.ts`
 - `services/risk-engine/src/risk.module.ts`
-- `services/ffs/.env.example`
-- `services/ffs/ASSUMPTIONS.md`
-- `services/ffs/FLAGS.md`
-- `services/ffs/README.md`
-- `services/ffs/src/dto/ffs.dto.ts`
-- `services/ffs/src/ffs.controller.ts`
-- `services/ffs/src/ffs.module.ts`
-- `services/ffs/src/ffs.service.ts`
-- `services/ffs/src/types/ffs.types.ts`
+- `services/sensync/.env.example`
+- `services/sensync/ASSUMPTIONS.md`
+- `services/sensync/FLAGS.md`
+- `services/sensync/README.md`
+- `services/sensync/src/sensync.controller.ts`
+- `services/sensync/src/sensync.module.ts`
+- `services/sensync/src/sensync.service.ts`
+- `services/sensync/src/sensync.types.ts`
 - `services/showzone/src/room-session.service.d.ts`
 - `services/showzone/src/room-session.service.js`
 - `services/showzone/src/room-session.service.js.map`
